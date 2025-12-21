@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4759b60cdbdd5054481ea8ad65078372, type: 3}
+  m_Name: ShizukuGraph
+  m_EditorClassIdentifier: Assembly-CSharp::ShizukuGraphBase
+  GUID: 
+  _nodes:
+  - rid: 5950651975208534098
+  - rid: 5950651975208534102
+  references:
+    version: 2
+    RefIds:
+    - rid: 5950651975208534098
+      type: {class: ShizukuNodeBase, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 1b648329-ae5c-4bfd-a265-38e8c05395d6
+        PositionAndSize:
+          x: 242.40001
+          y: 429.6
+          z: 200
+          w: 100
+        ParameterA:
+          rid: 5950651975208534099
+        ParameterB:
+          rid: 5950651975208534100
+        ParameterResult:
+          rid: 5950651975208534101
+    - rid: 5950651975208534099
+      type: {class: ParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: 
+        IsOut: 0
+    - rid: 5950651975208534100
+      type: {class: ParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: 
+        IsOut: 0
+    - rid: 5950651975208534101
+      type: {class: ParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: 
+        IsOut: 0
+    - rid: 5950651975208534102
+      type: {class: ShizukuNodeBase, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 1ef957af-49a8-4ae5-8df2-92c9c114d2db
+        PositionAndSize:
+          x: 687.2
+          y: 459.2
+          z: 200
+          w: 100
+        ParameterA:
+          rid: 5950651975208534103
+        ParameterB:
+          rid: 5950651975208534104
+        ParameterResult:
+          rid: 5950651975208534105
+    - rid: 5950651975208534103
+      type: {class: ParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: 
+        IsOut: 0
+    - rid: 5950651975208534104
+      type: {class: ParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: 
+        IsOut: 0
+    - rid: 5950651975208534105
+      type: {class: ParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: 
+        IsOut: 0

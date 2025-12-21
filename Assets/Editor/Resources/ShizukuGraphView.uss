@@ -1,0 +1,12 @@
+VisualElement {}
+
+:root {
+    --shizuku-graph-background: #f0f0f0; /* Example default color */
+}
+
+GridBackground {
+    --background-color: var(--shizuku-graph-background);
+    --line-color: rgba(19, 196, 50, 0.1);
+    --thick-line-color: rgba(193, 196, 192, 0.3);
+    --spacing: 20;
+}

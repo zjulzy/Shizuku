@@ -158,10 +158,21 @@ public class ShizukuGraphView : GraphView
             {
                 var targetNode = (edge.input.node as TestNodeView).RuntimeNode;
                 var sourceNode = (edge.output.node as TestNodeView).RuntimeNode;
-                
+                var edgeData = new ParameterEdge()
+                {
+                    OutputNodeGuid = sourceNode.GUID,
+                    OutputPortName = edge.output.portName,
+                    InputNodeGuid = targetNode.GUID,
+                    InputPortName = edge.input.portName
+                };
+                _runtimeGraph.Edges.Add(edgeData);
             }
         }
-        
+
+        if (graphViewChange.elementsToRemove != null)
+        {
+        }
+
         return graphViewChange;
     }
     

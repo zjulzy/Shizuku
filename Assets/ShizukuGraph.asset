@@ -14,68 +14,75 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShizukuGraphBase
   GUID: 
   _nodes:
-  - rid: 5950651975208534098
-  - rid: 5950651975208534102
+  - rid: 5950652133951406272
+  - rid: 5950652133951406275
+  _edges:
+  - rid: 5950652133951406278
+  RootNodeGUID: ab85e627-5302-4e0d-9d15-6f143400a573
   references:
     version: 2
     RefIds:
-    - rid: 5950651975208534098
+    - rid: 5950652133951406272
       type: {class: ShizukuNodeBase, ns: , asm: Assembly-CSharp}
       data:
-        GUID: 1b648329-ae5c-4bfd-a265-38e8c05395d6
+        GUID: 65b38994-a9af-4b0a-9bb4-8fcc1d78959b
         PositionAndSize:
-          x: 242.40001
-          y: 429.6
+          x: 437.6
+          y: 323.2
           z: 200
           w: 100
-        ParameterA:
-          rid: 5950651975208534099
-        ParameterB:
-          rid: 5950651975208534100
+        Parameter:
+          rid: 5950652133951406273
         ParameterResult:
-          rid: 5950651975208534101
-    - rid: 5950651975208534099
-      type: {class: ParameterEdgePort, ns: , asm: Assembly-CSharp}
+          rid: 5950652133951406274
+        NextNodeGuid: 315943e1-ade3-424d-ba24-32e4b2d44f4b
+    - rid: 5950652133951406273
+      type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
-        Name: 
+        Name: parameter
+        InputEdgeGUID: 
         IsOut: 0
-    - rid: 5950651975208534100
-      type: {class: ParameterEdgePort, ns: , asm: Assembly-CSharp}
+        Value: 0
+    - rid: 5950652133951406274
+      type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
-        Name: 
-        IsOut: 0
-    - rid: 5950651975208534101
-      type: {class: ParameterEdgePort, ns: , asm: Assembly-CSharp}
-      data:
-        Name: 
-        IsOut: 0
-    - rid: 5950651975208534102
+        Name: result
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 0
+    - rid: 5950652133951406275
       type: {class: ShizukuNodeBase, ns: , asm: Assembly-CSharp}
       data:
-        GUID: 1ef957af-49a8-4ae5-8df2-92c9c114d2db
+        GUID: 315943e1-ade3-424d-ba24-32e4b2d44f4b
         PositionAndSize:
-          x: 687.2
-          y: 459.2
+          x: 722.4
+          y: 424
           z: 200
           w: 100
-        ParameterA:
-          rid: 5950651975208534103
-        ParameterB:
-          rid: 5950651975208534104
+        Parameter:
+          rid: 5950652133951406276
         ParameterResult:
-          rid: 5950651975208534105
-    - rid: 5950651975208534103
-      type: {class: ParameterEdgePort, ns: , asm: Assembly-CSharp}
+          rid: 5950652133951406277
+        NextNodeGuid: 
+    - rid: 5950652133951406276
+      type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
-        Name: 
+        Name: parameter
+        InputEdgeGUID: 
         IsOut: 0
-    - rid: 5950651975208534104
-      type: {class: ParameterEdgePort, ns: , asm: Assembly-CSharp}
+        Value: 0
+    - rid: 5950652133951406277
+      type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
-        Name: 
-        IsOut: 0
-    - rid: 5950651975208534105
-      type: {class: ParameterEdgePort, ns: , asm: Assembly-CSharp}
+        Name: result
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 0
+    - rid: 5950652133951406278
+      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
       data:
-        Name: 
-        IsOut: 0
+        GUID: ba755ae8-fd7e-499c-9de9-01734eb1e962
+        OutputNodeGuid: 65b38994-a9af-4b0a-9bb4-8fcc1d78959b
+        OutputPortName: result
+        InputNodeGuid: 315943e1-ade3-424d-ba24-32e4b2d44f4b
+        InputPortName: parameter

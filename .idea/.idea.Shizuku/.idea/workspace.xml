@@ -5,10 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphViewExtensions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphViewExtensions.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/ParameterEdge.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/ParameterEdge.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ParameterEdgePort.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ParameterEdgePort.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuNodeBase.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuNodeBase.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ShizukuGraphBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ShizukuGraphBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ShizukuGraph.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ShizukuGraph.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ShizukuGraphBase.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ShizukuGraphBase.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs.meta" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +79,7 @@
 }</component>
   <component name="RunManager" selected="附加到 Unity 编辑器.附加到 Unity 编辑器">
     <configuration name="启动 Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="U:\engine\6000.2.14f1\Unity.exe" />
+      <option name="EXE_PATH" value="U:\engine\6000.0.24f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath U:\projects\game\Unity\Shizuku -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="U:\projects\game\Unity\Shizuku" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -76,17 +87,17 @@
       <method v="2" />
     </configuration>
     <configuration name="单元测试(批处理模式)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="U:\engine\6000.2.14f1\Unity.exe" />
+      <option name="EXE_PATH" value="U:\engine\6000.0.24f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath U:\projects\game\Unity\Shizuku -testResults Logs/results.xml -logFile Logs/Editor.log -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="U:\projects\game\Unity\Shizuku" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="42712">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="42712" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -121,7 +132,8 @@
       <workItem from="1766817725901" duration="12035000" />
       <workItem from="1766921096153" duration="4056000" />
       <workItem from="1766926571844" duration="74000" />
-      <workItem from="1766926715747" duration="536000" />
+      <workItem from="1766926715747" duration="2801000" />
+      <workItem from="1767108949434" duration="715000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -131,7 +143,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766328095745</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="图的update运行">
+      <option name="closed" value="true" />
+      <created>1766927447759</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1766927447759</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -159,26 +179,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="初步实现了一下图和节点的view与序列化，需要补全边的序列化" />
-    <option name="LAST_COMMIT_MESSAGE" value="初步实现了一下图和节点的view与序列化，需要补全边的序列化" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/ShizukuGraphBase.cs</url>
-          <line>272</line>
-          <properties documentPath="U:\projects\game\Unity\Shizuku\Assets\Scripts\ShizukuGraphBase.cs" containingFunctionPresentation="方法 'ConnectPorts'">
-            <startOffsets>
-              <option value="6792" />
-            </startOffsets>
-            <endOffsets>
-              <option value="6857" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="图的update运行" />
+    <option name="LAST_COMMIT_MESSAGE" value="图的update运行" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

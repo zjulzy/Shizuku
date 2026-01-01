@@ -14,68 +14,68 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShizukuGraphBase
   GUID: 
   _nodes:
-  - rid: 2162347980600377410
-  - rid: 2162347980600377429
-  - rid: 2162347980600377432
+  - rid: 2162347980600377434
+  - rid: 2162347980600377435
+  - rid: 2162347980600377441
   _edges: []
-  RootNodeGUID: 
+  RootNodeGUID: 98fadf38-0040-4d4b-99df-7296b1604a61
   references:
     version: 2
     RefIds:
-    - rid: 2162347980600377410
+    - rid: 2162347980600377434
       type: {class: ShizukuRootNode, ns: , asm: Assembly-CSharp}
       data:
-        GUID: b6276694-4fe5-45f3-9b2e-8f1090866822
+        GUID: 98fadf38-0040-4d4b-99df-7296b1604a61
         PositionAndSize:
-          x: 364.80002
-          y: 290.40002
+          x: 523.2
+          y: 353.6
           z: 200
           w: 100
-        NextNodeGuid: f7642678-a3b5-427b-8ec3-733e05ad424f
-    - rid: 2162347980600377429
+        NextNodeGuid: 4e6301b9-b510-4cac-8dfb-eb1bd16e41de
+    - rid: 2162347980600377435
       type: {class: ShizikuAddOneNode, ns: , asm: Assembly-CSharp}
       data:
-        GUID: f7642678-a3b5-427b-8ec3-733e05ad424f
+        GUID: 4e6301b9-b510-4cac-8dfb-eb1bd16e41de
         PositionAndSize:
-          x: 737.60004
-          y: 266.40002
-          z: 158.39996
-          w: 100.80002
-        NextNodeGuid: 0c4cefa9-f700-4d58-b035-54b99491578a
+          x: 778.4
+          y: 365.6
+          z: 183.20001
+          w: 100.79999
+        NextNodeGuid: 4272cf36-5770-4afd-ae00-6a401235301d
         Parameter:
-          rid: 2162347980600377430
+          rid: 2162347980600377436
         ParameterResult:
-          rid: 2162347980600377431
-    - rid: 2162347980600377430
+          rid: 2162347980600377437
+    - rid: 2162347980600377436
       type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
         Name: parameter
         InputEdgeGUID: 
         IsOut: 0
         Value: 0
-    - rid: 2162347980600377431
+    - rid: 2162347980600377437
       type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
         Name: result
         InputEdgeGUID: 
         IsOut: 1
         Value: 0
-    - rid: 2162347980600377432
+    - rid: 2162347980600377441
       type: {class: ShizukuLogNode, ns: , asm: Assembly-CSharp}
       data:
-        GUID: 0c4cefa9-f700-4d58-b035-54b99491578a
+        GUID: 4272cf36-5770-4afd-ae00-6a401235301d
         PositionAndSize:
-          x: 1020.7999
-          y: 278.4
-          z: 146.40002
-          w: 100.80002
+          x: 1073.6
+          y: 488.00003
+          z: 200
+          w: 100
         NextNodeGuid: 
         Message:
-          rid: 2162347980600377433
-    - rid: 2162347980600377433
+          rid: 2162347980600377442
+    - rid: 2162347980600377442
       type: {class: StringParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
         Name: message
         InputEdgeGUID: 
         IsOut: 0
-        Value: 
+        Value: "\uFF1F\uFF1F\uFF1F"

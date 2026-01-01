@@ -78,7 +78,7 @@ public abstract class ShizukuNodeBase
         
         _executedFrame = Time.frameCount;
         // 执行下一个节点
-        if (SupportControlInput && !string.IsNullOrEmpty(NextNodeGuid))
+        if (SupportControlOutput && !string.IsNullOrEmpty(NextNodeGuid))
         {
             if (_parentGraph.Guid2NodeMap.TryGetValue(NextNodeGuid, out var nextNode))
             {

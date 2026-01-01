@@ -55,13 +55,6 @@ public class ShizukuGraphView : GraphView
         evt.menu.AppendAction("创建节点/根节点", (a) => CreateNode<ShizukuRootNode>(_localMousePosition));
         evt.menu.AppendAction("创建节点/+1节点", (a) => CreateNode<ShizikuAddOneNode>(_localMousePosition));
         evt.menu.AppendAction("创建节点/打印节点", (a) => CreateNode<ShizukuLogNode>(_localMousePosition));
-        
-        
-        if(evt.target is ShizukuNodeView nodeView)
-        {
-            evt.menu.AppendSeparator();
-            evt.menu.AppendAction("设置为root", (a) => _runtimeGraph.RootNodeGUID = nodeView.RuntimeNode.GUID);
-        }
     }
     
     private void OnMouseDown(MouseDownEvent evt)
@@ -79,7 +72,9 @@ public class ShizukuGraphView : GraphView
         }
         
         var node = new TNode();
-        var nodeView = new ShizukuNodeView(node);
+
+        
+        var nodeView = new ShizukuNodeView(node, _runtimeGraph);
         nodeView.InitPort();
         nodeView.SetPosition(new Rect(mousePosition, new Vector2(200, 100)));
         
@@ -89,6 +84,7 @@ public class ShizukuGraphView : GraphView
         if(typeof(TNode) == typeof(ShizukuRootNode))
         {
             _entryNode = nodeView;
+            _runtimeGraph.RootNodeGUID = node.GUID;
         }
     }
 
@@ -198,6 +194,7 @@ public class ShizukuGraphView : GraphView
                     if (nodeView == _entryNode)
                     {
                         _entryNode = null;
+                        _runtimeGraph.RootNodeGUID = null;
                     }
                     
                     _runtimeGraph.Nodes.Remove(nodeView.RuntimeNode);
@@ -231,7 +228,7 @@ public class ShizukuGraphView : GraphView
         // 初始化节点
         graphAsset.Nodes.ForEach(nodeData =>
         {
-            var nodeView = new ShizukuNodeView(nodeData);
+            var nodeView = new ShizukuNodeView(nodeData, graphAsset);
             nodeView.InitPort();
             nodeView.SetPosition(new Rect(nodeData.PositionAndSize.x, nodeData.PositionAndSize.y, nodeData.PositionAndSize.z,
                 nodeData.PositionAndSize.w));
@@ -296,11 +293,14 @@ public class ShizukuGraphView : GraphView
 public class ShizukuNodeView : Node
 {
     private ShizukuNodeBase _node;
+    private ShizukuGraphBase _graphAsset;
+    
     public ShizukuNodeBase RuntimeNode => _node;
     
-    public ShizukuNodeView(ShizukuNodeBase node)
+    public ShizukuNodeView(ShizukuNodeBase node, ShizukuGraphBase graphAsset = null)
     {
         _node = node;
+        _graphAsset = graphAsset;
         title = node.Title;
     }
 
@@ -308,6 +308,11 @@ public class ShizukuNodeView : Node
     {
         get => base.title;
         set => base.title = value;
+    }
+
+    public void SetGraphAsset(ShizukuGraphBase graphAsset)
+    {
+        _graphAsset = graphAsset;
     }
 
     public void InitPort()
@@ -354,6 +359,14 @@ public class ShizukuNodeView : Node
                     {
                         var inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, field.FieldType);
                         inputPort.portName = port.Name;
+                        
+                        // 为输入端口添加默认值输入框
+                        var inputField = CreateInputFieldForPort(port, field);
+                        if (inputField != null)
+                        {
+                            inputPort.contentContainer.Add(inputField);
+                        }
+                        
                         inputContainer.Add(inputPort);
                     }
                 }
@@ -362,6 +375,45 @@ public class ShizukuNodeView : Node
 
         RefreshExpandedState();
         RefreshPorts();
+    }
+
+    private VisualElement CreateInputFieldForPort(ParameterEdgePort port, FieldInfo _)
+    {
+        // 根据端口类型创建对应的输入控件
+        if (port is IntParameterEdgePort intPort)
+        {
+            var intField = new IntegerField()
+            {
+                value = intPort.Value
+            };
+            intField.RegisterValueChangedCallback(evt =>
+            {
+                intPort.Value = evt.newValue;
+                if (_graphAsset != null)
+                {
+                    EditorUtility.SetDirty(_graphAsset);
+                }
+            });
+            return intField;
+        }
+        else if (port is StringParameterEdgePort stringPort)
+        {
+            var stringField = new TextField()
+            {
+                value = stringPort.Value
+            };
+            stringField.RegisterValueChangedCallback(evt =>
+            {
+                stringPort.Value = evt.newValue;
+                if (_graphAsset != null)
+                {
+                    EditorUtility.SetDirty(_graphAsset);
+                }
+            });
+            return stringField;
+        }
+        
+        return null;
     }
 
     public override void SetPosition(Rect newPos)

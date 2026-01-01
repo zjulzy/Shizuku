@@ -59,6 +59,11 @@ public class IntParameterEdgePort : ParameterEdgePort<int>
 {
 }
 
+[Serializable]
+public class StringParameterEdgePort : ParameterEdgePort<string>
+{
+}
+
 // 指定执行顺序的接口
 public class ChainPort
 {

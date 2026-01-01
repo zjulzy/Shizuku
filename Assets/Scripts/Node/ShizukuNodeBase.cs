@@ -6,19 +6,21 @@ using UnityEngine;
 
 
 [Serializable]
-public class ShizukuNodeBase
+public abstract class ShizukuNodeBase
 {
     [SerializeField]
-    public string GUID;
+    public string GUID = System.Guid.NewGuid().ToString();
     
     [SerializeField]
     public float4 PositionAndSize;
 
-    [SerializeReference]
-    public IntParameterEdgePort Parameter = new (){IsOut = false, Name = "parameter"};
+    public virtual string Title => "No Title";
     
-    [SerializeReference]
-    public IntParameterEdgePort ParameterResult = new(){IsOut = true, Name = "result"};
+    // 标定是否支持控制链输出
+    public virtual bool SupportControlOutput => true;
+    
+    // 标定是否支持控制链输入
+    public virtual bool SupportControlInput => true;
     
     [SerializeField]
     public string NextNodeGuid;
@@ -36,7 +38,9 @@ public class ShizukuNodeBase
     public readonly List<ParameterEdgePort> SelfOutputPorts = new List<ParameterEdgePort>();
     
     private int _executedFrame = -1;
+    
 
+    // 在运行时初始化调用
     public void Init(ShizukuGraphBase parentGraph)
     {
         _parentGraph = parentGraph;
@@ -66,14 +70,15 @@ public class ShizukuNodeBase
        
     }
 
+    
     public void Execute()
     {
         GetInputValues();
-        ParameterResult.Value = Parameter.Value + 1; // 示例逻辑：参数加1
-        Debug.Log($"帧号:{Time.frameCount} 执行节点 {GUID}  参数:{Parameter.Value}");
+        OnExecute();
+        
         _executedFrame = Time.frameCount;
         // 执行下一个节点
-        if (!string.IsNullOrEmpty(NextNodeGuid))
+        if (SupportControlInput && !string.IsNullOrEmpty(NextNodeGuid))
         {
             if (_parentGraph.Guid2NodeMap.TryGetValue(NextNodeGuid, out var nextNode))
             {
@@ -95,8 +100,14 @@ public class ShizukuNodeBase
         
     }
     
-    public void GetOutputValues()
+    public virtual void GetOutputValues()
     {
         
     }
+
+    #region 子类实现的生命周期
+
+    protected abstract void OnExecute();
+
+    #endregion
 }

@@ -64,6 +64,16 @@ public class StringParameterEdgePort : ParameterEdgePort<string>
 {
 }
 
+[Serializable]
+public class FloatParameterEdgePort : ParameterEdgePort<float>
+{
+}
+
+[Serializable]
+public class BoolParameterEdgePort : ParameterEdgePort<bool>
+{
+}
+
 // 指定执行顺序的接口
 public class ChainPort
 {

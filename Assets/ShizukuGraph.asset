@@ -18,6 +18,14 @@ MonoBehaviour:
   - rid: 2162347980600377435
   - rid: 2162347980600377441
   _edges: []
+  _groups:
+  - GUID: 58636885-4a8b-4f75-8579-d0e782e91d83
+    Title: "\u65B0\u5EFA\u5206\u7EC4"
+    PositionAndSize:
+      x: 635.2
+      y: 651.99994
+      z: 119.20001
+      w: 92
   RootNodeGUID: 98fadf38-0040-4d4b-99df-7296b1604a61
   references:
     version: 2
@@ -78,4 +86,4 @@ MonoBehaviour:
         Name: message
         InputEdgeGUID: 
         IsOut: 0
-        Value: "\uFF1F\uFF1F\uFF1F"
+        Value: 

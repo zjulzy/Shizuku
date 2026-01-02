@@ -1,12 +1,57 @@
 VisualElement {}
 
 :root {
-    --shizuku-graph-background: #f0f0f0; /* Example default color */
+    --shizuku-graph-background: #f0f0f0;
+    --custom-group-bg: rgba(50, 100, 200, 0.15);
+    --custom-group-border: rgba(100, 150, 255, 0.6);
+    --custom-group-title-bg: rgba(50, 100, 200, 0.5);
 }
 
+/* GraphView背景样式 */
 GridBackground {
     --background-color: var(--shizuku-graph-background);
     --line-color: rgba(19, 196, 50, 0.1);
     --thick-line-color: rgba(193, 196, 192, 0.3);
     --spacing: 20;
 }
+
+/* 自定义分组主容器样式 */
+.custom-group {
+    background-color: var(--custom-group-bg);
+    border-color: var(--custom-group-border);
+    border-width: 3px;
+    border-radius: 8px;
+}
+
+/* 分组标题栏样式 */
+.custom-group > #headerContainer {
+    background-color: var(--custom-group-title-bg);
+    border-radius: 4px 4px 0 0;
+    padding: 4px 8px;
+}
+
+.custom-group > #headerContainer > #title {
+    color: white;
+    font-size: 14px;
+    -unity-font-style: bold;
+}
+
+.custom-group > #headerContainer > #title > #title-label {
+    color: white;
+}
+
+/* 分组内容容器样式 */
+.custom-group > #contentContainer {
+    padding: 10px;
+}
+
+/* 边框调整区域 - 使用!important确保优先级 */
+.custom-group > #node-border {
+    border-width: 10px !important;
+    border-color: var(--custom-group-border);
+}
+
+.custom-group > #node-border:hover {
+    border-color: rgba(100, 200, 255, 0.9);
+}
+

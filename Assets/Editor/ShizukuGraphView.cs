@@ -34,6 +34,12 @@ public class ShizukuGraphView : GraphView
 
         // 注册 graphViewChanged 委托来检测环
         graphViewChanged += OnGraphViewChanged;
+        
+        // 设置删除回调，支持删除节点，边和分组
+        deleteSelection = (operationName, askUser) =>
+        {
+            DeleteElements(selection.OfType<GraphElement>().ToList());
+        };
 
         styleSheets.Add(Resources.Load<StyleSheet>("ShizukuGraphView"));
     }
@@ -55,6 +61,9 @@ public class ShizukuGraphView : GraphView
         evt.menu.AppendAction("创建节点/根节点", (a) => CreateNode<ShizukuRootNode>(_localMousePosition));
         evt.menu.AppendAction("创建节点/+1节点", (a) => CreateNode<ShizikuAddOneNode>(_localMousePosition));
         evt.menu.AppendAction("创建节点/打印节点", (a) => CreateNode<ShizukuLogNode>(_localMousePosition));
+        
+        evt.menu.AppendSeparator();
+        evt.menu.AppendAction("创建分组", (a) => CreateGroup(_localMousePosition));
     }
     
     private void OnMouseDown(MouseDownEvent evt)
@@ -72,7 +81,6 @@ public class ShizukuGraphView : GraphView
         }
         
         var node = new TNode();
-
         
         var nodeView = new ShizukuNodeView(node, _runtimeGraph);
         nodeView.InitPort();
@@ -80,12 +88,32 @@ public class ShizukuGraphView : GraphView
         
         _runtimeGraph.AddNode(node);
         AddElement(nodeView);
+        EditorUtility.SetDirty(_runtimeGraph);
         
         if(typeof(TNode) == typeof(ShizukuRootNode))
         {
             _entryNode = nodeView;
             _runtimeGraph.RootNodeGUID = node.GUID;
         }
+    }
+    
+    private void CreateGroup(Vector2 mousePosition)
+    {
+        var groupData = new GroupData("新建分组", new float4(mousePosition.x, mousePosition.y, 300, 200));
+        var group = new CustomGroup(groupData)
+        {
+            title = "新建分组"
+        };
+        group.SetPosition(new Rect(mousePosition, new Vector2(300, 200)));
+        
+        // 添加到运行时图中
+        if (_runtimeGraph != null)
+        {
+            _runtimeGraph.Groups.Add(groupData);
+            EditorUtility.SetDirty(_runtimeGraph);
+        }
+        
+        AddElement(group);
     }
 
     #endregion
@@ -205,6 +233,14 @@ public class ShizukuGraphView : GraphView
                         e.InputNodeGuid == nodeView.RuntimeNode.GUID
                     );
                 }
+                // 处理分组的移除
+                else if (element is CustomGroup customGroup)
+                {
+                    if (_runtimeGraph != null && customGroup.Data != null)
+                    {
+                        _runtimeGraph.Groups.Remove(customGroup.Data);
+                    }
+                }
             }
         }
 
@@ -241,6 +277,8 @@ public class ShizukuGraphView : GraphView
                 _entryNode = nodeView;
             }
         });
+        
+        // 初始化控制流连接
         graphAsset.Nodes.ForEach(nodeData =>
         {
             var currentNodeView = _guidToNodeViewMap[nodeData.GUID];
@@ -261,7 +299,7 @@ public class ShizukuGraphView : GraphView
         });
         
         
-        // 初始化边
+        // 初始化参数边
         graphAsset.Edges.ForEach(edgeData =>
         {
             var sourceNodeView = this.nodes.ToList().Find(n => (n as ShizukuNodeView).RuntimeNode.GUID == edgeData.OutputNodeGuid) as ShizukuNodeView;
@@ -277,10 +315,31 @@ public class ShizukuGraphView : GraphView
                 }
             }
         });
+        
+        // 初始化分组
+        graphAsset.Groups.ForEach(groupData =>
+        {
+            var group = new CustomGroup(groupData)
+            {
+                title = groupData.Title
+            };
+            group.SetPosition(new Rect(groupData.PositionAndSize.x, groupData.PositionAndSize.y, 
+                groupData.PositionAndSize.z, groupData.PositionAndSize.w));
+            AddElement(group);
+        });
     }
     
     public void SaveToAsset()
     {
+        // 在保存前更新所有Group的位置和标题数据
+        foreach (var element in graphElements)
+        {
+            if (element is CustomGroup customGroup)
+            {
+                customGroup.UpdateData();
+            }
+        }
+        
         // 直接将runtimeGraph保存到asset中
         EditorUtility.SetDirty(_runtimeGraph);
         AssetDatabase.SaveAssets();
@@ -361,7 +420,7 @@ public class ShizukuNodeView : Node
                         inputPort.portName = port.Name;
                         
                         // 为输入端口添加默认值输入框
-                        var inputField = CreateInputFieldForPort(port, field);
+                        var inputField = CreateInputFieldForPort(port);
                         if (inputField != null)
                         {
                             inputPort.contentContainer.Add(inputField);
@@ -377,43 +436,86 @@ public class ShizukuNodeView : Node
         RefreshPorts();
     }
 
-    private VisualElement CreateInputFieldForPort(ParameterEdgePort port, FieldInfo _)
+    private VisualElement CreateInputFieldForPort(ParameterEdgePort port)
     {
         // 根据端口类型创建对应的输入控件
-        if (port is IntParameterEdgePort intPort)
+        switch (port)
         {
-            var intField = new IntegerField()
+            case IntParameterEdgePort intPort:
             {
-                value = intPort.Value
-            };
-            intField.RegisterValueChangedCallback(evt =>
-            {
-                intPort.Value = evt.newValue;
-                if (_graphAsset != null)
+                var intField = new IntegerField()
                 {
-                    EditorUtility.SetDirty(_graphAsset);
-                }
-            });
-            return intField;
-        }
-        else if (port is StringParameterEdgePort stringPort)
-        {
-            var stringField = new TextField()
-            {
-                value = stringPort.Value
-            };
-            stringField.RegisterValueChangedCallback(evt =>
-            {
-                stringPort.Value = evt.newValue;
-                if (_graphAsset != null)
+                    value = intPort.Value
+                };
+                intField.style.minWidth = 30;
+                intField.RegisterValueChangedCallback(evt =>
                 {
-                    EditorUtility.SetDirty(_graphAsset);
-                }
-            });
-            return stringField;
+                    intPort.Value = evt.newValue;
+                    if (_graphAsset != null)
+                    {
+                        EditorUtility.SetDirty(_graphAsset);
+                    }
+                });
+                return intField;
+            }
+            
+            case FloatParameterEdgePort floatPort:
+            {
+                var floatField = new FloatField()
+                {
+                    value = floatPort.Value
+                };
+                floatField.style.minWidth = 30;
+                floatField.RegisterValueChangedCallback(evt =>
+                {
+                    floatPort.Value = evt.newValue;
+                    if (_graphAsset != null)
+                    {
+                        EditorUtility.SetDirty(_graphAsset);
+                    }
+                });
+                return floatField;
+            }
+            
+            case BoolParameterEdgePort boolPort:
+            {
+                var boolField = new Toggle()
+                {
+                    value = boolPort.Value
+                };
+                boolField.style.minWidth = 10;
+                boolField.RegisterValueChangedCallback(evt =>
+                {
+                    boolPort.Value = evt.newValue;
+                    if (_graphAsset != null)
+                    {
+                        EditorUtility.SetDirty(_graphAsset);
+                    }
+                });
+                return boolField;
+            }
+            
+            case StringParameterEdgePort stringPort:
+            {
+                var stringField = new TextField()
+                {
+                    value = stringPort.Value
+                };
+                stringField.style.minWidth = 30;
+                stringField.RegisterValueChangedCallback(evt =>
+                {
+                    stringPort.Value = evt.newValue;
+                    if (_graphAsset != null)
+                    {
+                        EditorUtility.SetDirty(_graphAsset);
+                    }
+                });
+                return stringField;
+            }
+            
+            default:
+                return null;
         }
-        
-        return null;
     }
 
     public override void SetPosition(Rect newPos)

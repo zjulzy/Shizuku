@@ -18,6 +18,10 @@ public class ShizukuGraphBase :ScriptableObject
     private List<ParameterEdge> _edges = new List<ParameterEdge>();
     public List<ParameterEdge> Edges => _edges;
     
+    [SerializeField]
+    private List<GroupData> _groups = new List<GroupData>();
+    public List<GroupData> Groups => _groups;
+    
     [SerializeField] 
     public string RootNodeGUID = null;
     

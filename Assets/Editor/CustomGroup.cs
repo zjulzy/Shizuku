@@ -45,6 +45,7 @@ public class CustomGroup : Group
         
         // 设置标题
         title = data.Title;
+        
     }
     
     // 更新数据对象的位置和大小

@@ -4,16 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/CustomGroup.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/CustomGroup.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/GroupData.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/GroupData.cs.meta" afterDir="false" />
+    <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="增加对group的支持">
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuGraphView.uss" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuGraphView.uss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/CustomGroup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/CustomGroup.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ParameterEdgePort.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ParameterEdgePort.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/防止环形图说明.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/防止环形图说明.md.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ShizukuGraph.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ShizukuGraph.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -137,7 +135,7 @@
       <workItem from="1767108949434" duration="755000" />
       <workItem from="1767271916908" duration="7709000" />
       <workItem from="1767285298187" duration="675000" />
-      <workItem from="1767333929109" duration="3116000" />
+      <workItem from="1767333929109" duration="4097000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -179,7 +177,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767285481412</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="增加对group的支持">
+      <option name="closed" value="true" />
+      <created>1767337155715</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1767337155715</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -211,7 +217,8 @@
     <MESSAGE value="拆分代码文件" />
     <MESSAGE value="优化节点的继承关系" />
     <MESSAGE value="修bug，支持修改port默认值" />
-    <option name="LAST_COMMIT_MESSAGE" value="修bug，支持修改port默认值" />
+    <MESSAGE value="增加对group的支持" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加对group的支持" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -19,13 +19,13 @@ MonoBehaviour:
   - rid: 2162347980600377441
   _edges: []
   _groups:
-  - GUID: 58636885-4a8b-4f75-8579-d0e782e91d83
+  - GUID: 6ee151b3-0f3c-4b41-8d38-ea3470a12d6b
     Title: "\u65B0\u5EFA\u5206\u7EC4"
     PositionAndSize:
-      x: 635.2
-      y: 651.99994
-      z: 119.20001
-      w: 92
+      x: 466.4
+      y: 544.8
+      z: 300
+      w: 200
   RootNodeGUID: 98fadf38-0040-4d4b-99df-7296b1604a61
   references:
     version: 2

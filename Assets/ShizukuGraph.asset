@@ -13,50 +13,10 @@ MonoBehaviour:
   m_Name: ShizukuGraph
   m_EditorClassIdentifier: Assembly-CSharp::ShizukuGraphBase
   GUID: 
-  _nodes:
-  - rid: 2162348006484738048
-  - rid: 2162348006484738049
+  _nodes: []
   _edges: []
   _groups: []
-  RootNodeGUID: 9d979594-2adf-4223-8d22-02d84bae52b1
+  RootNodeGUID: 
   references:
     version: 2
-    RefIds:
-    - rid: 2162348006484738048
-      type: {class: ShizukuRootNode, ns: , asm: Assembly-CSharp}
-      data:
-        GUID: 9d979594-2adf-4223-8d22-02d84bae52b1
-        PositionAndSize:
-          x: 712
-          y: 330.4
-          z: 125.60004
-          w: 76.80002
-        NextNodeGuid: 9c986c97-12d1-4ae5-89b1-a64fcc4288b8
-    - rid: 2162348006484738049
-      type: {class: ShizikuAddOneNode, ns: , asm: Assembly-CSharp}
-      data:
-        GUID: 9c986c97-12d1-4ae5-89b1-a64fcc4288b8
-        PositionAndSize:
-          x: 943.2
-          y: 349.6
-          z: 200
-          w: 100
-        NextNodeGuid: 
-        Parameter:
-          rid: 2162348006484738050
-        ParameterResult:
-          rid: 2162348006484738051
-    - rid: 2162348006484738050
-      type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
-      data:
-        Name: parameter
-        InputEdgeGUID: 
-        IsOut: 0
-        Value: 0
-    - rid: 2162348006484738051
-      type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
-      data:
-        Name: result
-        InputEdgeGUID: 
-        IsOut: 1
-        Value: 0
+    RefIds: []

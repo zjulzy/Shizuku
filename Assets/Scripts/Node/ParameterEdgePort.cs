@@ -75,7 +75,10 @@ public class BoolParameterEdgePort : ParameterEdgePort<bool>
 }
 
 // 指定执行顺序的接口
+[Serializable]
 public class ChainPort
 {
+    public string NextNodeGuid = null;
+    public string Name;
 }
 

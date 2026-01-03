@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -9,6 +10,7 @@ public class ShizukuNodeView : Node
 {
     private ShizukuNodeBase _node;
     private ShizukuGraphBase _graphAsset;
+    
     
     // 静态缓存样式表，只加载一次
     private static StyleSheet s_StyleSheet;
@@ -63,6 +65,8 @@ public class ShizukuNodeView : Node
             Debug.LogError("还没初始化节点就想着初始化端口？");
             return;
         }
+        var nodeType = _node.GetType();
+        var fields = nodeType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
         #region chain端口
 
@@ -78,15 +82,26 @@ public class ShizukuNodeView : Node
         // 添加控制流输入端口（Previous）
         if (_node.SupportControlInput)
         {
-            var previousPort = ControlFlowPort.Create(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, "Previous");
+            var previousPort = ControlFlowPort.Create(this, Orientation.Horizontal, Direction.Input, Port.Capacity.Single, "Previous");
             controlFlowContainer?.AddPreviousPort(previousPort);
         }
 
         // 添加控制流输出端口（Next）
         if (_node.SupportControlOutput)
         {
-            var nextPort = ControlFlowPort.Create(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, "Next");
-            controlFlowContainer?.AddNextPort(nextPort);
+            foreach (var field in fields)
+            {
+                // 检查字段是否是 ChainPort 类型
+                if (typeof(ChainPort).IsAssignableFrom(field.FieldType))
+                {
+                    var chainPort = field.GetValue(_node) as ChainPort;
+                    if (chainPort != null)
+                    {
+                        var nextPort = ControlFlowPort.Create(this, Orientation.Horizontal, Direction.Output, Port.Capacity.Single, chainPort.Name);
+                        controlFlowContainer?.AddNextPort(nextPort);
+                    }
+                }
+            }
         }
 
         #endregion
@@ -94,8 +109,7 @@ public class ShizukuNodeView : Node
         #region 参数端口
 
         // 基于反射自动为所有参数和结果生成端口
-        var nodeType = _node.GetType();
-        var fields = nodeType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        
         foreach (var field in fields)
         {
             // 检查字段是否是 ParameterEdgePort 类型
@@ -137,6 +151,7 @@ public class ShizukuNodeView : Node
         RefreshExpandedState();
         RefreshPorts();
     }
+
 
     private VisualElement CreateInputFieldForPort(ParameterEdgePort port)
     {

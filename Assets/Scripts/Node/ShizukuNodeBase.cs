@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Unity.Mathematics;
 using UnityEditorInternal;
 using UnityEngine;
@@ -17,14 +18,9 @@ public abstract class ShizukuNodeBase
     public virtual string Title => "No Title";
     public virtual Color TitleBarColor => Color.gray;
     
-    // 标定是否支持控制链输出
-    public virtual bool SupportControlOutput => true;
-    
-    // 标定是否支持控制链输入
+    // 标定是否支持控制链输入输出
     public virtual bool SupportControlInput => true;
-    
-    [SerializeField]
-    public string NextNodeGuid;
+    public virtual bool SupportControlOutput => true;
     
     [NonSerialized]
     private ShizukuGraphBase _parentGraph;
@@ -37,6 +33,9 @@ public abstract class ShizukuNodeBase
     
     [NonSerialized]
     public readonly List<ParameterEdgePort> SelfOutputPorts = new List<ParameterEdgePort>();
+    
+    [NonSerialized]
+    public Dictionary<string, ChainPort> ChainPorts = new Dictionary<string, ChainPort>();
     
     private int _executedFrame = -1;
     
@@ -66,22 +65,31 @@ public abstract class ShizukuNodeBase
                     }
                 }
             }
-
         }
-       
+        // 通过反射初始化_chainPorts
+        foreach (var field in fields)
+        {
+            if (typeof(ChainPort).IsAssignableFrom(field.FieldType))
+            {
+                var port = field.GetValue(this) as ChainPort;
+                if (port != null)
+                {
+                    ChainPorts[port.Name] = port;
+                }
+            }
+        }
     }
-
     
     public void Execute()
     {
         GetInputValues();
         OnExecute();
-        
+
         _executedFrame = Time.frameCount;
         // 执行下一个节点
-        if (SupportControlOutput && !string.IsNullOrEmpty(NextNodeGuid))
+        if (OnSelectNextNode(out var guid))
         {
-            if (_parentGraph.Guid2NodeMap.TryGetValue(NextNodeGuid, out var nextNode))
+            if (_parentGraph.Guid2NodeMap.TryGetValue(guid, out var nextNode))
             {
                 nextNode.Execute();
             }
@@ -109,6 +117,7 @@ public abstract class ShizukuNodeBase
     #region 子类实现的生命周期
 
     protected abstract void OnExecute();
+    protected abstract bool OnSelectNextNode(out string nextNodeGUID);
 
     #endregion
 }

@@ -4,23 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/ControlFlowPort.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/ControlFlowPort.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/ControlFlowPortContainer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/ControlFlowPortContainer.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPort.uss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPort.uss.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPortContainer.uss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPortContainer.uss.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuNodeView.uss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuNodeView.uss.meta" afterDir="false" />
+    <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="自定义port">
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/BlueprintBehavior.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/BlueprintBehavior.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EXAMPLE_Usage.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EXAMPLE_Usage.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/ShizukuBluePrint.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/ShizukuBluePrint.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuIfNode.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuIfNode.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuGraphView.uss" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuGraphView.uss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/ControlFlowPort.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ControlFlowPort.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/ControlFlowPort.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ControlFlowPort.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPort.uss" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPort.uss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizikuAddOneNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizikuAddOneNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuLogNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuLogNode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuRootNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuRootNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ParameterEdgePort.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ParameterEdgePort.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuNodeBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuNodeBase.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ShizukuGraph.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ShizukuGraph.asset" afterDir="false" />
     </list>
@@ -59,7 +62,9 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ec8e42e1933446f39ba5dfae3473755f224200/43/91b524fc/UQueryExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ec8e42e1933446f39ba5dfae3473755f224200/e4/3428755d/VisualElement.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fb7fbef2d0654c64811ce974c7a37c20573620/05/5ee42e76/BindingFlags.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://U:/projects/game/Unity/Shizuku/Assets/Editor/ControlFlowPort.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/ShizukuGraphWindow.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/Example/EnemyBehaviorExample.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -101,10 +106,10 @@
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="46368">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="46368" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -144,7 +149,7 @@
       <workItem from="1767271916908" duration="7709000" />
       <workItem from="1767285298187" duration="675000" />
       <workItem from="1767333929109" duration="16206000" />
-      <workItem from="1767431756764" duration="5399000" />
+      <workItem from="1767431756764" duration="15402000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -202,7 +207,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767338246973</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="自定义port">
+      <option name="closed" value="true" />
+      <created>1767442311263</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1767442311263</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -236,7 +249,27 @@
     <MESSAGE value="修bug，支持修改port默认值" />
     <MESSAGE value="增加对group的支持" />
     <MESSAGE value="整理代码文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="整理代码文件" />
+    <MESSAGE value="自定义port" />
+    <option name="LAST_COMMIT_MESSAGE" value="自定义port" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs</url>
+          <line>89</line>
+          <properties documentPath="U:\projects\game\Unity\Shizuku\Assets\Editor\ShizukuNodeView.cs" containingFunctionPresentation="方法 'InitPort'">
+            <startOffsets>
+              <option value="2481" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2512" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

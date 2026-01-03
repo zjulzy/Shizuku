@@ -1,9 +1,11 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Reflection;
 
 /// <summary>
 /// 自定义控制流端口 - 菱形样式
+/// 通过封装InstantiatePort确保连接逻辑正常工作
 /// </summary>
 public class ControlFlowPort : Port
 {
@@ -14,44 +16,76 @@ public class ControlFlowPort : Port
         s_StyleSheet = Resources.Load<StyleSheet>("ControlFlowPort");
         if (s_StyleSheet == null)
         {
-            Debug.LogError("⚠️ ControlFlowPort样式表未找到");
+            Debug.LogWarning("⚠️ ControlFlowPort样式表未找到");
         }
     }
     
     /// <summary>
-    /// 创建控制流端口
+    /// 创建控制流端口（封装了InstantiatePort的调用）
+    /// 通过反射创建真正的ControlFlowPort实例
     /// </summary>
-    public static ControlFlowPort Create(Orientation orientation, Direction direction, Capacity capacity, string portName)
+    public static ControlFlowPort Create(Node node, Orientation orientation, Direction direction, Capacity capacity, string portName)
     {
-        var port = new ControlFlowPort(orientation, direction, capacity, null, portName);
-        return port;
-    }
-    
-    private ControlFlowPort(Orientation portOrientation, Direction portDirection, Capacity portCapacity, System.Type type, string name)
-        : base(portOrientation, portDirection, portCapacity, type)
-    {
-        // 设置端口名称
-        portName = name;
+        // 先用InstantiatePort创建普通端口，获取EdgeConnector
+        var tempPort = node.InstantiatePort(orientation, direction, capacity, typeof(Chain));
         
-        // 加载样式表（用于端口标签等非connector样式）
-        if (s_StyleSheet != null && !styleSheets.Contains(s_StyleSheet))
+        // 创建ControlFlowPort实例
+        var controlFlowPort = new ControlFlowPort(orientation, direction, capacity, typeof(Chain))
         {
-            styleSheets.Add(s_StyleSheet);
+            portName = portName
+        };
+
+        // 通过反射复制EdgeConnector
+        var edgeConnectorField = typeof(Port).GetField("m_EdgeConnector", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (edgeConnectorField != null)
+        {
+            var edgeConnector = edgeConnectorField.GetValue(tempPort);
+            if (edgeConnector != null)
+            {
+                edgeConnectorField.SetValue(controlFlowPort, edgeConnector);
+                
+                // 添加EdgeConnector作为Manipulator
+                var manipulator = edgeConnector as IManipulator;
+                if (manipulator != null)
+                {
+                    controlFlowPort.AddManipulator(manipulator);
+                }
+            }
         }
         
-        AddToClassList("control-flow-port");
+        // 应用自定义样式
+        ApplyControlFlowStyle(controlFlowPort);
         
-        // 延迟设置connector样式（必须在C#中设置，USS无法覆盖Unity内联样式）
-        schedule.Execute(SetupConnectorStyle).ExecuteLater(0);
+        return controlFlowPort;
+    }
+    
+    /// <summary>
+    /// 为端口应用控制流样式
+    /// </summary>
+    private static void ApplyControlFlowStyle(Port port)
+    {
+        // 加载样式表
+        if (s_StyleSheet != null && !port.styleSheets.Contains(s_StyleSheet))
+        {
+            port.styleSheets.Add(s_StyleSheet);
+        }
+        
+        port.AddToClassList("control-flow-port");
+        
+        // 延迟设置connector样式
+        port.schedule.Execute(() =>
+        {
+            SetupConnectorStyle(port);
+        }).ExecuteLater(0);
     }
     
     /// <summary>
     /// 设置connector的菱形样式
     /// 注意：必须在C#中设置，USS无法覆盖Unity的内联样式
     /// </summary>
-    private void SetupConnectorStyle()
+    private static void SetupConnectorStyle(Port port)
     {
-        var connector = this.Q("connector");
+        var connector = port.Q("connector");
         if (connector != null)
         {
             // 形状 - 正方形
@@ -88,10 +122,12 @@ public class ControlFlowPort : Port
                 cap.style.borderBottomRightRadius = 0;
             }
         }
-        else
-        {
-            Debug.LogError($"⚠️ 控制流端口 '{portName}' 的connector元素未找到");
-        }
+    }
+    
+    // 保留protected构造函数以防需要继承
+    protected ControlFlowPort(Orientation portOrientation, Direction portDirection, Capacity portCapacity, System.Type type)
+        : base(portOrientation, portDirection, portCapacity, type)
+    {
     }
 }
 

@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 public class ShizukuGraphView : GraphView
 {
     private Vector2 _localMousePosition;
-    private ShizukuGraphBase _runtimeGraph = new();
+    private ShizukuGraphBase _runtimeGraph;
     private ShizukuNodeView _entryNode;
     
     private Dictionary<string, ShizukuNodeView> _guidToNodeViewMap = new Dictionary<string, ShizukuNodeView>();
@@ -61,9 +61,13 @@ public class ShizukuGraphView : GraphView
         evt.menu.AppendAction("创建节点/根节点", (a) => CreateNode<ShizukuRootNode>(_localMousePosition));
         evt.menu.AppendAction("创建节点/+1节点", (a) => CreateNode<ShizikuAddOneNode>(_localMousePosition));
         evt.menu.AppendAction("创建节点/打印节点", (a) => CreateNode<ShizukuLogNode>(_localMousePosition));
+        evt.menu.AppendAction("创建节点/条件节点", (a) => CreateNode<ShizukuIfNode>(_localMousePosition));
         
         evt.menu.AppendSeparator();
         evt.menu.AppendAction("创建分组", (a) => CreateGroup(_localMousePosition));
+        
+        evt.menu.AppendSeparator();
+        evt.menu.AppendAction("清空所有节点", (a) => ClearAllNodes());
     }
     
     private void OnMouseDown(MouseDownEvent evt)
@@ -115,6 +119,32 @@ public class ShizukuGraphView : GraphView
         
         AddElement(group);
     }
+    
+    /// <summary>
+    /// 清空所有节点、边和分组
+    /// </summary>
+    private void ClearAllNodes()
+    {
+        if (EditorUtility.DisplayDialog("确认清空", "确定要清空所有节点、边和分组吗？此操作无法撤销！", "确定", "取消"))
+        {
+            // 清空所有GraphView元素
+            DeleteElements(graphElements.ToList());
+            
+            // 清空运行时图数据
+            if (_runtimeGraph != null)
+            {
+                _runtimeGraph.Nodes.Clear();
+                _runtimeGraph.Edges.Clear();
+                _runtimeGraph.Groups.Clear();
+                _runtimeGraph.RootNodeGUID = null;
+                EditorUtility.SetDirty(_runtimeGraph);
+            }
+            
+            // 清空内部引用
+            _entryNode = null;
+            _guidToNodeViewMap.Clear();
+        }
+    }
 
     #endregion
     
@@ -128,10 +158,12 @@ public class ShizukuGraphView : GraphView
         {
             if (startPort != port && startPort.node != port.node && startPort.direction != port.direction)
             {
-                if(startPort.portName == "Next" && port.portName != "Previous")
-                    return;
-                if(startPort.portName == "Previous" && port.portName != "Next")
-                    return;
+                // 通过类型判断是否是控制流端口
+                bool isStartControlFlow = startPort is ControlFlowPort;
+                bool isTargetControlFlow = port is ControlFlowPort;
+                
+                if (isStartControlFlow != isTargetControlFlow)
+                    return; // 类型不匹配
                 
                 compatiblePorts.Add(port);
             }
@@ -152,6 +184,7 @@ public class ShizukuGraphView : GraphView
                 // 检查这条边是否会形成环
                 if (this.WouldCreateCycle(edge))
                 {
+                    Debug.LogWarning($"  ⚠️ 边会形成环，取消创建");
                     edgesToRemove.Add(edge);
                 }
             }
@@ -172,9 +205,13 @@ public class ShizukuGraphView : GraphView
                 var sourceNode = (edge.output.node as ShizukuNodeView).RuntimeNode;
                 // 暂时使用字符串来区分端口，如果端口名是previous或next则认为是控制流边，否则认为是参数边
                 // 控制流边只设置节点间的连接关系，参数边则需要在图中添加边数据
-                if (edge.input.portName == "Previous" && edge.output.portName == "Next")
+                if (edge.input is ControlFlowPort)
                 {
-                    sourceNode.NextNodeGuid = targetNode.GUID;
+                    if(sourceNode.ChainPorts.TryGetValue(edge.input.portName, out var chainPort))
+                    {
+                        chainPort.NextNodeGuid = targetNode.GUID;
+                    }
+                    Debug.Log($"  📌 设置控制流: {sourceNode.Title} -> {targetNode.Title}");
                 }
                 else
                 {
@@ -184,6 +221,7 @@ public class ShizukuGraphView : GraphView
                         targetNode,
                         edge.input.portName
                     );
+                    Debug.Log($"  📌 添加参数边: {sourceNode.Title}.{edge.output.portName} -> {targetNode.Title}.{edge.input.portName}");
                 }
             }
         }
@@ -192,6 +230,8 @@ public class ShizukuGraphView : GraphView
         {
             foreach (var element in graphViewChange.elementsToRemove)
             {
+                Debug.Log($"  ❌ 删除元素: {element.GetType().Name}");
+                
                 // 处理边的移除
                 if (element is Edge edge)
                 {
@@ -281,20 +321,24 @@ public class ShizukuGraphView : GraphView
         graphAsset.Nodes.ForEach(nodeData =>
         {
             var currentNodeView = _guidToNodeViewMap[nodeData.GUID];
-            // 设置控制流连接
-            if (!string.IsNullOrEmpty(nodeData.NextNodeGuid))
+            foreach (var chainPort in currentNodeView.RuntimeNode.ChainPorts)
             {
-                if (_guidToNodeViewMap.TryGetValue(nodeData.NextNodeGuid, out var nextNodeView))
+                // 设置控制流连接
+                if (!string.IsNullOrEmpty(chainPort.Value.NextNodeGuid))
                 {
-                    var outputPort = currentNodeView.outputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portName == "Next");
-                    var inputPort = nextNodeView.inputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portName == "Previous");
-                    if (outputPort != null && inputPort != null)
+                    if (_guidToNodeViewMap.TryGetValue(chainPort.Value.NextNodeGuid, out var nextNodeView))
                     {
-                        var edge = outputPort.ConnectTo(inputPort);
-                        AddElement(edge);
+                        var outputPort = currentNodeView.outputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portName == chainPort.Value.Name);
+                        var inputPort = nextNodeView.inputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portName == "Previous");
+                        if (outputPort != null && inputPort != null)
+                        {
+                            var edge = outputPort.ConnectTo(inputPort);
+                            AddElement(edge);
+                        }
                     }
                 }
             }
+            
         });
         
         

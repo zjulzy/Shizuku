@@ -15,6 +15,7 @@ public abstract class ShizukuNodeBase
     public float4 PositionAndSize;
 
     public virtual string Title => "No Title";
+    public virtual Color TitleBarColor => Color.gray;
     
     // 标定是否支持控制链输出
     public virtual bool SupportControlOutput => true;

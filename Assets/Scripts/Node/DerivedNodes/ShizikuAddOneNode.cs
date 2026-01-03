@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ShizikuAddOneNode : ShizukuNodeBase
 {
-    public override string Title => "+1 Node";
+    public override string Title => "Add One Node";
 
     [SerializeReference]
     private IntParameterEdgePort Parameter = new() { IsOut = false, Name = "parameter" };

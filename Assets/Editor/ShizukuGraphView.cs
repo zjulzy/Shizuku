@@ -287,7 +287,7 @@ public class ShizukuGraphView : GraphView
                 if (_guidToNodeViewMap.TryGetValue(nodeData.NextNodeGuid, out var nextNodeView))
                 {
                     var outputPort = currentNodeView.outputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portName == "Next");
-                    var inputPort = nextNodeView.inputContainer  .Children().OfType<Port>().FirstOrDefault(p => p.portName == "Previous");
+                    var inputPort = nextNodeView.inputContainer.Children().OfType<Port>().FirstOrDefault(p => p.portName == "Previous");
                     if (outputPort != null && inputPort != null)
                     {
                         var edge = outputPort.ConnectTo(inputPort);

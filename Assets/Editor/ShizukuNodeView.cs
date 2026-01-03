@@ -10,6 +10,15 @@ public class ShizukuNodeView : Node
     private ShizukuNodeBase _node;
     private ShizukuGraphBase _graphAsset;
     
+    // 静态缓存样式表，只加载一次
+    private static StyleSheet s_StyleSheet;
+    
+    static ShizukuNodeView()
+    {
+        // 静态构造函数，只会执行一次
+        s_StyleSheet = Resources.Load<StyleSheet>("ShizukuNodeView");
+    }
+    
     public ShizukuNodeBase RuntimeNode => _node;
     
     public ShizukuNodeView(ShizukuNodeBase node, ShizukuGraphBase graphAsset = null)
@@ -18,21 +27,22 @@ public class ShizukuNodeView : Node
         _graphAsset = graphAsset;
         title = node.Title;
         
-        // 如果是RootNode，设置标题栏背景颜色
-        if (node is ShizukuRootNode)
+        // 应用已加载的样式表（只是引用，不会重复加载）
+        if (s_StyleSheet != null && !styleSheets.Contains(s_StyleSheet))
         {
-            // 查找标题栏容器元素并设置背景颜色
-            schedule.Execute(() =>
-            {
-                // Unity的Node元素的标题栏通常是第一个子元素
-                var titleContainer = this.Q("title");
-                if (titleContainer != null)
-                {
-                    titleContainer.style.backgroundColor = new Color(0.2f, 0.6f, 0.2f, 1f); // 绿色背景
-                }
-                
-            }).ExecuteLater(0);
+            styleSheets.Add(s_StyleSheet);
         }
+
+        // 设置标题栏背景颜色
+        schedule.Execute(() =>
+        {
+            // Unity的Node元素的标题栏
+            var titleElement = this.Q("title");
+            if (titleElement != null)
+            {
+                titleElement.style.backgroundColor = node.TitleBarColor;
+            }
+        }).ExecuteLater(0);
     }
 
     public sealed override string title
@@ -54,19 +64,34 @@ public class ShizukuNodeView : Node
             return;
         }
 
-        if (_node.SupportControlOutput)
+        #region chain端口
+
+        // 创建控制流端口容器（放在节点顶部）
+        ControlFlowPortContainer controlFlowContainer = null;
+        if (_node.SupportControlInput || _node.SupportControlOutput)
         {
-            var nextPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(Chain));
-            nextPort.portName = "Next";
-            outputContainer.Add(nextPort);
+            controlFlowContainer = new ControlFlowPortContainer();
+            // 第一位是标题栏，第二位放控制流端口容器，最后是参数端口容器
+            mainContainer.Insert(1, controlFlowContainer);
         }
 
+        // 添加控制流输入端口（Previous）
         if (_node.SupportControlInput)
         {
-            var previousPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(Chain));
-            previousPort.portName = "Previous";
-            inputContainer.Add(previousPort);
+            var previousPort = ControlFlowPort.Create(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, "Previous");
+            controlFlowContainer?.AddPreviousPort(previousPort);
         }
+
+        // 添加控制流输出端口（Next）
+        if (_node.SupportControlOutput)
+        {
+            var nextPort = ControlFlowPort.Create(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, "Next");
+            controlFlowContainer?.AddNextPort(nextPort);
+        }
+
+        #endregion
+
+        #region 参数端口
 
         // 基于反射自动为所有参数和结果生成端口
         var nodeType = _node.GetType();
@@ -84,25 +109,30 @@ public class ShizukuNodeView : Node
                     {
                         var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, field.FieldType);
                         outputPort.portName = port.Name;
+                        outputPort.AddToClassList("parameter-port");
                         outputContainer.Add(outputPort);
                     }
                     else
                     {
                         var inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, field.FieldType);
                         inputPort.portName = port.Name;
-                        
+                        inputPort.AddToClassList("parameter-port");
+
                         // 为输入端口添加默认值输入框
                         var inputField = CreateInputFieldForPort(port);
                         if (inputField != null)
                         {
                             inputPort.contentContainer.Add(inputField);
                         }
-                        
+
                         inputContainer.Add(inputPort);
                     }
                 }
             }
         }
+
+        #endregion
+
 
         RefreshExpandedState();
         RefreshPorts();

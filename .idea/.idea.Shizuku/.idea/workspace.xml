@@ -4,14 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="增加对group的支持">
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs.meta" afterDir="false" />
+    <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/ControlFlowPort.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/ControlFlowPort.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/ControlFlowPortContainer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/ControlFlowPortContainer.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPort.uss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPort.uss.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPortContainer.uss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPortContainer.uss.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuNodeView.uss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuNodeView.uss.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/CustomGroup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/CustomGroup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuGraphView.uss" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuGraphView.uss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/防止环形图说明.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/防止环形图说明.md.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizikuAddOneNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizikuAddOneNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuRootNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuRootNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuNodeBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuNodeBase.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ShizukuGraph.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ShizukuGraph.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -40,6 +50,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3272951baa974b2ab5e8de68d60bfc1e46ae00/42/8861ce52/List`1.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3272951baa974b2ab5e8de68d60bfc1e46ae00/77/0389243b/BindingFlags.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3272951baa974b2ab5e8de68d60bfc1e46ae00/98/6ca204a7/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/b1/6b073c34/Object.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5ff4b547bab14ebb9b1631f70822126643000/51/f6f2aea7/Capabilities.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5ff4b547bab14ebb9b1631f70822126643000/59/3dfbc9f6/Node.cs" root0="FORCE_HIGHLIGHTING" />
@@ -48,10 +59,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ec8e42e1933446f39ba5dfae3473755f224200/43/91b524fc/UQueryExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ec8e42e1933446f39ba5dfae3473755f224200/e4/3428755d/VisualElement.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fb7fbef2d0654c64811ce974c7a37c20573620/05/5ee42e76/BindingFlags.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://U:/projects/game/Unity/Shizuku/Assets/Editor/ShizukuGraphView.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://U:/projects/game/Unity/Shizuku/Assets/Editor/ShizukuGraphView.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/ShizukuGraphWindow.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://U:/projects/game/Unity/Shizuku/Assets/Scripts/Node/ParameterEdgePort.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -62,20 +70,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settings.project.statistic.project.settings",
-    "vue.rearranger.settings.migration": "true",
-    "附加到 Unity 编辑器.附加到 Unity 编辑器.executor": "Debug"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.statistic.project.settings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;附加到 Unity 编辑器.附加到 Unity 编辑器.executor&quot;: &quot;Debug&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="附加到 Unity 编辑器.附加到 Unity 编辑器">
     <configuration name="启动 Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="U:\engine\6000.2.14f1\Unity.exe" />
@@ -135,7 +143,8 @@
       <workItem from="1767108949434" duration="755000" />
       <workItem from="1767271916908" duration="7709000" />
       <workItem from="1767285298187" duration="675000" />
-      <workItem from="1767333929109" duration="4097000" />
+      <workItem from="1767333929109" duration="16206000" />
+      <workItem from="1767431756764" duration="5399000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -185,7 +194,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767337155715</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="整理代码文件">
+      <option name="closed" value="true" />
+      <created>1767338246973</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1767338246973</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -218,26 +235,8 @@
     <MESSAGE value="优化节点的继承关系" />
     <MESSAGE value="修bug，支持修改port默认值" />
     <MESSAGE value="增加对group的支持" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加对group的支持" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs</url>
-          <line>72</line>
-          <properties documentPath="U:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\ShizukuGraphBase.cs" containingFunctionPresentation="方法 'Update'">
-            <startOffsets>
-              <option value="2082" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2122" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="整理代码文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="整理代码文件" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

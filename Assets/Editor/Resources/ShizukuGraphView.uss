@@ -15,6 +15,7 @@ GridBackground {
     --spacing: 20;
 }
 
+
 /* 自定义分组主容器样式 */
 .custom-group {
     background-color: var(--custom-group-bg);

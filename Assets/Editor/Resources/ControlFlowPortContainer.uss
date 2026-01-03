@@ -1,0 +1,22 @@
+/* 控制流端口容器主样式 */
+.control-flow-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 24px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+/* 左右侧端口容器 */
+.port-side-container {
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 右侧容器特殊样式 */
+.port-right-container {
+    justify-content: flex-end;
+}
+
+

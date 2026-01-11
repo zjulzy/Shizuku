@@ -13,10 +13,45 @@ MonoBehaviour:
   m_Name: ShizukuGraph
   m_EditorClassIdentifier: Assembly-CSharp::ShizukuGraphBase
   GUID: 
-  _nodes: []
+  _nodes:
+  - rid: 2162348022557835329
+  - rid: 2162348022557835330
   _edges: []
   _groups: []
-  RootNodeGUID: 
+  RootNodeGUID: 6d3394ea-fc1c-4dc3-a4e8-a862917cfedb
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2162348022557835329
+      type: {class: ShizukuRootNode, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 6d3394ea-fc1c-4dc3-a4e8-a862917cfedb
+        PositionAndSize:
+          x: 916.8
+          y: 339.2
+          z: 200
+          w: 100
+        _nextPort:
+          NextNodeGuid: 
+          Name: next
+    - rid: 2162348022557835330
+      type: {class: ShizukuLogNode, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 1c5263dd-a078-4c69-8087-28990b14116a
+        PositionAndSize:
+          x: 1239.2001
+          y: 488.80002
+          z: 200
+          w: 100
+        Message:
+          rid: 2162348022557835331
+        _nextPort:
+          NextNodeGuid: 
+          Name: next
+    - rid: 2162348022557835331
+      type: {class: StringParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: message
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: 

@@ -51,7 +51,7 @@ public class ShizukuGraphBase :ScriptableObject
         _edges.Add(edge);
     }
 
-    public void Init()
+    public virtual void Init()
     {
         _guid2NodeMap.Clear();
         foreach (var node in _nodes)

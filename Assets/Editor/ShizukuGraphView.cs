@@ -153,6 +153,7 @@ public class ShizukuGraphView : GraphView
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
     {
         var compatiblePorts = new List<Port>();
+        // TODO: 需要根据端口的数据类型进行更加精细的匹配判断
         
         ports.ForEach(port =>
         {

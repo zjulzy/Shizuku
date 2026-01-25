@@ -35,12 +35,6 @@ public class BlueprintEventNode : ShizukuNodeBase
     public List<EventParameter> EventParameters = new List<EventParameter>();
     
     /// <summary>
-    /// 绑定的Behavior实例
-    /// </summary>
-    [NonSerialized]
-    private BlueprintBehavior _boundBehavior;
-    
-    /// <summary>
     /// 下一个节点的ChainPort
     /// </summary>
     [SerializeField]
@@ -52,14 +46,6 @@ public class BlueprintEventNode : ShizukuNodeBase
     // 事件节点不支持控制流输入（它是入口点）
     public override bool SupportControlInput => false;
     public override bool SupportControlOutput => true;
-    
-    /// <summary>
-    /// 绑定到Behavior实例
-    /// </summary>
-    public void BindToBehavior(BlueprintBehavior behavior)
-    {
-        _boundBehavior = behavior;
-    }
     
     /// <summary>
     /// 触发事件执行

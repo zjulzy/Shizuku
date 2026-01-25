@@ -1,0 +1,96 @@
+Date : 2026-01-25 17:45:52
+Directory : u:\projects\game\Unity\Shizuku
+Total : 45 files,  2981 codes, 350 comments, 390 blanks, all 3721 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C#       |         25 |      1,755 |        350 |        387 |      2,492 |
+| JSON     |          3 |        643 |          0 |          2 |        645 |
+| XML      |         16 |        581 |          0 |          0 |        581 |
+| Markdown |          1 |          2 |          0 |          1 |          3 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                          | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                             |         45 |      2,981 |        350 |        390 |      3,721 |
+| . (Files)                                                                                     |          1 |          2 |          0 |          1 |          3 |
+| .idea                                                                                         |         16 |        581 |          0 |          0 |        581 |
+| .idea (Files)                                                                                 |          6 |         38 |          0 |          0 |         38 |
+| .idea\.idea.Shiziku                                                                           |          1 |        193 |          0 |          0 |        193 |
+| .idea\.idea.Shiziku\.idea                                                                     |          1 |        193 |          0 |          0 |        193 |
+| .idea\.idea.Shizuku                                                                           |          9 |        350 |          0 |          0 |        350 |
+| .idea\.idea.Shizuku\.idea                                                                     |          9 |        350 |          0 |          0 |        350 |
+| Assets                                                                                        |         25 |      1,755 |        350 |        387 |      2,492 |
+| Assets\Editor                                                                                 |          7 |        751 |        116 |        156 |      1,023 |
+| Assets\Scripts                                                                                |         16 |        795 |        233 |        181 |      1,209 |
+| Assets\Scripts (Files)                                                                        |          1 |         13 |          2 |          3 |         18 |
+| Assets\Scripts\Graph                                                                          |          7 |        448 |        155 |         89 |        692 |
+| Assets\Scripts\Graph (Files)                                                                  |          3 |        148 |          5 |         31 |        184 |
+| Assets\Scripts\Graph\Blueprint                                                                |          4 |        300 |        150 |         58 |        508 |
+| Assets\Scripts\Node                                                                           |          8 |        334 |         76 |         89 |        499 |
+| Assets\Scripts\Node (Files)                                                                   |          2 |        160 |          8 |         40 |        208 |
+| Assets\Scripts\Node\BlueprintNodes                                                            |          1 |         80 |         68 |         22 |        170 |
+| Assets\Scripts\Node\DerivedNodes                                                              |          5 |         94 |          0 |         27 |        121 |
+| Assets\TutorialInfo                                                                           |          2 |        209 |          1 |         50 |        260 |
+| Assets\TutorialInfo\Scripts                                                                   |          2 |        209 |          1 |         50 |        260 |
+| Assets\TutorialInfo\Scripts (Files)                                                           |          1 |         14 |          0 |          3 |         17 |
+| Assets\TutorialInfo\Scripts\Editor                                                            |          1 |        195 |          1 |         47 |        243 |
+| Packages                                                                                      |          2 |        522 |          0 |          2 |        524 |
+| ProjectSettings                                                                               |          1 |        121 |          0 |          0 |        121 |
++-----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                      | language | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shiziku\.idea\workspace.xml                        | XML      |        193 |          0 |          0 |        193 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\copilot.data.migration.agent.xml     | XML      |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\copilot.data.migration.ask.xml       | XML      |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\copilot.data.migration.ask2agent.xml | XML      |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\copilot.data.migration.edit.xml      | XML      |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\indexLayout.xml                      | XML      |          8 |          0 |          0 |          8 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\projectSettingsUpdater.xml           | XML      |          8 |          0 |          0 |          8 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\statistic.xml                        | XML      |         14 |          0 |          0 |         14 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\vcs.xml                              | XML      |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\workspace.xml                        | XML      |        290 |          0 |          0 |        290 |
+| u:\projects\game\Unity\Shizuku\.idea\copilot.data.migration.agent.xml                         | XML      |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\copilot.data.migration.ask.xml                           | XML      |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\copilot.data.migration.ask2agent.xml                     | XML      |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\copilot.data.migration.edit.xml                          | XML      |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\indexLayout.xml                                          | XML      |          8 |          0 |          0 |          8 |
+| u:\projects\game\Unity\Shizuku\.idea\vcs.xml                                                  | XML      |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ControlFlowPort.cs                               | C#       |         87 |         28 |         19 |        134 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ControlFlowPortContainer.cs                      | C#       |         47 |         13 |         11 |         71 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\CustomGroup.cs                                   | C#       |         37 |         12 |         14 |         63 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ShizukuGraphView.cs                              | C#       |        294 |         38 |         63 |        395 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ShizukuGraphViewExtensions.cs                    | C#       |         41 |          9 |          8 |         58 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ShizukuGraphWindow.cs                            | C#       |         48 |          1 |          9 |         58 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ShizukuNodeView.cs                               | C#       |        197 |         15 |         32 |        244 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\GraphRunner.cs                                  | C#       |         13 |          2 |          3 |         18 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\Blueprint\BlueprintBehavior.cs            | C#       |         71 |         63 |         19 |        153 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\Blueprint\BlueprintExtensions.cs          | C#       |         58 |         21 |          9 |         88 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\Blueprint\EXAMPLE_EnemyBlueprint.cs       | C#       |         85 |          0 |          1 |         86 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\Blueprint\ShizukuBluePrint.cs             | C#       |         86 |         66 |         29 |        181 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\GroupData.cs                              | C#       |         25 |          3 |          7 |         35 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\ParameterEdge.cs                          | C#       |         56 |          2 |          9 |         67 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\ShizukuGraphBase.cs                       | C#       |         67 |          0 |         15 |         82 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\BlueprintNodes\BlueprintEventNode.cs       | C#       |         80 |         68 |         22 |        170 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\DerivedNodes\ShizikuAddOneNode.cs          | C#       |         21 |          0 |          7 |         28 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\DerivedNodes\ShizukuForNode.cs             | C#       |         11 |          0 |          2 |         13 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\DerivedNodes\ShizukuIfNode.cs              | C#       |         27 |          0 |          7 |         34 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\DerivedNodes\ShizukuLogNode.cs             | C#       |         18 |          0 |          5 |         23 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\DerivedNodes\ShizukuRootNode.cs            | C#       |         17 |          0 |          6 |         23 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\ParameterEdgePort.cs                       | C#       |         64 |          3 |         18 |         85 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\ShizukuNodeBase.cs                         | C#       |         96 |          5 |         22 |        123 |
+| u:\projects\game\Unity\Shizuku\Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs             | C#       |        195 |          1 |         47 |        243 |
+| u:\projects\game\Unity\Shizuku\Assets\TutorialInfo\Scripts\Readme.cs                          | C#       |         14 |          0 |          3 |         17 |
+| u:\projects\game\Unity\Shizuku\Packages\manifest.json                                         | JSON     |         48 |          0 |          1 |         49 |
+| u:\projects\game\Unity\Shizuku\Packages\packages-lock.json                                    | JSON     |        474 |          0 |          1 |        475 |
+| u:\projects\game\Unity\Shizuku\ProjectSettings\SceneTemplateSettings.json                     | JSON     |        121 |          0 |          0 |        121 |
+| u:\projects\game\Unity\Shizuku\README.md                                                      | Markdown |          2 |          0 |          1 |          3 |
+| Total                                                                                         |          |      2,981 |        350 |        390 |      3,721 |
++-----------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

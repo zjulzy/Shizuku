@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-// TODO: 基于模板的蓝图系统
-// 初步构想是蓝图模板绑定BlueprintBehavior类型，就可以在具体的蓝图类中重写BlueprintBehavior中的虚方法
-// 在新建一个BlueprintBehavior类型后，通过自动生成代码生成对应的蓝图类
-
 /// <summary>
 /// 蓝图基类（泛型版本，用于代码生成和类型安全）
 /// T: 对应的BlueprintBehavior类型
@@ -14,14 +10,14 @@ using UnityEngine;
 /// <remarks>
 /// 使用流程：
 /// 1. 先定义 EnemyBehavior : BlueprintBehavior（不会有编译错误）
-/// 2. 右键菜单"Generate Blueprint" → 自动生成 EnemyBlueprint : ShizukuBluePrint&lt;EnemyBehavior&gt;
+/// 2. 右键菜单"Generate Blueprint" → 自动生成 EnemyBlueprint : ShizukuBluePrint EnemyBehavior；
 /// 3. 生成器通过反射获取 EnemyBehavior 的成员，生成强类型的初始化代码
 /// 
 /// 新增功能：
 /// - 事件系统：支持蓝图重写Behavior的虚拟方法
 /// - 属性访问：支持蓝图读写Behavior的protected字段
 /// </remarks>
-public abstract class ShizukuBluePrint<T> : ShizukuGraphBase where T : BlueprintBehavior
+public abstract class ShizukuBluePrint<T> : ShizukuGraphBase where T : BlueprintBehavior<T>
 {
     /// <summary>
     /// 当前绑定的Behavior实例
@@ -34,39 +30,16 @@ public abstract class ShizukuBluePrint<T> : ShizukuGraphBase where T : Blueprint
     /// key: 事件名称, value: 对应的事件节点
     /// </summary>
     [NonSerialized]
-    private Dictionary<string, BlueprintEventNode> _eventNodes = new Dictionary<string, BlueprintEventNode>();
+    private readonly Dictionary<string, BlueprintEventNode> _eventNodes = new Dictionary<string, BlueprintEventNode>();
     
     /// <summary>
-    /// 重写Init方法，在初始化时主动绑定到Behavior
+    /// 静态属性访问器缓存（所有同类型实例共享）
+    /// 避免每次 InitializeBehavior 都反射
     /// </summary>
-    public override void Init()
-    {
-        // 先调用基类Init初始化节点和边
-        base.Init();
-        
-        // 查找场景中持有此蓝图的Behavior
-        FindAndBindBehavior();
-    }
+    private static Dictionary<string, Func<T, object>> _cachedGetters;
+    private static Dictionary<string, Action<T, object>> _cachedSetters;
+    private static bool _accessorsCached = false;
     
-    /// <summary>
-    /// 查找并绑定到持有此蓝图的Behavior实例
-    /// </summary>
-    private void FindAndBindBehavior()
-    {
-        // 在场景中查找所有T类型的Behavior
-        var behaviors = UnityEngine.Object.FindObjectsOfType<T>();
-        
-        foreach (var behavior in behaviors)
-        {
-            // 检查这个Behavior是否持有当前蓝图
-            if (behavior.Blueprint == this)
-            {
-                _behavior = behavior;
-                InitializeBehavior(behavior);
-                break;
-            }
-        }
-    }
     
     /// <summary>
     /// 初始化Behavior（由BlueprintBehavior的Start调用）
@@ -74,6 +47,7 @@ public abstract class ShizukuBluePrint<T> : ShizukuGraphBase where T : Blueprint
     /// </summary>
     public virtual void InitializeBehavior(T behavior)
     {
+        Init();
         _behavior = behavior;
         
         // 注册蓝图事件
@@ -81,9 +55,6 @@ public abstract class ShizukuBluePrint<T> : ShizukuGraphBase where T : Blueprint
         
         // 注册属性访问器
         RegisterPropertyAccessors(behavior);
-        
-        // 使用扩展方法绑定所有节点
-        this.BindAllNodes(behavior);
     }
     
     /// <summary>
@@ -101,9 +72,6 @@ public abstract class ShizukuBluePrint<T> : ShizukuGraphBase where T : Blueprint
             {
                 _eventNodes[eventNode.EventName] = eventNode;
                 
-                // 将事件节点绑定到Behavior
-                eventNode.BindToBehavior(behavior);
-                
                 // 注册事件处理器
                 behavior.RegisterBlueprintEvent(eventNode.EventName, (args) =>
                 {
@@ -116,47 +84,76 @@ public abstract class ShizukuBluePrint<T> : ShizukuGraphBase where T : Blueprint
     /// <summary>
     /// 注册属性访问器
     /// 通过反射为Behavior的protected字段生成访问器
-    /// 子类可以重写此方法来添加自定义访问器
+    /// 使用静态缓存优化性能（首次反射，后续复用）
     /// </summary>
     protected virtual void RegisterPropertyAccessors(T behavior)
     {
+        // 首次调用时构建缓存
+        if (!_accessorsCached)
+        {
+            BuildAccessorCache();
+            _accessorsCached = true;
+        }
+        
+        // 使用缓存的访问器注册
+        foreach (var kvp in _cachedGetters)
+        {
+            var getter = kvp.Value;
+            behavior.RegisterPropertyGetter(kvp.Key, () => getter(behavior));
+        }
+        
+        foreach (var kvp in _cachedSetters)
+        {
+            var setter = kvp.Value;
+            behavior.RegisterPropertySetter(kvp.Key, (value) => setter(behavior, value));
+        }
+    }
+    
+    /// <summary>
+    /// 构建属性访问器缓存（只在首次调用时执行）
+    /// </summary>
+    private static void BuildAccessorCache()
+    {
+        _cachedGetters = new Dictionary<string, Func<T, object>>();
+        _cachedSetters = new Dictionary<string, Action<T, object>>();
+        
         var behaviorType = typeof(T);
         var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
         
-        // 获取所有字段
+        // 缓存字段访问器
         var fields = behaviorType.GetFields(flags);
-        
         foreach (var field in fields)
         {
             // 跳过Unity的私有字段
             if (field.Name.StartsWith("m_")) continue;
             
             var fieldName = field.Name;
+            var fieldCopy = field; // 避免闭包捕获循环变量
             
-            // 注册Getter
-            behavior.RegisterPropertyGetter(fieldName, () => field.GetValue(behavior));
+            // 缓存 Getter
+            _cachedGetters[fieldName] = (b) => fieldCopy.GetValue(b);
             
-            // 注册Setter
-            behavior.RegisterPropertySetter(fieldName, (value) => field.SetValue(behavior, value));
+            // 缓存 Setter
+            _cachedSetters[fieldName] = (b, value) => fieldCopy.SetValue(b, value);
         }
         
-        // 获取所有属性
+        // 缓存属性访问器
         var properties = behaviorType.GetProperties(flags);
-        
         foreach (var property in properties)
         {
             var propertyName = property.Name;
+            var propertyCopy = property;
             
-            // 注册Getter
+            // 缓存 Getter
             if (property.CanRead)
             {
-                behavior.RegisterPropertyGetter(propertyName, () => property.GetValue(behavior));
+                _cachedGetters[propertyName] = (b) => propertyCopy.GetValue(b);
             }
             
-            // 注册Setter
+            // 缓存 Setter
             if (property.CanWrite)
             {
-                behavior.RegisterPropertySetter(propertyName, (value) => property.SetValue(behavior, value));
+                _cachedSetters[propertyName] = (b, value) => propertyCopy.SetValue(b, value);
             }
         }
     }

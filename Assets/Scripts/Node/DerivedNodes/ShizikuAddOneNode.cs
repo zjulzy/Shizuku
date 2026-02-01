@@ -1,7 +1,6 @@
 using UnityEngine;
 
-
-public class ShizikuAddOneNode : ShizukuNodeBase
+public class ShizikuAddOneNode : ShizukuRunnableNode
 {
     public override string Title => "Add One Node";
 
@@ -16,7 +15,7 @@ public class ShizikuAddOneNode : ShizukuNodeBase
 
     protected override void OnExecute()
     {
-        _parameterResult.Value = _parameter.Value + 1; // 示例逻辑：参数加1
+        _parameterResult.Value = _parameter.Value + 1;
         Debug.Log($"帧号:{Time.frameCount} 执行节点 {GUID}  参数:{_parameter.Value}");
     }
 

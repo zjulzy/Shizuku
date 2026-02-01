@@ -442,6 +442,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1356500955}
   - component: {fileID: 1356500954}
+  - component: {fileID: 1356500956}
   m_Layer: 0
   m_Name: GraphRunner
   m_TagString: Untagged
@@ -456,7 +457,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1356500953}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5307538763b394f4da6222a710ba5a7b, type: 3}
   m_Name: 
@@ -477,6 +478,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1356500956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356500953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33f93dcd79dd4a33a4a0d44f45c35bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EXAMPLE_EnemyBlueprint
+  _blueprint: {fileID: 11400000, guid: c7a3ad5889ab34a4e94aa93fb2713dd4, type: 2}
+  health: 100
+  speed: 5
+  defense: 10
 --- !u!1 &2117902512
 GameObject:
   m_ObjectHideFlags: 0

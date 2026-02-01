@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ShizukuIfNode : ShizukuNodeBase
+public class ShizukuIfNode : ShizukuRunnableNode
 {
     public override string Title => "If";
     public override Color TitleBarColor => Color.cyan;
@@ -16,19 +16,11 @@ public class ShizukuIfNode : ShizukuNodeBase
 
     protected override void OnExecute()
     {
-        
     }
 
     protected override bool OnSelectNextNode(out string nextNodeGUID)
     {
-        if (_condition.Value)
-        {
-            nextNodeGUID = _truePort.NextNodeGuid;
-        }
-        else
-        {
-            nextNodeGUID = _falsePort.NextNodeGuid;
-        }
+        nextNodeGUID = _condition.Value ? _truePort.NextNodeGuid : _falsePort.NextNodeGuid;
         return !string.IsNullOrEmpty(nextNodeGUID);
     }
 }

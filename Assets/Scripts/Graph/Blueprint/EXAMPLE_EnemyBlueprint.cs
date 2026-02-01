@@ -1,10 +1,11 @@
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 /// <summary>
 /// 敌人行为类示例
 /// 演示如何使用 [BlueprintOverridable] 简化蓝图重写逻辑
 /// </summary>
-public class EnemyBehavior : BlueprintBehavior<EnemyBehavior>
+public class EXAMPLE_EnemyBlueprint : BlueprintBehavior<EXAMPLE_EnemyBlueprint>
 {
     [SerializeField] protected float health = 100f;
     [SerializeField] protected float speed = 5f;
@@ -28,16 +29,19 @@ public class EnemyBehavior : BlueprintBehavior<EnemyBehavior>
     }
 
     [BlueprintOverridable]
+    [Button]
+
     protected virtual void OnDeath()
     {
         if (TryExecuteBlueprintOverride(nameof(OnDeath)))
             return;
         
         Debug.Log($"{gameObject.name} died!");
-        Destroy(gameObject);
+        // Destroy(gameObject);
     }
 
     [BlueprintOverridable("OnAttack")]
+    [Button]
     public virtual void Attack(GameObject target)
     {
         if (TryExecuteBlueprintOverride(nameof(Attack), target))
@@ -59,28 +63,9 @@ public class EnemyBehavior : BlueprintBehavior<EnemyBehavior>
         transform.position = Vector3.MoveTowards(
             transform.position, target, speed * Time.deltaTime);
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            // 自动判断：蓝图实现了就用蓝图，否则用 C# 逻辑
-            TakeDamage(20f);
-        }
-
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            Heal(15f);
-        }
-    }
 }
 
 [CreateAssetMenu(fileName = "EnemyBlueprint", menuName = "Shizuku/Blueprint/Enemy Blueprint")]
-public class EnemyBlueprint : ShizukuBluePrint<EnemyBehavior>
+public class EnemyBlueprint : ShizukuBluePrint<EXAMPLE_EnemyBlueprint>
 {
-    public override void InitializeBehavior(EnemyBehavior behavior)
-    {
-        base.InitializeBehavior(behavior);
-        Debug.Log($"EnemyBlueprint initialized for {behavior.gameObject.name}");
-    }
 }

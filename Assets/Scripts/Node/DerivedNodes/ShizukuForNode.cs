@@ -1,8 +1,7 @@
-public class ShizukuForNode: ShizukuNodeBase
+public class ShizukuForNode : ShizukuRunnableNode
 {
     protected override void OnExecute()
     {
-        
     }
 
     protected override bool OnSelectNextNode(out string nextNodeGUID)

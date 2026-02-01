@@ -22,55 +22,24 @@ using UnityEngine;
 /// </remarks>
 public abstract class BlueprintBehavior<T> : MonoBehaviour where T : BlueprintBehavior<T>
 {
-    /// <summary>
-    /// 蓝图引用（使用基类类型，避免编译时依赖）
-    /// 赋值的时候需要检测泛型类型
-    /// </summary>
-    // TODO：严格限制蓝图类型
     [SerializeField]
     private ShizukuBluePrint<T> _blueprint;
     
-    /// <summary>
-    /// 获取蓝图实例
-    /// </summary>
-    public ShizukuGraphBase Blueprint => _blueprint;
-
-    protected virtual Type GraphType => typeof(ShizukuBluePrint<>);
+    public ShizukuBluePrint<T> Blueprint => _blueprint;
 
     #region 蓝图事件系统
     
-    /// <summary>
-    /// 蓝图事件处理器字典
-    /// </summary>
     private Dictionary<string, Action<object[]>> _blueprintEvents = new Dictionary<string, Action<object[]>>();
     
-    /// <summary>
-    /// 蓝图属性获取器字典
-    /// </summary>
     private Dictionary<string, Func<object>> _propertyGetters = new Dictionary<string, Func<object>>();
-    
-    /// <summary>
-    /// 蓝图属性设置器字典
-    /// </summary>
+
     private Dictionary<string, Action<object>> _propertySetters = new Dictionary<string, Action<object>>();
     
-    /// <summary>
-    /// 可重写方法缓存字典（避免重复反射）
-    /// key: 方法名, value: 对应的蓝图事件名（null 表示该方法不可重写）
-    /// </summary>
-    private Dictionary<string, string> _overridableMethodCache = new Dictionary<string, string>();
-    
-    /// <summary>
-    /// 注册蓝图事件
-    /// </summary>
     public void RegisterBlueprintEvent(string eventName, Action<object[]> handler)
     {
         _blueprintEvents[eventName] = handler;
     }
     
-    /// <summary>
-    /// 注销蓝图事件
-    /// </summary>
     public void UnregisterBlueprintEvent(string eventName)
     {
         _blueprintEvents.Remove(eventName);
@@ -98,50 +67,17 @@ public abstract class BlueprintBehavior<T> : MonoBehaviour where T : BlueprintBe
         return _blueprintEvents != null && _blueprintEvents.ContainsKey(eventName);
     }
     
-    /// <summary>
-    /// 尝试执行标记了 [BlueprintOverridable] 的方法的蓝图重写版本
-    /// 如果蓝图实现了对应事件，返回 true；否则返回 false，继续执行 C# 逻辑
-    /// 使用缓存机制避免重复反射，第一次调用会有反射开销，后续调用性能接近字典查询
-    /// </summary>
     /// <param name="methodName">方法名（使用 nameof(方法名)）</param>
     /// <param name="args">方法参数</param>
     /// <returns>蓝图是否实现了该方法</returns>
     protected bool TryExecuteBlueprintOverride(string methodName, params object[] args)
     {
-        // 先查缓存
-        if (!_overridableMethodCache.TryGetValue(methodName, out var eventName))
+        if(!IsBlueprintEventImplemented(methodName))
         {
-            // 缓存未命中，执行反射检查（只在第一次调用时发生）
-            var method = GetType().GetMethod(methodName, 
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            
-            if (method == null)
-            {
-                Debug.LogWarning($"Method '{methodName}' not found on {GetType().Name}");
-                _overridableMethodCache[methodName] = null; // 缓存失败结果
-                return false;
-            }
-            
-            // 检查是否有 [BlueprintOverridable] 标记
-            var attr = method.GetCustomAttribute<BlueprintOverridableAttribute>();
-            if (attr == null)
-            {
-                Debug.LogWarning($"Method '{methodName}' is not marked with [BlueprintOverridable]");
-                _overridableMethodCache[methodName] = null; // 缓存失败结果
-                return false;
-            }
-            
-            // 获取事件名并缓存
-            eventName = string.IsNullOrEmpty(attr.EventName) ? methodName : attr.EventName;
-            _overridableMethodCache[methodName] = eventName;
-        }
-        
-        // 如果缓存的结果是 null，说明之前检查失败过
-        if (eventName == null)
             return false;
-        
-        // 尝试执行蓝图事件
-        return ExecuteBlueprintEvent(eventName, args);
+        }
+        ExecuteBlueprintEvent(methodName, args);
+        return true;
     }
     
     /// <summary>
@@ -163,24 +99,28 @@ public abstract class BlueprintBehavior<T> : MonoBehaviour where T : BlueprintBe
     /// <summary>
     /// 获取属性值（供蓝图节点调用）
     /// </summary>
-    public object GetBlueprintProperty(string propertyName)
+    public bool TryGetBlueprintProperty(string propertyName, out object value)
     {
+        value = null;
         if (_propertyGetters != null && _propertyGetters.TryGetValue(propertyName, out var getter))
         {
-            return getter?.Invoke();
+            value = getter?.Invoke();
+            return true;
         }
-        return null;
+        return false;
     }
     
     /// <summary>
     /// 设置属性值（供蓝图节点调用）
     /// </summary>
-    public void SetBlueprintProperty(string propertyName, object value)
+    public bool TrySetBlueprintProperty(string propertyName, object value)
     {
         if (_propertySetters != null && _propertySetters.TryGetValue(propertyName, out var setter))
         {
             setter?.Invoke(value);
+            return true;
         }
+        return false;
     }
     
     #endregion
@@ -212,6 +152,5 @@ public abstract class BlueprintBehavior<T> : MonoBehaviour where T : BlueprintBe
         _blueprintEvents?.Clear();
         _propertyGetters?.Clear();
         _propertySetters?.Clear();
-        _overridableMethodCache?.Clear();
     }
 }

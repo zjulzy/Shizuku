@@ -74,7 +74,10 @@ public class ShizukuGraphBase :ScriptableObject
         {
             if (_guid2NodeMap.TryGetValue(RootNodeGUID, out var rootNode))
             {
-                rootNode.Execute();
+                if (rootNode is ShizukuRootNode)
+                {
+                    (rootNode as ShizukuRootNode).StartExcute();
+                }
             }
         }
     }

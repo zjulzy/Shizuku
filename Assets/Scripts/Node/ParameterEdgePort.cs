@@ -74,6 +74,11 @@ public class BoolParameterEdgePort : ParameterEdgePort<bool>
 {
 }
 
+[Serializable]
+public class ObjectParameterEdgePort : ParameterEdgePort<object>
+{
+}
+
 // 指定执行顺序的接口
 [Serializable]
 public class ChainPort

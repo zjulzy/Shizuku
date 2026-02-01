@@ -42,13 +42,14 @@ public class ParameterEdge
     // 依据记录的信息连接参数端口
     public void ConnectPorts(ShizukuGraphBase graph)
     {
-        var OutputNode = graph.Nodes.Find(n => n.GUID == OutputNodeGuid);
-        var InputNode = graph.Nodes.Find(n => n.GUID == InputNodeGuid);
-        if (OutputNode != null && InputNode != null)
+        var outputNode = graph.Nodes.Find(n => n.GUID == OutputNodeGuid);
+        var inputNode = graph.Nodes.Find(n => n.GUID == InputNodeGuid);
+        if (outputNode != null && inputNode != null)
         {
-            InputNode.DependentNodes.Add(OutputNode);
-            var outputPort = OutputNode.SelfOutputPorts.Find(p => p.Name == OutputPortName);
-            var inputPort = InputNode.SelfInputPorts.Find(p => p.Name == InputPortName);
+            var inputRunnableNode = inputNode as ShizukuRunnableNode;
+            inputRunnableNode.DependentNodes.Add(outputNode);
+            var outputPort = outputNode.SelfOutputPorts.Find(p => p.Name == OutputPortName);
+            var inputPort = inputRunnableNode.SelfInputPorts.Find(p => p.Name == InputPortName);
             if (outputPort != null && inputPort != null)
             {
                 if (outputPort.GetType() == inputPort.GetType())

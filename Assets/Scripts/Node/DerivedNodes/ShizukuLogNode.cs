@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ShizukuLogNode : ShizukuNodeBase
+public class ShizukuLogNode : ShizukuRunnableNode
 {
     public override string Title => "Log Node";
 

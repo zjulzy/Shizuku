@@ -22,8 +22,8 @@ public class ControlFlowPortContainer : VisualElement
         }
     }
     
-    private VisualElement leftContainer;
-    private VisualElement rightContainer;
+    public VisualElement LeftContainer;
+    public VisualElement RightContainer;
     
     public ControlFlowPortContainer()
     {
@@ -38,17 +38,17 @@ public class ControlFlowPortContainer : VisualElement
         AddToClassList("control-flow-container");
         
         // 创建左侧容器（用于Previous端口）
-        leftContainer = new VisualElement();
-        leftContainer.name = "left-container";
-        leftContainer.AddToClassList("port-side-container");
-        Add(leftContainer);
+        LeftContainer = new VisualElement();
+        LeftContainer.name = "left-container";
+        LeftContainer.AddToClassList("port-side-container");
+        Add(LeftContainer);
         
         // 创建右侧容器（用于Next端口）
-        rightContainer = new VisualElement();
-        rightContainer.name = "right-container";
-        rightContainer.AddToClassList("port-side-container");
-        rightContainer.AddToClassList("port-right-container");
-        Add(rightContainer);
+        RightContainer = new VisualElement();
+        RightContainer.name = "right-container";
+        RightContainer.AddToClassList("port-side-container");
+        RightContainer.AddToClassList("port-right-container");
+        Add(RightContainer);
     }
     
     /// <summary>
@@ -56,7 +56,7 @@ public class ControlFlowPortContainer : VisualElement
     /// </summary>
     public void AddPreviousPort(Port port)
     {
-        leftContainer.Add(port);
+        LeftContainer.Add(port);
     }
     
     /// <summary>
@@ -64,7 +64,7 @@ public class ControlFlowPortContainer : VisualElement
     /// </summary>
     public void AddNextPort(Port port)
     {
-        rightContainer.Add(port);
+        RightContainer.Add(port);
     }
 }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reflection;
 using UnityEngine;
 
@@ -17,30 +18,23 @@ using UnityEngine;
 /// - 事件系统：支持蓝图重写Behavior的虚拟方法
 /// - 属性访问：支持蓝图读写Behavior的protected字段
 /// </remarks>
-public abstract class ShizukuBluePrint<T> : ShizukuGraphBase where T : BlueprintBehavior<T>
+public abstract class ShizukuBluePrint : ShizukuGraphBase
 {
-    /// <summary>
-    /// 当前绑定的Behavior实例
-    /// </summary>
-    [NonSerialized]
+    public abstract bool TryGetProperty(string propertyName, out object value);
+    public abstract bool TrySetProperty(string propertyName, object value);
+}
+
+public abstract class ShizukuBluePrint<T> : ShizukuBluePrint where T : BlueprintBehavior<T>
+{
     private T _behavior;
-    
-    /// <summary>
-    /// 蓝图事件节点字典
-    /// key: 事件名称, value: 对应的事件节点
-    /// </summary>
-    [NonSerialized]
+
     private readonly Dictionary<string, BlueprintEventNode> _eventNodes = new Dictionary<string, BlueprintEventNode>();
-    
-    /// <summary>
-    /// 静态属性访问器缓存（所有同类型实例共享）
-    /// 避免每次 InitializeBehavior 都反射
-    /// </summary>
+
     private static Dictionary<string, Func<T, object>> _cachedGetters;
     private static Dictionary<string, Action<T, object>> _cachedSetters;
     private static bool _accessorsCached = false;
-    
-    
+
+
     /// <summary>
     /// 初始化Behavior（由BlueprintBehavior的Start调用）
     /// 子类可以重写此方法来自定义初始化逻辑
@@ -49,14 +43,16 @@ public abstract class ShizukuBluePrint<T> : ShizukuGraphBase where T : Blueprint
     {
         Init();
         _behavior = behavior;
-        
+
         // 注册蓝图事件
         RegisterBlueprintEvents(behavior);
-        
+
         // 注册属性访问器
         RegisterPropertyAccessors(behavior);
     }
-    
+
+    #region 注册各种东西
+
     /// <summary>
     /// 注册蓝图事件
     /// 扫描图中的所有EventNode，并注册到Behavior
@@ -64,14 +60,14 @@ public abstract class ShizukuBluePrint<T> : ShizukuGraphBase where T : Blueprint
     protected virtual void RegisterBlueprintEvents(T behavior)
     {
         _eventNodes.Clear();
-        
+
         // 扫描所有节点，找到BlueprintEventNode
         foreach (var node in Nodes)
         {
             if (node is BlueprintEventNode eventNode)
             {
                 _eventNodes[eventNode.EventName] = eventNode;
-                
+
                 // 注册事件处理器
                 behavior.RegisterBlueprintEvent(eventNode.EventName, (args) =>
                 {
@@ -80,7 +76,7 @@ public abstract class ShizukuBluePrint<T> : ShizukuGraphBase where T : Blueprint
             }
         }
     }
-    
+
     /// <summary>
     /// 注册属性访问器
     /// 通过反射为Behavior的protected字段生成访问器
@@ -94,84 +90,122 @@ public abstract class ShizukuBluePrint<T> : ShizukuGraphBase where T : Blueprint
             BuildAccessorCache();
             _accessorsCached = true;
         }
-        
+
         // 使用缓存的访问器注册
         foreach (var kvp in _cachedGetters)
         {
             var getter = kvp.Value;
             behavior.RegisterPropertyGetter(kvp.Key, () => getter(behavior));
         }
-        
+
         foreach (var kvp in _cachedSetters)
         {
             var setter = kvp.Value;
             behavior.RegisterPropertySetter(kvp.Key, (value) => setter(behavior, value));
         }
     }
-    
+
     /// <summary>
     /// 构建属性访问器缓存（只在首次调用时执行）
+    /// 基于语法树，会比正常的基于反射的快一些
     /// </summary>
     private static void BuildAccessorCache()
     {
         _cachedGetters = new Dictionary<string, Func<T, object>>();
         _cachedSetters = new Dictionary<string, Action<T, object>>();
-        
+
         var behaviorType = typeof(T);
         var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-        
-        // 缓存字段访问器
-        var fields = behaviorType.GetFields(flags);
-        foreach (var field in fields)
+
+        // 字段访问器
+        foreach (var field in behaviorType.GetFields(flags))
         {
-            // 跳过Unity的私有字段
             if (field.Name.StartsWith("m_")) continue;
-            
+
             var fieldName = field.Name;
-            var fieldCopy = field; // 避免闭包捕获循环变量
-            
-            // 缓存 Getter
-            _cachedGetters[fieldName] = (b) => fieldCopy.GetValue(b);
-            
-            // 缓存 Setter
-            _cachedSetters[fieldName] = (b, value) => fieldCopy.SetValue(b, value);
+
+            // === Expression Tree 生成 Getter ===
+            var paramGet = Expression.Parameter(typeof(T), "b");
+            var fieldAccess = Expression.Field(paramGet, field);
+            var convertGet = Expression.Convert(fieldAccess, typeof(object));
+            var lambdaGet = Expression.Lambda<Func<T, object>>(convertGet, paramGet);
+            _cachedGetters[fieldName] = lambdaGet.Compile();  // ✅ 编译一次，快 50 倍
+
+            // === Expression Tree 生成 Setter ===
+            if (!field.IsInitOnly)  // 不是 readonly
+            {
+                var paramSet = Expression.Parameter(typeof(T), "b");
+                var paramValue = Expression.Parameter(typeof(object), "value");
+                var convertValue = Expression.Convert(paramValue, field.FieldType);
+                var assignExpr = Expression.Assign(
+                    Expression.Field(paramSet, field),
+                    convertValue
+                );
+                var lambdaSet = Expression.Lambda<Action<T, object>>(
+                    assignExpr, paramSet, paramValue
+                );
+                _cachedSetters[fieldName] = lambdaSet.Compile();
+            }
         }
-        
-        // 缓存属性访问器
-        var properties = behaviorType.GetProperties(flags);
-        foreach (var property in properties)
+
+        // 属性访问器（类似）
+        foreach (var property in behaviorType.GetProperties(flags))
         {
+            if (!property.CanRead && !property.CanWrite) continue;
+
             var propertyName = property.Name;
-            var propertyCopy = property;
-            
-            // 缓存 Getter
+
+            // Getter
             if (property.CanRead)
             {
-                _cachedGetters[propertyName] = (b) => propertyCopy.GetValue(b);
+                var paramGet = Expression.Parameter(typeof(T), "b");
+                var propertyAccess = Expression.Property(paramGet, property);
+                var convertGet = Expression.Convert(propertyAccess, typeof(object));
+                var lambdaGet = Expression.Lambda<Func<T, object>>(convertGet, paramGet);
+                _cachedGetters[propertyName] = lambdaGet.Compile();
             }
-            
-            // 缓存 Setter
+
+            // Setter
             if (property.CanWrite)
             {
-                _cachedSetters[propertyName] = (b, value) => propertyCopy.SetValue(b, value);
+                var paramSet = Expression.Parameter(typeof(T), "b");
+                var paramValue = Expression.Parameter(typeof(object), "value");
+                var convertValue = Expression.Convert(paramValue, property.PropertyType);
+                var assignExpr = Expression.Assign(
+                    Expression.Property(paramSet, property),
+                    convertValue
+                );
+                var lambdaSet = Expression.Lambda<Action<T, object>>(
+                    assignExpr, paramSet, paramValue
+                );
+                _cachedSetters[propertyName] = lambdaSet.Compile();
             }
         }
     }
-    
+
+    #endregion
+
     /// <summary>
-    /// 获取当前绑定的Behavior实例
+    /// 获取属性值（由蓝图节点调用）
     /// </summary>
-    public T GetBehavior() => _behavior;
-    
-    /// <summary>
-    /// 触发蓝图事件（供外部调用）
-    /// </summary>
-    public void TriggerBlueprintEvent(string eventName, params object[] args)
+    public override bool TryGetProperty(string propertyName, out object value)
     {
-        if (_eventNodes.TryGetValue(eventName, out var eventNode))
-        {
-            eventNode.TriggerEvent(args);
-        }
+        value = null;
+        if (_behavior == null)
+            return false;
+
+        return _behavior.TryGetBlueprintProperty(propertyName, out value);
+    }
+
+    /// <summary>
+    /// 设置属性值（由蓝图节点调用）
+    /// </summary>
+    public override bool TrySetProperty(string propertyName, object value)
+    {
+        if (_behavior == null)
+            return false;
+
+        return _behavior.TrySetBlueprintProperty(propertyName, value);
     }
 }
 

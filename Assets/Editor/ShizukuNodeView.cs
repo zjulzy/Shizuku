@@ -10,6 +10,8 @@ public class ShizukuNodeView : Node
 {
     private ShizukuNodeBase _node;
     private ShizukuGraphBase _graphAsset;
+
+    public ControlFlowPortContainer ControlFlowContainer = null;
     
     
     // 静态缓存样式表，只加载一次
@@ -71,19 +73,18 @@ public class ShizukuNodeView : Node
         #region chain端口
 
         // 创建控制流端口容器（放在节点顶部）
-        ControlFlowPortContainer controlFlowContainer = null;
         if (_node.SupportControlInput || _node.SupportControlOutput)
         {
-            controlFlowContainer = new ControlFlowPortContainer();
+            ControlFlowContainer = new ControlFlowPortContainer();
             // 第一位是标题栏，第二位放控制流端口容器，最后是参数端口容器
-            mainContainer.Insert(1, controlFlowContainer);
+            mainContainer.Insert(1, ControlFlowContainer);
         }
 
         // 添加控制流输入端口（Previous）
         if (_node.SupportControlInput)
         {
             var previousPort = ControlFlowPort.Create(this, Orientation.Horizontal, Direction.Input, Port.Capacity.Single, "Previous");
-            controlFlowContainer?.AddPreviousPort(previousPort);
+            ControlFlowContainer?.AddPreviousPort(previousPort);
         }
 
         // 添加控制流输出端口（Next）
@@ -98,7 +99,7 @@ public class ShizukuNodeView : Node
                     if (chainPort != null)
                     {
                         var nextPort = ControlFlowPort.Create(this, Orientation.Horizontal, Direction.Output, Port.Capacity.Single, chainPort.Name);
-                        controlFlowContainer?.AddNextPort(nextPort);
+                        ControlFlowContainer?.AddNextPort(nextPort);
                     }
                 }
             }

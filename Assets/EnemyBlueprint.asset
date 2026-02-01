@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: EnemyBlueprint
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyBlueprint
+  GUID: 
+  _nodes:
+  - rid: 4125048796970746041
+  - rid: 4125048796970746042
+  _edges: []
+  _groups: []
+  RootNodeGUID: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 4125048796970746041
+      type: {class: BlueprintEventNode, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 164c9538-670e-451f-b0cf-3d1b13d952ab
+        PositionAndSize:
+          x: 673.60004
+          y: 443.2
+          z: 164
+          w: 100
+        _nextPort:
+          NextNodeGuid: 43e214fd-0d09-454b-a106-46fe28a1a3e2
+          Name: next
+        EventName: OnDeath
+        EventParameters: []
+    - rid: 4125048796970746042
+      type: {class: ShizukuLogNode, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 43e214fd-0d09-454b-a106-46fe28a1a3e2
+        PositionAndSize:
+          x: 1003.2001
+          y: 419.19998
+          z: 124.79999
+          w: 132.79999
+        Message:
+          rid: 4125048796970746043
+        _nextPort:
+          NextNodeGuid: 
+          Name: next
+    - rid: 4125048796970746043
+      type: {class: StringParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: message
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: "\u5367\u69FD\u6210\u529F\u4E86"

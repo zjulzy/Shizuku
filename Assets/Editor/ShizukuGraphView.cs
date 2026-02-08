@@ -15,6 +15,8 @@ public class ShizukuGraphView : GraphView
     private ShizukuNodeView _entryNode;
 
     private Dictionary<string, ShizukuNodeView> _guidToNodeViewMap = new Dictionary<string, ShizukuNodeView>();
+    
+    public System.Action OnGraphChanged;
 
     #region 生命周期
 
@@ -158,6 +160,8 @@ public class ShizukuGraphView : GraphView
         _runtimeGraph.AddNode(node);
         AddElement(nodeView);
         EditorUtility.SetDirty(_runtimeGraph);
+        
+        OnGraphChanged?.Invoke();
     }
 
     private ParameterEdgePort CreatePortForType(string name, Type type)

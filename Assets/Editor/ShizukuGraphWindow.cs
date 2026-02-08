@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.UIElements;
@@ -7,6 +8,11 @@ using UnityEngine.UIElements;
 public class ShizukuGraphWindow : EditorWindow
 {
     private ShizukuGraphView _graphView;
+    private IGraphEditorExtension _currentExtension;
+    private ShizukuGraphBase _currentGraph;
+    
+    private VisualElement _contentContainer;
+    private List<IGraphEditorExtension> _availableExtensions = new List<IGraphEditorExtension>();
     
     [MenuItem("Shizuku/ShizukuGraphWindow")]
     public static void OpenWindow()
@@ -17,26 +23,91 @@ public class ShizukuGraphWindow : EditorWindow
 
     private void OnEnable()
     {
-        _graphView = new ShizukuGraphView();
-        _graphView.StretchToParentSize();
-        rootVisualElement.Add(_graphView);
+        RegisterExtensions();
+        BuildUI();
+    }
+    
+    private void RegisterExtensions()
+    {
+        _availableExtensions.Clear();
+        _availableExtensions.Add(new BlueprintEditorExtension());
+        _availableExtensions.Add(new BaseGraphEditorExtension());
+    }
+    
+    private void BuildUI()
+    {
+        rootVisualElement.Clear();
         
         // 工具栏
         Toolbar toolbar = new Toolbar();
-        Button nodeCreateButton = new Button(() => { Debug.Log("测试按钮"); });
-        nodeCreateButton.text = "测试按钮";
-        Button saveButton = new Button(() => {_graphView.SaveToAsset();});
+        Button saveButton = new Button(() => { _graphView?.SaveToAsset(); });
         saveButton.text = "保存";
         
-        toolbar.Add(nodeCreateButton);
+        Button refreshButton = new Button(() => { RefreshExtension(); });
+        refreshButton.text = "刷新";
+        
         toolbar.Add(saveButton);
+        toolbar.Add(refreshButton);
         rootVisualElement.Add(toolbar);
+        
+        // 内容容器
+        _contentContainer = new VisualElement
+        {
+            style =
+            {
+                flexDirection = FlexDirection.Row,
+                flexGrow = 1
+            }
+        };
+        rootVisualElement.Add(_contentContainer);
+        
+        // 图视图
+        _graphView = new ShizukuGraphView();
+        _graphView.style.flexGrow = 1;
+        _contentContainer.Add(_graphView);
     }
     
     private void OnDisable()
     {
+        UnloadExtension();
         rootVisualElement.Clear();
         _graphView = null;
+        _currentGraph = null;
+    }
+    
+    private void LoadExtension(ShizukuGraphBase graph)
+    {
+        UnloadExtension();
+        
+        foreach (var extension in _availableExtensions)
+        {
+            if (extension.CanHandle(graph))
+            {
+                _currentExtension = extension;
+                _currentExtension.OnEnable(this, _graphView, _contentContainer);
+                _currentExtension.OnGraphLoaded(graph);
+                
+                _graphView.OnGraphChanged = () => _currentExtension?.OnGraphLoaded(graph);
+                break;
+            }
+        }
+    }
+    
+    private void UnloadExtension()
+    {
+        if (_currentExtension != null)
+        {
+            _currentExtension.OnDisable();
+            _currentExtension = null;
+        }
+    }
+    
+    private void RefreshExtension()
+    {
+        if (_currentGraph != null && _currentExtension != null)
+        {
+            _currentExtension.OnGraphLoaded(_currentGraph);
+        }
     }
     
     [OnOpenAsset]
@@ -46,9 +117,11 @@ public class ShizukuGraphWindow : EditorWindow
         if (graphAsset != null)
         {
             ShizukuGraphWindow window = GetWindow<ShizukuGraphWindow>();
-            window.titleContent = new GUIContent("Shizuku Graph");
+            window.titleContent = new GUIContent($"Shizuku Graph - {graphAsset.name}");
             
+            window._currentGraph = graphAsset;
             window._graphView.LoadFromAsset(graphAsset);
+            window.LoadExtension(graphAsset);
             window.Show();
             return true;
         }

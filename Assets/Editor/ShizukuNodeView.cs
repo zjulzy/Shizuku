@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
-using System.Reflection;
 using Unity.Mathematics;
 
 public class ShizukuNodeView : Node
@@ -40,13 +42,147 @@ public class ShizukuNodeView : Node
         // 设置标题栏背景颜色
         schedule.Execute(() =>
         {
-            // Unity的Node元素的标题栏
             var titleElement = this.Q("title");
             if (titleElement != null)
             {
                 titleElement.style.backgroundColor = node.TitleBarColor;
             }
         }).ExecuteLater(0);
+        
+        if (node is BlueprintEventNode eventNode)
+        {
+            ValidateEventNode(eventNode);
+        }
+    }
+    
+    private void ValidateEventNode(BlueprintEventNode eventNode)
+    {
+        if (!eventNode.IsValid())
+        {
+            var warningLabel = new Label($"⚠ {eventNode.GetValidationMessage()}")
+            {
+                style =
+                {
+                    color = new Color(1f, 0.8f, 0f, 1f),
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 5,
+                    marginRight = 5,
+                    whiteSpace = WhiteSpace.Normal
+                }
+            };
+            extensionContainer.Add(warningLabel);
+            
+            var refreshButton = new Button(() => ShowRefreshMenu(eventNode))
+            {
+                text = "更新事件节点"
+            };
+            refreshButton.style.marginTop = 2;
+            refreshButton.style.marginBottom = 5;
+            extensionContainer.Add(refreshButton);
+        }
+    }
+    
+    private void ShowRefreshMenu(BlueprintEventNode eventNode)
+    {
+        var menu = new GenericMenu();
+        menu.AddItem(new GUIContent("重新生成参数"), false, () =>
+        {
+            if (RegenerateEventParameters(eventNode))
+            {
+                EditorUtility.DisplayDialog("成功", "事件节点已更新", "确定");
+                RefreshView();
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("失败", $"无法找到方法 '{eventNode.EventName}'", "确定");
+            }
+        });
+        menu.ShowAsContext();
+    }
+    
+    private bool RegenerateEventParameters(BlueprintEventNode eventNode)
+    {
+        var behaviorType = GetBehaviorTypeFromGraph(_graphAsset);
+        if (behaviorType == null) return false;
+        
+        var methods = behaviorType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        foreach (var method in methods)
+        {
+            var attr = method.GetCustomAttribute<BlueprintOverridableAttribute>();
+            if (attr != null)
+            {
+                var methodEventName = attr.EventName ?? method.Name;
+                if (methodEventName == eventNode.EventName)
+                {
+                    eventNode.EventParameters.Clear();
+                    foreach (var param in method.GetParameters())
+                    {
+                        var eventParam = new EventParameter
+                        {
+                            Name = param.Name,
+                            TypeName = param.ParameterType.Name,
+                            OutputPort = CreatePortForType(param.Name, param.ParameterType)
+                        };
+                        eventNode.EventParameters.Add(eventParam);
+                    }
+                    
+                    if (_graphAsset != null)
+                    {
+                        EditorUtility.SetDirty(_graphAsset);
+                    }
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    private ParameterEdgePort CreatePortForType(string name, Type type)
+    {
+        if (type == typeof(float))
+            return new FloatParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(int))
+            return new IntParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(bool))
+            return new BoolParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(string))
+            return new StringParameterEdgePort { IsOut = true, Name = name };
+        else
+            return new ObjectParameterEdgePort { IsOut = true, Name = name };
+    }
+    
+    private Type GetBehaviorTypeFromGraph(ShizukuGraphBase graph)
+    {
+        if (graph == null) return null;
+        
+        var graphType = graph.GetType();
+        while (graphType != null && graphType != typeof(object))
+        {
+            if (graphType.IsGenericType)
+            {
+                var genericDef = graphType.GetGenericTypeDefinition();
+                if (genericDef.Name.StartsWith("ShizukuBluePrint"))
+                {
+                    var genericArgs = graphType.GetGenericArguments();
+                    if (genericArgs.Length > 0)
+                    {
+                        return genericArgs[0];
+                    }
+                }
+            }
+            graphType = graphType.BaseType;
+        }
+        return null;
+    }
+    
+    private void RefreshView()
+    {
+        var container = outputContainer;
+        container.Clear();
+        InitPort();
     }
 
     public sealed override string title
@@ -109,17 +245,27 @@ public class ShizukuNodeView : Node
 
         #region 参数端口
 
-        // 基于反射自动为所有参数和结果生成端口
+        if (_node is BlueprintEventNode eventNode)
+        {
+            foreach (var param in eventNode.EventParameters)
+            {
+                if (param.OutputPort != null)
+                {
+                    var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, param.OutputPort.GetType());
+                    outputPort.portName = param.Name;
+                    outputPort.AddToClassList("parameter-port");
+                    outputContainer.Add(outputPort);
+                }
+            }
+        }
         
         foreach (var field in fields)
         {
-            // 检查字段是否是 ParameterEdgePort 类型
             if (typeof(ParameterEdgePort).IsAssignableFrom(field.FieldType))
             {
                 var port = field.GetValue(_node) as ParameterEdgePort;
                 if (port != null)
                 {
-                    // 根据 IsOut 属性判断是输入端口还是输出端口
                     if (port.IsOut)
                     {
                         var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, field.FieldType);
@@ -133,7 +279,6 @@ public class ShizukuNodeView : Node
                         inputPort.portName = port.Name;
                         inputPort.AddToClassList("parameter-port");
 
-                        // 为输入端口添加默认值输入框
                         var inputField = CreateInputFieldForPort(port);
                         if (inputField != null)
                         {

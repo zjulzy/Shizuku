@@ -24,6 +24,11 @@ public class ParameterEdgePort{
     {
         
     }
+
+    public virtual object GetSelfValue()
+    {
+        return null;
+    }
     
 }
 
@@ -45,12 +50,18 @@ public class ParameterEdgePort<T>: ParameterEdgePort
         else if (DifferentTypeConnectedPort != null)
         {
             // 类型转换逻辑
-            var differentValue = DifferentTypeConnectedPort as ParameterEdgePort<object>;
+            // TODO: 这里装箱了，后续需要优化
+            var differentValue = DifferentTypeConnectedPort.GetSelfValue();
             if (differentValue != null)
             {
-                Value = (T)Convert.ChangeType(differentValue.Value, typeof(T));
+                Value = (T)Convert.ChangeType(differentValue, typeof(T));
             }
         }
+    }
+
+    public override object GetSelfValue()
+    {
+        return Value;
     }
 }
 

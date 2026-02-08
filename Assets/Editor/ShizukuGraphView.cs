@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -65,7 +66,7 @@ public class ShizukuGraphView : GraphView
 
         // 蓝图节点
         evt.menu.AppendSeparator();
-        evt.menu.AppendAction("蓝图节点/事件节点", (a) => CreateNode<BlueprintEventNode>(_localMousePosition));
+        BuildBlueprintEventMenu(evt);
         evt.menu.AppendAction("蓝图节点/获取属性/Float", (a) => CreateNode<GetPropertyNode_Float>(_localMousePosition));
         evt.menu.AppendAction("蓝图节点/获取属性/Int", (a) => CreateNode<GetPropertyNode_Int>(_localMousePosition));
         evt.menu.AppendAction("蓝图节点/获取属性/Bool", (a) => CreateNode<GetPropertyNode_Bool>(_localMousePosition));
@@ -88,6 +89,129 @@ public class ShizukuGraphView : GraphView
     {
         // 将鼠标位置转换为内容容器的本地坐标并保存，目前主要给右键菜单定位用
         _localMousePosition = contentViewContainer.WorldToLocal(evt.mousePosition);
+    }
+
+    private void BuildBlueprintEventMenu(ContextualMenuPopulateEvent evt)
+    {
+        var behaviorType = GetBehaviorType();
+        if (behaviorType == null)
+        {
+            evt.menu.AppendAction("蓝图事件/需要 ShizukuBluePrint 类型", null, DropdownMenuAction.Status.Disabled);
+            return;
+        }
+
+        var methods = behaviorType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+            .Where(m => m.GetCustomAttribute<BlueprintOverridableAttribute>() != null)
+            .ToArray();
+
+        if (methods.Length == 0)
+        {
+            evt.menu.AppendAction("蓝图事件/无可覆写方法", null, DropdownMenuAction.Status.Disabled);
+            return;
+        }
+
+        var existingEvents = GetExistingEventNames();
+
+        foreach (var method in methods)
+        {
+            var attr = method.GetCustomAttribute<BlueprintOverridableAttribute>();
+            var eventName = attr.EventName ?? method.Name;
+            var parameters = method.GetParameters();
+            var paramStr = parameters.Length > 0 
+                ? $"({string.Join(", ", parameters.Select(p => p.ParameterType.Name))})" 
+                : "()";
+            var displayName = $"蓝图事件/{eventName}{paramStr}";
+
+            if (existingEvents.Contains(eventName))
+            {
+                evt.menu.AppendAction(displayName, null, DropdownMenuAction.Status.Disabled);
+            }
+            else
+            {
+                evt.menu.AppendAction(displayName, (a) => CreateBlueprintEventNode(eventName, method, _localMousePosition));
+            }
+        }
+    }
+
+    private void CreateBlueprintEventNode(string eventName, MethodInfo method, Vector2 mousePosition)
+    {
+        var node = new BlueprintEventNode
+        {
+            EventName = eventName
+        };
+
+        foreach (var param in method.GetParameters())
+        {
+            var eventParam = new EventParameter
+            {
+                Name = param.Name,
+                TypeName = param.ParameterType.Name,
+                OutputPort = CreatePortForType(param.Name, param.ParameterType)
+            };
+            node.EventParameters.Add(eventParam);
+        }
+
+        var nodeView = new ShizukuNodeView(node, _runtimeGraph);
+        nodeView.InitPort();
+        nodeView.SetPosition(new Rect(mousePosition, new Vector2(200, 100)));
+
+        _runtimeGraph.AddNode(node);
+        AddElement(nodeView);
+        EditorUtility.SetDirty(_runtimeGraph);
+    }
+
+    private ParameterEdgePort CreatePortForType(string name, Type type)
+    {
+        if (type == typeof(float))
+            return new FloatParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(int))
+            return new IntParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(bool))
+            return new BoolParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(string))
+            return new StringParameterEdgePort { IsOut = true, Name = name };
+        else
+            return new ObjectParameterEdgePort { IsOut = true, Name = name };
+    }
+
+    private Type GetBehaviorType()
+    {
+        if (_runtimeGraph == null) return null;
+
+        var graphType = _runtimeGraph.GetType();
+        while (graphType != null && graphType != typeof(object))
+        {
+            if (graphType.IsGenericType)
+            {
+                var genericDef = graphType.GetGenericTypeDefinition();
+                if (genericDef.Name.StartsWith("ShizukuBluePrint"))
+                {
+                    var genericArgs = graphType.GetGenericArguments();
+                    if (genericArgs.Length > 0)
+                    {
+                        return genericArgs[0];
+                    }
+                }
+            }
+            graphType = graphType.BaseType;
+        }
+        return null;
+    }
+
+    private HashSet<string> GetExistingEventNames()
+    {
+        var existingEvents = new HashSet<string>();
+        if (_runtimeGraph != null)
+        {
+            foreach (var node in _runtimeGraph.Nodes)
+            {
+                if (node is BlueprintEventNode eventNode)
+                {
+                    existingEvents.Add(eventNode.EventName);
+                }
+            }
+        }
+        return existingEvents;
     }
 
     private void CreateNode<TNode>(Vector2 mousePosition) where TNode : ShizukuNodeBase, new()

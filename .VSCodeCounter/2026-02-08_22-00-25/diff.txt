@@ -1,0 +1,38 @@
+Date : 2026-02-08 22:00:25
+Directory : u:\projects\game\Unity\Shizuku
+Total : 6 files,  352 codes, -5 comments, 44 blanks, all 391 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C#       |          6 |        352 |         -5 |         44 |        391 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                    | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                       |          6 |        352 |         -5 |         44 |        391 |
+| Assets                                                                                  |          6 |        352 |         -5 |         44 |        391 |
+| Assets\Editor                                                                           |          2 |        248 |         -5 |         26 |        269 |
+| Assets\Scripts                                                                          |          4 |        104 |          0 |         18 |        122 |
+| Assets\Scripts\Graph                                                                    |          2 |        -12 |         -1 |         -3 |        -16 |
+| Assets\Scripts\Graph\Blueprint                                                          |          2 |        -12 |         -1 |         -3 |        -16 |
+| Assets\Scripts\Node                                                                     |          2 |        116 |          1 |         21 |        138 |
+| Assets\Scripts\Node (Files)                                                             |          1 |          8 |          1 |          2 |         11 |
+| Assets\Scripts\Node\BlueprintNodes                                                      |          1 |        108 |          0 |         19 |        127 |
++-----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                | language | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ShizukuGraphView.cs                        | C#       |        110 |          0 |         14 |        124 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ShizukuNodeView.cs                         | C#       |        138 |         -5 |         12 |        145 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\Blueprint\EXAMPLE_EnemyBlueprint.cs | C#       |        -17 |         -1 |         -5 |        -23 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\Blueprint\EnemyBlueprint.cs         | C#       |          5 |          0 |          2 |          7 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\BlueprintNodes\BlueprintEventNode.cs | C#       |        108 |          0 |         19 |        127 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\ParameterEdgePort.cs                 | C#       |          8 |          1 |          2 |         11 |
+| Total                                                                                   |          |        352 |         -5 |         44 |        391 |
++-----------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

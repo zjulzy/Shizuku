@@ -12,25 +12,7 @@ public class EXAMPLE_EnemyBlueprint : BlueprintBehavior<EXAMPLE_EnemyBlueprint>
     [SerializeField] protected float defense = 10f;
 
     [BlueprintOverridable]
-    public virtual void TakeDamage(float damage)
-    {
-        if (TryExecuteBlueprintOverride(nameof(TakeDamage), damage))
-            return;
-        
-        // 默认逻辑
-        float actualDamage = Mathf.Max(0, damage - defense);
-        health -= actualDamage;
-        Debug.Log($"{gameObject.name} took {actualDamage} damage. Health: {health}");
-        
-        if (health <= 0)
-        {
-            OnDeath();
-        }
-    }
-
-    [BlueprintOverridable]
     [Button]
-
     protected virtual void OnDeath()
     {
         if (TryExecuteBlueprintOverride(nameof(OnDeath)))
@@ -40,14 +22,14 @@ public class EXAMPLE_EnemyBlueprint : BlueprintBehavior<EXAMPLE_EnemyBlueprint>
         // Destroy(gameObject);
     }
 
-    [BlueprintOverridable("OnAttack")]
+    [BlueprintOverridable("Attack")]
     [Button]
-    public virtual void Attack(GameObject target)
+    public virtual void Attack(float damage)
     {
-        if (TryExecuteBlueprintOverride(nameof(Attack), target))
+        if (TryExecuteBlueprintOverride(nameof(Attack), damage))
             return;
         
-        Debug.Log($"{gameObject.name} attacks {target.name}");
+        Debug.Log($"{gameObject.name} attacks");
     }
 
     // 不标记 Attribute 的方法不会被蓝图重写
@@ -63,9 +45,4 @@ public class EXAMPLE_EnemyBlueprint : BlueprintBehavior<EXAMPLE_EnemyBlueprint>
         transform.position = Vector3.MoveTowards(
             transform.position, target, speed * Time.deltaTime);
     }
-}
-
-[CreateAssetMenu(fileName = "EnemyBlueprint", menuName = "Shizuku/Blueprint/Enemy Blueprint")]
-public class EnemyBlueprint : ShizukuBluePrint<EXAMPLE_EnemyBlueprint>
-{
 }

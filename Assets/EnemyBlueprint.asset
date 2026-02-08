@@ -9,51 +9,71 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: dfd66f420b5bb0849964154877fa9752, type: 3}
   m_Name: EnemyBlueprint
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBlueprint
   GUID: 
   _nodes:
-  - rid: 4125048796970746041
-  - rid: 4125048796970746042
-  _edges: []
+  - rid: 522454034720751684
+  - rid: 522454034720751686
+  _edges:
+  - rid: 522454034720751688
   _groups: []
   RootNodeGUID: 
   references:
     version: 2
     RefIds:
-    - rid: 4125048796970746041
+    - rid: 522454034720751684
       type: {class: BlueprintEventNode, ns: , asm: Assembly-CSharp}
       data:
-        GUID: 164c9538-670e-451f-b0cf-3d1b13d952ab
+        GUID: b660174a-7c82-4368-9cc0-f64bc79cf71b
         PositionAndSize:
-          x: 673.60004
-          y: 443.2
-          z: 164
-          w: 100
+          x: 527.9999
+          y: 447.2
+          z: 146.40002
+          w: 132.80002
         _nextPort:
-          NextNodeGuid: 43e214fd-0d09-454b-a106-46fe28a1a3e2
+          NextNodeGuid: 48498bda-c557-4fde-974c-7af3eaccd98f
           Name: next
-        EventName: OnDeath
-        EventParameters: []
-    - rid: 4125048796970746042
+        EventName: Attack
+        EventParameters:
+        - Name: damage
+          TypeName: Single
+          OutputPort:
+            rid: 522454034720751685
+    - rid: 522454034720751685
+      type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: damage
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 0
+    - rid: 522454034720751686
       type: {class: ShizukuLogNode, ns: , asm: Assembly-CSharp}
       data:
-        GUID: 43e214fd-0d09-454b-a106-46fe28a1a3e2
+        GUID: 48498bda-c557-4fde-974c-7af3eaccd98f
         PositionAndSize:
-          x: 1003.2001
-          y: 419.19998
-          z: 124.79999
-          w: 132.79999
+          x: 894.4
+          y: 459.2
+          z: 200
+          w: 100
         Message:
-          rid: 4125048796970746043
+          rid: 522454034720751687
         _nextPort:
           NextNodeGuid: 
           Name: next
-    - rid: 4125048796970746043
+    - rid: 522454034720751687
       type: {class: StringParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
         Name: message
         InputEdgeGUID: 
         IsOut: 0
-        Value: "\u5367\u69FD\u6210\u529F\u4E86"
+        Value: 
+    - rid: 522454034720751688
+      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: ca01d6b7-584d-45ff-af42-a5c95ee975af
+        OutputNodeGuid: b660174a-7c82-4368-9cc0-f64bc79cf71b
+        OutputPortName: damage
+        InputNodeGuid: 48498bda-c557-4fde-974c-7af3eaccd98f
+        InputPortName: message

@@ -254,6 +254,10 @@ public class ShizukuNodeView : Node
                     var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, param.OutputPort.GetType());
                     outputPort.portName = param.Name;
                     outputPort.AddToClassList("parameter-port");
+                    
+                    // 添加数据类型 tooltip
+                    SetPortTooltip(outputPort, param.OutputPort.GetType());
+                    
                     outputContainer.Add(outputPort);
                 }
             }
@@ -271,6 +275,10 @@ public class ShizukuNodeView : Node
                         var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, field.FieldType);
                         outputPort.portName = port.Name;
                         outputPort.AddToClassList("parameter-port");
+                        
+                        // 添加数据类型 tooltip
+                        SetPortTooltip(outputPort, field.FieldType);
+                        
                         outputContainer.Add(outputPort);
                     }
                     else
@@ -278,6 +286,9 @@ public class ShizukuNodeView : Node
                         var inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, field.FieldType);
                         inputPort.portName = port.Name;
                         inputPort.AddToClassList("parameter-port");
+                        
+                        // 添加数据类型 tooltip
+                        SetPortTooltip(inputPort, field.FieldType);
 
                         var inputField = CreateInputFieldForPort(port);
                         if (inputField != null)
@@ -379,6 +390,149 @@ public class ShizukuNodeView : Node
             default:
                 return null;
         }
+    }
+    
+    /// <summary>
+    /// AI-generated
+    /// 为端口设置数据类型 tooltip
+    /// </summary>
+    private void SetPortTooltip(Port port, System.Type portType)
+    {
+        if (port == null || portType == null)
+            return;
+        
+        // 获取实际的值类型
+        string typeName = GetPortValueTypeName(portType);
+        string tooltipText = $"类型: {typeName}";
+        
+        // 1. 设置端口本身的 tooltip
+        port.tooltip = tooltipText;
+        
+        // 2. 扩展端口的可交互区域
+        // 让整个端口行（包括标签文字）都能触发 tooltip
+        port.style.paddingLeft = 0;
+        port.style.paddingRight = 0;
+        port.style.paddingTop = 2;
+        port.style.paddingBottom = 2;
+        port.style.marginLeft = 0;
+        port.style.marginRight = 0;
+        
+        // 确保端口可以响应鼠标事件
+        port.pickingMode = PickingMode.Position;
+        
+        // 3. 为端口的连接器（圆点）设置 tooltip
+        var connector = port.Q("connector");
+        if (connector != null)
+        {
+            connector.tooltip = tooltipText;
+            connector.pickingMode = PickingMode.Position;
+        }
+        
+        // 4. 为端口的标签设置 tooltip（这是端口名称文字）
+        var label = port.Q<Label>();
+        if (label != null)
+        {
+            label.tooltip = tooltipText;
+            label.pickingMode = PickingMode.Position;
+            // 扩展标签的可点击区域
+            label.style.flexGrow = 1;
+            label.style.unityTextAlign = TextAnchor.MiddleLeft;
+        }
+        
+        // 5. 为端口的内容容器设置 tooltip（包含输入控件的区域）
+        if (port.contentContainer != null)
+        {
+            port.contentContainer.tooltip = tooltipText;
+            port.contentContainer.pickingMode = PickingMode.Position;
+        }
+        
+        // 6. 为 connector-text 设置 tooltip（如果存在）
+        var connectorText = port.Q("connectorText");
+        if (connectorText != null)
+        {
+            connectorText.tooltip = tooltipText;
+            connectorText.pickingMode = PickingMode.Position;
+        }
+        
+        // 7. 递归为所有子元素设置 tooltip，扩大触发范围
+        SetTooltipRecursive(port, tooltipText);
+    }
+    
+    /// <summary>
+    /// 递归为元素及其所有子元素设置 tooltip
+    /// </summary>
+    private void SetTooltipRecursive(VisualElement element, string tooltip)
+    {
+        if (element == null)
+            return;
+        
+        element.tooltip = tooltip;
+        element.pickingMode = PickingMode.Position;
+        
+        // 为所有子元素也设置 tooltip
+        foreach (var child in element.Children())
+        {
+            SetTooltipRecursive(child, tooltip);
+        }
+    }
+    
+    /// <summary>
+    /// 获取端口值类型的友好名称
+    /// </summary>
+    private string GetPortValueTypeName(System.Type portType)
+    {
+        // 如果自身是泛型类型（如 ParameterEdgePort<float>），提取泛型参数
+        if (portType.IsGenericType)
+        {
+            var genericArgs = portType.GetGenericArguments();
+            if (genericArgs.Length > 0)
+            {
+                return GetFriendlyTypeName(genericArgs[0]);
+            }
+        }
+        
+        // 如果自身不是泛型，但基类是泛型（如 FloatParameterEdgePort : ParameterEdgePort<float>）
+        var baseType = portType.BaseType;
+        if (baseType != null && baseType.IsGenericType)
+        {
+            var genericArgs = baseType.GetGenericArguments();
+            if (genericArgs.Length > 0)
+            {
+                return GetFriendlyTypeName(genericArgs[0]);
+            }
+        }
+        
+        // 否则返回类型名称
+        return portType.Name;
+    }
+    
+    /// <summary>
+    /// 获取类型的友好名称
+    /// </summary>
+    private string GetFriendlyTypeName(System.Type type)
+    {
+        // 处理常见的 C# 类型别名
+        if (type == typeof(int))
+            return "Int";
+        if (type == typeof(float))
+            return "Float";
+        if (type == typeof(bool))
+            return "Bool";
+        if (type == typeof(string))
+            return "String";
+        if (type == typeof(UnityEngine.Vector2))
+            return "Vector2";
+        if (type == typeof(UnityEngine.Vector3))
+            return "Vector3";
+        if (type == typeof(UnityEngine.Color))
+            return "Color";
+        if (type == typeof(UnityEngine.GameObject))
+            return "GameObject";
+        if (type == typeof(UnityEngine.Transform))
+            return "Transform";
+        
+        // 默认返回类型名称
+        return type.Name;
     }
 
     public override void SetPosition(Rect newPos)

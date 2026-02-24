@@ -25,201 +25,190 @@
 #### 功能列表
 
 **1. 值节点缓存机制** ⭐⭐⭐
-- 同一帧内避免重复计算
-- 添加 `_outputComputedFrame` 缓存标记
-- 实现 `OnComputeOutputValues()` 接口
-- 性能监控：记录缓存命中率
+- [ ] 同一帧内避免重复计算
+- [ ] 添加 `_outputComputedFrame` 缓存标记
+- [ ] 实现 `OnComputeOutputValues()` 接口
 
 **2. 节点库自动发现** ⭐⭐⭐
-- 通过反射扫描所有 `ShizukuNodeBase` 子类
-- 自动生成分类菜单
-- 支持 `[NodeInfo]` 特性标注元数据
-- 节点搜索功能
-
-```csharp
-[NodeInfo("Math/Add", "数学/加法", Category = "Math", Icon = "icon_add")]
-public class AddNode : ShizukuNodeBase { }
-```
+- [ ] 通过反射扫描所有 `ShizukuNodeBase` 子类
+- [ ] 自动生成分类菜单
+- [ ] 支持 `[NodeInfo]` 特性标注元数据
+- [ ] 节点搜索功能
 
 **3. 扩展类型系统** ⭐⭐
-- 新增 `Vector3ParameterEdgePort`
-- 新增 `Vector2ParameterEdgePort`
-- 新增 `GameObjectParameterEdgePort`
-- 新增 `TransformParameterEdgePort`
-- 新增 `ColorParameterEdgePort`
-- 类型注册中心（支持自定义类型）
+- [ ] 新增 `Vector3ParameterEdgePort`
+- [ ] 新增 `Vector2ParameterEdgePort`
+- [ ] 新增 `GameObjectParameterEdgePort`
+- [ ] 新增 `TransformParameterEdgePort`
+- [ ] 新增 `ColorParameterEdgePort`
+- [ ] 类型注册中心（支持自定义类型）
 
 **4. 更多实用节点** ⭐⭐
-- 数学节点：Add, Subtract, Multiply, Divide, Clamp, Lerp
-- 逻辑节点：And, Or, Not, Compare
-- 工具节点：GetComponent, FindGameObject, SetActive
-- 属性节点：GetProperty, SetProperty（通用版本）
+- [ ] 数学节点：Add, Subtract, Multiply, Divide, Clamp, Lerp
+- [ ] 逻辑节点：And, Or, Not, Compare
+- [ ] 工具节点：GetComponent, FindGameObject, SetActive
+- [ ] 属性节点：GetProperty, SetProperty（通用版本）
 
 **5. 编辑器优化** ⭐
-- 节点搜索框（Ctrl+Space 唤起）
-- 节点折叠/展开
-- 快捷键支持（复制/粘贴）
-- 网格吸附
+- [ ] 节点搜索框（Ctrl+Space 唤起）
+- [ ] 节点折叠/展开
+- [ ] 快捷键支持（复制/粘贴）
+- [ ] 网格吸附
 
-#### 验收标准
-- [ ] 所有新功能通过单元测试
-- [ ] 性能测试：1000 节点图稳定运行
-- [ ] 文档更新：API 参考和示例
-- [ ] 至少 3 个完整的示例场景
+**6. 性能优化** ⭐⭐⭐
+- [ ] **Update 执行优化**
+  - [ ] 添加 `UpdateMode` 枚举（Always/OnDemand/Disabled）
+  - [ ] 检测 Root Node 是否有实际逻辑
+  - [ ] 提供 `EnableUpdate`/`DisableUpdate` API
+- [ ] **值节点缓存** - 同一帧避免重复计算（已在第 1 项）
+- [ ] **批量初始化优化** - 静态缓存共享（已实现）
+
+**7. 运行时错误处理** ⭐⭐⭐
+- [ ] **友好的错误信息**
+  - [ ] 捕获节点执行异常
+  - [ ] 显示：GameObject 名称、Behavior 类型、蓝图资源、节点类型
+  - [ ] 提供执行路径跟踪
+- [ ] **错误恢复机制**
+  - [ ] Try-Catch 包装节点执行
+  - [ ] 错误节点标记（Editor 中高亮）
+  - [ ] 可选的"遇错继续"模式
+- [ ] **调试日志增强**
+  - [ ] `Debug.LogWarning` 改为结构化日志
+  - [ ] 添加错误码和文档链接
+  - [ ] 支持自定义错误处理器
+
+**8. 数据类型传递优化** ⭐⭐⭐
+- [x] **显式类型转换节点**
+  - [x] 实现 `TypeConverterNode` 基类
+  - [x] 实现常用转换节点（Float↔Int, Vector3↔Vector2, String↔Number）
+  - [x] 实现 `ConverterNodeRegistry` 自动注册中心
+  - [x] 编辑器自动插入转换节点（连接时检测类型）
+  - [x] 视觉反馈（蓝色端口表示需要转换，禁止不可转换连接）
+- [ ] **扩展类型支持**
+  - [ ] Vector3/Vector2/GameObject/Transform 类型端口
+  - [ ] Color/Quaternion 等 Unity 常用类型
 
 ---
 
 ### 🔍 v0.3.0 - 调试工具
+
 
 **目标**：提供强大的调试能力，提升开发效率。
 
 #### 功能列表
 
 **1. 调试器基础架构** ⭐⭐⭐
-- `ShizukuDebugger` 单例管理器
-- 节点执行历史记录
-- 执行状态可视化（运行中/已完成/错误）
+- [ ] `ShizukuDebugger` 单例管理器
+- [ ] 节点执行历史记录
+- [ ] 执行状态可视化（运行中/已完成/错误）
 
 **2. 断点系统** ⭐⭐⭐
-- 节点断点设置/移除
-- 断点触发时暂停执行
-- 继续执行 / 单步执行
-- 条件断点（高级）
+- [ ] 节点断点设置/移除
+- [ ] 断点触发时暂停执行
+- [ ] 继续执行 / 单步执行
+- [ ] 条件断点（高级）
 
 **3. 变量监视** ⭐⭐
-- 实时查看节点输入/输出值
-- 监视窗口（类似 Watch 窗口）
-- 支持表达式求值（高级）
+- [ ] 实时查看节点输入/输出值
+- [ ] 监视窗口（类似 Watch 窗口）
+- [ ] 支持表达式求值（高级）
 
 **4. 执行可视化** ⭐⭐
-- 当前执行节点高亮显示
-- 执行路径动画
-- 数据流动画（显示值传递过程）
-- 性能热点标注（慢节点标红）
+- [ ] 当前执行节点高亮显示
+- [ ] 执行路径动画
+- [ ] 数据流动画（显示值传递过程）
+- [ ] 性能热点标注（慢节点标红）
 
 **5. 性能分析** ⭐
-- 节点执行耗时统计
-- 调用次数统计
-- 性能报告导出
-- 瓶颈分析建议
-
-#### 验收标准
-- [ ] 断点功能完整可用
-- [ ] 监视窗口实时更新
-- [ ] 性能开销 < 5%（调试模式）
-- [ ] 完整的调试教程文档
-
+- [ ] 节点执行耗时统计
+- [ ] 调用次数统计
+- [ ] 性能报告导出
+- [ ] 瓶颈分析建议
 ---
 
 ### 🧩 v0.4.0 - 高级功能
+
 
 **目标**：支持复杂场景，提升代码复用性。
 
 #### 功能列表
 
 **1. 子图系统** ⭐⭐⭐
-- 将子图封装为节点
-- 子图参数输入/输出
-- 子图嵌套支持
-- 子图库管理
+- [ ] 将子图封装为节点
+- [ ] 子图参数输入/输出
+- [ ] 子图嵌套支持
+- [ ] 子图库管理
 
-```
-SubGraph: DealDamage
-  Input: target (GameObject), damage (float)
-  Output: actualDamage (float)
-  
-使用：
-  GetEnemy → [DealDamage] → PlayEffect
-```
 
-**2. 函数节点（纯计算）** ⭐⭐
-- 标记为纯函数（无副作用）
-- 自动缓存优化
-- 支持多返回值
-- 内联优化（未来）
+**2. 函数节点（纯计算）** ⭐⭐⭐
+- [ ] **蓝图函数系统**
+  - [ ] 支持有返回值的方法重写
+  - [ ] 事件系统扩展：`Action<>` → `Func<>`
+  - [ ] `BlueprintEventNode` 增加返回值输出端口
+- [ ] **父类方法调用（Call Parent）**
+  - [ ] 新增 `CallParentNode` 节点
+  - [ ] 支持在蓝图中调用 C# 原始实现
+- [ ] **纯函数优化**
+  - [ ] 标记为纯函数（无副作用）
+  - [ ] 自动缓存优化
+  - [ ] 内联优化（未来）
 
 **3. 时间轴支持** ⭐⭐⭐
-- 延迟执行节点（Delay）
-- 等待条件节点（WaitUntil）
-- 序列执行容器（Sequence）
-- 并行执行容器（Parallel）
-- 协程支持
+- [ ] 延迟执行节点（Delay）
+- [ ] 等待条件节点（WaitUntil）
+- [ ] 序列执行容器（Sequence）
+- [ ] 并行执行容器（Parallel）
+- [ ] 协程支持
 
-```
-Sequence
-  ├─ PlayAnimation "Attack"
-  ├─ Wait 0.5s
-  ├─ DealDamage
-  └─ Wait 1.0s
-```
 
 **4. 循环节点完善** ⭐⭐
-- For 循环（指定次数）
-- ForEach 循环（遍历集合）
-- While 循环（条件循环）
-- Break / Continue 支持
+- [ ] For 循环（指定次数）
+- [ ] ForEach 循环（遍历集合）
+- [ ] While 循环（条件循环）
+- [ ] Break / Continue 支持
 
 **5. 异常处理** ⭐
-- Try-Catch 节点
-- 错误日志节点
-- 异常恢复机制
-
-#### 验收标准
-- [ ] 子图系统完整可用
-- [ ] 至少 5 个可复用的子图示例
-- [ ] 协程节点稳定运行
-- [ ] 复杂循环场景测试通过
+- [ ] Try-Catch 节点
+- [ ] 错误日志节点
+- [ ] 异常恢复机制
 
 ---
 
 ### 🎮 v0.5.0 - 技能系统专用
+
 
 **目标**：为 ARPG/RPG 游戏提供开箱即用的技能系统。
 
 #### 功能列表
 
 **1. 技能上下文** ⭐⭐⭐
-```csharp
-public class SkillContext
-{
-    public GameObject Caster;     // 施法者
-    public GameObject Target;     // 目标
-    public Vector3 Position;      // 位置
-    public float BaseDamage;      // 基础伤害
-    public Dictionary<string, object> CustomData;  // 自定义数据
-}
-```
+- [ ] 定义 `SkillContext` 类（包含施法者、目标、位置等信息）
 
 **2. 技能节点库** ⭐⭐⭐
-- **伤害计算**：DealDamage, DealDamageOverTime, AreaDamage
-- **效果触发**：SpawnEffect, PlaySound, CameraShake
-- **检测判定**：RaycastCheck, SphereCheck, LineOfSightCheck
-- **Buff 系统**：ApplyBuff, RemoveBuff, CheckBuff
-- **冷却管理**：SetCooldown, CheckCooldown
+- [ ] **伤害计算**：DealDamage, DealDamageOverTime, AreaDamage
+- [ ] **效果触发**：SpawnEffect, PlaySound, CameraShake
+- [ ] **检测判定**：RaycastCheck, SphereCheck, LineOfSightCheck
+- [ ] **Buff 系统**：ApplyBuff, RemoveBuff, CheckBuff
+- [ ] **冷却管理**：SetCooldown, CheckCooldown
 
 **3. 伤害计算公式** ⭐⭐
-- 公式编辑器（类似 Excel 公式）
-- 常用公式预设（物理/魔法/真实伤害）
-- 属性查询节点
-- 随机数节点（带种子）
+- [ ] 公式编辑器（类似 Excel 公式）
+- [ ] 常用公式预设（物理/魔法/真实伤害）
+- [ ] 属性查询节点
+- [ ] 随机数节点（带种子）
 
 **4. 技能指示器集成** ⭐
-- 范围指示器节点
-- 方向指示器节点
-- 轨迹预测节点
+- [ ] 范围指示器节点
+- [ ] 方向指示器节点
+- [ ] 轨迹预测节点
 
 **5. 技能链系统** ⭐
-- 连招检测
-- 技能衔接节点
-- Combo 计数
-
-#### 验收标准
-- [ ] 完整实现一个 ARPG 角色的技能树
-- [ ] 至少 10 个技能示例
-- [ ] 技能编辑器文档
-- [ ] 性能测试：50 个单位同时释放技能
+- [ ] 连招检测
+- [ ] 技能衔接节点
+- [ ] Combo 计数
 
 ---
+
 
 ### 📐 v0.6.0 - 编辑器增强
 
@@ -228,72 +217,67 @@ public class SkillContext
 #### 功能列表
 
 **1. Mini-map** ⭐⭐
-- 缩略图导航
-- 当前视口标识
-- 点击跳转
+- [ ] 缩略图导航
+- [ ] 当前视口标识
+- [ ] 点击跳转
 
 **2. 撤销/重做** ⭐⭐⭐
-- 命令模式实现
-- 支持所有编辑操作
-- 历史记录查看
+- [ ] 命令模式实现
+- [ ] 支持所有编辑操作
+- [ ] 历史记录查看
 
 **3. 多选编辑** ⭐⭐
-- 批量修改属性
-- 对齐工具
-- 分组编辑
+- [ ] 批量修改属性
+- [ ] 对齐工具
+- [ ] 分组编辑
 
 **4. 主题系统** ⭐
-- 明亮/暗黑主题
-- 自定义颜色方案
-- 节点样式预设
+- [ ] 明亮/暗黑主题
+- [ ] 自定义颜色方案
+- [ ] 节点样式预设
 
 **5. 自动布局** ⭐⭐
-- 层次布局算法
-- 节点对齐
-- 路径优化
+- [ ] 层次布局算法
+- [ ] 节点对齐
+- [ ] 路径优化
 
 **6. 注释系统** ⭐
-- 文本注释节点
-- 区域标注
-- TODO 标记
-
-#### 验收标准
-- [ ] 撤销/重做支持所有操作
-- [ ] Mini-map 流畅显示
-- [ ] 主题切换无缝
-- [ ] 自动布局算法优化
+- [ ] 文本注释节点
+- [ ] 区域标注
+- [ ] TODO 标记
 
 ---
 
 ### 🚀 v1.0.0 - 生产就绪
 
+
 **目标**：达到生产环境使用标准。
 
 #### 里程碑要求
 
-**1. 功能完整性** ✅
+**1. 功能完整性**
 - [ ] 所有计划功能实现
 - [ ] 覆盖 80% 以上常见需求
 - [ ] 至少 100 个内置节点
 
-**2. 稳定性** ✅
+**2. 稳定性**
 - [ ] 单元测试覆盖率 > 80%
 - [ ] 集成测试覆盖核心流程
 - [ ] 零已知 Critical Bug
 - [ ] 性能测试通过
 
-**3. 文档完善** ✅
+**3. 文档完善**
 - [ ] 完整的 API 文档
 - [ ] 详细的教程（文字 + 视频）
 - [ ] 至少 10 个完整示例项目
 - [ ] 常见问题解答
 
-**4. 社区支持** ✅
+**4. 社区支持**
 - [ ] 活跃的 Discord/QQ 群
 - [ ] Issue 响应时间 < 48h
 - [ ] 定期更新博客
 
-**5. 性能优化** ✅
+**5. 性能优化**
 - [ ] 代码生成器（蓝图编译为 C#）
 - [ ] 运行时性能接近手写代码
 - [ ] 内存占用优化
@@ -304,22 +288,22 @@ public class SkillContext
 ## 🔮 未来展望（v2.0+）
 
 ### 高级特性
-- **可视化脚本语言**：完整的编程语言特性
-- **多人协作**：实时协同编辑
-- **版本控制集成**：Git Diff/Merge 支持
-- **云端蓝图库**：分享和下载社区蓝图
-- **AI 辅助**：智能节点推荐和代码生成
+- [ ] **可视化脚本语言**：完整的编程语言特性
+- [ ] **多人协作**：实时协同编辑
+- [ ] **版本控制集成**：Git Diff/Merge 支持
+- [ ] **云端蓝图库**：分享和下载社区蓝图
+- [ ] **AI 辅助**：智能节点推荐和代码生成
 
 ### 跨平台支持
-- **导出 Lua**：用于热更新
-- **导出 Python**：用于工具脚本
-- **Web 编辑器**：浏览器中编辑蓝图
+- [ ] **导出 Lua**：用于热更新
+- [ ] **导出 Python**：用于工具脚本
+- [ ] **Web 编辑器**：浏览器中编辑蓝图
 
 ### 游戏类型适配
-- **AI 行为树**：专门的 AI 节点库
-- **对话系统**：对话树编辑器
-- **关卡脚本**：关卡事件和触发器
-- **UI 流程**：UI 状态机
+- [ ] **AI 行为树**：专门的 AI 节点库
+- [ ] **对话系统**：对话树编辑器
+- [ ] **关卡脚本**：关卡事件和触发器
+- [ ] **UI 流程**：UI 状态机
 
 ---
 

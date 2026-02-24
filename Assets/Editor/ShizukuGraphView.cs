@@ -8,7 +8,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class ShizukuGraphView : GraphView
+public partial class ShizukuGraphView : GraphView
 {
     private Vector2 _localMousePosition;
     private ShizukuGraphBase _runtimeGraph;
@@ -45,8 +45,10 @@ public class ShizukuGraphView : GraphView
         };
 
         styleSheets.Add(Resources.Load<StyleSheet>("ShizukuGraphView"));
+        
+        // 创建 AI 助手窗口
+        CreateAIAssistantWindow();
     }
-
 
     #endregion
 
@@ -295,7 +297,6 @@ public class ShizukuGraphView : GraphView
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
     {
         var compatiblePorts = new List<Port>();
-        // TODO: 需要根据端口的数据类型进行更加精细的匹配判断
 
         ports.ForEach(port =>
         {
@@ -308,19 +309,174 @@ public class ShizukuGraphView : GraphView
                 if (isStartControlFlow != isTargetControlFlow)
                     return; // 类型不匹配
 
-                compatiblePorts.Add(port);
+                // 如果是参数端口，检查类型兼容性
+                if (!isStartControlFlow)
+                {
+                    var startValueType = GetPortValueType(startPort);
+                    var endValueType = GetPortValueType(port);
+                    
+                    if (startValueType != null && endValueType != null)
+                    {
+                        // 同类型：直接兼容
+                        if (startValueType == endValueType)
+                        {
+                            compatiblePorts.Add(port);
+                        }
+                        // 可转换类型：也兼容，会自动插入转换节点
+                        else if (ConverterNodeRegistry.CanConvert(startValueType, endValueType))
+                        {
+                            // 设置端口颜色为蓝色，表示需要转换
+                            port.portColor = new Color(0.5f, 0.7f, 1f);
+                            compatiblePorts.Add(port);
+                        }
+                        // 不可转换：不添加到兼容列表
+                    }
+                    else
+                    {
+                        // 如果无法获取类型信息，默认兼容（向后兼容）
+                        compatiblePorts.Add(port);
+                    }
+                }
+                else
+                {
+                    // 控制流端口直接兼容
+                    compatiblePorts.Add(port);
+                }
             }
         });
 
         return compatiblePorts;
     }
+    
+    /// <summary>
+    /// 获取端口的值类型
+    /// </summary>
+    private Type GetPortValueType(Port port)
+    {
+        if (port == null || port.portType == null)
+            return null;
+        
+        // 如果自身是泛型端口（如 ParameterEdgePort<float>），获取泛型参数
+        if (port.portType.IsGenericType)
+        {
+            var genericArgs = port.portType.GetGenericArguments();
+            if (genericArgs.Length > 0)
+            {
+                return genericArgs[0];
+            }
+        }
+        
+        // 如果自身不是泛型，但基类是泛型（如 FloatParameterEdgePort : ParameterEdgePort<float>）
+        var baseType = port.portType.BaseType;
+        if (baseType != null && baseType.IsGenericType)
+        {
+            var genericArgs = baseType.GetGenericArguments();
+            if (genericArgs.Length > 0)
+            {
+                return genericArgs[0];
+            }
+        }
+        
+        return null;
+    }
+    
+    /// <summary>
+    /// 插入类型转换节点
+    /// </summary>
+    /// <returns>返回两条新的边：输出节点 → 转换节点、转换节点 → 输入节点</returns>
+    private List<Edge> InsertConverterNode(Edge originalEdge, Type fromType, Type toType)
+    {
+        try
+        {
+            // 1. 创建转换节点
+            var converterNode = ConverterNodeRegistry.CreateConverterNode(fromType, toType);
+            if (converterNode == null)
+            {
+                Debug.LogError($"  ❌ 无法创建转换节点: {fromType.Name} → {toType.Name}");
+                return null;
+            }
+            
+            Debug.Log($"  ✅ 创建转换节点: {converterNode.Title}");
+            
+            // 2. 添加到图数据中
+            _runtimeGraph.AddNode(converterNode);
+            
+            // 3. 计算转换节点位置（在两个节点中间）
+            var outputNodeView = originalEdge.output.node as ShizukuNodeView;
+            var inputNodeView = originalEdge.input.node as ShizukuNodeView;
+            
+            var outputPos = outputNodeView.GetPosition().position;
+            var inputPos = inputNodeView.GetPosition().position;
+            var midPosition = (outputPos + inputPos) / 2f;
+            
+            converterNode.PositionAndSize = new float4(midPosition.x, midPosition.y, 150, 80);
+            
+            // 4. 创建转换节点的视图
+            var converterNodeView = new ShizukuNodeView(converterNode, _runtimeGraph);
+            converterNodeView.InitPort();
+            converterNodeView.SetPosition(new Rect(midPosition, new Vector2(150, 80)));
+            _guidToNodeViewMap[converterNode.GUID] = converterNodeView;
+            AddElement(converterNodeView);
+            
+            // 5. 获取转换节点的端口
+            Port converterInputPort = null;
+            Port converterOutputPort = null;
+            
+            foreach (var port in converterNodeView.inputContainer.Children().OfType<Port>())
+            {
+                if (!(port is ControlFlowPort))
+                {
+                    converterInputPort = port;
+                    break;
+                }
+            }
+            
+            foreach (var port in converterNodeView.outputContainer.Children().OfType<Port>())
+            {
+                if (!(port is ControlFlowPort))
+                {
+                    converterOutputPort = port;
+                    break;
+                }
+            }
+            
+            if (converterInputPort == null || converterOutputPort == null)
+            {
+                Debug.LogError("  ❌ 转换节点端口未找到");
+                RemoveElement(converterNodeView);
+                _runtimeGraph.Nodes.Remove(converterNode);
+                return null;
+            }
+            
+            // 6. 创建新的边
+            var edge1 = originalEdge.output.ConnectTo(converterInputPort);
+            var edge2 = converterOutputPort.ConnectTo(originalEdge.input);
+            
+            // 7. 添加边到视图
+            AddElement(edge1);
+            AddElement(edge2);
+            
+            // 8. 标记图已修改
+            EditorUtility.SetDirty(_runtimeGraph);
+            
+            Debug.Log($"  ✅ 已插入转换节点: {outputNodeView.RuntimeNode.Title} → {converterNode.Title} → {inputNodeView.RuntimeNode.Title}");
+            
+            return new List<Edge> { edge1, edge2 };
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"  ❌ 插入转换节点失败: {ex.Message}");
+            return null;
+        }
+    }
 
     private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
     {
-        // 检查新添加的边是否会形成环
+        // 检查新添加的边是否会形成环，以及是否需要插入转换节点
         if (graphViewChange.edgesToCreate != null)
         {
             var edgesToRemove = new List<Edge>();
+            var edgesToAdd = new List<Edge>();
 
             foreach (var edge in graphViewChange.edgesToCreate)
             {
@@ -329,13 +485,44 @@ public class ShizukuGraphView : GraphView
                 {
                     Debug.LogWarning($"  ⚠️ 边会形成环，取消创建");
                     edgesToRemove.Add(edge);
+                    continue;
+                }
+                
+                // 检查是否需要插入类型转换节点
+                if (!(edge.input is ControlFlowPort) && !(edge.output is ControlFlowPort))
+                {
+                    var outputType = GetPortValueType(edge.output);
+                    var inputType = GetPortValueType(edge.input);
+                    
+                    // 如果类型不同且可以转换，插入转换节点
+                    if (outputType != null && inputType != null && 
+                        outputType != inputType && 
+                        ConverterNodeRegistry.CanConvert(outputType, inputType))
+                    {
+                        Debug.Log($"  🔄 检测到类型转换需求: {outputType.Name} → {inputType.Name}");
+                        
+                        // 插入转换节点
+                        var newEdges = InsertConverterNode(edge, outputType, inputType);
+                        if (newEdges != null && newEdges.Count == 2)
+                        {
+                            // 移除原始边，添加新的边
+                            edgesToRemove.Add(edge);
+                            edgesToAdd.AddRange(newEdges);
+                        }
+                    }
                 }
             }
 
-            // 移除会形成环的边
+            // 移除需要替换的边
             foreach (var edge in edgesToRemove)
             {
                 graphViewChange.edgesToCreate.Remove(edge);
+            }
+            
+            // 添加新的边（通过转换节点连接）
+            foreach (var edge in edgesToAdd)
+            {
+                graphViewChange.edgesToCreate.Add(edge);
             }
         }
 
@@ -345,11 +532,12 @@ public class ShizukuGraphView : GraphView
             foreach (var edge in graphViewChange.edgesToCreate)
             {
                 var targetNode = (edge.input.node as ShizukuNodeView).RuntimeNode;
-                var sourceNormalNode = (edge.output.node as ShizukuNodeView).RuntimeNode as ShizukuNormalNode;
+                var sourceNode = (edge.output.node as ShizukuNodeView).RuntimeNode;
                 // 暂时使用字符串来区分端口，如果端口名是previous或next则认为是控制流边，否则认为是参数边
                 // 控制流边只设置节点间的连接关系，参数边则需要在图中添加边数据
                 if (edge.input is ControlFlowPort)
                 {
+                    var sourceNormalNode = sourceNode as ShizukuNormalNode;
                     if (sourceNormalNode.ChainPorts.TryGetValue(edge.output.portName, out var chainPort))
                     {
                         chainPort.NextNodeGuid = targetNode.GUID;
@@ -359,12 +547,12 @@ public class ShizukuGraphView : GraphView
                 else
                 {
                     _runtimeGraph.AddParameterEdge(
-                        sourceNormalNode,
+                        sourceNode,
                         edge.output.portName,
                         targetNode,
                         edge.input.portName
                     );
-                    Debug.Log($"  📌 添加参数边: {sourceNormalNode.Title}.{edge.output.portName} -> {targetNode.Title}.{edge.input.portName}");
+                    Debug.Log($"  📌 添加参数边: {sourceNode.Title}.{edge.output.portName} -> {targetNode.Title}.{edge.input.portName}");
                 }
             }
         }

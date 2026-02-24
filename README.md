@@ -9,12 +9,14 @@
 
 ## 📚 文档导航
 
-- 📖 [快速参考](Docs/QUICK_REFERENCE.md) - 5分钟上手，常用代码速查
-- 🏗️ [架构设计](Docs/ARCHITECTURE.md) - 深入了解系统设计和实现原理
-- 🗺️ [开发路线图](Docs/ROADMAP.md) - 未来规划和版本计划
-- 🛠️ [节点开发指南](Docs/NODE_DEVELOPMENT.md) - 创建自定义节点
-- 🤝 [贡献指南](Docs/CONTRIBUTING.md) - 如何参与项目开发
-- 📁 [项目结构](Docs/PROJECT_STRUCTURE.md) - 目录和文件组织说明
+- 📖 [快速参考](Assets/Docs/QUICK_REFERENCE.md) - 5分钟上手，常用代码速查
+- 🏗️ [架构设计](Assets/Docs/ARCHITECTURE.md) - 深入了解系统设计和实现原理
+- 🗺️ [开发路线图](Assets/Docs/ROADMAP.md) - 未来规划和版本计划
+- ⚠️ [已知问题](Assets/Docs/KNOWN_ISSUES.md) - 性能优化和错误处理相关问题
+- 🛠️ [节点开发指南](Assets/Docs/NODE_DEVELOPMENT.md) - 创建自定义节点
+- 🤝 [贡献指南](Assets/Docs/CONTRIBUTING.md) - 如何参与项目开发
+- 📁 [项目结构](Assets/Docs/PROJECT_STRUCTURE.md) - 目录和文件组织说明
+- 🔧 [Blueprint Generator 使用指南](Assets/Docs/BLUEPRINT_GENERATOR_GUIDE.md) - 蓝图类生成器工具
 
 ---
 

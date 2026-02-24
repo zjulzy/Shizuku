@@ -5,24 +5,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/BlueprintGeneratorWindow.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/BlueprintGeneratorWindow.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/Generated.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Docs/BLUEPRINT_GENERATOR_GUIDE.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Docs/BLUEPRINT_GENERATOR_SUMMARY.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/TYPE_CONVERT.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/TYPE_CONVERT.md.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.AIAssistant.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.AIAssistant.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/BasicTypeConverters.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/BasicTypeConverters.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/TypeConverterNode.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/TypeConverterNode.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EXAMPLE_EnemyBlueprint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EnemyBehavior.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EXAMPLE_EnemyBlueprint.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EnemyBehavior.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EnemyBlueprint.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EnemyBlueprint.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/README_PropertyNodes.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/README_PropertyNodes.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/README_PropertyNodes.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/README_PropertyNodes.md.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/ARCHITECTURE.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/CONTRIBUTING.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/NODE_DEVELOPMENT.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/PROJECT_STRUCTURE.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/QUICK_REFERENCE.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/ROADMAP.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/ARCHITECTURE.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/ARCHITECTURE.md.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/BLUEPRINT_GENERATOR.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/BLUEPRINT_GENERATOR.md.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/CONTRIBUTING.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/CONTRIBUTING.md.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/NODE_DEVELOPMENT.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/NODE_DEVELOPMENT.md.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/PROJECT_STRUCTURE.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/PROJECT_STRUCTURE.md.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/QUICK_REFERENCE.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/QUICK_REFERENCE.md.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/ParameterEdge.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/ParameterEdge.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/BlueprintEventNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/BlueprintEventNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuNodeBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuNodeBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuRunnableNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuRunnableNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Docs/BLUEPRINT_GENERATOR_GUIDE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Docs/BLUEPRINT_GENERATOR_SUMMARY.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,19 +63,29 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3272951baa974b2ab5e8de68d60bfc1e46ae00/b3/93aaabe4/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/0b/65960d28/Dictionary`2.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/70/8ff87dc9/Type.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/77/4230ea42/Object.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5ff4b547bab14ebb9b1631f70822126643000/de/4a3e41b3/Port.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f27f375161264267910e5cbe7a0862ec1f7600/6b/4acc2bff/Behaviour.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f27f375161264267910e5cbe7a0862ec1f7600/9b/39454f88/MonoBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f27f375161264267910e5cbe7a0862ec1f7600/da/5a8454b4/Component.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Docs/ARCHITECTURE.md.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Docs/BLUEPRINT_GENERATOR.md.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Docs/CONTRIBUTING.md.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/BlueprintGeneratorWindow.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.AIAssistant.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/ShizukuGraphWindow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Plugins.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/BlueprintExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/BlueprintExtensions.cs.meta" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EXAMPLE_EnemyBlueprint.cs.meta" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/TestPlayerBehavior.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/BlueprintEventNode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/BlueprintEventNode.cs.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/BasicTypeConverters.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/BasicTypeConverters.cs.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/VisualScripting/New Script Graph.asset" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
@@ -117,13 +140,15 @@
       <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false" ignored-value-for-modified-check="41688">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="41688" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
-        <list />
+        <list>
+          <MonoRuntime />
+        </list>
       </option>
       <option name="selectedOptions">
         <list />
@@ -173,7 +198,7 @@
       <workItem from="1767539277791" duration="2246000" />
       <workItem from="1768122012297" duration="12586000" />
       <workItem from="1769849146862" duration="12000" />
-      <workItem from="1771913880849" duration="6234000" />
+      <workItem from="1771913880849" duration="16614000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -255,7 +280,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768139535928</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="蓝图代码生成器">
+      <option name="closed" value="true" />
+      <created>1771925256254</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1771925256254</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -292,7 +325,8 @@
     <MESSAGE value="自定义port" />
     <MESSAGE value="自定义控制流节点，以及初步设计蓝图系统" />
     <MESSAGE value="基于ai先尝试实现一下blueprint，与graph结果先隔离" />
-    <option name="LAST_COMMIT_MESSAGE" value="基于ai先尝试实现一下blueprint，与graph结果先隔离" />
+    <MESSAGE value="蓝图代码生成器" />
+    <option name="LAST_COMMIT_MESSAGE" value="蓝图代码生成器" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -46,21 +46,18 @@ public class ParameterEdge
         var inputNode = graph.Nodes.Find(n => n.GUID == InputNodeGuid);
         if (outputNode != null && inputNode != null)
         {
-            var inputRunnableNode = inputNode as ShizukuRunnableNode;
-            inputRunnableNode.DependentNodes.Add(outputNode);
+            inputNode.DependentNodes.Add(outputNode);
             var outputPort = outputNode.SelfOutputPorts.Find(p => p.Name == OutputPortName);
-            var inputPort = inputRunnableNode.SelfInputPorts.Find(p => p.Name == InputPortName);
+            var inputPort = inputNode.SelfInputPorts.Find(p => p.Name == InputPortName);
             if (outputPort != null && inputPort != null)
             {
                 if (outputPort.GetType() == inputPort.GetType())
                 {
                     inputPort.SameTypeConnectedPort = outputPort;
-                    inputPort.DifferentTypeConnectedPort = null;
                 }
                 else
                 {
-                    inputPort.DifferentTypeConnectedPort = outputPort;
-                    inputPort.SameTypeConnectedPort = null;
+                    Debug.LogError($"Type mismatch when connecting ports: {outputNode.Title}.{OutputPortName} ({outputPort.GetType()}) -> {inputNode.Title}.{InputPortName} ({inputPort.GetType()})");
                 }
             }
         }

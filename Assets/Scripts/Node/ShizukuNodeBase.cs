@@ -24,6 +24,12 @@ public abstract class ShizukuNodeBase
     
     [NonSerialized]
     public readonly List<ParameterEdgePort> SelfOutputPorts = new List<ParameterEdgePort>();
+    
+    [NonSerialized]
+    public readonly List<ParameterEdgePort> SelfInputPorts = new List<ParameterEdgePort>();
+    
+    [NonSerialized]
+    public readonly List<ShizukuNodeBase> DependentNodes = new List<ShizukuNodeBase>();
 
     public virtual void Init(ShizukuGraphBase parentGraph)
     {
@@ -43,6 +49,33 @@ public abstract class ShizukuNodeBase
                         SelfOutputPorts.Add(port);
                 }
             }
+        }
+        
+        SelfInputPorts.Clear();
+        foreach (var field in fields)
+        {
+            if (typeof(ParameterEdgePort).IsAssignableFrom(field.FieldType))
+            {
+                var port = field.GetValue(this) as ParameterEdgePort;
+                if (port != null)
+                {
+                    if (!port.IsOut)
+                        SelfInputPorts.Add(port);
+                }
+            }
+        }
+    }
+    
+    protected void GetInputValues()
+    {
+        foreach (var node in DependentNodes)
+        {
+            node.GetOutputValues();
+        }
+
+        foreach (var port in SelfInputPorts)
+        {
+            port.GetSourceValue();
         }
     }
     

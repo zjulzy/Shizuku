@@ -432,6 +432,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1198112251
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1198112253}
+  - component: {fileID: 1198112252}
+  m_Layer: 0
+  m_Name: ConverterNodeTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1198112252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198112251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf88573e53f848439b1aee5a57952c92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConverterNodeTest
+--- !u!4 &1198112253
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198112251}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1356500953
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,7 +534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33f93dcd79dd4a33a4a0d44f45c35bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EXAMPLE_EnemyBlueprint
-  _blueprint: {fileID: 0}
+  _blueprint: {fileID: 11400000, guid: 877986cb54a25be43af7674033dea433, type: 2}
   health: 100
   speed: 5
   defense: 10
@@ -563,3 +607,4 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 1356500955}
   - {fileID: 2117902515}
+  - {fileID: 1198112253}

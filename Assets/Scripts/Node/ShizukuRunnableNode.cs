@@ -11,31 +11,9 @@ public abstract class ShizukuRunnableNode : ShizukuNormalNode
     public sealed override bool SupportControlInput => true;
     public sealed override bool SupportControlOutput => true;
 
-    [NonSerialized]
-    public readonly List<ShizukuNodeBase> DependentNodes = new List<ShizukuNodeBase>();
-    
-    [NonSerialized]
-    public readonly List<ParameterEdgePort> SelfInputPorts = new List<ParameterEdgePort>();
-
     public override void Init(ShizukuGraphBase parentGraph)
     {
         base.Init(parentGraph);
-
-        var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        SelfInputPorts.Clear();
-        
-        foreach (var field in fields)
-        {
-            if (typeof(ParameterEdgePort).IsAssignableFrom(field.FieldType))
-            {
-                var port = field.GetValue(this) as ParameterEdgePort;
-                if (port != null)
-                {
-                    if (!port.IsOut)
-                        SelfInputPorts.Add(port);
-                }
-            }
-        }
     }
 
     public void Execute()
@@ -60,19 +38,6 @@ public abstract class ShizukuRunnableNode : ShizukuNormalNode
             {
                 Debug.LogError($"Next node not found: {guid}");
             }
-        }
-    }
-
-    private void GetInputValues()
-    {
-        foreach (var node in DependentNodes)
-        {
-            node.GetOutputValues();
-        }
-
-        foreach (var port in SelfInputPorts)
-        {
-            port.GetSourceValue();
         }
     }
 

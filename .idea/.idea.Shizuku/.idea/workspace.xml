@@ -5,37 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Docs/TYPE_CONVERT.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Docs/TYPE_CONVERT.md.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.AIAssistant.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.AIAssistant.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/BasicTypeConverters.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/BasicTypeConverters.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/TypeConverterNode.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/TypeConverterNode.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Docs/ARCHITECTURE.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/ARCHITECTURE.md.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Docs/BLUEPRINT_GENERATOR.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/BLUEPRINT_GENERATOR.md.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Docs/CONTRIBUTING.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/CONTRIBUTING.md.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Docs/NODE_DEVELOPMENT.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/NODE_DEVELOPMENT.md.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Docs/PROJECT_STRUCTURE.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/PROJECT_STRUCTURE.md.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Docs/QUICK_REFERENCE.md.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/QUICK_REFERENCE.md.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/BlueprintEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/BlueprintEditorExtension.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/ParameterEdge.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/ParameterEdge.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/BlueprintEventNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/BlueprintEventNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuNodeBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuNodeBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuRunnableNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuRunnableNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/BLUEPRINT_GENERATOR_GUIDE.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/BLUEPRINT_GENERATOR_SUMMARY.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,7 +170,7 @@
       <workItem from="1767539277791" duration="2246000" />
       <workItem from="1768122012297" duration="12586000" />
       <workItem from="1769849146862" duration="12000" />
-      <workItem from="1771913880849" duration="16614000" />
+      <workItem from="1771913880849" duration="17616000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -288,7 +260,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771925256254</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="优化节点间的数据类型传递，将类型转换显式表现出来">
+      <option name="closed" value="true" />
+      <created>1771938166690</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1771938166690</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -326,7 +306,8 @@
     <MESSAGE value="自定义控制流节点，以及初步设计蓝图系统" />
     <MESSAGE value="基于ai先尝试实现一下blueprint，与graph结果先隔离" />
     <MESSAGE value="蓝图代码生成器" />
-    <option name="LAST_COMMIT_MESSAGE" value="蓝图代码生成器" />
+    <MESSAGE value="优化节点间的数据类型传递，将类型转换显式表现出来" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化节点间的数据类型传递，将类型转换显式表现出来" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

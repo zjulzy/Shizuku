@@ -219,6 +219,51 @@ public partial class ShizukuGraphView : GraphView
         }
         return existingEvents;
     }
+    
+    /// <summary>
+    /// 聚焦到指定事件名称的节点
+    /// </summary>
+    private void FocusOnEventNode(string eventName)
+    {
+        if (_runtimeGraph == null)
+            return;
+        
+        // 查找事件节点
+        BlueprintEventNode targetEventNode = null;
+        foreach (var node in _runtimeGraph.Nodes)
+        {
+            if (node is BlueprintEventNode eventNode && eventNode.EventName == eventName)
+            {
+                targetEventNode = eventNode;
+                break;
+            }
+        }
+        
+        if (targetEventNode == null)
+        {
+            Debug.LogWarning($"未找到事件节点: {eventName}");
+            return;
+        }
+        
+        // 查找对应的节点视图
+        if (_guidToNodeViewMap.TryGetValue(targetEventNode.GUID, out var nodeView))
+        {
+            // 取消所有选择
+            ClearSelection();
+            
+            // 选中目标节点
+            AddToSelection(nodeView);
+            
+            // 使用 FrameSelection 方法来聚焦，这是 Unity GraphView 内置的方法
+            FrameSelection();
+            
+            Debug.Log($"已聚焦到事件节点: {eventName}");
+        }
+        else
+        {
+            Debug.LogWarning($"未找到事件节点的视图: {eventName}");
+        }
+    }
 
     private void CreateNode<TNode>(Vector2 mousePosition) where TNode : ShizukuNodeBase, new()
     {

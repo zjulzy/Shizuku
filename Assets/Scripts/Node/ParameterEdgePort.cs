@@ -90,6 +90,16 @@ public class ObjectParameterEdgePort : ParameterEdgePort<object>
 {
 }
 
+[Serializable]
+public class Vector2ParameterEdgePort : ParameterEdgePort<Vector2>
+{
+}
+
+[Serializable]
+public class Vector3ParameterEdgePort : ParameterEdgePort<Vector3>
+{
+}
+
 // 指定执行顺序的接口
 [Serializable]
 public class ChainPort

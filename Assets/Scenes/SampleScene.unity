@@ -490,7 +490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33f93dcd79dd4a33a4a0d44f45c35bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EXAMPLE_EnemyBlueprint
-  _blueprint: {fileID: 11400000, guid: c7a3ad5889ab34a4e94aa93fb2713dd4, type: 2}
+  _blueprint: {fileID: 0}
   health: 100
   speed: 5
   defense: 10

@@ -1,0 +1,135 @@
+Date : 2026-02-09 00:18:15
+Directory : u:\projects\game\Unity\Shizuku
+Total : 73 files,  48733 codes, 339 comments, 1968 blanks, all 51040 lines
+
+Languages
++-----------+------------+------------+------------+------------+------------+
+| language  | files      | code       | comment    | blank      | total      |
++-----------+------------+------------+------------+------------+------------+
+| XML       |         23 |     41,510 |          4 |        405 |     41,919 |
+| C#        |         34 |      3,418 |        324 |        653 |      4,395 |
+| Markdown  |          9 |      2,916 |          0 |        864 |      3,780 |
+| JSON      |          3 |        643 |          0 |          2 |        645 |
+| ShaderLab |          4 |        246 |         11 |         44 |        301 |
++-----------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                  | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                     |         73 |     48,733 |        339 |      1,968 |     51,040 |
+| . (Files)                                                                                                             |          2 |        757 |          0 |        237 |        994 |
+| .idea                                                                                                                 |         16 |        585 |          0 |          0 |        585 |
+| .idea (Files)                                                                                                         |          6 |         38 |          0 |          0 |         38 |
+| .idea\.idea.Shiziku                                                                                                   |          1 |        193 |          0 |          0 |        193 |
+| .idea\.idea.Shiziku\.idea                                                                                             |          1 |        193 |          0 |          0 |        193 |
+| .idea\.idea.Shizuku                                                                                                   |          9 |        354 |          0 |          0 |        354 |
+| .idea\.idea.Shizuku\.idea                                                                                             |          9 |        354 |          0 |          0 |        354 |
+| Assets                                                                                                                |         46 |     44,765 |        339 |      1,170 |     46,274 |
+| Assets\Editor                                                                                                         |         10 |      1,340 |        114 |        238 |      1,692 |
+| Assets\Plugins                                                                                                        |         12 |     41,915 |         44 |        559 |     42,518 |
+| Assets\Plugins\Sirenix                                                                                                |         12 |     41,915 |         44 |        559 |     42,518 |
+| Assets\Plugins\Sirenix\Assemblies                                                                                     |          7 |     40,925 |          4 |        405 |     41,334 |
+| Assets\Plugins\Sirenix\Odin Inspector                                                                                 |          5 |        990 |         40 |        154 |      1,184 |
+| Assets\Plugins\Sirenix\Odin Inspector\Assets                                                                          |          4 |        246 |         11 |         44 |        301 |
+| Assets\Plugins\Sirenix\Odin Inspector\Assets\Editor                                                                   |          4 |        246 |         11 |         44 |        301 |
+| Assets\Plugins\Sirenix\Odin Inspector\Assets\Editor\Hidden                                                            |          4 |        246 |         11 |         44 |        301 |
+| Assets\Plugins\Sirenix\Odin Inspector\Modules                                                                         |          1 |        744 |         29 |        110 |        883 |
+| Assets\Plugins\Sirenix\Odin Inspector\Modules\Unity.Mathematics                                                       |          1 |        744 |         29 |        110 |        883 |
+| Assets\Scripts                                                                                                        |         22 |      1,301 |        180 |        323 |      1,804 |
+| Assets\Scripts (Files)                                                                                                |          1 |         13 |          2 |          3 |         18 |
+| Assets\Scripts\Graph                                                                                                  |          9 |        457 |        130 |        101 |        688 |
+| Assets\Scripts\Graph (Files)                                                                                          |          3 |        152 |          5 |         31 |        188 |
+| Assets\Scripts\Graph\Blueprint                                                                                        |          6 |        305 |        125 |         70 |        500 |
+| Assets\Scripts\Node                                                                                                   |         12 |        831 |         48 |        219 |      1,098 |
+| Assets\Scripts\Node (Files)                                                                                           |          4 |        199 |          4 |         46 |        249 |
+| Assets\Scripts\Node\BlueprintNodes                                                                                    |          3 |        516 |         43 |        149 |        708 |
+| Assets\Scripts\Node\DerivedNodes                                                                                      |          5 |        116 |          1 |         24 |        141 |
+| Assets\TutorialInfo                                                                                                   |          2 |        209 |          1 |         50 |        260 |
+| Assets\TutorialInfo\Scripts                                                                                           |          2 |        209 |          1 |         50 |        260 |
+| Assets\TutorialInfo\Scripts (Files)                                                                                   |          1 |         14 |          0 |          3 |         17 |
+| Assets\TutorialInfo\Scripts\Editor                                                                                    |          1 |        195 |          1 |         47 |        243 |
+| Docs                                                                                                                  |          6 |      1,983 |          0 |        559 |      2,542 |
+| Packages                                                                                                              |          2 |        522 |          0 |          2 |        524 |
+| ProjectSettings                                                                                                       |          1 |        121 |          0 |          0 |        121 |
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------------------------------+-----------+------------+------------+------------+------------+
+| filename                                                                                                              | language  | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------+-----------+------------+------------+------------+------------+
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shiziku\.idea\workspace.xml                                                | XML       |        193 |          0 |          0 |        193 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\copilot.data.migration.agent.xml                             | XML       |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\copilot.data.migration.ask.xml                               | XML       |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\copilot.data.migration.ask2agent.xml                         | XML       |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\copilot.data.migration.edit.xml                              | XML       |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\indexLayout.xml                                              | XML       |          8 |          0 |          0 |          8 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\projectSettingsUpdater.xml                                   | XML       |          8 |          0 |          0 |          8 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\statistic.xml                                                | XML       |         14 |          0 |          0 |         14 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\vcs.xml                                                      | XML       |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\.idea.Shizuku\.idea\workspace.xml                                                | XML       |        294 |          0 |          0 |        294 |
+| u:\projects\game\Unity\Shizuku\.idea\copilot.data.migration.agent.xml                                                 | XML       |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\copilot.data.migration.ask.xml                                                   | XML       |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\copilot.data.migration.ask2agent.xml                                             | XML       |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\copilot.data.migration.edit.xml                                                  | XML       |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\.idea\indexLayout.xml                                                                  | XML       |          8 |          0 |          0 |          8 |
+| u:\projects\game\Unity\Shizuku\.idea\vcs.xml                                                                          | XML       |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\BaseGraphEditorExtension.cs                                              | C#        |         17 |          0 |          5 |         22 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\BlueprintEditorExtension.cs                                              | C#        |        239 |          0 |         35 |        274 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ControlFlowPort.cs                                                       | C#        |         87 |         28 |         19 |        134 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ControlFlowPortContainer.cs                                              | C#        |         47 |         13 |         11 |         71 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\CustomGroup.cs                                                           | C#        |         37 |         12 |         14 |         63 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\IGraphEditorExtension.cs                                                 | C#        |          8 |          0 |          2 |         10 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ShizukuGraphView.cs                                                      | C#        |        421 |         39 |         79 |        539 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ShizukuGraphViewExtensions.cs                                            | C#        |         41 |          9 |          8 |         58 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ShizukuGraphWindow.cs                                                    | C#        |        108 |          3 |         20 |        131 |
+| u:\projects\game\Unity\Shizuku\Assets\Editor\ShizukuNodeView.cs                                                       | C#        |        335 |         10 |         45 |        390 |
+| u:\projects\game\Unity\Shizuku\Assets\Plugins\Sirenix\Assemblies\Sirenix.OdinInspector.Attributes.xml                 | XML       |      6,178 |          2 |        262 |      6,442 |
+| u:\projects\game\Unity\Shizuku\Assets\Plugins\Sirenix\Assemblies\Sirenix.OdinInspector.Editor.xml                     | XML       |     11,200 |          0 |        113 |     11,313 |
+| u:\projects\game\Unity\Shizuku\Assets\Plugins\Sirenix\Assemblies\Sirenix.Serialization.Config.xml                     | XML       |        202 |          0 |          1 |        203 |
+| u:\projects\game\Unity\Shizuku\Assets\Plugins\Sirenix\Assemblies\Sirenix.Serialization.xml                            | XML       |      9,858 |          0 |          7 |      9,865 |
+| u:\projects\game\Unity\Shizuku\Assets\Plugins\Sirenix\Assemblies\Sirenix.Utilities.Editor.xml                         | XML       |      9,771 |          2 |         18 |      9,791 |
+| u:\projects\game\Unity\Shizuku\Assets\Plugins\Sirenix\Assemblies\Sirenix.Utilities.xml                                | XML       |      3,710 |          0 |          4 |      3,714 |
+| u:\projects\game\Unity\Shizuku\Assets\Plugins\Sirenix\Assemblies\link.xml                                             | XML       |          6 |          0 |          0 |          6 |
+| u:\projects\game\Unity\Shizuku\Assets\Plugins\Sirenix\Odin Inspector\Assets\Editor\Hidden\ExtractSpriteShader.shader  | ShaderLab |         44 |          1 |          6 |         51 |
+| u:\projects\game\Unity\Shizuku\Assets\Plugins\Sirenix\Odin Inspector\Assets\Editor\Hidden\GUIUtilShader.shader        | ShaderLab |         80 |          3 |         15 |         98 |
+| u:\projects\game\Unity\Shizuku\Assets\Plugins\Sirenix\Odin Inspector\Assets\Editor\Hidden\LazyEditorIconShader.shader | ShaderLab |         41 |          7 |          9 |         57 |
+| u:\projects\game\Unity\Shizuku\Assets\Plugins\Sirenix\Odin Inspector\Assets\Editor\Hidden\SdfIconShader.shader        | ShaderLab |         81 |          0 |         14 |         95 |
+| u:\projects\game\Unity\Shizuku\Assets\Plugins\Sirenix\Odin Inspector\Modules\Unity.Mathematics\MathematicsDrawers.cs  | C#        |        744 |         29 |        110 |        883 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\GraphRunner.cs                                                          | C#        |         13 |          2 |          3 |         18 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\Blueprint\BlueprintBehavior.cs                                    | C#        |         92 |         44 |         20 |        156 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\Blueprint\BlueprintExtensions.cs                                  | C#        |         32 |         13 |          5 |         50 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\Blueprint\BlueprintOverridableAttribute.cs                        | C#        |         10 |         13 |          3 |         26 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\Blueprint\EXAMPLE_EnemyBlueprint.cs                               | C#        |         35 |          6 |          8 |         49 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\Blueprint\EnemyBlueprint.cs                                       | C#        |          5 |          0 |          2 |          7 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\Blueprint\ShizukuBluePrint.cs                                     | C#        |        131 |         49 |         32 |        212 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\GroupData.cs                                                      | C#        |         25 |          3 |          7 |         35 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\ParameterEdge.cs                                                  | C#        |         57 |          2 |          9 |         68 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Graph\ShizukuGraphBase.cs                                               | C#        |         70 |          0 |         15 |         85 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\BlueprintNodes\BlueprintEventNode.cs                               | C#        |        167 |          0 |         34 |        201 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\BlueprintNodes\PropertyNodes.cs                                    | C#        |        173 |         43 |         47 |        263 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\BlueprintNodes\README_PropertyNodes.md                             | Markdown  |        176 |          0 |         68 |        244 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\DerivedNodes\ShizikuAddOneNode.cs                                  | C#        |         21 |          0 |          6 |         27 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\DerivedNodes\ShizukuForNode.cs                                     | C#        |         11 |          0 |          1 |         12 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\DerivedNodes\ShizukuIfNode.cs                                      | C#        |         20 |          0 |          6 |         26 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\DerivedNodes\ShizukuLogNode.cs                                     | C#        |         18 |          0 |          5 |         23 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\DerivedNodes\ShizukuRootNode.cs                                    | C#        |         46 |          1 |          6 |         53 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\ParameterEdgePort.cs                                               | C#        |         76 |          4 |         21 |        101 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\ShizukuNodeBase.cs                                                 | C#        |         40 |          0 |         10 |         50 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\ShizukuRunnableNode.cs                                             | C#        |         68 |          0 |         13 |         81 |
+| u:\projects\game\Unity\Shizuku\Assets\Scripts\Node\ShizukuValueNode.cs                                                | C#        |         15 |          0 |          2 |         17 |
+| u:\projects\game\Unity\Shizuku\Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs                                     | C#        |        195 |          1 |         47 |        243 |
+| u:\projects\game\Unity\Shizuku\Assets\TutorialInfo\Scripts\Readme.cs                                                  | C#        |         14 |          0 |          3 |         17 |
+| u:\projects\game\Unity\Shizuku\CHANGELOG.md                                                                           | Markdown  |         55 |          0 |         25 |         80 |
+| u:\projects\game\Unity\Shizuku\Docs\ARCHITECTURE.md                                                                   | Markdown  |        581 |          0 |        155 |        736 |
+| u:\projects\game\Unity\Shizuku\Docs\CONTRIBUTING.md                                                                   | Markdown  |        328 |          0 |        105 |        433 |
+| u:\projects\game\Unity\Shizuku\Docs\NODE_DEVELOPMENT.md                                                               | Markdown  |        252 |          0 |         67 |        319 |
+| u:\projects\game\Unity\Shizuku\Docs\PROJECT_STRUCTURE.md                                                              | Markdown  |        308 |          0 |         73 |        381 |
+| u:\projects\game\Unity\Shizuku\Docs\QUICK_REFERENCE.md                                                                | Markdown  |        233 |          0 |         68 |        301 |
+| u:\projects\game\Unity\Shizuku\Docs\ROADMAP.md                                                                        | Markdown  |        281 |          0 |         91 |        372 |
+| u:\projects\game\Unity\Shizuku\Packages\manifest.json                                                                 | JSON      |         48 |          0 |          1 |         49 |
+| u:\projects\game\Unity\Shizuku\Packages\packages-lock.json                                                            | JSON      |        474 |          0 |          1 |        475 |
+| u:\projects\game\Unity\Shizuku\ProjectSettings\SceneTemplateSettings.json                                             | JSON      |        121 |          0 |          0 |        121 |
+| u:\projects\game\Unity\Shizuku\README.md                                                                              | Markdown  |        702 |          0 |        212 |        914 |
+| Total                                                                                                                 |           |     48,733 |        339 |      1,968 |     51,040 |
++-----------------------------------------------------------------------------------------------------------------------+-----------+------------+------------+------------+------------+

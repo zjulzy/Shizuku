@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 /// 敌人行为类示例
 /// 演示如何使用 [BlueprintOverridable] 简化蓝图重写逻辑
 /// </summary>
-public class EXAMPLE_EnemyBlueprint : BlueprintBehavior<EXAMPLE_EnemyBlueprint>
+public class EnemyBehavior : BlueprintBehavior<EnemyBehavior>
 {
     [SerializeField] protected float health = 100f;
     [SerializeField] protected float speed = 5f;

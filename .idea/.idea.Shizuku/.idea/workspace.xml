@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="" />
+    <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/AddNode.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/AddNode.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/DivideNode.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/DivideNode.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/MultiplyNode.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/MultiplyNode.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/SubtractNode.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/SubtractNode.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -54,6 +65,9 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/BasicTypeConverters.cs.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/VectorTypeConverters.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/DivideNode.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/MultiplyNode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/VisualScripting/New Script Graph.asset" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
@@ -166,7 +180,7 @@
       <workItem from="1767539277791" duration="2246000" />
       <workItem from="1768122012297" duration="12586000" />
       <workItem from="1769849146862" duration="12000" />
-      <workItem from="1771913880849" duration="17945000" />
+      <workItem from="1771913880849" duration="18616000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -272,7 +286,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771939344492</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="更新文档">
+      <option name="closed" value="true" />
+      <created>1771939690906</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1771939690906</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -312,7 +334,8 @@
     <MESSAGE value="蓝图代码生成器" />
     <MESSAGE value="优化节点间的数据类型传递，将类型转换显式表现出来" />
     <MESSAGE value="优化面板ui" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化面板ui" />
+    <MESSAGE value="更新文档" />
+    <option name="LAST_COMMIT_MESSAGE" value="更新文档" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

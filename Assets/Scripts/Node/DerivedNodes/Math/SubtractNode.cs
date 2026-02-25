@@ -74,6 +74,7 @@ public class SubtractNode_Vector2 : ShizukuValueNode
 /// 减法节点 - Vector3 版本
 /// </summary>
 [Serializable]
+[NodeMenuItem("数学/减法/三维向量", NodeCategory.Math, Description = "三维向量减法")]
 public class SubtractNode_Vector3 : ShizukuValueNode
 {
     public override string Title => "Subtract (Vector3)";

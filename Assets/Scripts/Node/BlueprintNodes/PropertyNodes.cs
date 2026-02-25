@@ -216,6 +216,7 @@ public class SetPropertyNode_String : PropertySetNode<StringParameterEdgePort>
 /// - 强类型版本提供更好的类型安全和编辑器支持
 /// </remarks>
 [Serializable]
+[NodeMenuItem("蓝图/获取属性/通用", NodeCategory.Blueprint, Description = "获取 Object 类型属性")]
 public class GetPropertyNode : PropertyGetNode<ObjectParameterEdgePort>
 {
     protected override string TypeName => "Object";
@@ -248,6 +249,7 @@ public class GetPropertyNode : PropertyGetNode<ObjectParameterEdgePort>
 /// - 强类型版本提供更好的类型安全和编辑器支持
 /// </remarks>
 [Serializable]
+[NodeMenuItem("蓝图/设置属性/通用", NodeCategory.Blueprint, Description = "设置 Object 类型属性")]
 public class SetPropertyNode : PropertySetNode<ObjectParameterEdgePort>
 {
     protected override string TypeName => "Object";

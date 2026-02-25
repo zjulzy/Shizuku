@@ -29,11 +29,11 @@
 - [ ] 添加 `_outputComputedFrame` 缓存标记
 - [ ] 实现 `OnComputeOutputValues()` 接口
 
-**2. 节点库自动发现** ⭐⭐⭐
-- [ ] 通过反射扫描所有 `ShizukuNodeBase` 子类
-- [ ] 自动生成分类菜单
-- [ ] 支持 `[NodeInfo]` 特性标注元数据
-- [ ] 节点搜索功能
+**2. 节点库自动发现** ⭐⭐⭐ ✅
+- [x] 通过反射扫描所有 `ShizukuNodeBase` 子类
+- [x] 自动生成分类菜单
+- [x] 支持 `[NodeMenuItem]` 特性标注元数据
+- [x] 节点搜索功能（Unity SearchWindow）
 
 **3. 扩展类型系统** ⭐⭐
 - [x] 新增 `Vector3ParameterEdgePort`

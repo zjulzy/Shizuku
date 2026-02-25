@@ -44,10 +44,33 @@ public partial class ShizukuGraphView : GraphView
             DeleteElements(selection.OfType<GraphElement>().ToList());
         };
 
+        // 注册节点创建请求，使用 SearchWindow
+        nodeCreationRequest = context =>
+        {
+            SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), CreateNodeSearchWindowProvider(context.screenMousePosition));
+        };
+
         styleSheets.Add(Resources.Load<StyleSheet>("ShizukuGraphView"));
         
         // 创建 AI 助手窗口
         CreateAIAssistantWindow();
+    }
+    
+    /// <summary>
+    /// 创建节点搜索窗口提供者
+    /// </summary>
+    private NodeSearchWindowProvider CreateNodeSearchWindowProvider(Vector2 screenMousePosition)
+    {
+        var windowRoot = EditorWindow.focusedWindow.rootVisualElement;
+        var windowMousePosition = windowRoot.ChangeCoordinatesTo(
+            windowRoot.parent,
+            screenMousePosition - EditorWindow.focusedWindow.position.position
+        );
+        var graphMousePosition = contentViewContainer.WorldToLocal(windowMousePosition);
+        
+        var provider = ScriptableObject.CreateInstance<NodeSearchWindowProvider>();
+        provider.Initialize(this, graphMousePosition);
+        return provider;
     }
 
     #endregion
@@ -287,6 +310,56 @@ public partial class ShizukuGraphView : GraphView
         {
             _entryNode = nodeView;
             _runtimeGraph.RootNodeGUID = node.GUID;
+        }
+    }
+    
+    /// <summary>
+    /// 用于 SearchWindow创建节点
+    /// AI-generated
+    /// </summary>
+    public void CreateNodeFromType(Type nodeType, Vector2 mousePosition)
+    {
+        if (!typeof(ShizukuNodeBase).IsAssignableFrom(nodeType))
+        {
+            Debug.LogError($"类型 {nodeType.Name} 不是有效的节点类型！");
+            return;
+        }
+
+        if (nodeType == typeof(ShizukuRootNode) && _entryNode != null)
+        {
+            Debug.LogWarning("只能有一个根节点！");
+            return;
+        }
+
+        try
+        {
+            var node = Activator.CreateInstance(nodeType) as ShizukuNodeBase;
+            if (node == null)
+            {
+                Debug.LogError($"无法创建节点实例: {nodeType.Name}");
+                return;
+            }
+
+            var nodeView = new ShizukuNodeView(node, _runtimeGraph);
+            nodeView.InitPort();
+            nodeView.SetPosition(new Rect(mousePosition, new Vector2(200, 100)));
+
+            _runtimeGraph.AddNode(node);
+            _guidToNodeViewMap[node.GUID] = nodeView;
+            AddElement(nodeView);
+            EditorUtility.SetDirty(_runtimeGraph);
+
+            if (nodeType == typeof(ShizukuRootNode))
+            {
+                _entryNode = nodeView;
+                _runtimeGraph.RootNodeGUID = node.GUID;
+            }
+            
+            OnGraphChanged?.Invoke();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"创建节点失败: {ex.Message}");
         }
     }
 

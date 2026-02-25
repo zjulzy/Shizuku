@@ -77,6 +77,7 @@ public class AddNode_Vector2 : ShizukuValueNode
 /// 加法节点 - Vector3 版本
 /// </summary>
 [Serializable]
+[NodeMenuItem("数学/加法/三维向量", NodeCategory.Math, Description = "三维向量加法")]
 public class AddNode_Vector3 : ShizukuValueNode
 {
     public override string Title => "Add (Vector3)";

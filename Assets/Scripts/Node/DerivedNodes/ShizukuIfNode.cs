@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[NodeMenuItem("逻辑/条件分支", NodeCategory.Logic, Description = "根据条件执行不同分支")]
 public class ShizukuIfNode : ShizukuRunnableNode
 {
     public override string Title => "If";

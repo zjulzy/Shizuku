@@ -77,6 +77,7 @@ public class MultiplyNode_Vector2 : ShizukuValueNode
 /// 乘法节点 - Vector3 版本（标量乘法）
 /// </summary>
 [Serializable]
+[NodeMenuItem("数学/乘法/三维向量", NodeCategory.Math, Description = "三维向量标量乘法")]
 public class MultiplyNode_Vector3 : ShizukuValueNode
 {
     public override string Title => "Multiply (Vector3)";

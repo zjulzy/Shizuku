@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[NodeMenuItem("基础/加一", NodeCategory.Basic, Description = "将整数加一")]
 public class ShizikuAddOneNode : ShizukuRunnableNode
 {
     public override string Title => "Add One Node";

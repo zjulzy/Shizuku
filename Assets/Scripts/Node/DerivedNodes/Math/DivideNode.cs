@@ -69,6 +69,7 @@ public class DivideNode_Float : ShizukuValueNode
 /// 除法节点 - Vector2 版本（标量除法）
 /// </summary>
 [Serializable]
+[NodeMenuItem("数学/除法/二维向量", NodeCategory.Math, Description = "二维向量标量除法")]
 public class DivideNode_Vector2 : ShizukuValueNode
 {
     public override string Title => "Divide (Vector2)";
@@ -101,6 +102,7 @@ public class DivideNode_Vector2 : ShizukuValueNode
 /// 除法节点 - Vector3 版本（标量除法）
 /// </summary>
 [Serializable]
+[NodeMenuItem("数学/除法/三维向量", NodeCategory.Math, Description = "三维向量标量除法")]
 public class DivideNode_Vector3 : ShizukuValueNode
 {
     public override string Title => "Divide (Vector3)";

@@ -80,48 +80,89 @@ public class ControlFlowPort : Port
     }
     
     /// <summary>
-    /// 设置connector的菱形样式
-    /// 注意：必须在C#中设置，USS无法覆盖Unity的内联样式
+    /// 设置connector的样式
+    /// 控制流端口：横向胶囊形状，体现方向性
     /// </summary>
     private static void SetupConnectorStyle(Port port)
     {
         var connector = port.Q("connector");
         if (connector != null)
         {
-            // 形状 - 正方形
-            connector.style.borderTopLeftRadius = 0;
-            connector.style.borderTopRightRadius = 0;
-            connector.style.borderBottomLeftRadius = 0;
-            connector.style.borderBottomRightRadius = 0;
-            connector.style.width = 14;
-            connector.style.height = 14;
+            bool isInput = port.direction == Direction.Input;
             
-            // 颜色 - 橙黄色
-            connector.style.backgroundColor = new Color(1f, 0.78f, 0.39f, 1f);
-            connector.style.borderLeftColor = new Color(1f, 0.59f, 0.2f, 1f);
-            connector.style.borderRightColor = new Color(1f, 0.59f, 0.2f, 1f);
-            connector.style.borderTopColor = new Color(1f, 0.59f, 0.2f, 1f);
-            connector.style.borderBottomColor = new Color(1f, 0.59f, 0.2f, 1f);
+            // 设置为横向胶囊形状（椭圆）- 增大尺寸
+            connector.style.width = 16;
+            connector.style.height = 12;
             
-            // 边框宽度
-            connector.style.borderLeftWidth = 2;
-            connector.style.borderRightWidth = 2;
-            connector.style.borderTopWidth = 2;
-            connector.style.borderBottomWidth = 2;
+            // 设置圆角，创建明显的方向性
+            // 输入端口：左边完全圆润，右边尖锐 (
+            // 输出端口：左边尖锐，右边完全圆润 )
+            if (isInput)
+            {
+                // 左边：完全圆润（圆角半径 = 高度的一半）
+                connector.style.borderTopLeftRadius = 6;
+                connector.style.borderBottomLeftRadius = 6;
+                // 右边：尖锐（圆角半径很小）
+                connector.style.borderTopRightRadius = 1;
+                connector.style.borderBottomRightRadius = 1;
+            }
+            else
+            {
+                // 左边：尖锐（圆角半径很小）
+                connector.style.borderTopLeftRadius = 1;
+                connector.style.borderBottomLeftRadius = 1;
+                // 右边：完全圆润（圆角半径 = 高度的一半）
+                connector.style.borderTopRightRadius = 6;
+                connector.style.borderBottomRightRadius = 6;
+            }
             
-            // 旋转45度创建菱形
-            connector.style.rotate = new Rotate(new Angle(45, AngleUnit.Degree));
+            // 边框样式 - 减小边框宽度使空心更明显
+            Color borderColor = new Color(1f, 0.78f, 0.39f, 1f); // 橙黄色
+            connector.style.borderLeftWidth = 1.5f;
+            connector.style.borderRightWidth = 1.5f;
+            connector.style.borderTopWidth = 1.5f;
+            connector.style.borderBottomWidth = 1.5f;
+            connector.style.borderLeftColor = borderColor;
+            connector.style.borderRightColor = borderColor;
+            connector.style.borderTopColor = borderColor;
+            connector.style.borderBottomColor = borderColor;
             
-            // 处理内部cap元素 - 也变成正方形
+            // 初始背景（未连接）
+            connector.style.backgroundColor = Color.clear;
+            
+            // 移除旋转
+            connector.style.rotate = new Rotate(new Angle(0, AngleUnit.Degree));
+            
+            // 隐藏内部cap元素
             var cap = connector.Q("cap");
             if (cap != null)
             {
-                cap.style.borderTopLeftRadius = 0;
-                cap.style.borderTopRightRadius = 0;
-                cap.style.borderBottomLeftRadius = 0;
-                cap.style.borderBottomRightRadius = 0;
+                cap.style.display = DisplayStyle.None;
             }
+            
+            // 监听连接状态变化
+            SetupConnectionStateListener(port, connector);
         }
+    }
+    
+    /// <summary>
+    /// 设置连接状态监听，根据是否连接改变填充状态
+    /// </summary>
+    private static void SetupConnectionStateListener(Port port, VisualElement connector)
+    {
+        // 定期检查连接状态并更新样式
+        port.schedule.Execute(() =>
+        {
+            bool isConnected = port.connected;
+            
+            // 未连接：空心（透明背景 + 边框）
+            // 已连接：实心（填充背景 + 边框）
+            Color fillColor = isConnected 
+                ? new Color(1f, 0.5f, 0.2f, 1f)      // 实心 - 深橙色填充（更醒目）
+                : Color.clear;                        // 空心 - 透明
+            
+            connector.style.backgroundColor = fillColor;
+        }).Every(100); // 每100ms检查一次
     }
     
     // 保留protected构造函数以防需要继承

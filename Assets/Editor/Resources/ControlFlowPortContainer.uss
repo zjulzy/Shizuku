@@ -1,16 +1,17 @@
 /* 控制流端口容器主样式 */
 .control-flow-container {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;  /* 改为水平布局，使Previous和Next在同一行 */
+    align-items: center;  /* 垂直居中对齐 */
+    justify-content: space-between;  /* Previous在左，Next在右 */
     margin-top: 4px;
     margin-bottom: 4px;
+    min-height: 24px;
 }
 
 /* 左右侧端口容器 */
 .port-side-container {
     flex-direction: row;
     align-items: center;
-    min-height: 24px;
 }
 
 /* 右侧容器特殊样式 */

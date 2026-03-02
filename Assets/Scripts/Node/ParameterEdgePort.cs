@@ -38,6 +38,8 @@ public class ParameterEdgePort<T>: ParameterEdgePort
 {
     public T Value = default;
     
+    public T DefaultValue = default;
+    
     public Type GetValueType => typeof(T);
     
     public override void GetSourceValue()
@@ -56,6 +58,10 @@ public class ParameterEdgePort<T>: ParameterEdgePort
             {
                 Value = (T)Convert.ChangeType(differentValue, typeof(T));
             }
+        }
+        else
+        {
+            Value = DefaultValue;
         }
     }
 

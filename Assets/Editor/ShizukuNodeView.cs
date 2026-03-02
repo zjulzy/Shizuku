@@ -293,6 +293,16 @@ public class ShizukuNodeView : Node
                         var inputField = CreateInputFieldForPort(port);
                         if (inputField != null)
                         {
+                            // 将输入字段存储在 userData 中，方便后续隐藏/显示
+                            inputPort.userData = inputField;
+                            
+                            // 检查图数据中是否已有连接到该端口的边
+                            bool hasConnection = _graphAsset != null && _graphAsset.Edges.Any(e => 
+                                e.InputNodeGuid == _node.GUID && e.InputPortName == port.Name);
+                            
+                            // 根据连接状态决定是否显示输入字段
+                            UpdateInputFieldVisibility(inputPort, hasConnection);
+                            
                             inputPort.contentContainer.Add(inputField);
                         }
 
@@ -319,12 +329,12 @@ public class ShizukuNodeView : Node
             {
                 var intField = new IntegerField()
                 {
-                    value = intPort.Value
+                    value = intPort.DefaultValue
                 };
                 intField.style.minWidth = 30;
                 intField.RegisterValueChangedCallback(evt =>
                 {
-                    intPort.Value = evt.newValue;
+                    intPort.DefaultValue = evt.newValue;
                     if (_graphAsset != null)
                     {
                         EditorUtility.SetDirty(_graphAsset);
@@ -337,12 +347,12 @@ public class ShizukuNodeView : Node
             {
                 var floatField = new FloatField()
                 {
-                    value = floatPort.Value
+                    value = floatPort.DefaultValue
                 };
                 floatField.style.minWidth = 30;
                 floatField.RegisterValueChangedCallback(evt =>
                 {
-                    floatPort.Value = evt.newValue;
+                    floatPort.DefaultValue = evt.newValue;
                     if (_graphAsset != null)
                     {
                         EditorUtility.SetDirty(_graphAsset);
@@ -355,12 +365,12 @@ public class ShizukuNodeView : Node
             {
                 var boolField = new Toggle()
                 {
-                    value = boolPort.Value
+                    value = boolPort.DefaultValue
                 };
                 boolField.style.minWidth = 10;
                 boolField.RegisterValueChangedCallback(evt =>
                 {
-                    boolPort.Value = evt.newValue;
+                    boolPort.DefaultValue = evt.newValue;
                     if (_graphAsset != null)
                     {
                         EditorUtility.SetDirty(_graphAsset);
@@ -373,12 +383,12 @@ public class ShizukuNodeView : Node
             {
                 var stringField = new TextField()
                 {
-                    value = stringPort.Value
+                    value = stringPort.DefaultValue
                 };
                 stringField.style.minWidth = 30;
                 stringField.RegisterValueChangedCallback(evt =>
                 {
-                    stringPort.Value = evt.newValue;
+                    stringPort.DefaultValue = evt.newValue;
                     if (_graphAsset != null)
                     {
                         EditorUtility.SetDirty(_graphAsset);
@@ -389,6 +399,35 @@ public class ShizukuNodeView : Node
             
             default:
                 return null;
+        }
+    }
+    
+    /// <summary>
+    /// 更新输入字段的可见性（根据端口是否有连接）
+    /// </summary>
+    private void UpdateInputFieldVisibility(Port inputPort, bool isConnected)
+    {
+        if (inputPort == null || inputPort.userData == null)
+            return;
+        
+        var inputField = inputPort.userData as VisualElement;
+        if (inputField == null)
+            return;
+        
+        // 如果端口已连接，隐藏输入字段；否则显示
+        inputField.style.display = isConnected ? DisplayStyle.None : DisplayStyle.Flex;
+    }
+    
+    /// <summary>
+    /// 当端口连接状态改变时调用此方法
+    /// </summary>
+    /// <param name="port">输入端口</param>
+    /// <param name="isConnected">是否已连接（true=已连接，false=未连接）</param>
+    public void OnPortConnectionChanged(Port port, bool isConnected)
+    {
+        if (port != null && port.direction == Direction.Input)
+        {
+            UpdateInputFieldVisibility(port, isConnected);
         }
     }
     

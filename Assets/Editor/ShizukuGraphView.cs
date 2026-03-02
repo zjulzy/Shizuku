@@ -671,6 +671,10 @@ public partial class ShizukuGraphView : GraphView
                         edge.input.portName
                     );
                     Debug.Log($"  📌 添加参数边: {sourceNode.Title}.{edge.output.portName} -> {targetNode.Title}.{edge.input.portName}");
+                    
+                    // 通知输入节点更新输入字段的可见性（边已连接，传递 true）
+                    var targetNodeView = edge.input.node as ShizukuNodeView;
+                    targetNodeView?.OnPortConnectionChanged(edge.input, true);
                 }
             }
         }
@@ -701,6 +705,10 @@ public partial class ShizukuGraphView : GraphView
                         {
                             _runtimeGraph.Edges.Remove(edgeToRemove);
                         }
+                        
+                        // 通知输入节点更新输入字段的可见性（边已删除，传递 false）
+                        var targetNodeView = edge.input.node as ShizukuNodeView;
+                        targetNodeView?.OnPortConnectionChanged(edge.input, false);
                     }
                 }
                 // 处理节点的移除

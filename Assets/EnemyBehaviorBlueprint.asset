@@ -17,22 +17,78 @@ MonoBehaviour:
   - rid: 522454392492261445
   - rid: 522454392492261447
   - rid: 522454395759624271
-  - rid: 522454395759624276
   - rid: 522454395759624279
   - rid: 522454395759624287
   - rid: 522454395759624289
+  - rid: 254579876135174145
   _edges:
   - rid: 522454395759624272
   - rid: 522454395759624273
   - rid: 522454395759624280
-  - rid: 522454395759624281
-  - rid: 522454395759624290
-  - rid: 522454395759624291
+  - rid: 254579876135174146
+  - rid: 254579876135174147
+  - rid: 254579876135174210
   _groups: []
   RootNodeGUID: 
   references:
     version: 2
     RefIds:
+    - rid: 254579876135174145
+      type: {class: ShizikuAddOneNode, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 78c1ef9a-e9bf-4fe8-8a4d-2a04bcdf9b29
+        PositionAndSize:
+          x: 903.19995
+          y: 389.59998
+          z: 178.40002
+          w: 108.79999
+        _parameter:
+          rid: 254579876135174148
+        _parameterResult:
+          rid: 254579876135174149
+        _nextPort:
+          NextNodeGuid: 9cf34297-7508-497d-adb6-8a274c0713bc
+          Name: next
+    - rid: 254579876135174146
+      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 05bcac13-274b-4b38-8c2c-4f365af4b116
+        OutputNodeGuid: 38bfa7ad-41f4-40bf-9dbc-de611a7918df
+        OutputPortName: Int
+        InputNodeGuid: 78c1ef9a-e9bf-4fe8-8a4d-2a04bcdf9b29
+        InputPortName: parameter
+    - rid: 254579876135174147
+      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 9e2ff069-b3fd-4e09-bb4d-2e2b1813dc74
+        OutputNodeGuid: 78c1ef9a-e9bf-4fe8-8a4d-2a04bcdf9b29
+        OutputPortName: result
+        InputNodeGuid: b88d63c3-dc13-42c1-9ec4-60aa3c08f963
+        InputPortName: Int
+    - rid: 254579876135174148
+      type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: parameter
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: 0
+        DefaultValue: 0
+    - rid: 254579876135174149
+      type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: result
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 1
+        DefaultValue: 0
+    - rid: 254579876135174210
+      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: b3817e39-dfaa-4d0f-80fe-cd96b557ce93
+        OutputNodeGuid: b88d63c3-dc13-42c1-9ec4-60aa3c08f963
+        OutputPortName: String
+        InputNodeGuid: 9cf34297-7508-497d-adb6-8a274c0713bc
+        InputPortName: message
     - rid: 522454392492261445
       type: {class: BlueprintEventNode, ns: , asm: Assembly-CSharp}
       data:
@@ -57,7 +113,8 @@ MonoBehaviour:
         Name: damage
         InputEdgeGUID: 
         IsOut: 1
-        Value: 5
+        Value: 0
+        DefaultValue: 0
     - rid: 522454392492261447
       type: {class: ShizukuLogNode, ns: , asm: Assembly-CSharp}
       data:
@@ -70,7 +127,7 @@ MonoBehaviour:
         Message:
           rid: 522454392492261448
         _nextPort:
-          NextNodeGuid: 9036bec0-a09b-4070-aaf8-02383bacbf56
+          NextNodeGuid: 78c1ef9a-e9bf-4fe8-8a4d-2a04bcdf9b29
           Name: next
     - rid: 522454392492261448
       type: {class: StringParameterEdgePort, ns: , asm: Assembly-CSharp}
@@ -78,7 +135,8 @@ MonoBehaviour:
         Name: message
         InputEdgeGUID: 
         IsOut: 0
-        Value: 5.00
+        Value: 0.00
+        DefaultValue: 
     - rid: 522454395759624271
       type: {class: FloatToStringConverter, ns: , asm: Assembly-CSharp}
       data:
@@ -114,44 +172,16 @@ MonoBehaviour:
         Name: Float
         InputEdgeGUID: 
         IsOut: 0
-        Value: 5
+        Value: 0
+        DefaultValue: 0
     - rid: 522454395759624275
       type: {class: StringParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
         Name: String
         InputEdgeGUID: 
         IsOut: 1
-        Value: 5.00
-    - rid: 522454395759624276
-      type: {class: ShizikuAddOneNode, ns: , asm: Assembly-CSharp}
-      data:
-        GUID: 9036bec0-a09b-4070-aaf8-02383bacbf56
-        PositionAndSize:
-          x: 871.24005
-          y: 405.08002
-          z: 177.59998
-          w: 132.79999
-        _parameter:
-          rid: 522454395759624277
-        _parameterResult:
-          rid: 522454395759624278
-        _nextPort:
-          NextNodeGuid: 9cf34297-7508-497d-adb6-8a274c0713bc
-          Name: next
-    - rid: 522454395759624277
-      type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
-      data:
-        Name: parameter
-        InputEdgeGUID: 
-        IsOut: 0
-        Value: 5
-    - rid: 522454395759624278
-      type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
-      data:
-        Name: result
-        InputEdgeGUID: 
-        IsOut: 1
-        Value: 6
+        Value: 0.00
+        DefaultValue: 
     - rid: 522454395759624279
       type: {class: FloatToIntConverter, ns: , asm: Assembly-CSharp}
       data:
@@ -173,28 +203,22 @@ MonoBehaviour:
         OutputPortName: damage
         InputNodeGuid: 38bfa7ad-41f4-40bf-9dbc-de611a7918df
         InputPortName: Float
-    - rid: 522454395759624281
-      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
-      data:
-        GUID: e656b512-f0e0-4e8d-84c2-801333aa5f89
-        OutputNodeGuid: 38bfa7ad-41f4-40bf-9dbc-de611a7918df
-        OutputPortName: Int
-        InputNodeGuid: 9036bec0-a09b-4070-aaf8-02383bacbf56
-        InputPortName: parameter
     - rid: 522454395759624282
       type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
         Name: Float
         InputEdgeGUID: 
         IsOut: 0
-        Value: 5
+        Value: 0
+        DefaultValue: 0
     - rid: 522454395759624283
       type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
         Name: Int
         InputEdgeGUID: 
         IsOut: 1
-        Value: 5
+        Value: 0
+        DefaultValue: 0
     - rid: 522454395759624287
       type: {class: ShizukuLogNode, ns: , asm: Assembly-CSharp}
       data:
@@ -215,7 +239,8 @@ MonoBehaviour:
         Name: message
         InputEdgeGUID: 
         IsOut: 0
-        Value: 6
+        Value: 1
+        DefaultValue: 
     - rid: 522454395759624289
       type: {class: IntToStringConverter, ns: , asm: Assembly-CSharp}
       data:
@@ -229,33 +254,19 @@ MonoBehaviour:
           rid: 522454395759624292
         _output:
           rid: 522454395759624293
-    - rid: 522454395759624290
-      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
-      data:
-        GUID: e529d248-5836-4ab8-a5a8-550e6be0c147
-        OutputNodeGuid: 9036bec0-a09b-4070-aaf8-02383bacbf56
-        OutputPortName: result
-        InputNodeGuid: b88d63c3-dc13-42c1-9ec4-60aa3c08f963
-        InputPortName: Int
-    - rid: 522454395759624291
-      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
-      data:
-        GUID: 199248e4-d93c-4c44-a28f-5e5c14438448
-        OutputNodeGuid: b88d63c3-dc13-42c1-9ec4-60aa3c08f963
-        OutputPortName: String
-        InputNodeGuid: 9cf34297-7508-497d-adb6-8a274c0713bc
-        InputPortName: message
     - rid: 522454395759624292
       type: {class: IntParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
         Name: Int
         InputEdgeGUID: 
         IsOut: 0
-        Value: 6
+        Value: 1
+        DefaultValue: 0
     - rid: 522454395759624293
       type: {class: StringParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
         Name: String
         InputEdgeGUID: 
         IsOut: 1
-        Value: 6
+        Value: 1
+        DefaultValue: 

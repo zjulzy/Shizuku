@@ -199,6 +199,161 @@ public class SetPropertyNode_String : PropertySetNode<StringParameterEdgePort>
 }
 
 // ============================================================
+// Vector2 类型节点
+// ============================================================
+
+[Serializable]
+public class GetPropertyNode_Vector2 : PropertyGetNode<Vector2ParameterEdgePort>
+{
+    protected override string TypeName => "Vector2";
+    
+    protected override void SetOutputValue(object value)
+    {
+        Output.Value = value is Vector2 v ? v : Vector2.zero;
+    }
+    
+    protected override void SetOutputValueDefault()
+    {
+        Output.Value = Vector2.zero;
+    }
+}
+
+[Serializable]
+public class SetPropertyNode_Vector2 : PropertySetNode<Vector2ParameterEdgePort>
+{
+    protected override string TypeName => "Vector2";
+    
+    protected override object GetInputValue()
+    {
+        return Input.Value;
+    }
+}
+
+// ============================================================
+// Vector3 类型节点
+// ============================================================
+
+[Serializable]
+public class GetPropertyNode_Vector3 : PropertyGetNode<Vector3ParameterEdgePort>
+{
+    protected override string TypeName => "Vector3";
+    
+    protected override void SetOutputValue(object value)
+    {
+        Output.Value = value is Vector3 v ? v : Vector3.zero;
+    }
+    
+    protected override void SetOutputValueDefault()
+    {
+        Output.Value = Vector3.zero;
+    }
+}
+
+[Serializable]
+public class SetPropertyNode_Vector3 : PropertySetNode<Vector3ParameterEdgePort>
+{
+    protected override string TypeName => "Vector3";
+    
+    protected override object GetInputValue()
+    {
+        return Input.Value;
+    }
+}
+
+// ============================================================
+// GameObject 类型节点
+// ============================================================
+
+[Serializable]
+public class GetPropertyNode_GameObject : PropertyGetNode<GameObjectParameterEdgePort>
+{
+    protected override string TypeName => "GameObject";
+    
+    protected override void SetOutputValue(object value)
+    {
+        Output.Value = value as GameObject;
+    }
+    
+    protected override void SetOutputValueDefault()
+    {
+        Output.Value = null;
+    }
+}
+
+[Serializable]
+public class SetPropertyNode_GameObject : PropertySetNode<GameObjectParameterEdgePort>
+{
+    protected override string TypeName => "GameObject";
+    
+    protected override object GetInputValue()
+    {
+        return Input.Value;
+    }
+}
+
+// ============================================================
+// Transform 类型节点
+// ============================================================
+
+[Serializable]
+public class GetPropertyNode_Transform : PropertyGetNode<TransformParameterEdgePort>
+{
+    protected override string TypeName => "Transform";
+    
+    protected override void SetOutputValue(object value)
+    {
+        Output.Value = value as Transform;
+    }
+    
+    protected override void SetOutputValueDefault()
+    {
+        Output.Value = null;
+    }
+}
+
+[Serializable]
+public class SetPropertyNode_Transform : PropertySetNode<TransformParameterEdgePort>
+{
+    protected override string TypeName => "Transform";
+    
+    protected override object GetInputValue()
+    {
+        return Input.Value;
+    }
+}
+
+// ============================================================
+// Color 类型节点
+// ============================================================
+
+[Serializable]
+public class GetPropertyNode_Color : PropertyGetNode<ColorParameterEdgePort>
+{
+    protected override string TypeName => "Color";
+    
+    protected override void SetOutputValue(object value)
+    {
+        Output.Value = value is Color c ? c : Color.white;
+    }
+    
+    protected override void SetOutputValueDefault()
+    {
+        Output.Value = Color.white;
+    }
+}
+
+[Serializable]
+public class SetPropertyNode_Color : PropertySetNode<ColorParameterEdgePort>
+{
+    protected override string TypeName => "Color";
+    
+    protected override object GetInputValue()
+    {
+        return Input.Value;
+    }
+}
+
+// ============================================================
 // 通用版本（Object 类型）
 // ============================================================
 

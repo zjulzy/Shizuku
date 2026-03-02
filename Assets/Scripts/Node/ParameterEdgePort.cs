@@ -106,6 +106,21 @@ public class Vector3ParameterEdgePort : ParameterEdgePort<Vector3>
 {
 }
 
+[Serializable]
+public class GameObjectParameterEdgePort : ParameterEdgePort<GameObject>
+{
+}
+
+[Serializable]
+public class TransformParameterEdgePort : ParameterEdgePort<Transform>
+{
+}
+
+[Serializable]
+public class ColorParameterEdgePort : ParameterEdgePort<Color>
+{
+}
+
 // 指定执行顺序的接口
 [Serializable]
 public class ChainPort

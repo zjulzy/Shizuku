@@ -38,9 +38,9 @@
 **3. 扩展类型系统** ⭐⭐
 - [x] 新增 `Vector3ParameterEdgePort`
 - [x] 新增 `Vector2ParameterEdgePort`
-- [ ] 新增 `GameObjectParameterEdgePort`
-- [ ] 新增 `TransformParameterEdgePort`
-- [ ] 新增 `ColorParameterEdgePort`
+- [x] 新增 `GameObjectParameterEdgePort`
+- [x] 新增 `TransformParameterEdgePort`
+- [x] 新增 `ColorParameterEdgePort`
 - [ ] 类型注册中心（支持自定义类型）
 
 **4. 更多实用节点** ⭐⭐
@@ -60,7 +60,6 @@
   - [ ] 添加 `UpdateMode` 枚举（Always/OnDemand/Disabled）
   - [ ] 检测 Root Node 是否有实际逻辑
   - [ ] 提供 `EnableUpdate`/`DisableUpdate` API
-- [ ] **值节点缓存** - 同一帧避免重复计算（已在第 1 项）
 - [ ] **批量初始化优化** - 静态缓存共享（已实现）
 
 **7. 运行时错误处理** ⭐⭐⭐
@@ -84,9 +83,9 @@
   - [x] 实现 `ConverterNodeRegistry` 自动注册中心
   - [x] 编辑器自动插入转换节点（连接时检测类型）
   - [x] 视觉反馈（蓝色端口表示需要转换，禁止不可转换连接）
-- [ ] **扩展类型支持**
-  - [ ] Vector3/Vector2/GameObject/Transform 类型端口
-  - [ ] Color/Quaternion 等 Unity 常用类型
+- [x] **扩展类型支持**
+  - [x] Vector3/Vector2/GameObject/Transform/Color 类型端口
+  - [ ] Quaternion 等其他 Unity 常用类型
 
 ---
 
@@ -388,5 +387,5 @@
 - 版本发布日期为预估，实际可能延后
 - 标注 ⭐ 的功能为核心优先功能
 
-**最后更新**：2026-01-25
+**最后更新**：2026-03-02
 **下次更新**：每月第一个周一

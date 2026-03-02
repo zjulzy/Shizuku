@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/PropertyNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/PropertyNodes.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ParameterEdgePort.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ParameterEdgePort.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -197,7 +198,7 @@
       <workItem from="1769849146862" duration="12000" />
       <workItem from="1771913880849" duration="18774000" />
       <workItem from="1772028636126" duration="4811000" />
-      <workItem from="1772436522645" duration="3963000" />
+      <workItem from="1772436522645" duration="6634000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -335,7 +336,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772036670608</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="优化参数port默认值相关逻辑">
+      <option name="closed" value="true" />
+      <created>1772442660541</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1772442660541</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -379,7 +388,8 @@
     <MESSAGE value="创建基础数学节点" />
     <MESSAGE value="实现节点搜索添加窗口" />
     <MESSAGE value="优化外观" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化外观" />
+    <MESSAGE value="优化参数port默认值相关逻辑" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化参数port默认值相关逻辑" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

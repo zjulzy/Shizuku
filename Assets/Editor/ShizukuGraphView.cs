@@ -199,6 +199,16 @@ public partial class ShizukuGraphView : GraphView
             return new BoolParameterEdgePort { IsOut = true, Name = name };
         else if (type == typeof(string))
             return new StringParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(Vector2))
+            return new Vector2ParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(Vector3))
+            return new Vector3ParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(GameObject))
+            return new GameObjectParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(Transform))
+            return new TransformParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(Color))
+            return new ColorParameterEdgePort { IsOut = true, Name = name };
         else
             return new ObjectParameterEdgePort { IsOut = true, Name = name };
     }

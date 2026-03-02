@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using Unity.Mathematics;
+using UnityEditor.UIElements;
 
 public class ShizukuNodeView : Node
 {
@@ -150,6 +151,16 @@ public class ShizukuNodeView : Node
             return new BoolParameterEdgePort { IsOut = true, Name = name };
         else if (type == typeof(string))
             return new StringParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(Vector2))
+            return new Vector2ParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(Vector3))
+            return new Vector3ParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(GameObject))
+            return new GameObjectParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(Transform))
+            return new TransformParameterEdgePort { IsOut = true, Name = name };
+        else if (type == typeof(Color))
+            return new ColorParameterEdgePort { IsOut = true, Name = name };
         else
             return new ObjectParameterEdgePort { IsOut = true, Name = name };
     }
@@ -397,6 +408,98 @@ public class ShizukuNodeView : Node
                 return stringField;
             }
             
+            case Vector2ParameterEdgePort vector2Port:
+            {
+                var vector2Field = new Vector2Field()
+                {
+                    value = vector2Port.DefaultValue
+                };
+                vector2Field.style.minWidth = 80;
+                vector2Field.RegisterValueChangedCallback(evt =>
+                {
+                    vector2Port.DefaultValue = evt.newValue;
+                    if (_graphAsset != null)
+                    {
+                        EditorUtility.SetDirty(_graphAsset);
+                    }
+                });
+                return vector2Field;
+            }
+            
+            case Vector3ParameterEdgePort vector3Port:
+            {
+                var vector3Field = new Vector3Field()
+                {
+                    value = vector3Port.DefaultValue
+                };
+                vector3Field.style.minWidth = 100;
+                vector3Field.RegisterValueChangedCallback(evt =>
+                {
+                    vector3Port.DefaultValue = evt.newValue;
+                    if (_graphAsset != null)
+                    {
+                        EditorUtility.SetDirty(_graphAsset);
+                    }
+                });
+                return vector3Field;
+            }
+            
+            case GameObjectParameterEdgePort gameObjectPort:
+            {
+                var objectField = new ObjectField()
+                {
+                    objectType = typeof(GameObject),
+                    value = gameObjectPort.DefaultValue
+                };
+                objectField.style.minWidth = 80;
+                objectField.RegisterValueChangedCallback(evt =>
+                {
+                    gameObjectPort.DefaultValue = evt.newValue as GameObject;
+                    if (_graphAsset != null)
+                    {
+                        EditorUtility.SetDirty(_graphAsset);
+                    }
+                });
+                return objectField;
+            }
+            
+            case TransformParameterEdgePort transformPort:
+            {
+                var objectField = new ObjectField()
+                {
+                    objectType = typeof(Transform),
+                    value = transformPort.DefaultValue
+                };
+                objectField.style.minWidth = 80;
+                objectField.RegisterValueChangedCallback(evt =>
+                {
+                    transformPort.DefaultValue = evt.newValue as Transform;
+                    if (_graphAsset != null)
+                    {
+                        EditorUtility.SetDirty(_graphAsset);
+                    }
+                });
+                return objectField;
+            }
+            
+            case ColorParameterEdgePort colorPort:
+            {
+                var colorField = new ColorField()
+                {
+                    value = colorPort.DefaultValue
+                };
+                colorField.style.minWidth = 50;
+                colorField.RegisterValueChangedCallback(evt =>
+                {
+                    colorPort.DefaultValue = evt.newValue;
+                    if (_graphAsset != null)
+                    {
+                        EditorUtility.SetDirty(_graphAsset);
+                    }
+                });
+                return colorField;
+            }
+            
             default:
                 return null;
         }
@@ -559,16 +662,16 @@ public class ShizukuNodeView : Node
             return "Bool";
         if (type == typeof(string))
             return "String";
-        if (type == typeof(UnityEngine.Vector2))
+        if (type == typeof(Vector2))
             return "Vector2";
-        if (type == typeof(UnityEngine.Vector3))
+        if (type == typeof(Vector3))
             return "Vector3";
-        if (type == typeof(UnityEngine.Color))
-            return "Color";
-        if (type == typeof(UnityEngine.GameObject))
+        if (type == typeof(GameObject))
             return "GameObject";
-        if (type == typeof(UnityEngine.Transform))
+        if (type == typeof(Transform))
             return "Transform";
+        if (type == typeof(Color))
+            return "Color";
         
         // 默认返回类型名称
         return type.Name;

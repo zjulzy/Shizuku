@@ -9,6 +9,9 @@ public class ShizukuGraphWindow : EditorWindow
 {
     private ShizukuGraphView _graphView;
     private IGraphEditorExtension _currentExtension;
+    
+    // 使用 SerializeField 保存当前图的引用，在 Play 模式切换时不会丢失
+    [SerializeField]
     private ShizukuGraphBase _currentGraph;
     
     private VisualElement _contentContainer;
@@ -25,6 +28,13 @@ public class ShizukuGraphWindow : EditorWindow
     {
         RegisterExtensions();
         BuildUI();
+        
+        // 如果之前有打开的图（例如从 Play 模式返回时），重新加载它
+        if (_currentGraph != null)
+        {
+            _graphView.LoadFromAsset(_currentGraph);
+            LoadExtension(_currentGraph);
+        }
     }
     
     private void RegisterExtensions()
@@ -72,7 +82,7 @@ public class ShizukuGraphWindow : EditorWindow
         UnloadExtension();
         rootVisualElement.Clear();
         _graphView = null;
-        _currentGraph = null;
+        // 不清空 _currentGraph，让它被 Unity 序列化保存，以便在 Play 模式切换后恢复
     }
     
     private void LoadExtension(ShizukuGraphBase graph)

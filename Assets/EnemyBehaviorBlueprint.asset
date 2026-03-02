@@ -27,7 +27,7 @@ MonoBehaviour:
   - rid: 522454395759624280
   - rid: 254579876135174146
   - rid: 254579876135174147
-  - rid: 254579876135174210
+  - rid: 254579876135174211
   _groups: []
   RootNodeGUID: 
   references:
@@ -81,10 +81,10 @@ MonoBehaviour:
         IsOut: 1
         Value: 1
         DefaultValue: 0
-    - rid: 254579876135174210
+    - rid: 254579876135174211
       type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
       data:
-        GUID: b3817e39-dfaa-4d0f-80fe-cd96b557ce93
+        GUID: f10a44b8-b4f1-45d6-b886-65ef73df30c1
         OutputNodeGuid: b88d63c3-dc13-42c1-9ec4-60aa3c08f963
         OutputPortName: String
         InputNodeGuid: 9cf34297-7508-497d-adb6-8a274c0713bc

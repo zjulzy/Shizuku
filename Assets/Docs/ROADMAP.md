@@ -44,25 +44,45 @@
 - [ ] 类型注册中心（支持自定义类型）
 
 **4. 更多实用节点** ⭐⭐
-- [ ] 数学节点：Add, Subtract, Multiply, Divide, Clamp, Lerp
+- [x] 数学节点：Add, Subtract, Multiply, Divide, Clamp, Lerp
 - [ ] 逻辑节点：And, Or, Not, Compare
 - [ ] 工具节点：GetComponent, FindGameObject, SetActive
 - [ ] 属性节点：GetProperty, SetProperty（通用版本）
 
-**5. 编辑器优化** ⭐
+**5. 蓝图自定义变量** ⭐⭐⭐
+- [ ] **变量定义系统**
+  - [ ] 在蓝图中定义局部变量
+  - [ ] 支持常见类型（Int, Float, Bool, String, Vector2/3, GameObject, Transform, Color）
+  - [ ] 变量默认值设置
+  - [ ] 变量序列化和持久化
+- [ ] **变量访问节点**
+  - [ ] Get Variable 节点（读取变量值）
+  - [ ] Set Variable 节点（设置变量值）
+  - [ ] 变量选择器（下拉菜单）
+- [ ] **变量管理界面**
+  - [ ] 变量列表面板（类似属性/事件列表）
+  - [ ] 添加/删除/重命名变量
+  - [ ] 变量类型修改
+  - [ ] 变量分组/排序
+- [ ] **变量作用域**
+  - [ ] 局部变量（当前蓝图）
+  - [ ] 全局变量（跨蓝图共享，可选）
+  - [ ] 静态变量支持（可选）
+
+**6. 编辑器优化** ⭐
 - [ ] 节点搜索框（Ctrl+Space 唤起）
 - [ ] 节点折叠/展开
 - [ ] 快捷键支持（复制/粘贴）
 - [ ] 网格吸附
 
-**6. 性能优化** ⭐⭐⭐
+**7. 性能优化** ⭐⭐⭐
 - [ ] **Update 执行优化**
   - [ ] 添加 `UpdateMode` 枚举（Always/OnDemand/Disabled）
   - [ ] 检测 Root Node 是否有实际逻辑
   - [ ] 提供 `EnableUpdate`/`DisableUpdate` API
 - [ ] **批量初始化优化** - 静态缓存共享（已实现）
 
-**7. 运行时错误处理** ⭐⭐⭐
+**8. 运行时错误处理** ⭐⭐⭐
 - [ ] **友好的错误信息**
   - [ ] 捕获节点执行异常
   - [ ] 显示：GameObject 名称、Behavior 类型、蓝图资源、节点类型
@@ -76,7 +96,7 @@
   - [ ] 添加错误码和文档链接
   - [ ] 支持自定义错误处理器
 
-**8. 数据类型传递优化** ⭐⭐⭐
+**9. 数据类型传递优化** ⭐⭐⭐
 - [x] **显式类型转换节点**
   - [x] 实现 `TypeConverterNode` 基类
   - [x] 实现常用转换节点（Float↔Int, Vector3↔Vector2, String↔Number）

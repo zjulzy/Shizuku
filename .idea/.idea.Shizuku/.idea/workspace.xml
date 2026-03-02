@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/BaseGraphEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/BaseGraphEditorExtension.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +72,9 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/VectorTypeConverters.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/AddNode.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/ClampNode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/DivideNode.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/LerpNode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/MultiplyNode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/SubtractNode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizikuAddOneNode.cs" root0="FORCE_HIGHLIGHTING" />
@@ -194,7 +197,7 @@
       <workItem from="1769849146862" duration="12000" />
       <workItem from="1771913880849" duration="18774000" />
       <workItem from="1772028636126" duration="4811000" />
-      <workItem from="1772436522645" duration="8813000" />
+      <workItem from="1772436522645" duration="13950000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -348,7 +351,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772447761027</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="修复进入play模式时会将当前的编辑器清空">
+      <option name="closed" value="true" />
+      <created>1772450533924</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1772450533924</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -394,7 +405,8 @@
     <MESSAGE value="优化外观" />
     <MESSAGE value="优化参数port默认值相关逻辑" />
     <MESSAGE value="继续拓展端口数据类型" />
-    <option name="LAST_COMMIT_MESSAGE" value="继续拓展端口数据类型" />
+    <MESSAGE value="修复进入play模式时会将当前的编辑器清空" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复进入play模式时会将当前的编辑器清空" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

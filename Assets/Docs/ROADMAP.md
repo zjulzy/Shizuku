@@ -45,7 +45,7 @@
 
 **4. 更多实用节点** ⭐⭐
 - [x] 数学节点：Add, Subtract, Multiply, Divide, Clamp, Lerp
-- [ ] 逻辑节点：And, Or, Not, Compare
+- [x] 逻辑节点：And, Or, Not, Xor, Compare (支持 Int/Float/String/Bool 类型比较)
 - [ ] 工具节点：GetComponent, FindGameObject, SetActive
 - [ ] 属性节点：GetProperty, SetProperty（通用版本）
 

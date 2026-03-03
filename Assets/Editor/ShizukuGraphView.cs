@@ -17,6 +17,7 @@ public partial class ShizukuGraphView : GraphView
     private Dictionary<string, ShizukuNodeView> _guidToNodeViewMap = new Dictionary<string, ShizukuNodeView>();
     
     public System.Action OnGraphChanged;
+    public System.Action<ShizukuNodeBase> OnNodeSelected;
 
     #region 生命周期
 
@@ -49,6 +50,17 @@ public partial class ShizukuGraphView : GraphView
         {
             SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), CreateNodeSearchWindowProvider(context.screenMousePosition));
         };
+        
+        // 监听选择变化事件
+        RegisterCallback<MouseUpEvent>(evt =>
+        {
+            // 延迟一帧，确保选择已更新
+            schedule.Execute(() =>
+            {
+                var selectedNode = selection.OfType<ShizukuNodeView>().FirstOrDefault();
+                OnNodeSelected?.Invoke(selectedNode?.RuntimeNode);
+            }).ExecuteLater(0);
+        });
 
         styleSheets.Add(Resources.Load<StyleSheet>("ShizukuGraphView"));
         
@@ -855,6 +867,19 @@ public partial class ShizukuGraphView : GraphView
         // 直接将runtimeGraph保存到asset中
         EditorUtility.SetDirty(_runtimeGraph);
         AssetDatabase.SaveAssets();
+    }
+    
+    /// <summary>
+    /// 刷新节点标题（用于变量节点名称更新）
+    /// </summary>
+    public void RefreshNodeTitle(ShizukuNodeBase node)
+    {
+        if (node == null) return;
+        
+        if (_guidToNodeViewMap.TryGetValue(node.GUID, out var nodeView))
+        {
+            nodeView.title = node.Title;
+        }
     }
 
     #endregion

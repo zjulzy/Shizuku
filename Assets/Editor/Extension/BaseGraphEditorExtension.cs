@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,8 +15,10 @@ public class BaseGraphEditorExtension : IGraphEditorExtension
     private ShizukuGraphBase _currentGraph;
     
     private VisualElement _rightPanel;
+    private ScrollView _nodeInspectorPanel;
     private ScrollView _variablesPanel;
     private VisualElement _horizontalResizer;
+    private ShizukuNodeBase _selectedNode;
     
     public bool CanHandle(ShizukuGraphBase graph)
     {
@@ -28,18 +33,32 @@ public class BaseGraphEditorExtension : IGraphEditorExtension
         _rootElement = rootElement;
         
         BuildUI();
+        
+        // 监听节点选择事件
+        if (_graphView != null)
+        {
+            _graphView.OnNodeSelected += OnNodeSelected;
+        }
     }
 
     public void OnDisable()
     {
+        // 取消监听节点选择事件
+        if (_graphView != null)
+        {
+            _graphView.OnNodeSelected -= OnNodeSelected;
+        }
+        
         if (_rightPanel != null && _rightPanel.parent != null)
         {
             _rightPanel.RemoveFromHierarchy();
         }
         
         _rightPanel = null;
+        _nodeInspectorPanel = null;
         _variablesPanel = null;
         _currentGraph = null;
+        _selectedNode = null;
     }
 
     public void OnGraphLoaded(ShizukuGraphBase graph)
@@ -62,7 +81,51 @@ public class BaseGraphEditorExtension : IGraphEditorExtension
             }
         };
         
-        // 变量列表标题栏（带添加按钮）
+        // ===== 节点检查器面板 =====
+        var inspectorHeader = new VisualElement
+        {
+            style =
+            {
+                flexDirection = FlexDirection.Row,
+                backgroundColor = new Color(0.25f, 0.25f, 0.25f),
+                paddingTop = 8,
+                paddingBottom = 8,
+                paddingLeft = 10,
+                paddingRight = 10
+            }
+        };
+        
+        var inspectorLabel = new Label("节点检查器")
+        {
+            style =
+            {
+                unityFontStyleAndWeight = FontStyle.Bold,
+                fontSize = 14,
+                unityTextAlign = TextAnchor.MiddleLeft
+            }
+        };
+        inspectorHeader.Add(inspectorLabel);
+        _rightPanel.Add(inspectorHeader);
+        
+        // 节点检查器滚动视图
+        _nodeInspectorPanel = new ScrollView(ScrollViewMode.Vertical)
+        {
+            style =
+            {
+                flexGrow = 1,
+                flexShrink = 1,
+                minHeight = 100,
+                maxHeight = 400,
+                borderBottomWidth = 1,
+                borderBottomColor = new Color(0.2f, 0.2f, 0.2f)
+            }
+        };
+        _rightPanel.Add(_nodeInspectorPanel);
+        
+        // 初始显示提示
+        RefreshNodeInspector();
+        
+        // ===== 变量列表面板 =====
         var variablesHeader = new VisualElement
         {
             style =
@@ -435,6 +498,317 @@ public class BaseGraphEditorExtension : IGraphEditorExtension
             EditorUtility.SetDirty(_currentGraph);
             RefreshVariablesPanel();
         }
+    }
+    
+    /// <summary>
+    /// 节点选择事件处理
+    /// </summary>
+    private void OnNodeSelected(ShizukuNodeBase node)
+    {
+        _selectedNode = node;
+        RefreshNodeInspector();
+    }
+    
+    /// <summary>
+    /// 刷新节点检查器面板
+    /// </summary>
+    private void RefreshNodeInspector()
+    {
+        _nodeInspectorPanel.Clear();
+        
+        if (_selectedNode == null)
+        {
+            var emptyLabel = new Label("未选择节点")
+            {
+                style =
+                {
+                    paddingTop = 20,
+                    paddingLeft = 10,
+                    color = new Color(0.6f, 0.6f, 0.6f),
+                    unityTextAlign = TextAnchor.UpperCenter
+                }
+            };
+            _nodeInspectorPanel.Add(emptyLabel);
+            return;
+        }
+        
+        // 显示节点信息
+        var container = new VisualElement
+        {
+            style =
+            {
+                paddingTop = 10,
+                paddingBottom = 10,
+                paddingLeft = 10,
+                paddingRight = 10
+            }
+        };
+        
+        // 节点标题
+        var titleLabel = new Label(_selectedNode.Title)
+        {
+            style =
+            {
+                fontSize = 13,
+                unityFontStyleAndWeight = FontStyle.Bold,
+                marginBottom = 10,
+                color = new Color(0.9f, 0.9f, 0.9f)
+            }
+        };
+        container.Add(titleLabel);
+        
+        // 节点类型
+        var typeLabel = new Label($"类型: {_selectedNode.GetType().Name}")
+        {
+            style =
+            {
+                fontSize = 11,
+                marginBottom = 5,
+                color = new Color(0.7f, 0.7f, 0.7f)
+            }
+        };
+        container.Add(typeLabel);
+        
+        // GUID
+        var guidLabel = new Label($"GUID: {_selectedNode.GUID}")
+        {
+            style =
+            {
+                fontSize = 10,
+                marginBottom = 10,
+                color = new Color(0.6f, 0.6f, 0.6f)
+            }
+        };
+        container.Add(guidLabel);
+        
+        // 分隔线
+        var separator = new VisualElement
+        {
+            style =
+            {
+                height = 1,
+                backgroundColor = new Color(0.3f, 0.3f, 0.3f),
+                marginTop = 5,
+                marginBottom = 10
+            }
+        };
+        container.Add(separator);
+        
+        // 使用反射显示所有序列化字段
+        var nodeType = _selectedNode.GetType();
+        var fields = nodeType.GetFields(System.Reflection.BindingFlags.Public | 
+                                       System.Reflection.BindingFlags.NonPublic | 
+                                       System.Reflection.BindingFlags.Instance);
+        
+        foreach (var field in fields)
+        {
+            // 只显示有 SerializeField 或 SerializeReference 特性的字段，或者是 public 字段
+            bool isSerializable = field.IsPublic || 
+                                 field.GetCustomAttributes(typeof(SerializeField), true).Length > 0 ||
+                                 field.GetCustomAttributes(typeof(SerializeReference), true).Length > 0;
+            
+            if (!isSerializable)
+                continue;
+            
+            // 跳过端口字段（这些已经在节点上显示了）
+            if (typeof(ParameterEdgePort).IsAssignableFrom(field.FieldType) || 
+                typeof(ChainPort).IsAssignableFrom(field.FieldType))
+                continue;
+            
+            var fieldElement = CreateFieldEditor(field, _selectedNode);
+            if (fieldElement != null)
+            {
+                container.Add(fieldElement);
+            }
+        }
+        
+        _nodeInspectorPanel.Add(container);
+    }
+    
+    /// <summary>
+    /// 为字段创建编辑器
+    /// </summary>
+    private VisualElement CreateFieldEditor(System.Reflection.FieldInfo field, ShizukuNodeBase node)
+    {
+        var fieldType = field.FieldType;
+        var fieldName = field.Name;
+        var fieldValue = field.GetValue(node);
+        
+        // 特殊处理：如果是变量节点的 VariableGUID 字段，有一说一这里有点硬
+        if (fieldName == "VariableGUID" && fieldType == typeof(string))
+        {
+            return CreateVariableGUIDSelector(field, node);
+        }
+        
+        // 处理常见类型
+        if (fieldType == typeof(string))
+        {
+            var textField = new TextField(ObjectNames.NicifyVariableName(fieldName))
+            {
+                value = fieldValue as string ?? "",
+                style = { marginBottom = 5 }
+            };
+            textField.RegisterValueChangedCallback(evt =>
+            {
+                field.SetValue(node, evt.newValue);
+                if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
+            });
+            return textField;
+        }
+        else if (fieldType == typeof(int))
+        {
+            var intField = new IntegerField(ObjectNames.NicifyVariableName(fieldName))
+            {
+                value = (int)fieldValue,
+                style = { marginBottom = 5 }
+            };
+            intField.RegisterValueChangedCallback(evt =>
+            {
+                field.SetValue(node, evt.newValue);
+                if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
+            });
+            return intField;
+        }
+        else if (fieldType == typeof(float))
+        {
+            var floatField = new FloatField(ObjectNames.NicifyVariableName(fieldName))
+            {
+                value = (float)fieldValue,
+                style = { marginBottom = 5 }
+            };
+            floatField.RegisterValueChangedCallback(evt =>
+            {
+                field.SetValue(node, evt.newValue);
+                if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
+            });
+            return floatField;
+        }
+        else if (fieldType == typeof(bool))
+        {
+            var boolField = new Toggle(ObjectNames.NicifyVariableName(fieldName))
+            {
+                value = (bool)fieldValue,
+                style = { marginBottom = 5 }
+            };
+            boolField.RegisterValueChangedCallback(evt =>
+            {
+                field.SetValue(node, evt.newValue);
+                if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
+            });
+            return boolField;
+        }
+        else if (fieldType.IsEnum)
+        {
+            var enumField = new EnumField(ObjectNames.NicifyVariableName(fieldName), (System.Enum)fieldValue)
+            {
+                style = { marginBottom = 5 }
+            };
+            enumField.RegisterValueChangedCallback(evt =>
+            {
+                field.SetValue(node, evt.newValue);
+                if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
+            });
+            return enumField;
+        }
+        else if (typeof(UnityEngine.Object).IsAssignableFrom(fieldType))
+        {
+            var objectField = new ObjectField(ObjectNames.NicifyVariableName(fieldName))
+            {
+                objectType = fieldType,
+                value = fieldValue as UnityEngine.Object,
+                style = { marginBottom = 5 }
+            };
+            objectField.RegisterValueChangedCallback(evt =>
+            {
+                field.SetValue(node, evt.newValue);
+                if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
+            });
+            return objectField;
+        }
+        
+        // 其他类型显示只读标签
+        var label = new Label($"{ObjectNames.NicifyVariableName(fieldName)}: {fieldValue?.ToString() ?? "null"}")
+        {
+            style =
+            {
+                fontSize = 11,
+                marginBottom = 5,
+                color = new Color(0.7f, 0.7f, 0.7f)
+            }
+        };
+        return label;
+    }
+    
+    /// <summary>
+    /// 为变量节点创建变量选择器
+    /// </summary>
+    private VisualElement CreateVariableGUIDSelector(System.Reflection.FieldInfo field, ShizukuNodeBase node)
+    {
+        var container = new VisualElement
+        {
+            style = { marginBottom = 10 }
+        };
+        
+        string currentGuid = field.GetValue(node) as string;
+        
+        // 构建变量选项列表
+        var choices = new List<string> { "<未选择>" };
+        var guidMap = new Dictionary<string, string>(); // 显示名 -> GUID
+        
+        if (_currentGraph != null)
+        {
+            foreach (var variable in _currentGraph.Variables)
+            {
+                string displayName = $"{variable.Name} ({variable.Type})";
+                choices.Add(displayName);
+                guidMap[displayName] = variable.GUID;
+            }
+        }
+        
+        // 找到当前选中项的索引
+        int currentIndex = 0;
+        if (!string.IsNullOrEmpty(currentGuid) && _currentGraph != null)
+        {
+            var currentVar = _currentGraph.GetVariableByGUID(currentGuid);
+            if (currentVar != null)
+            {
+                string currentDisplay = $"{currentVar.Name} ({currentVar.Type})";
+                currentIndex = choices.IndexOf(currentDisplay);
+                if (currentIndex < 0) currentIndex = 0;
+            }
+        }
+        
+        // 创建下拉菜单
+        var popupField = new PopupField<string>("目标变量", choices, currentIndex, 
+            formatSelectedValueCallback: choice => choice,
+            formatListItemCallback: choice => choice);
+        popupField.RegisterValueChangedCallback(evt =>
+        {
+            if (evt.newValue == "<未选择>")
+            {
+                field.SetValue(node, "");
+            }
+            else if (guidMap.TryGetValue(evt.newValue, out string selectedGuid))
+            {
+                field.SetValue(node, selectedGuid);
+            }
+            
+            // 刷新节点标题
+            if (_graphView != null)
+            {
+                _graphView.RefreshNodeTitle(node);
+            }
+            
+            // 标记为脏
+            if (_currentGraph != null)
+            {
+                EditorUtility.SetDirty(_currentGraph);
+            }
+        });
+        
+        container.Add(popupField);
+        
+        return container;
     }
     
     private void AddNewVariable()

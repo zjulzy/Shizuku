@@ -18,6 +18,7 @@ public class GraphVariable
     public VariableType Type;
     
     // 每种类型一个字段，避免装箱
+    // TODO : 后续可以优化成 union 结构，减少内存占用
     [SerializeField]
     public int IntValue;
     
@@ -44,6 +45,8 @@ public class GraphVariable
     
     [SerializeField]
     public Color ColorValue;
+    
+    // TODO: 可以设置一个编辑器only的变量，存放所有依赖这个变量的节点
     
     public GraphVariable()
     {

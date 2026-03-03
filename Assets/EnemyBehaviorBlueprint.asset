@@ -22,33 +22,24 @@ MonoBehaviour:
   - rid: 522454395759624289
   - rid: 254579876135174145
   - rid: 254579876135174216
+  - rid: 254579904546340925
+  - rid: 254579904546340931
   _edges:
   - rid: 522454395759624272
   - rid: 522454395759624273
   - rid: 522454395759624280
   - rid: 254579876135174146
   - rid: 254579876135174147
-  - rid: 254579876135174211
+  - rid: 254579904546340932
+  - rid: 254579904546340933
   _groups: []
   RootNodeGUID: 
   _variables:
-  - GUID: 2631f4b3-2847-4168-ab6f-11be7992df7f
-    Name: NewVariable
-    Type: 6
-    IntValue: 0
-    FloatValue: 0
-    BoolValue: 0
-    StringValue: 
-    Vector2Value: {x: 0, y: 0}
-    Vector3Value: {x: 0, y: 0, z: 0}
-    GameObjectValue: {fileID: 0}
-    TransformValue: {fileID: 0}
-    ColorValue: {r: 0, g: 0, b: 0, a: 0}
-  - GUID: f8ebfb9c-c9a2-46b3-b2ef-15f53d5cb431
-    Name: NewVariablef
+  - GUID: ff567a4e-e1dc-4f43-b4dd-102bc1321bd1
+    Name: test
     Type: 1
     IntValue: 0
-    FloatValue: 0
+    FloatValue: 50000
     BoolValue: 0
     StringValue: 
     Vector2Value: {x: 0, y: 0}
@@ -64,9 +55,9 @@ MonoBehaviour:
       data:
         GUID: 78c1ef9a-e9bf-4fe8-8a4d-2a04bcdf9b29
         PositionAndSize:
-          x: 903.19995
-          y: 389.59998
-          z: 178.40002
+          x: 880.79987
+          y: 404.79996
+          z: 157.6001
           w: 108.79999
         _parameter:
           rid: 254579876135174148
@@ -107,14 +98,6 @@ MonoBehaviour:
         IsOut: 1
         Value: 1
         DefaultValue: 0
-    - rid: 254579876135174211
-      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
-      data:
-        GUID: f10a44b8-b4f1-45d6-b886-65ef73df30c1
-        OutputNodeGuid: b88d63c3-dc13-42c1-9ec4-60aa3c08f963
-        OutputPortName: String
-        InputNodeGuid: 9cf34297-7508-497d-adb6-8a274c0713bc
-        InputPortName: message
     - rid: 254579876135174216
       type: {class: BlueprintEventNode, ns: , asm: Assembly-CSharp}
       data:
@@ -129,6 +112,71 @@ MonoBehaviour:
           Name: next
         EventName: OnDeath
         EventParameters: []
+    - rid: 254579904546340925
+      type: {class: GetVariableNode_Float, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 26b9d57b-4ff9-4f58-bedf-95606a5e8dbf
+        PositionAndSize:
+          x: 880.7999
+          y: 188
+          z: 107.20007
+          w: 76.8
+        VariableGUID: ff567a4e-e1dc-4f43-b4dd-102bc1321bd1
+        Output:
+          rid: 254579904546340926
+    - rid: 254579904546340926
+      type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: Value
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 50000
+        DefaultValue: 0
+    - rid: 254579904546340931
+      type: {class: FloatToStringConverter, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: baf46880-b823-4328-8e47-dcfbea3d3ee7
+        PositionAndSize:
+          x: 1091.6
+          y: 300.8
+          z: 150
+          w: 80
+        _input:
+          rid: 254579904546340934
+        _output:
+          rid: 254579904546340935
+    - rid: 254579904546340932
+      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: ff936d1e-9956-4a83-9167-8f01cf39597b
+        OutputNodeGuid: 26b9d57b-4ff9-4f58-bedf-95606a5e8dbf
+        OutputPortName: Value
+        InputNodeGuid: baf46880-b823-4328-8e47-dcfbea3d3ee7
+        InputPortName: Float
+    - rid: 254579904546340933
+      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: abe74423-67df-41b6-92ce-8b2b552a08e2
+        OutputNodeGuid: baf46880-b823-4328-8e47-dcfbea3d3ee7
+        OutputPortName: String
+        InputNodeGuid: 9cf34297-7508-497d-adb6-8a274c0713bc
+        InputPortName: message
+    - rid: 254579904546340934
+      type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: Float
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: 50000
+        DefaultValue: 0
+    - rid: 254579904546340935
+      type: {class: StringParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: String
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 50000.00
+        DefaultValue: 
     - rid: 522454392492261445
       type: {class: BlueprintEventNode, ns: , asm: Assembly-CSharp}
       data:
@@ -264,10 +312,10 @@ MonoBehaviour:
       data:
         GUID: 9cf34297-7508-497d-adb6-8a274c0713bc
         PositionAndSize:
-          x: 1348.04
-          y: 423.48
-          z: 118.400024
-          w: 132.80002
+          x: 1243.2
+          y: 430.4
+          z: 157.59998
+          w: 108.80002
         Message:
           rid: 522454395759624288
         _nextPort:
@@ -279,16 +327,16 @@ MonoBehaviour:
         Name: message
         InputEdgeGUID: 
         IsOut: 0
-        Value: 1
+        Value: 50000.00
         DefaultValue: 
     - rid: 522454395759624289
       type: {class: IntToStringConverter, ns: , asm: Assembly-CSharp}
       data:
         GUID: b88d63c3-dc13-42c1-9ec4-60aa3c08f963
         PositionAndSize:
-          x: 1029.6401
-          y: 629.8801
-          z: 138.3999
+          x: 1029.6
+          y: 629.6
+          z: 134.40002
           w: 76.79999
         _input:
           rid: 522454395759624292

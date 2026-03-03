@@ -5,30 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Docs/Guide_Variables.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Docs/Guide_Variables.md.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Docs/Implementation_Variables.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Docs/Implementation_Variables.md.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Docs/Technical_VariablePersistence.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Docs/Technical_VariablePersistence.md.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/VariableCreationDialog.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/VariableCreationDialog.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/GraphVariable.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/GraphVariable.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/GetVariableNodes.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/GetVariableNodes.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/SetVariableNodes.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/SetVariableNodes.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/Extension.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Docs/KNOWN_ISSUES.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/KNOWN_ISSUES.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/BaseGraphEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/BaseGraphEditorExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/BlueprintEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/BlueprintEditorExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/BaseGraphEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/BaseGraphEditorExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/BaseGraphEditorExtension.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/BaseGraphEditorExtension.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/BlueprintEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/BlueprintEditorExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/BlueprintEditorExtension.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/BlueprintEditorExtension.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/IGraphEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/IGraphEditorExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/IGraphEditorExtension.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/IGraphEditorExtension.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/VariableCreationDialog.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/VariableCreationDialog.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/VariableCreationDialog.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/VariableCreationDialog.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/NodeCategory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/NodeCategory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/GraphVariable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/GraphVariable.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -219,7 +208,7 @@
       <workItem from="1771913880849" duration="18774000" />
       <workItem from="1772028636126" duration="4811000" />
       <workItem from="1772436522645" duration="15025000" />
-      <workItem from="1772543293102" duration="4327000" />
+      <workItem from="1772543293102" duration="7216000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -389,7 +378,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772468249248</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="初步支持自定义变量功能，下一步实现对蓝图变量和自定义变量的get和set">
+      <option name="closed" value="true" />
+      <created>1772550887635</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1772550887636</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -437,7 +434,8 @@
     <MESSAGE value="继续拓展端口数据类型" />
     <MESSAGE value="修复进入play模式时会将当前的编辑器清空" />
     <MESSAGE value="补充节点类型，新建右侧变量面板" />
-    <option name="LAST_COMMIT_MESSAGE" value="补充节点类型，新建右侧变量面板" />
+    <MESSAGE value="初步支持自定义变量功能，下一步实现对蓝图变量和自定义变量的get和set" />
+    <option name="LAST_COMMIT_MESSAGE" value="初步支持自定义变量功能，下一步实现对蓝图变量和自定义变量的get和set" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

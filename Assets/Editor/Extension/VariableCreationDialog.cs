@@ -136,14 +136,35 @@ public class VariableCreationDialog : EditorWindow
         var newVariable = new GraphVariable(_variableName, _variableType);
         _targetGraph.AddVariable(newVariable);
         
-        // 先关闭窗口，再执行回调，避免刷新时闪烁
+        // 先关闭窗口
         Close();
         
-        // 延迟执行回调，确保窗口已完全关闭，防止主窗口闪烁
-        EditorApplication.delayCall += () =>
+        // 延迟两帧执行回调，确保窗口完全关闭且渲染完成
+        DelayedCall(2, () =>
         {
             _onVariableCreated?.Invoke();
+        });
+    }
+    
+    /// <summary>
+    /// 延迟指定帧数后执行回调
+    /// </summary>
+    private void DelayedCall(int frameCount, System.Action callback)
+    {
+        int remainingFrames = frameCount;
+        EditorApplication.CallbackFunction updateAction = null;
+        
+        updateAction = () =>
+        {
+            remainingFrames--;
+            if (remainingFrames <= 0)
+            {
+                EditorApplication.update -= updateAction;
+                callback?.Invoke();
+            }
         };
+        
+        EditorApplication.update += updateAction;
     }
 }
 

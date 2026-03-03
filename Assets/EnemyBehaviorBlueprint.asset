@@ -21,6 +21,7 @@ MonoBehaviour:
   - rid: 522454395759624287
   - rid: 522454395759624289
   - rid: 254579876135174145
+  - rid: 254579876135174216
   _edges:
   - rid: 522454395759624272
   - rid: 522454395759624273
@@ -30,6 +31,31 @@ MonoBehaviour:
   - rid: 254579876135174211
   _groups: []
   RootNodeGUID: 
+  _variables:
+  - GUID: 2631f4b3-2847-4168-ab6f-11be7992df7f
+    Name: NewVariable
+    Type: 6
+    IntValue: 0
+    FloatValue: 0
+    BoolValue: 0
+    StringValue: 
+    Vector2Value: {x: 0, y: 0}
+    Vector3Value: {x: 0, y: 0, z: 0}
+    GameObjectValue: {fileID: 0}
+    TransformValue: {fileID: 0}
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+  - GUID: f8ebfb9c-c9a2-46b3-b2ef-15f53d5cb431
+    Name: NewVariablef
+    Type: 1
+    IntValue: 0
+    FloatValue: 0
+    BoolValue: 0
+    StringValue: 
+    Vector2Value: {x: 0, y: 0}
+    Vector3Value: {x: 0, y: 0, z: 0}
+    GameObjectValue: {fileID: 0}
+    TransformValue: {fileID: 0}
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
   references:
     version: 2
     RefIds:
@@ -89,6 +115,20 @@ MonoBehaviour:
         OutputPortName: String
         InputNodeGuid: 9cf34297-7508-497d-adb6-8a274c0713bc
         InputPortName: message
+    - rid: 254579876135174216
+      type: {class: BlueprintEventNode, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 0fff85d7-c21f-4ed0-9003-92fdbd2f5325
+        PositionAndSize:
+          x: 252.00003
+          y: 840
+          z: 163.19998
+          w: 76
+        _nextPort:
+          NextNodeGuid: 
+          Name: next
+        EventName: OnDeath
+        EventParameters: []
     - rid: 522454392492261445
       type: {class: BlueprintEventNode, ns: , asm: Assembly-CSharp}
       data:

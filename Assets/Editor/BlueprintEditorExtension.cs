@@ -3,6 +3,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Cursor = UnityEngine.UIElements.Cursor;
 
 public class BlueprintEditorExtension : IGraphEditorExtension
 {
@@ -20,6 +21,7 @@ public class BlueprintEditorExtension : IGraphEditorExtension
     private ScrollView _functionsPanel;
     private VisualElement _resizer1;
     private VisualElement _resizer2;
+    private VisualElement _horizontalResizer;
 
     public bool CanHandle(ShizukuGraphBase graph)
     {
@@ -268,15 +270,50 @@ public class BlueprintEditorExtension : IGraphEditorExtension
 
         _leftPanel.Add(_functionsContainer);
 
+        // 水平拖拽条（调整左侧面板宽度）
+        _horizontalResizer = new VisualElement
+        {
+            style =
+            {
+                position = Position.Absolute,
+                right = 0,
+                top = 0,
+                bottom = 0,
+                width = 8,
+                cursor = new Cursor() { texture = null, hotspot = Vector2.zero }
+            }
+        };
+        
+        // 添加悬停效果
+        _horizontalResizer.RegisterCallback<MouseEnterEvent>(evt =>
+        {
+            _horizontalResizer.style.backgroundColor = new Color(0.3f, 0.5f, 0.8f, 0.3f);
+        });
+        _horizontalResizer.RegisterCallback<MouseLeaveEvent>(evt =>
+        {
+            if (!_isResizingHorizontal)
+            {
+                _horizontalResizer.style.backgroundColor = Color.clear;
+            }
+        });
+        
+        // 添加拖动功能
+        _horizontalResizer.RegisterCallback<MouseDownEvent>(OnHorizontalResizerMouseDown);
+        
+        _leftPanel.Add(_horizontalResizer);
+
         _rootElement.Insert(0, _leftPanel);
     }
     
     private bool _isResizing1 = false;
     private bool _isResizing2 = false;
+    private bool _isResizingHorizontal = false;
     private float _startMouseY;
+    private float _startMouseX;
     private float _startPropertiesHeight;
     private float _startEventsHeight;
     private float _startFunctionsHeight;
+    private float _startPanelWidth;
     
     private void OnResizer1MouseDown(MouseDownEvent evt)
     {
@@ -425,6 +462,51 @@ public class BlueprintEditorExtension : IGraphEditorExtension
             
             // 恢复分隔条颜色
             _resizer2.style.backgroundColor = new Color(0.15f, 0.15f, 0.15f);
+            
+            evt.StopPropagation();
+        }
+    }
+    
+    private void OnHorizontalResizerMouseDown(MouseDownEvent evt)
+    {
+        if (evt.button == 0) // 左键
+        {
+            _isResizingHorizontal = true;
+            _startMouseX = evt.mousePosition.x;
+            _startPanelWidth = _leftPanel.resolvedStyle.width;
+            
+            _horizontalResizer.CaptureMouse();
+            _horizontalResizer.RegisterCallback<MouseMoveEvent>(OnHorizontalResizerMouseMove);
+            _horizontalResizer.RegisterCallback<MouseUpEvent>(OnHorizontalResizerMouseUp);
+            
+            evt.StopPropagation();
+        }
+    }
+    
+    private void OnHorizontalResizerMouseMove(MouseMoveEvent evt)
+    {
+        if (_isResizingHorizontal)
+        {
+            float deltaX = evt.mousePosition.x - _startMouseX;
+            float newWidth = Mathf.Clamp(_startPanelWidth + deltaX, 150, 600);
+            
+            _leftPanel.style.width = newWidth;
+            
+            evt.StopPropagation();
+        }
+    }
+    
+    private void OnHorizontalResizerMouseUp(MouseUpEvent evt)
+    {
+        if (_isResizingHorizontal)
+        {
+            _isResizingHorizontal = false;
+            _horizontalResizer.ReleaseMouse();
+            _horizontalResizer.UnregisterCallback<MouseMoveEvent>(OnHorizontalResizerMouseMove);
+            _horizontalResizer.UnregisterCallback<MouseUpEvent>(OnHorizontalResizerMouseUp);
+            
+            // 恢复分隔条颜色
+            _horizontalResizer.style.backgroundColor = Color.clear;
             
             evt.StopPropagation();
         }

@@ -97,8 +97,7 @@ public class ShizukuGraphWindow : EditorWindow
                 _currentExtension.OnEnable(this, _graphView, _contentContainer);
                 _currentExtension.OnGraphLoaded(graph);
                 
-                _graphView.OnGraphChanged = () => _currentExtension?.OnGraphLoaded(graph);
-                break;
+                _graphView.OnGraphChanged += () => _currentExtension?.OnGraphLoaded(graph);
             }
         }
     }

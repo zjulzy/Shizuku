@@ -29,6 +29,11 @@ public enum NodeCategory
     Converter,
     
     /// <summary>
+    /// 变量节点
+    /// </summary>
+    Variable,
+    
+    /// <summary>
     /// 事件节点
     /// </summary>
     Event

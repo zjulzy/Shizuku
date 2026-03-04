@@ -5,19 +5,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/Extension.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/COMPLETION_REPORT_ShizukuAttributes.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/COMPLETION_REPORT_ShizukuAttributes.md.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/COMPLETION_VariableTypeGenerator.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/COMPLETION_VariableTypeGenerator.md.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/Guide_ShizukuAttributes.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/Guide_ShizukuAttributes.md.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/Guide_VariableTypeGenerator.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/Guide_VariableTypeGenerator.md.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/Implementation_ShizukuAttributes.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/Implementation_ShizukuAttributes.md.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/QUICK_REFERENCE_ShizukuAttributes.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/QUICK_REFERENCE_ShizukuAttributes.md.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/SUMMARY_ShizukuAttributes.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/SUMMARY_ShizukuAttributes.md.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuFunctionNodeGenerator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuFunctionNodeGenerator.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/VariableTypeGenerator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/VariableTypeGenerator.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuClassAttribute.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuClassAttribute.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuFunctionAttribute.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuFunctionAttribute.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuTypeInfo.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuTypeInfo.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuTypeRegistry.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuTypeRegistry.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/ShizukuAttributeExamples.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/ShizukuAttributeExamples.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/BaseGraphEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/BaseGraphEditorExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/BaseGraphEditorExtension.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/BaseGraphEditorExtension.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/BlueprintEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/BlueprintEditorExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/BlueprintEditorExtension.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/BlueprintEditorExtension.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/IGraphEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/IGraphEditorExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/IGraphEditorExtension.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/IGraphEditorExtension.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/VariableCreationDialog.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/VariableCreationDialog.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/VariableCreationDialog.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Extension/VariableCreationDialog.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/GraphVariable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/GraphVariable.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/NodeCategory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/NodeCategory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,15 +78,17 @@
     <setting file="file://$PROJECT_DIR$/Assets/Docs/ARCHITECTURE.md.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Docs/BLUEPRINT_GENERATOR.md.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Docs/CONTRIBUTING.md.meta" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Editor/BlueprintEditorExtension.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Docs/Implementation_ShizukuAttributes.md.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/BlueprintGeneratorWindow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/ControlFlowPort.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/NodeSearchWindowProvider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Editor/ShizukuFunctionNodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Editor/ShizukuFunctionNodeGenerator.cs.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.AIAssistant.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/ShizukuGraphWindow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Editor/VariableCreationDialog.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Editor/VariableTypeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Plugins.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/BlueprintExtensions.cs" root0="FORCE_HIGHLIGHTING" />
@@ -83,6 +106,11 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/VectorTypeConverters.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Logic.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Logic/CompareNodes.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Logic/CompareNodes.cs.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Logic/LogicNodes.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Logic/LogicNodes.cs.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/AddNode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/ClampNode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/DivideNode.cs" root0="FORCE_HIGHLIGHTING" />
@@ -95,6 +123,11 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuLogNode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/NodeCategory.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/NodeMenuItemAttribute.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ShizukuClassAttribute.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ShizukuClassAttribute.cs.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ShizukuFunctionAttribute.cs.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ShizukuTypeInfo.cs.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/ShizukuAttributeExamples.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/VisualScripting/New Script Graph.asset" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
@@ -208,7 +241,8 @@
       <workItem from="1771913880849" duration="18774000" />
       <workItem from="1772028636126" duration="4811000" />
       <workItem from="1772436522645" duration="15025000" />
-      <workItem from="1772543293102" duration="7216000" />
+      <workItem from="1772543293102" duration="7566000" />
+      <workItem from="1772638910518" duration="3070000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -386,7 +420,23 @@
       <option name="project" value="LOCAL" />
       <updated>1772550887636</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="实现节点inspectotr">
+      <option name="closed" value="true" />
+      <created>1772553879142</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1772553879142</updated>
+    </task>
+    <task id="LOCAL-00024" summary="实现逻辑运算节点">
+      <option name="closed" value="true" />
+      <created>1772554111843</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1772554111843</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -435,7 +485,9 @@
     <MESSAGE value="修复进入play模式时会将当前的编辑器清空" />
     <MESSAGE value="补充节点类型，新建右侧变量面板" />
     <MESSAGE value="初步支持自定义变量功能，下一步实现对蓝图变量和自定义变量的get和set" />
-    <option name="LAST_COMMIT_MESSAGE" value="初步支持自定义变量功能，下一步实现对蓝图变量和自定义变量的get和set" />
+    <MESSAGE value="实现节点inspectotr" />
+    <MESSAGE value="实现逻辑运算节点" />
+    <option name="LAST_COMMIT_MESSAGE" value="实现逻辑运算节点" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

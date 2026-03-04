@@ -36,6 +36,10 @@ public enum NodeCategory
     /// <summary>
     /// 事件节点
     /// </summary>
-    Event
+    Event,
+    /// <summary>
+    /// 自定义类型函数
+    /// </summary>
+    Function
 }
 

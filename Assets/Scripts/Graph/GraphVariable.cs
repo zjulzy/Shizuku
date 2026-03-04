@@ -6,7 +6,7 @@ using UnityEngine;
 /// 使用 GUID 引用，支持重命名而不破坏节点连接
 /// </summary>
 [Serializable]
-public class GraphVariable
+public partial class GraphVariable
 {
     [SerializeField]
     public string GUID;
@@ -95,8 +95,17 @@ public class GraphVariable
             case VariableType.Color:
                 ColorValue = Color.white;
                 break;
+            default:
+                // 自定义类型由生成代码处理
+                SetDefaultValueCustomType(type);
+                break;
         }
     }
+    
+    /// <summary>
+    /// 设置自定义类型的默认值（由生成代码实现）
+    /// </summary>
+    partial void SetDefaultValueCustomType(VariableType type);
 }
 
 /// <summary>

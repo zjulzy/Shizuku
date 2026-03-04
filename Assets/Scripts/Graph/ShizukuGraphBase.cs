@@ -5,7 +5,7 @@ using UnityEditorInternal;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ShizukuGraph", menuName = "Shizuku/Graph", order = 1)]
-public class ShizukuGraphBase :ScriptableObject
+public partial class ShizukuGraphBase :ScriptableObject
 {
     [SerializeField]
     public string GUID;
@@ -120,6 +120,9 @@ public class ShizukuGraphBase :ScriptableObject
         _runtimeTransforms = new Dictionary<string, Transform>();
         _runtimeColors = new Dictionary<string, Color>();
         
+        // 初始化自定义类型字典（由生成代码实现）
+        InitCustomTypeVariables();
+        
         foreach (var variable in _variables)
         {
             switch (variable.Type)
@@ -151,9 +154,23 @@ public class ShizukuGraphBase :ScriptableObject
                 case VariableType.Color:
                     _runtimeColors[variable.GUID] = variable.ColorValue;
                     break;
+                default:
+                    // 自定义类型由生成代码处理
+                    InitCustomTypeVariable(variable);
+                    break;
             }
         }
     }
+    
+    /// <summary>
+    /// 初始化自定义类型字典（由生成代码实现）
+    /// </summary>
+    partial void InitCustomTypeVariables();
+    
+    /// <summary>
+    /// 初始化单个自定义类型变量（由生成代码实现）
+    /// </summary>
+    partial void InitCustomTypeVariable(GraphVariable variable);
     
     // 零装箱的泛型变量访问方法
     public bool TryGetVariableInt(string guid, out int value)

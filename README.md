@@ -17,6 +17,8 @@
 - 🤝 [贡献指南](Assets/Docs/CONTRIBUTING.md) - 如何参与项目开发
 - 📁 [项目结构](Assets/Docs/PROJECT_STRUCTURE.md) - 目录和文件组织说明
 - 🔧 [Blueprint Generator 使用指南](Assets/Docs/BLUEPRINT_GENERATOR_GUIDE.md) - 蓝图类生成器工具
+- ⭐ [ShizukuClass 和 ShizukuFunction 使用指南](Assets/Docs/Guide_ShizukuAttributes.md) - 自定义类型和函数支持 **[NEW]**
+- 📖 [ShizukuClass 和 ShizukuFunction 实现文档](Assets/Docs/Implementation_ShizukuAttributes.md) - 技术实现细节
 
 ---
 
@@ -34,6 +36,8 @@ Shizuku 是一个基于 Unity GraphView 的可视化节点编辑系统，旨在�
 - 🛡️ **环检测** - 编辑器自动防止创建循环依赖
 - ⚡ **性能优化** - 静态缓存属性访问器，100 个实例仅 ~0.5ms
 - 📦 **模块化设计** - 运行时与编辑器代码完全分离
+- 🏷️ **自定义类型和函数** - 通过 `[ShizukuClass]` 和 `[ShizukuFunction]` 将 C# 代码暴露给蓝图 **[NEW]**
+- 🔧 **代码生成工具** - 自动为标记的函数生成蓝图节点，零反射开销 **[NEW]**
 
 ### 适用场景
 

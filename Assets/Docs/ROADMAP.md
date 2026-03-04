@@ -112,6 +112,35 @@
   - [x] Vector3/Vector2/GameObject/Transform/Color 类型端口
   - [ ] Quaternion 等其他 Unity 常用类型
 
+**10. ShizukuClass 和 ShizukuFunction 支持** ⭐⭐⭐⭐
+- [ ] **Attribute 定义**
+  - [ ] `[ShizukuClass]` - 标记类可在蓝图中使用
+  - [ ] `[ShizukuFunction]` - 标记方法可生成蓝图节点
+  - [ ] 支持元数据（DisplayName、Category、Description 等）
+- [ ] **注册中心**
+  - [ ] `ShizukuTypeRegistry` - 反射扫描和注册系统
+  - [ ] 类型信息缓存（ShizukuClassInfo、ShizukuFunctionInfo）
+  - [ ] 编辑器下自动重新扫描（InitializeOnLoad）
+- [ ] **自定义类型支持**
+  - [ ] 作为变量类型（GraphVariable 扩展）
+  - [ ] 作为端口类型（CreatePortForType 扩展）
+  - [ ] 泛型端口类 `ShizukuClassParameterEdgePort<T>`
+- [ ] **函数节点代码生成**
+  - [ ] `ShizukuFunctionNodeGenerator` - 代码生成工具
+  - [ ] 为每个 [ShizukuFunction] 生成专用节点类
+  - [ ] 自动创建输入/输出端口
+  - [ ] 支持参数和返回值映射
+  - [ ] 生成节点管理窗口
+- [ ] **SearchWindow 集成**
+  - [ ] 在节点搜索中显示函数节点
+  - [ ] 按类型/分类组织菜单
+  - [ ] 支持快速搜索和过滤
+- [ ] **高级功能**
+  - [ ] 泛型方法支持（指定具体类型）
+  - [ ] 实例方法 vs 静态方法
+  - [ ] 重载方法处理
+  - [ ] 可选参数和默认值
+
 ---
 
 ### 🔍 v0.3.0 - 调试工具

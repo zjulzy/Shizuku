@@ -26,7 +26,7 @@ public class StringUtils_Contains_String_String_Node : ShizukuRunnableNode
 
     protected override void OnExecute()
     {
-        _result.Value = StringUtils.Contains(_str.Value, _substring.Value);
+        _result.Value = ShizukuAttributeExamples.StringUtils.Contains(_str.Value, _substring.Value);
     }
 
     protected override bool OnSelectNextNode(out string nextNodeGUID)

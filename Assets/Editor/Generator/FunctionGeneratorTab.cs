@@ -7,11 +7,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-/// <summary>
-/// ShizukuFunction 节点生成器管理窗口
-/// 用于管理和生成带有 [ShizukuFunction] 标记的方法对应的节点类
-/// </summary>
-public class ShizukuFunctionNodeGenerator : EditorWindow
+namespace Editor.Generator
+{
+    /// <summary>
+    /// ShizukuFunction 节点生成器管理窗口
+    /// 用于管理和生成带有 [ShizukuFunction] 标记的方法对应的节点类
+    /// </summary>
+    public class FunctionGeneratorTab
 {
     /// <summary>
     /// 默认生成路径：所有新生成的函数节点类都会放在这个目录下
@@ -24,23 +26,13 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
     private Label _statusLabel;
     private TextField _generationPathField;
 
-    [MenuItem("Shizuku/Function Node Generator")]
-    public static void OpenWindow()
-    {
-        var window = GetWindow<ShizukuFunctionNodeGenerator>();
-        window.titleContent = new GUIContent("Function Node Generator");
-        window.minSize = new Vector2(700, 500);
-    }
+    
 
-    private void OnEnable()
-    {
-        BuildUI();
-        ScanFunctions();
-    }
+    
 
-    private void BuildUI()
+    public void BuildUI(VisualElement parent)
     {
-        rootVisualElement.Clear();
+        parent.Clear();
 
         // 标题栏
         var titleBar = new VisualElement
@@ -95,7 +87,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
         buttonContainer.Add(generateAllButton);
         titleBar.Add(titleLabel);
         titleBar.Add(buttonContainer);
-        rootVisualElement.Add(titleBar);
+        parent.Add(titleBar);
 
         // 生成路径配置
         var pathContainer = new VisualElement
@@ -135,7 +127,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
             var path = EditorUtility.OpenFolderPanel("Select Generation Folder", "Assets", "");
             if (!string.IsNullOrEmpty(path))
             {
-                // 转换为相对路径
+                // 转换为相对路�?
                 if (path.StartsWith(Application.dataPath))
                 {
                     path = "Assets" + path.Substring(Application.dataPath.Length);
@@ -151,7 +143,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
         pathContainer.Add(pathLabel);
         pathContainer.Add(_generationPathField);
         pathContainer.Add(browseButton);
-        rootVisualElement.Add(pathContainer);
+        parent.Add(pathContainer);
 
         // 状态栏
         var statusContainer = new VisualElement
@@ -175,7 +167,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
         };
 
         statusContainer.Add(_statusLabel);
-        rootVisualElement.Add(statusContainer);
+        parent.Add(statusContainer);
 
         // 内容区域
         _scrollView = new ScrollView(ScrollViewMode.Vertical)
@@ -198,7 +190,10 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
         };
 
         _scrollView.Add(_contentContainer);
-        rootVisualElement.Add(_scrollView);
+        parent.Add(_scrollView);
+        
+        // 初始扫描
+        ScanFunctions();
     }
 
     /// <summary>
@@ -240,7 +235,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
     {
         var nodeClassName = funcInfo.GetNodeClassName();
         
-        // 搜索所有程序集中是否存在该类
+        // 搜索所有程序集中是否存在该�?
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
         foreach (var assembly in assemblies)
         {
@@ -268,7 +263,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
     {
         _contentContainer.Clear();
 
-        // 按类型分组显示
+        // 按类型分组显�?
         var grouped = _functionNodes.GroupBy(n => n.FunctionInfo.DeclaringType);
 
         foreach (var group in grouped.OrderBy(g => g.Key.Name))
@@ -310,7 +305,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
     }
 
     /// <summary>
-    /// 创建函数项 UI
+    /// 创建函数�?UI
     /// </summary>
     private VisualElement CreateFunctionItem(FunctionNodeInfo nodeInfo)
     {
@@ -381,7 +376,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
             }
         };
 
-        var statusLabel = new Label(nodeInfo.IsGenerated ? "✅ Generated" : "⚠️ Pending")
+        var statusLabel = new Label(nodeInfo.IsGenerated ? "�?Generated" : "⚠️ Pending")
         {
             style =
             {
@@ -427,7 +422,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
     }
 
     /// <summary>
-    /// 获取函数签名字符串
+    /// 获取函数签名字符�?
     /// </summary>
     private string GetFunctionSignature(ShizukuFunctionInfo funcInfo)
     {
@@ -450,7 +445,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
     }
 
     /// <summary>
-    /// 获取类型的友好名称
+    /// 获取类型的友好名�?
     /// </summary>
     private string GetTypeName(Type type)
     {
@@ -463,7 +458,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
     }
 
     /// <summary>
-    /// 生成所有未生成的节点
+    /// 生成所有未生成的节�?
     /// </summary>
     private void GenerateAllMissing()
     {
@@ -506,7 +501,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
         {
             AssetDatabase.Refresh();
             
-            // 延迟扫描以等待编译完成
+            // 延迟扫描以等待编译完�?
             EditorApplication.delayCall += () =>
             {
                 EditorApplication.delayCall += ScanFunctions;
@@ -562,7 +557,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
     }
 
     /// <summary>
-    /// 生成节点类代码
+    /// 生成节点类代�?
     /// </summary>
     private bool GenerateNodeClass(FunctionNodeInfo nodeInfo)
     {
@@ -599,7 +594,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
     {
         var sb = new StringBuilder();
         
-        // 文件头注释
+        // 文件头注�?
         sb.AppendLine("// Auto-generated by ShizukuFunctionNodeGenerator");
         sb.AppendLine($"// Source: {funcInfo.DeclaringType.FullName}.{funcInfo.Method.Name}");
         sb.AppendLine($"// Generated at: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
@@ -610,11 +605,11 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
         sb.AppendLine("using UnityEngine;");
         sb.AppendLine();
         
-        // NodeMenuItem 特性
+        // NodeMenuItem 特�?
         var menuPath = funcInfo.GetMenuPath();
         sb.AppendLine($"[NodeMenuItem(\"{menuPath}\", NodeCategory.Function, Description = \"{funcInfo.Description}\")]");
         
-        // 类定义
+        // 类定�?
         var baseClass = "ShizukuRunnableNode";
         sb.AppendLine($"public class {funcInfo.GetNodeClassName()} : {baseClass}");
         sb.AppendLine("{");
@@ -648,7 +643,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
             sb.AppendLine();
         }
         
-        // 如果是可执行节点，添加 ChainPort
+        // 如果是可执行节点，添�?ChainPort
         if (baseClass == "ShizukuRunnableNode")
         {
             sb.AppendLine("    [SerializeField]");
@@ -665,7 +660,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
             // 调用目标方法
             if (funcInfo.IsStatic)
             {
-                // 静态方法调用
+                // 静态方法调�?
                 var paramNames = funcInfo.Parameters.Select(p => $"_{p.Name}.Value").ToArray();
                 var call = $"{funcInfo.DeclaringType.Name}.{funcInfo.Method.Name}({string.Join(", ", paramNames)})";
                 
@@ -697,7 +692,7 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
         }
         else
         {
-            // 值节点
+            // 值节�?
             sb.AppendLine("    public override void GetOutputValues()");
             sb.AppendLine("    {");
             
@@ -751,4 +746,6 @@ public class ShizukuFunctionNodeGenerator : EditorWindow
         public bool IsGenerated;
     }
 }
+}
+
 

@@ -7,11 +7,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-/// <summary>
-/// 变量类型代码生成器
-/// 为所有 ShizukuClass 类型自动生成对应的 VariableType 枚举值和 GraphVariable 字段
-/// </summary>
-public class VariableTypeGenerator : EditorWindow
+namespace Editor.Generator
+{
+    /// <summary>
+    /// 变量类型代码生成器
+    /// 为所有 ShizukuClass 类型自动生成对应的 VariableType 枚举值和 GraphVariable 字段
+    /// </summary>
+    public class VariableTypeGeneratorTab
 {
     private const string ENUM_OUTPUT_PATH = "Assets/Scripts/Graph/Generated/VariableType.Generated.cs";
     private const string VARIABLE_OUTPUT_PATH = "Assets/Scripts/Graph/Generated/GraphVariable.Generated.cs";
@@ -21,23 +23,13 @@ public class VariableTypeGenerator : EditorWindow
     private ScrollView _scrollView;
     private Label _statusLabel;
 
-    [MenuItem("Shizuku/Generate Variable Types")]
-    public static void OpenWindow()
-    {
-        var window = GetWindow<VariableTypeGenerator>();
-        window.titleContent = new GUIContent("Variable Type Generator");
-        window.minSize = new Vector2(600, 400);
-    }
+    
 
-    private void OnEnable()
-    {
-        BuildUI();
-        ScanCustomTypes();
-    }
+    
 
-    private void BuildUI()
+    public void BuildUI(VisualElement parent)
     {
-        rootVisualElement.Clear();
+        parent.Clear();
 
         // 标题栏
         var titleBar = new VisualElement
@@ -91,7 +83,7 @@ public class VariableTypeGenerator : EditorWindow
         buttonContainer.Add(generateButton);
         titleBar.Add(titleLabel);
         titleBar.Add(buttonContainer);
-        rootVisualElement.Add(titleBar);
+        parent.Add(titleBar);
 
         // 状态栏
         var statusContainer = new VisualElement
@@ -115,7 +107,7 @@ public class VariableTypeGenerator : EditorWindow
         };
 
         statusContainer.Add(_statusLabel);
-        rootVisualElement.Add(statusContainer);
+        parent.Add(statusContainer);
 
         // 内容区域
         _scrollView = new ScrollView(ScrollViewMode.Vertical)
@@ -126,7 +118,10 @@ public class VariableTypeGenerator : EditorWindow
             }
         };
 
-        rootVisualElement.Add(_scrollView);
+        parent.Add(_scrollView);
+        
+        // 初始扫描
+        ScanCustomTypes();
     }
 
     private void ScanCustomTypes()
@@ -508,4 +503,6 @@ public class VariableTypeGenerator : EditorWindow
         Debug.Log($"[VariableTypeGenerator] Generated: {GRAPH_BASE_OUTPUT_PATH}");
     }
 }
+}
+
 

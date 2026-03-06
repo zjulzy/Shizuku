@@ -8,11 +8,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-/// <summary>
-/// 蓝图生成器管理窗口
-/// 用于管理和生成 BlueprintBehavior 对应的 ShizukuBluePrint 子类
-/// </summary>
-public class BlueprintGeneratorWindow : EditorWindow
+namespace Editor.Generator
+{
+    /// <summary>
+    /// 蓝图生成器 Tab
+    /// 用于管理和生成 BlueprintBehavior 对应的 ShizukuBluePrint 子类
+    /// </summary>
+    public class BlueprintGeneratorTab
 {
     /// <summary>
     /// 默认生成路径：所有新生成的 Blueprint 类都会放在这个目录下
@@ -24,26 +26,12 @@ public class BlueprintGeneratorWindow : EditorWindow
     private VisualElement _contentContainer;
     private Label _statusLabel;
 
-    [MenuItem("Shizuku/Blueprint Generator")]
-    public static void OpenWindow()
+    public void BuildUI(VisualElement parent)
     {
-        var window = GetWindow<BlueprintGeneratorWindow>();
-        window.titleContent = new GUIContent("Blueprint Generator");
-        window.minSize = new Vector2(600, 400);
-    }
+        parent.Clear();
 
-    private void OnEnable()
-    {
-        BuildUI();
-        ScanBlueprintClasses();
-    }
-
-    private void BuildUI()
-    {
-        rootVisualElement.Clear();
-
-        // 标题栏
-        var titleBar = new VisualElement
+        // 标题栏和按钮
+        var headerContainer = new VisualElement
         {
             style =
             {
@@ -61,7 +49,7 @@ public class BlueprintGeneratorWindow : EditorWindow
         {
             style =
             {
-                fontSize = 16,
+                fontSize = 14,
                 unityFontStyleAndWeight = FontStyle.Bold,
                 color = Color.white
             }
@@ -93,9 +81,9 @@ public class BlueprintGeneratorWindow : EditorWindow
 
         buttonContainer.Add(refreshButton);
         buttonContainer.Add(generateAllButton);
-        titleBar.Add(titleLabel);
-        titleBar.Add(buttonContainer);
-        rootVisualElement.Add(titleBar);
+        headerContainer.Add(titleLabel);
+        headerContainer.Add(buttonContainer);
+        parent.Add(headerContainer);
 
         // 状态栏
         var statusContainer = new VisualElement
@@ -130,7 +118,7 @@ public class BlueprintGeneratorWindow : EditorWindow
         };
         statusContainer.Add(pathInfoLabel);
 
-        rootVisualElement.Add(statusContainer);
+        parent.Add(statusContainer);
 
         // 滚动区域
         _scrollView = new ScrollView(ScrollViewMode.Vertical)
@@ -153,7 +141,10 @@ public class BlueprintGeneratorWindow : EditorWindow
         };
 
         _scrollView.Add(_contentContainer);
-        rootVisualElement.Add(_scrollView);
+        parent.Add(_scrollView);
+
+        // 初始扫描
+        ScanBlueprintClasses();
     }
 
     /// <summary>
@@ -631,23 +622,6 @@ public class BlueprintGeneratorWindow : EditorWindow
     }
 
     /// <summary>
-    /// 查找类型的脚本路径
-    /// </summary>
-    private string FindScriptPath(Type type)
-    {
-        var guids = AssetDatabase.FindAssets($"{type.Name} t:Script");
-        foreach (var guid in guids)
-        {
-            var path = AssetDatabase.GUIDToAssetPath(guid);
-            if (Path.GetFileNameWithoutExtension(path) == type.Name)
-            {
-                return path;
-            }
-        }
-        return null;
-    }
-
-    /// <summary>
     /// 在 Project 窗口中定位脚本
     /// </summary>
     private void PingScriptAsset(string path)
@@ -695,5 +669,6 @@ public class BlueprintGeneratorWindow : EditorWindow
         public Type GeneratedBlueprintType;
         public string GeneratedScriptPath;
     }
+}
 }
 

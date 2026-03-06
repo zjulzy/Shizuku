@@ -107,20 +107,3 @@ public partial class GraphVariable
     /// </summary>
     partial void SetDefaultValueCustomType(VariableType type);
 }
-
-/// <summary>
-/// 变量类型枚举
-/// </summary>
-public enum VariableType
-{
-    Int,
-    Float,
-    Bool,
-    String,
-    Vector2,
-    Vector3,
-    GameObject,
-    Transform,
-    Color
-}
-

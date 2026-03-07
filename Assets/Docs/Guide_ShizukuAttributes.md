@@ -181,6 +181,7 @@ public class CharacterStats
 #### 2.2 创建操作函数
 
 ```csharp
+[ShizukuClass("角色数据工具", "游戏/工具", ShowInVariableMenu = false)]
 public static class CharacterStatsUtils
 {
     [ShizukuFunction("受到伤害", "游戏/战斗")]

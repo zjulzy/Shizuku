@@ -1,0 +1,1238 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace Editor.Generator
+{
+    /// <summary>
+    /// 统一的 Shizuku 代码生成器管理窗口
+    /// 集成 ShizukuClass 和 ShizukuFunction 的管理和生成
+    /// </summary>
+    public class UnifiedShizukuGeneratorTab
+    {
+        private const string FUNCTION_NODE_PATH = "Assets/Scripts/Node/DerivedNodes/Generated";
+        private const string ENUM_OUTPUT_PATH = "Assets/Scripts/Graph/Generated/VariableType.Generated.cs";
+        private const string VARIABLE_OUTPUT_PATH = "Assets/Scripts/Graph/Generated/GraphVariable.Generated.cs";
+        private const string GRAPH_BASE_OUTPUT_PATH = "Assets/Scripts/Graph/Generated/ShizukuGraphBase.Generated.cs";
+
+        private List<ShizukuClassEntry> _classEntries = new List<ShizukuClassEntry>();
+        private ScrollView _scrollView;
+        private VisualElement _contentContainer;
+        private Label _statusLabel;
+        private TextField _functionNodePathField;
+
+        public void BuildUI(VisualElement parent)
+        {
+            parent.Clear();
+
+            // 标题栏
+            var titleBar = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row,
+                    justifyContent = Justify.SpaceBetween,
+                    paddingTop = 10,
+                    paddingBottom = 10,
+                    paddingLeft = 10,
+                    paddingRight = 10,
+                    backgroundColor = new Color(0.2f, 0.2f, 0.2f, 1f)
+                }
+            };
+
+            var titleLabel = new Label("ShizukuClass & Function Generator")
+            {
+                style =
+                {
+                    fontSize = 16,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    color = Color.white
+                }
+            };
+
+            var buttonContainer = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row
+                }
+            };
+
+            var refreshButton = new Button(ScanAll)
+            {
+                text = "🔄 Refresh",
+                style = { marginRight = 5 }
+            };
+
+            var generateAllButton = new Button(GenerateAllPending)
+            {
+                text = "Generate All Pending",
+                style =
+                {
+                    marginRight = 5,
+                    backgroundColor = new Color(0.2f, 0.6f, 0.2f, 0.8f)
+                }
+            };
+
+            var generateVariableTypesButton = new Button(GenerateVariableTypes)
+            {
+                text = "Generate Variable Types",
+                style =
+                {
+                    backgroundColor = new Color(0.2f, 0.4f, 0.8f, 0.8f)
+                }
+            };
+
+            buttonContainer.Add(refreshButton);
+            buttonContainer.Add(generateAllButton);
+            buttonContainer.Add(generateVariableTypesButton);
+            titleBar.Add(titleLabel);
+            titleBar.Add(buttonContainer);
+            parent.Add(titleBar);
+
+            // 生成路径配置
+            var pathContainer = new VisualElement
+            {
+                style =
+                {
+                    paddingTop = 5,
+                    paddingBottom = 5,
+                    paddingLeft = 10,
+                    paddingRight = 10,
+                    backgroundColor = new Color(0.25f, 0.25f, 0.25f, 1f),
+                    flexDirection = FlexDirection.Row
+                }
+            };
+
+            var pathLabel = new Label("Function Node Path:")
+            {
+                style =
+                {
+                    width = 130,
+                    unityTextAlign = TextAnchor.MiddleLeft
+                }
+            };
+
+            _functionNodePathField = new TextField
+            {
+                value = FUNCTION_NODE_PATH,
+                style =
+                {
+                    flexGrow = 1,
+                    marginRight = 5
+                }
+            };
+
+            var browseButton = new Button(() =>
+            {
+                var path = EditorUtility.OpenFolderPanel("Select Generation Folder", "Assets", "");
+                if (!string.IsNullOrEmpty(path))
+                {
+                    if (path.StartsWith(Application.dataPath))
+                    {
+                        path = "Assets" + path.Substring(Application.dataPath.Length);
+                    }
+                    _functionNodePathField.value = path;
+                }
+            })
+            {
+                text = "Browse",
+                style = { width = 80 }
+            };
+
+            pathContainer.Add(pathLabel);
+            pathContainer.Add(_functionNodePathField);
+            pathContainer.Add(browseButton);
+            parent.Add(pathContainer);
+
+            // 状态栏
+            var statusContainer = new VisualElement
+            {
+                style =
+                {
+                    paddingTop = 5,
+                    paddingBottom = 5,
+                    paddingLeft = 10,
+                    paddingRight = 10,
+                    backgroundColor = new Color(0.15f, 0.15f, 0.15f, 1f)
+                }
+            };
+
+            _statusLabel = new Label("Ready")
+            {
+                style =
+                {
+                    color = Color.white
+                }
+            };
+
+            statusContainer.Add(_statusLabel);
+            parent.Add(statusContainer);
+
+            // 内容区域
+            _scrollView = new ScrollView(ScrollViewMode.Vertical)
+            {
+                style =
+                {
+                    flexGrow = 1
+                }
+            };
+
+            _contentContainer = new VisualElement
+            {
+                style =
+                {
+                    paddingTop = 10,
+                    paddingBottom = 10,
+                    paddingLeft = 10,
+                    paddingRight = 10
+                }
+            };
+
+            _scrollView.Add(_contentContainer);
+            parent.Add(_scrollView);
+
+            // 初始扫描
+            ScanAll();
+        }
+
+        /// <summary>
+        /// 扫描所有 ShizukuClass 和 ShizukuFunction
+        /// </summary>
+        private void ScanAll()
+        {
+            _classEntries.Clear();
+            _contentContainer.Clear();
+
+            // 确保注册中心已初始化
+            ShizukuTypeRegistry.Initialize();
+
+            var allClassInfos = ShizukuTypeRegistry.GetAllShizukuClassInfos().ToList();
+
+            foreach (var classInfo in allClassInfos)
+            {
+                var entry = new ShizukuClassEntry
+                {
+                    ClassInfo = classInfo,
+                    Functions = new List<FunctionEntry>()
+                };
+
+                // 获取该类的所有 ShizukuFunction
+                var functions = ShizukuTypeRegistry.GetFunctionsForType(classInfo.Type);
+                foreach (var funcInfo in functions)
+                {
+                    var funcEntry = new FunctionEntry
+                    {
+                        FunctionInfo = funcInfo,
+                        NodeClassName = funcInfo.GetNodeClassName(),
+                        IsGenerated = CheckIfFunctionNodeGenerated(funcInfo)
+                    };
+                    entry.Functions.Add(funcEntry);
+                }
+
+                // 检查是否支持生成变量类型（非静态类且 ShowInVariableMenu 为 true）
+                entry.SupportsVariableType = classInfo.ShowInVariableMenu && !classInfo.Type.IsAbstract && !classInfo.Type.IsStatic();
+
+                _classEntries.Add(entry);
+            }
+
+            // 按 Category 和 DisplayName 排序
+            _classEntries = _classEntries
+                .OrderBy(e => e.ClassInfo.Category)
+                .ThenBy(e => e.ClassInfo.DisplayName)
+                .ToList();
+
+            UpdateUI();
+
+            var totalClasses = _classEntries.Count;
+            var totalFunctions = _classEntries.Sum(e => e.Functions.Count);
+            var generatedFunctions = _classEntries.Sum(e => e.Functions.Count(f => f.IsGenerated));
+            _statusLabel.text = $"Found {totalClasses} class(es), {totalFunctions} function(s) ({generatedFunctions} generated, {totalFunctions - generatedFunctions} pending)";
+        }
+
+        /// <summary>
+        /// 检查函数节点是否已生成
+        /// </summary>
+        private bool CheckIfFunctionNodeGenerated(ShizukuFunctionInfo funcInfo)
+        {
+            var nodeClassName = funcInfo.GetNodeClassName();
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in assemblies)
+            {
+                try
+                {
+                    var type = assembly.GetType(nodeClassName);
+                    if (type != null && typeof(ShizukuNodeBase).IsAssignableFrom(type))
+                    {
+                        return true;
+                    }
+                }
+                catch
+                {
+                    // 忽略错误
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 更新 UI
+        /// </summary>
+        private void UpdateUI()
+        {
+            _contentContainer.Clear();
+
+            if (_classEntries.Count == 0)
+            {
+                var noClassLabel = new Label("No ShizukuClass found.\nAdd [ShizukuClass] attribute to your classes.")
+                {
+                    style =
+                    {
+                        fontSize = 14,
+                        color = Color.yellow,
+                        unityTextAlign = TextAnchor.MiddleCenter,
+                        paddingTop = 50,
+                        whiteSpace = WhiteSpace.Normal
+                    }
+                };
+                _contentContainer.Add(noClassLabel);
+                return;
+            }
+
+            // 按类别分组
+            var grouped = _classEntries.GroupBy(e => e.ClassInfo.Category);
+
+            foreach (var group in grouped.OrderBy(g => g.Key))
+            {
+                // 类别标题
+                var categoryHeader = new VisualElement
+                {
+                    style =
+                    {
+                        flexDirection = FlexDirection.Row,
+                        paddingTop = 10,
+                        paddingBottom = 5,
+                        paddingLeft = 5,
+                        paddingRight = 5,
+                        backgroundColor = new Color(0.3f, 0.3f, 0.3f, 1f),
+                        marginBottom = 5
+                    }
+                };
+
+                var categoryLabel = new Label($"📁 {group.Key}")
+                {
+                    style =
+                    {
+                        fontSize = 14,
+                        unityFontStyleAndWeight = FontStyle.Bold
+                    }
+                };
+
+                categoryHeader.Add(categoryLabel);
+                _contentContainer.Add(categoryHeader);
+
+                // 类列表
+                foreach (var entry in group.OrderBy(e => e.ClassInfo.DisplayName))
+                {
+                    var classContainer = CreateClassItem(entry);
+                    _contentContainer.Add(classContainer);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 创建 ShizukuClass 项的 UI
+        /// </summary>
+        private VisualElement CreateClassItem(ShizukuClassEntry entry)
+        {
+            var container = new VisualElement
+            {
+                style =
+                {
+                    marginBottom = 5,
+                    marginLeft = 10,
+                    backgroundColor = new Color(0.22f, 0.22f, 0.22f, 0.8f),
+                    paddingTop = 5,
+                    paddingBottom = 5,
+                    paddingLeft = 5,
+                    paddingRight = 5
+                }
+            };
+
+            // 类头部
+            var classHeader = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row,
+                    justifyContent = Justify.SpaceBetween,
+                    paddingTop = 5,
+                    paddingBottom = 5,
+                    paddingLeft = 5,
+                    paddingRight = 5,
+                    backgroundColor = new Color(0.28f, 0.28f, 0.32f, 1f)
+                }
+            };
+
+            // 左侧信息
+            var infoContainer = new VisualElement
+            {
+                style =
+                {
+                    flexGrow = 1
+                }
+            };
+
+            var classNameLabel = new Label($"📦 {entry.ClassInfo.DisplayName}")
+            {
+                style =
+                {
+                    fontSize = 13,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    color = new Color(0.8f, 0.9f, 1f, 1f)
+                }
+            };
+
+            var classTypeLabel = new Label($"Type: {entry.ClassInfo.Type.Name} | Functions: {entry.Functions.Count}")
+            {
+                style =
+                {
+                    fontSize = 10,
+                    color = new Color(0.7f, 0.7f, 0.7f, 1f)
+                }
+            };
+
+            if (!string.IsNullOrEmpty(entry.ClassInfo.Description))
+            {
+                var descLabel = new Label(entry.ClassInfo.Description)
+                {
+                    style =
+                    {
+                        fontSize = 10,
+                        color = new Color(0.6f, 0.8f, 0.6f, 1f)
+                    }
+                };
+                infoContainer.Add(classNameLabel);
+                infoContainer.Add(classTypeLabel);
+                infoContainer.Add(descLabel);
+            }
+            else
+            {
+                infoContainer.Add(classNameLabel);
+                infoContainer.Add(classTypeLabel);
+            }
+
+            // 右侧按钮
+            var buttonContainer = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row,
+                    alignItems = Align.Center
+                }
+            };
+
+            // 如果支持生成变量类型，显示生成按钮
+            if (entry.SupportsVariableType)
+            {
+                var varTypeButton = new Button(() => GenerateSingleVariableType(entry))
+                {
+                    text = "Generate Variable Type",
+                    style =
+                    {
+                        width = 160,
+                        backgroundColor = new Color(0.2f, 0.5f, 0.7f, 0.8f)
+                    }
+                };
+                buttonContainer.Add(varTypeButton);
+            }
+
+            classHeader.Add(infoContainer);
+            classHeader.Add(buttonContainer);
+            container.Add(classHeader);
+
+            // 函数列表
+            if (entry.Functions.Count > 0)
+            {
+                var functionsContainer = new VisualElement
+                {
+                    style =
+                    {
+                        paddingLeft = 15,
+                        paddingTop = 5
+                    }
+                };
+
+                foreach (var funcEntry in entry.Functions.OrderBy(f => f.FunctionInfo.DisplayName))
+                {
+                    var funcItem = CreateFunctionItem(funcEntry);
+                    functionsContainer.Add(funcItem);
+                }
+
+                container.Add(functionsContainer);
+            }
+
+            return container;
+        }
+
+        /// <summary>
+        /// 创建函数项的 UI
+        /// </summary>
+        private VisualElement CreateFunctionItem(FunctionEntry funcEntry)
+        {
+            var container = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row,
+                    justifyContent = Justify.SpaceBetween,
+                    paddingTop = 5,
+                    paddingBottom = 5,
+                    paddingLeft = 10,
+                    paddingRight = 10,
+                    backgroundColor = funcEntry.IsGenerated
+                        ? new Color(0.2f, 0.3f, 0.2f, 0.3f)
+                        : new Color(0.3f, 0.2f, 0.2f, 0.3f),
+                    marginBottom = 2
+                }
+            };
+
+            // 左侧信息
+            var infoContainer = new VisualElement
+            {
+                style =
+                {
+                    flexGrow = 1
+                }
+            };
+
+            var nameLabel = new Label($"⚡ {funcEntry.FunctionInfo.DisplayName}")
+            {
+                style =
+                {
+                    fontSize = 11,
+                    unityFontStyleAndWeight = FontStyle.Bold
+                }
+            };
+
+            var signatureLabel = new Label(GetFunctionSignature(funcEntry.FunctionInfo))
+            {
+                style =
+                {
+                    fontSize = 9,
+                    color = new Color(0.7f, 0.7f, 0.7f, 1f)
+                }
+            };
+
+            infoContainer.Add(nameLabel);
+            infoContainer.Add(signatureLabel);
+
+            // 右侧按钮
+            var buttonContainer = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row,
+                    alignItems = Align.Center
+                }
+            };
+
+            var statusLabel = new Label(funcEntry.IsGenerated ? "✓ Generated" : "⚠ Pending")
+            {
+                style =
+                {
+                    marginRight = 10,
+                    fontSize = 10,
+                    color = funcEntry.IsGenerated ? Color.green : Color.yellow
+                }
+            };
+
+            var generateButton = new Button(() => GenerateSingleFunction(funcEntry))
+            {
+                text = funcEntry.IsGenerated ? "Regenerate" : "Generate",
+                style =
+                {
+                    width = 90,
+                    backgroundColor = funcEntry.IsGenerated
+                        ? new Color(0.3f, 0.3f, 0.6f, 0.8f)
+                        : new Color(0.2f, 0.6f, 0.2f, 0.8f)
+                }
+            };
+
+            if (funcEntry.IsGenerated)
+            {
+                var deleteButton = new Button(() => DeleteGeneratedFunction(funcEntry))
+                {
+                    text = "Delete",
+                    style =
+                    {
+                        width = 70,
+                        marginLeft = 5,
+                        backgroundColor = new Color(0.6f, 0.2f, 0.2f, 0.8f)
+                    }
+                };
+                buttonContainer.Add(deleteButton);
+            }
+
+            buttonContainer.Add(statusLabel);
+            buttonContainer.Add(generateButton);
+
+            container.Add(infoContainer);
+            container.Add(buttonContainer);
+
+            return container;
+        }
+
+        /// <summary>
+        /// 获取函数签名字符串
+        /// </summary>
+        private string GetFunctionSignature(ShizukuFunctionInfo funcInfo)
+        {
+            var sb = new StringBuilder();
+
+            if (funcInfo.IsStatic)
+                sb.Append("static ");
+
+            sb.Append(GetTypeName(funcInfo.ReturnType));
+            sb.Append(" ");
+            sb.Append(funcInfo.Method.Name);
+            sb.Append("(");
+
+            var paramStrs = funcInfo.Parameters.Select(p => $"{GetTypeName(p.ParameterType)} {p.Name}");
+            sb.Append(string.Join(", ", paramStrs));
+
+            sb.Append(")");
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// 获取类型的友好名称
+        /// </summary>
+        private string GetTypeName(Type type)
+        {
+            if (type == typeof(void)) return "void";
+            if (type == typeof(int)) return "int";
+            if (type == typeof(float)) return "float";
+            if (type == typeof(bool)) return "bool";
+            if (type == typeof(string)) return "string";
+            return type.Name;
+        }
+
+        /// <summary>
+        /// 生成所有待生成的节点
+        /// </summary>
+        private void GenerateAllPending()
+        {
+            var pendingFunctions = _classEntries
+                .SelectMany(e => e.Functions)
+                .Where(f => !f.IsGenerated)
+                .ToList();
+
+            if (pendingFunctions.Count == 0)
+            {
+                EditorUtility.DisplayDialog("Info", "All function nodes are already generated!", "OK");
+                return;
+            }
+
+            if (!EditorUtility.DisplayDialog("Confirm",
+                $"Generate {pendingFunctions.Count} function node(s)?", "Generate", "Cancel"))
+            {
+                return;
+            }
+
+            int successCount = 0;
+            foreach (var funcEntry in pendingFunctions)
+            {
+                if (GenerateFunctionNodeClass(funcEntry))
+                {
+                    successCount++;
+                }
+            }
+
+            AssetDatabase.Refresh();
+            ScanAll();
+
+            EditorUtility.DisplayDialog("Complete",
+                $"Successfully generated {successCount}/{pendingFunctions.Count} node class(es)!", "OK");
+        }
+
+        /// <summary>
+        /// 生成单个函数节点
+        /// </summary>
+        private void GenerateSingleFunction(FunctionEntry funcEntry)
+        {
+            if (GenerateFunctionNodeClass(funcEntry))
+            {
+                AssetDatabase.Refresh();
+
+                // 延迟扫描以等待编译完成
+                EditorApplication.delayCall += () =>
+                {
+                    EditorApplication.delayCall += ScanAll;
+                };
+
+                EditorUtility.DisplayDialog("Success",
+                    $"Successfully generated node class: {funcEntry.NodeClassName}", "OK");
+            }
+        }
+
+        /// <summary>
+        /// 删除已生成的函数节点
+        /// </summary>
+        private void DeleteGeneratedFunction(FunctionEntry funcEntry)
+        {
+            if (!EditorUtility.DisplayDialog("Confirm Delete",
+                $"Delete generated node class: {funcEntry.NodeClassName}?", "Delete", "Cancel"))
+            {
+                return;
+            }
+
+            var filePath = FindGeneratedFilePath(funcEntry.NodeClassName);
+            if (string.IsNullOrEmpty(filePath))
+            {
+                EditorUtility.DisplayDialog("Error", "Cannot find generated file!", "OK");
+                return;
+            }
+
+            AssetDatabase.DeleteAsset(filePath);
+            AssetDatabase.Refresh();
+
+            EditorApplication.delayCall += () =>
+            {
+                EditorApplication.delayCall += ScanAll;
+            };
+        }
+
+        /// <summary>
+        /// 查找已生成文件的路径
+        /// </summary>
+        private string FindGeneratedFilePath(string className)
+        {
+            var guids = AssetDatabase.FindAssets($"{className} t:Script");
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                if (path.Contains(className))
+                {
+                    return path;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 生成函数节点类代码
+        /// </summary>
+        private bool GenerateFunctionNodeClass(FunctionEntry funcEntry)
+        {
+            try
+            {
+                var code = GenerateFunctionCode(funcEntry.FunctionInfo);
+                var fileName = $"{funcEntry.NodeClassName}.cs";
+                var path = _functionNodePathField.value;
+
+                // 确保目录存在
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                var filePath = Path.Combine(path, fileName);
+                File.WriteAllText(filePath, code);
+
+                Debug.Log($"[UnifiedShizukuGenerator] Generated: {filePath}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[UnifiedShizukuGenerator] Failed to generate {funcEntry.NodeClassName}: {ex.Message}");
+                EditorUtility.DisplayDialog("Error", $"Failed to generate node class:\n{ex.Message}", "OK");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 生成函数节点代码
+        /// </summary>
+        private string GenerateFunctionCode(ShizukuFunctionInfo funcInfo)
+        {
+            var sb = new StringBuilder();
+
+            // 文件头注释
+            sb.AppendLine("// Auto-generated by UnifiedShizukuGenerator");
+            sb.AppendLine($"// Source: {funcInfo.DeclaringType.FullName}.{funcInfo.Method.Name}");
+            sb.AppendLine($"// Generated at: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+            sb.AppendLine();
+
+            // Using 语句
+            sb.AppendLine("using System;");
+            sb.AppendLine("using UnityEngine;");
+            if (!string.IsNullOrEmpty(funcInfo.DeclaringType.Namespace))
+            {
+                sb.AppendLine($"using {funcInfo.DeclaringType.Namespace};");
+            }
+            sb.AppendLine();
+
+            // NodeMenuItem 特性
+            var menuPath = funcInfo.GetMenuPath();
+            sb.AppendLine($"[NodeMenuItem(\"{menuPath}\", NodeCategory.Function, Description = \"{funcInfo.Description}\")]");
+
+            // 类定义
+            var baseClass = "ShizukuRunnableNode";
+            sb.AppendLine($"public class {funcInfo.GetNodeClassName()} : {baseClass}");
+            sb.AppendLine("{");
+
+            // Title
+            sb.AppendLine($"    public override string Title => \"{funcInfo.DisplayName}\";");
+            sb.AppendLine();
+
+            // TitleBarColor - 函数节点使用紫色
+            sb.AppendLine("    public override Color TitleBarColor => new Color(0.6f, 0.4f, 0.8f, 1f);");
+            sb.AppendLine();
+
+            // 输入端口（参数）
+            if (funcInfo.Parameters.Count > 0)
+            {
+                foreach (var param in funcInfo.Parameters)
+                {
+                    var portType = GetPortTypeName(param.ParameterType);
+                    sb.AppendLine($"    [SerializeReference]");
+                    sb.AppendLine($"    private {portType} _{param.Name} = new() {{ IsOut = false, Name = \"{param.Name}\" }};");
+                    sb.AppendLine();
+                }
+            }
+
+            // 输出端口（返回值）
+            if (funcInfo.ReturnType != typeof(void))
+            {
+                var returnPortType = GetPortTypeName(funcInfo.ReturnType);
+                sb.AppendLine($"    [SerializeReference]");
+                sb.AppendLine($"    private {returnPortType} _result = new() {{ IsOut = true, Name = \"result\" }};");
+                sb.AppendLine();
+            }
+
+            // 如果是可执行节点，添加 ChainPort
+            if (baseClass == "ShizukuRunnableNode")
+            {
+                sb.AppendLine("    [SerializeField]");
+                sb.AppendLine("    private ChainPort _nextPort = new() { Name = \"next\" };");
+                sb.AppendLine();
+            }
+
+            // 执行方法
+            if (baseClass == "ShizukuRunnableNode")
+            {
+                sb.AppendLine("    protected override void OnExecute()");
+                sb.AppendLine("    {");
+
+                // 调用目标方法
+                if (funcInfo.IsStatic)
+                {
+                    // 静态方法调用
+                    var paramNames = funcInfo.Parameters.Select(p => $"_{p.Name}.Value").ToArray();
+                    var call = $"{funcInfo.DeclaringType.Name}.{funcInfo.Method.Name}({string.Join(", ", paramNames)})";
+
+                    if (funcInfo.ReturnType != typeof(void))
+                    {
+                        sb.AppendLine($"        _result.Value = {call};");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"        {call};");
+                    }
+                }
+                else
+                {
+                    // 实例方法需要获取实例（TODO: 支持从端口传入）
+                    sb.AppendLine("        // TODO: Get instance from input port or BlueprintBehavior");
+                    sb.AppendLine($"        // var instance = ...;");
+                    sb.AppendLine($"        // instance.{funcInfo.Method.Name}(...);");
+                }
+
+                sb.AppendLine("    }");
+                sb.AppendLine();
+
+                sb.AppendLine("    protected override bool OnSelectNextNode(out string nextNodeGUID)");
+                sb.AppendLine("    {");
+                sb.AppendLine("        nextNodeGUID = _nextPort.NextNodeGuid;");
+                sb.AppendLine("        return !string.IsNullOrEmpty(nextNodeGUID);");
+                sb.AppendLine("    }");
+            }
+            else
+            {
+                // 值节点
+                sb.AppendLine("    public override void GetOutputValues()");
+                sb.AppendLine("    {");
+
+                if (funcInfo.IsStatic)
+                {
+                    var paramNames = funcInfo.Parameters.Select(p => $"_{p.Name}.Value").ToArray();
+                    var call = $"{funcInfo.DeclaringType.Name}.{funcInfo.Method.Name}({string.Join(", ", paramNames)})";
+                    sb.AppendLine($"        _result.Value = {call};");
+                }
+                else
+                {
+                    sb.AppendLine("        // TODO: Get instance from input port or BlueprintBehavior");
+                    sb.AppendLine($"        // var instance = ...;");
+                    sb.AppendLine($"        // _result.Value = instance.{funcInfo.Method.Name}(...);");
+                }
+
+                sb.AppendLine("    }");
+            }
+
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// 获取端口类型名称
+        /// </summary>
+        private string GetPortTypeName(Type type)
+        {
+            if (type == typeof(int)) return "IntParameterEdgePort";
+            if (type == typeof(float)) return "FloatParameterEdgePort";
+            if (type == typeof(bool)) return "BoolParameterEdgePort";
+            if (type == typeof(string)) return "StringParameterEdgePort";
+            if (type == typeof(Vector2)) return "Vector2ParameterEdgePort";
+            if (type == typeof(Vector3)) return "Vector3ParameterEdgePort";
+            if (type == typeof(GameObject)) return "GameObjectParameterEdgePort";
+            if (type == typeof(Transform)) return "TransformParameterEdgePort";
+            if (type == typeof(Color)) return "ColorParameterEdgePort";
+
+            // 默认使用 ObjectParameterEdgePort
+            return "ObjectParameterEdgePort";
+        }
+
+        /// <summary>
+        /// 生成单个类的变量类型
+        /// </summary>
+        private void GenerateSingleVariableType(ShizukuClassEntry entry)
+        {
+            if (!entry.SupportsVariableType)
+            {
+                EditorUtility.DisplayDialog("Error", 
+                    "This class does not support variable type generation!", "OK");
+                return;
+            }
+
+            // 直接调用生成所有变量类型（包含此类）
+            GenerateVariableTypes();
+        }
+
+        /// <summary>
+        /// 生成所有变量类型代码
+        /// </summary>
+        private void GenerateVariableTypes()
+        {
+            var customTypes = _classEntries
+                .Where(e => e.SupportsVariableType)
+                .Select(e => e.ClassInfo)
+                .ToList();
+
+            if (customTypes.Count == 0)
+            {
+                EditorUtility.DisplayDialog("Info", "No custom types available for variable generation!", "OK");
+                return;
+            }
+
+            try
+            {
+                // 确保输出目录存在
+                var dir = Path.GetDirectoryName(ENUM_OUTPUT_PATH);
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                // 生成枚举
+                GenerateVariableTypeEnum(customTypes);
+
+                // 生成 GraphVariable partial
+                GenerateGraphVariablePartial(customTypes);
+
+                // 生成 ShizukuGraphBase partial
+                GenerateShizukuGraphBasePartial(customTypes);
+
+                AssetDatabase.Refresh();
+
+                _statusLabel.text = $"✅ Generated variable types for {customTypes.Count} class(es)";
+                EditorUtility.DisplayDialog("Success",
+                    $"Successfully generated variable type code for {customTypes.Count} class(es)!", "OK");
+            }
+            catch (Exception ex)
+            {
+                _statusLabel.text = $"❌ Error: {ex.Message}";
+                EditorUtility.DisplayDialog("Error", $"Failed to generate variable types:\n{ex.Message}", "OK");
+                Debug.LogError($"[UnifiedShizukuGenerator] Error: {ex}");
+            }
+        }
+
+        private void GenerateVariableTypeEnum(List<ShizukuClassInfo> customTypes)
+        {
+            var sb = new StringBuilder();
+
+            // 文件头
+            sb.AppendLine("// Auto-generated by UnifiedShizukuGenerator");
+            sb.AppendLine($"// Generated at: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+            sb.AppendLine("// DO NOT MODIFY THIS FILE MANUALLY");
+            sb.AppendLine();
+            sb.AppendLine("/// <summary>");
+            sb.AppendLine("/// 变量类型枚举（自动生成）");
+            sb.AppendLine("/// </summary>");
+            sb.AppendLine("public enum VariableType");
+            sb.AppendLine("{");
+
+            // 内置类型
+            sb.AppendLine("    // Built-in types");
+            sb.AppendLine("    Int,");
+            sb.AppendLine("    Float,");
+            sb.AppendLine("    Bool,");
+            sb.AppendLine("    String,");
+            sb.AppendLine("    Vector2,");
+            sb.AppendLine("    Vector3,");
+            sb.AppendLine("    GameObject,");
+            sb.AppendLine("    Transform,");
+            sb.AppendLine("    Color,");
+            sb.AppendLine();
+
+            // 自定义类型
+            if (customTypes.Count > 0)
+            {
+                sb.AppendLine("    // Custom ShizukuClass types (auto-generated)");
+                foreach (var typeInfo in customTypes)
+                {
+                    var enumName = $"Custom_{typeInfo.Type.Name}";
+                    var comment = string.IsNullOrEmpty(typeInfo.Description)
+                        ? typeInfo.DisplayName
+                        : typeInfo.Description;
+                    sb.AppendLine($"    {enumName},  // {comment}");
+                }
+            }
+
+            sb.AppendLine("}");
+
+            File.WriteAllText(ENUM_OUTPUT_PATH, sb.ToString());
+            Debug.Log($"[UnifiedShizukuGenerator] Generated: {ENUM_OUTPUT_PATH}");
+        }
+
+        private void GenerateGraphVariablePartial(List<ShizukuClassInfo> customTypes)
+        {
+            var sb = new StringBuilder();
+
+            // 文件头
+            sb.AppendLine("// Auto-generated by UnifiedShizukuGenerator");
+            sb.AppendLine($"// Generated at: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+            sb.AppendLine("// DO NOT MODIFY THIS FILE MANUALLY");
+            sb.AppendLine();
+            sb.AppendLine("using System;");
+            sb.AppendLine("using UnityEngine;");
+            sb.AppendLine();
+            sb.AppendLine("/// <summary>");
+            sb.AppendLine("/// GraphVariable 的自动生成扩展部分");
+            sb.AppendLine("/// 包含所有自定义 ShizukuClass 类型的字段");
+            sb.AppendLine("/// </summary>");
+            // 由于是partial类，不要添加[Serializable]特性，以免与原类冲突
+            // sb.AppendLine("[Serializable]");
+            
+            sb.AppendLine("public partial class GraphVariable");
+            sb.AppendLine("{");
+
+            if (customTypes.Count > 0)
+            {
+                sb.AppendLine("    // Custom type fields (auto-generated)");
+                foreach (var typeInfo in customTypes)
+                {
+                    var fieldName = $"Custom_{typeInfo.Type.Name}Value";
+                    var typeName = typeInfo.Type.FullName ?? typeInfo.Type.Name;
+                    sb.AppendLine();
+                    sb.AppendLine($"    /// <summary>");
+                    sb.AppendLine($"    /// {typeInfo.DisplayName} ({typeInfo.Type.Name})");
+                    sb.AppendLine($"    /// </summary>");
+                    sb.AppendLine($"    [SerializeField]");
+                    sb.AppendLine($"    public {typeName} {fieldName};");
+                }
+                sb.AppendLine();
+
+                // 实现 SetDefaultValueCustomType partial 方法
+                sb.AppendLine("    /// <summary>");
+                sb.AppendLine("    /// 设置自定义类型的默认值");
+                sb.AppendLine("    /// </summary>");
+                sb.AppendLine("    partial void SetDefaultValueCustomType(VariableType type)");
+                sb.AppendLine("    {");
+                sb.AppendLine("        switch (type)");
+                sb.AppendLine("        {");
+                foreach (var typeInfo in customTypes)
+                {
+                    var enumName = $"VariableType.Custom_{typeInfo.Type.Name}";
+                    var fieldName = $"Custom_{typeInfo.Type.Name}Value";
+                    sb.AppendLine($"            case {enumName}:");
+                    sb.AppendLine($"                {fieldName} = default;");
+                    sb.AppendLine($"                break;");
+                }
+                sb.AppendLine("        }");
+                sb.AppendLine("    }");
+            }
+            else
+            {
+                sb.AppendLine("    // No custom types defined");
+            }
+
+            sb.AppendLine("}");
+
+            File.WriteAllText(VARIABLE_OUTPUT_PATH, sb.ToString());
+            Debug.Log($"[UnifiedShizukuGenerator] Generated: {VARIABLE_OUTPUT_PATH}");
+        }
+
+        private void GenerateShizukuGraphBasePartial(List<ShizukuClassInfo> customTypes)
+        {
+            var sb = new StringBuilder();
+
+            // 文件头
+            sb.AppendLine("// Auto-generated by UnifiedShizukuGenerator");
+            sb.AppendLine($"// Generated at: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+            sb.AppendLine("// DO NOT MODIFY THIS FILE MANUALLY");
+            sb.AppendLine();
+            sb.AppendLine("using System;");
+            sb.AppendLine("using System.Collections.Generic;");
+            sb.AppendLine("using UnityEngine;");
+            sb.AppendLine();
+            sb.AppendLine("/// <summary>");
+            sb.AppendLine("/// ShizukuGraphBase 的自动生成扩展部分");
+            sb.AppendLine("/// 包含所有自定义类型的运行时存储和访问方法");
+            sb.AppendLine("/// </summary>");
+            sb.AppendLine("public partial class ShizukuGraphBase");
+            sb.AppendLine("{");
+
+            if (customTypes.Count > 0)
+            {
+                // 运行时字典
+                sb.AppendLine("    // Custom type runtime storage (auto-generated)");
+                foreach (var typeInfo in customTypes)
+                {
+                    var typeName = typeInfo.Type.FullName ?? typeInfo.Type.Name;
+                    var fieldName = $"_runtimeCustom_{typeInfo.Type.Name}s";
+                    sb.AppendLine($"    [NonSerialized]");
+                    sb.AppendLine($"    private Dictionary<string, {typeName}> {fieldName};");
+                }
+                sb.AppendLine();
+
+                // 实现 partial 方法：InitCustomTypeVariables
+                sb.AppendLine("    /// <summary>");
+                sb.AppendLine("    /// 初始化自定义类型字典");
+                sb.AppendLine("    /// </summary>");
+                sb.AppendLine("    partial void InitCustomTypeVariables()");
+                sb.AppendLine("    {");
+                foreach (var typeInfo in customTypes)
+                {
+                    var typeName = typeInfo.Type.FullName ?? typeInfo.Type.Name;
+                    var fieldName = $"_runtimeCustom_{typeInfo.Type.Name}s";
+                    sb.AppendLine($"        {fieldName} = new Dictionary<string, {typeName}>();");
+                }
+                sb.AppendLine("    }");
+                sb.AppendLine();
+
+                // 实现 partial 方法：InitCustomTypeVariable
+                sb.AppendLine("    /// <summary>");
+                sb.AppendLine("    /// 初始化单个自定义类型变量");
+                sb.AppendLine("    /// </summary>");
+                sb.AppendLine("    partial void InitCustomTypeVariable(GraphVariable variable)");
+                sb.AppendLine("    {");
+                sb.AppendLine("        switch (variable.Type)");
+                sb.AppendLine("        {");
+                foreach (var typeInfo in customTypes)
+                {
+                    var enumName = $"VariableType.Custom_{typeInfo.Type.Name}";
+                    var fieldName = $"_runtimeCustom_{typeInfo.Type.Name}s";
+                    var valueFieldName = $"Custom_{typeInfo.Type.Name}Value";
+                    sb.AppendLine($"            case {enumName}:");
+                    sb.AppendLine($"                {fieldName}[variable.GUID] = variable.{valueFieldName};");
+                    sb.AppendLine($"                break;");
+                }
+                sb.AppendLine("        }");
+                sb.AppendLine("    }");
+                sb.AppendLine();
+
+                // Get 方法
+                sb.AppendLine("    // Custom type Get methods (auto-generated)");
+                foreach (var typeInfo in customTypes)
+                {
+                    var typeName = typeInfo.Type.FullName ?? typeInfo.Type.Name;
+                    var fieldName = $"_runtimeCustom_{typeInfo.Type.Name}s";
+                    var methodName = $"TryGetVariable_{typeInfo.Type.Name}";
+
+                    sb.AppendLine($"    public bool {methodName}(string guid, out {typeName} value)");
+                    sb.AppendLine($"    {{");
+                    sb.AppendLine($"        if ({fieldName} != null && {fieldName}.TryGetValue(guid, out value))");
+                    sb.AppendLine($"            return true;");
+                    sb.AppendLine($"        value = default;");
+                    sb.AppendLine($"        return false;");
+                    sb.AppendLine($"    }}");
+                    sb.AppendLine();
+                }
+
+                // Set 方法
+                sb.AppendLine("    // Custom type Set methods (auto-generated)");
+                foreach (var typeInfo in customTypes)
+                {
+                    var typeName = typeInfo.Type.FullName ?? typeInfo.Type.Name;
+                    var fieldName = $"_runtimeCustom_{typeInfo.Type.Name}s";
+                    var methodName = $"SetVariable_{typeInfo.Type.Name}";
+
+                    sb.AppendLine($"    public void {methodName}(string guid, {typeName} value)");
+                    sb.AppendLine($"    {{");
+                    sb.AppendLine($"        if ({fieldName} != null) {fieldName}[guid] = value;");
+                    sb.AppendLine($"    }}");
+                    sb.AppendLine();
+                }
+            }
+            else
+            {
+                sb.AppendLine("    // No custom types defined");
+            }
+
+            sb.AppendLine("}");
+
+            File.WriteAllText(GRAPH_BASE_OUTPUT_PATH, sb.ToString());
+            Debug.Log($"[UnifiedShizukuGenerator] Generated: {GRAPH_BASE_OUTPUT_PATH}");
+        }
+
+        /// <summary>
+        /// ShizukuClass 条目
+        /// </summary>
+        private class ShizukuClassEntry
+        {
+            public ShizukuClassInfo ClassInfo;
+            public List<FunctionEntry> Functions;
+            public bool SupportsVariableType;
+        }
+
+        /// <summary>
+        /// 函数条目
+        /// </summary>
+        private class FunctionEntry
+        {
+            public ShizukuFunctionInfo FunctionInfo;
+            public string NodeClassName;
+            public bool IsGenerated;
+        }
+    }
+
+    /// <summary>
+    /// Type 扩展方法
+    /// </summary>
+    public static class TypeExtensions
+    {
+        public static bool IsStatic(this Type type)
+        {
+            return type.IsAbstract && type.IsSealed;
+        }
+    }
+}
+

@@ -84,6 +84,13 @@ public static class ShizukuTypeRegistry
     }
     private static void RegisterFunction(Type type, MethodInfo method, ShizukuFunctionAttribute attr)
     {
+        // 验证：ShizukuFunction 必须在 ShizukuClass 中
+        if (!_registeredClasses.ContainsKey(type))
+        {
+            Debug.LogWarning($"[ShizukuTypeRegistry] ShizukuFunction '{method.Name}' in type '{type.Name}' is ignored because the type is not marked with [ShizukuClass]");
+            return;
+        }
+        
         var info = new ShizukuFunctionInfo
         {
             DeclaringType = type,

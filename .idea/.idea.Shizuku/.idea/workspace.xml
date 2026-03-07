@@ -5,35 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/Generator.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/Generator/BlueprintGeneratorTab.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/Generator/BlueprintGeneratorTab.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/Generator/ShizukuGeneratorWindow.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Editor/Generator/ShizukuGeneratorWindow.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/Generator/UnifiedShizukuGeneratorTab.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Editor/Generator/UnifiedShizukuGeneratorTab.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/BlueprintGeneratorWindow.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/BlueprintGeneratorWindow.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuFunctionNodeGenerator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuFunctionNodeGenerator.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/VariableTypeGenerator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/VariableTypeGenerator.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/Guide_ShizukuAttributes.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/Guide_ShizukuAttributes.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/FunctionGeneratorTab.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/FunctionGeneratorTab.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/ShizukuGeneratorWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Generator/ShizukuGeneratorWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/VariableTypeGeneratorTab.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/VariableTypeGeneratorTab.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/GraphVariable.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/GraphVariable.Generated.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/ShizukuGraphBase.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/ShizukuGraphBase.Generated.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/VariableType.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/VariableType.Generated.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/GraphVariable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/GraphVariable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_Contains_String_String_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_Contains_String_String_Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo/Icons.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo/Icons/URP.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo/Icons/URP.png.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo/Layout.wlt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo/Layout.wlt.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo/Scripts.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo/Scripts/Editor.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo/Scripts/Editor/ReadmeEditor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo/Scripts/Editor/ReadmeEditor.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo/Scripts/Readme.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo/Scripts/Readme.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_Contains_String_String_Node.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_Contains_String_String_Node.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuTypeRegistry.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuTypeRegistry.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ShizukuAttributeExamples.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ShizukuAttributeExamples.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +64,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Editor/ControlFlowPort.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/Generator/BlueprintGeneratorTab.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/Generator/ShizukuGeneratorWindow.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Editor/Generator/UnifiedShizukuGeneratorTab.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/NodeSearchWindowProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.AIAssistant.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" root0="FORCE_HIGHLIGHTING" />
@@ -100,6 +88,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/VectorTypeConverters.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/MathUtils_VectorDot_Vector3_Vector3_Node.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Logic.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Logic/CompareNodes.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Logic/CompareNodes.cs.meta" root0="FORCE_HIGHLIGHTING" />
@@ -176,13 +165,15 @@
       <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false" ignored-value-for-modified-check="17044">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="17044" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
-        <list />
+        <list>
+          <MonoRuntime />
+        </list>
       </option>
       <option name="selectedOptions">
         <list />
@@ -238,7 +229,8 @@
       <workItem from="1772543293102" duration="7566000" />
       <workItem from="1772638910518" duration="3312000" />
       <workItem from="1772729591713" duration="1210000" />
-      <workItem from="1772814692022" duration="1055000" />
+      <workItem from="1772814692022" duration="1085000" />
+      <workItem from="1772899251975" duration="1977000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -440,7 +432,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772644179725</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="整理生成文件和生成ui窗口">
+      <option name="closed" value="true" />
+      <created>1772815785355</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1772815785355</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -467,7 +467,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="初步实现了一下图和节点的view与序列化，需要补全边的序列化" />
     <MESSAGE value="图的update运行" />
     <MESSAGE value="拆分代码文件" />
     <MESSAGE value="优化节点的继承关系" />
@@ -492,7 +491,27 @@
     <MESSAGE value="实现节点inspectotr" />
     <MESSAGE value="实现逻辑运算节点" />
     <MESSAGE value="完全基于ai生成的自定义类型及函数调用生成器，下一步需要全盘检查代码，并限制自定义函数调用的输入值和输出值必须是支持类型，并将多个代码生成面板和到一个里面去" />
-    <option name="LAST_COMMIT_MESSAGE" value="完全基于ai生成的自定义类型及函数调用生成器，下一步需要全盘检查代码，并限制自定义函数调用的输入值和输出值必须是支持类型，并将多个代码生成面板和到一个里面去" />
+    <MESSAGE value="整理生成文件和生成ui窗口" />
+    <option name="LAST_COMMIT_MESSAGE" value="整理生成文件和生成ui窗口" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Editor/Generator/UnifiedShizukuGeneratorTab.cs</url>
+          <line>775</line>
+          <properties documentPath="U:\projects\game\Unity\Shizuku\Assets\Editor\Generator\UnifiedShizukuGeneratorTab.cs" containingFunctionPresentation="方法 'GenerateFunctionCode'">
+            <startOffsets>
+              <option value="24802" />
+            </startOffsets>
+            <endOffsets>
+              <option value="24862" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,23 +6,21 @@ namespace Editor.Generator
 {
     /// <summary>
     /// Shizuku 生成器统一管理窗口
-    /// 包含蓝图生成器、函数节点生成器和变量类型生成器三个页签
+    /// 包含蓝图生成器和 ShizukuClass/Function 生成器两个页签
     /// </summary>
     public class ShizukuGeneratorWindow : EditorWindow
 {
     private enum TabType
     {
         Blueprint,
-        Function,
-        VariableType
+        ShizukuClassAndFunction
     }
 
     private TabType _currentTab = TabType.Blueprint;
     
     // 各个生成器的实例
     private BlueprintGeneratorTab _blueprintTab;
-    private FunctionGeneratorTab _functionTab;
-    private VariableTypeGeneratorTab _variableTypeTab;
+    private UnifiedShizukuGeneratorTab _unifiedTab;
     
     private VisualElement _tabButtonContainer;
     private VisualElement _contentContainer;
@@ -40,8 +37,7 @@ namespace Editor.Generator
     {
         // 初始化生成器实例
         _blueprintTab = new BlueprintGeneratorTab();
-        _functionTab = new FunctionGeneratorTab();
-        _variableTypeTab = new VariableTypeGeneratorTab();
+        _unifiedTab = new UnifiedShizukuGeneratorTab();
         
         BuildUI();
         SwitchTab(_currentTab);
@@ -105,8 +101,7 @@ namespace Editor.Generator
         };
 
         CreateTabButton("Blueprint Generator", TabType.Blueprint, "🎨");
-        CreateTabButton("Function Node Generator", TabType.Function, "⚙️");
-        CreateTabButton("Variable Type Generator", TabType.VariableType, "📦");
+        CreateTabButton("ShizukuClass & Function", TabType.ShizukuClassAndFunction, "📦");
 
         mainContainer.Add(_tabButtonContainer);
 
@@ -167,8 +162,7 @@ namespace Editor.Generator
         // 重建 tab 按钮以更新样式
         _tabButtonContainer.Clear();
         CreateTabButton("Blueprint Generator", TabType.Blueprint, "🎨");
-        CreateTabButton("Function Node Generator", TabType.Function, "⚙️");
-        CreateTabButton("Variable Type Generator", TabType.VariableType, "📦");
+        CreateTabButton("ShizukuClass & Function", TabType.ShizukuClassAndFunction, "📦");
         
         // 切换内容
         _contentContainer.Clear();
@@ -178,11 +172,8 @@ namespace Editor.Generator
             case TabType.Blueprint:
                 _blueprintTab.BuildUI(_contentContainer);
                 break;
-            case TabType.Function:
-                _functionTab.BuildUI(_contentContainer);
-                break;
-            case TabType.VariableType:
-                _variableTypeTab.BuildUI(_contentContainer);
+            case TabType.ShizukuClassAndFunction:
+                _unifiedTab.BuildUI(_contentContainer);
                 break;
         }
     }

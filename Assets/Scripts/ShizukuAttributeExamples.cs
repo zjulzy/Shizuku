@@ -3,104 +3,104 @@ using UnityEngine;
 /// <summary>
 /// ShizukuClass 和 ShizukuFunction 使用示例
 /// </summary>
-public static class ShizukuAttributeExamples
+/// <summary>
+/// 示例 1：数学工具类
+/// </summary>
+[ShizukuClass]
+public static class MathUtils
 {
-    /// <summary>
-    /// 示例 1：数学工具类
-    /// </summary>
-    public static class MathUtils
+    [ShizukuFunction("平方", "数学/基础", Pure = true)]
+    public static float Square(float value)
     {
-        [ShizukuFunction("平方", "数学/基础", Pure = true)]
-        public static float Square(float value)
-        {
-            return value * value;
-        }
+        return value * value;
+    }
 
-        [ShizukuFunction("平方根", "数学/基础", Pure = true)]
-        public static float Sqrt(float value)
-        {
-            return Mathf.Sqrt(value);
-        }
+    [ShizukuFunction("平方根", "数学/基础", Pure = true)]
+    public static float Sqrt(float value)
+    {
+        return Mathf.Sqrt(value);
+    }
 
-        [ShizukuFunction("限制范围", "数学/基础", Pure = true)]
-        public static float Clamp01(float value)
-        {
-            return Mathf.Clamp01(value);
-        }
+    [ShizukuFunction("限制范围", "数学/基础", Pure = true)]
+    public static float Clamp01(float value)
+    {
+        return Mathf.Clamp01(value);
+    }
 
-        [ShizukuFunction("向量距离", "数学/向量", Pure = true)]
-        public static float VectorDistance(Vector3 a, Vector3 b)
-        {
-            return Vector3.Distance(a, b);
-        }
+    [ShizukuFunction("向量距离", "数学/向量", Pure = true)]
+    public static float VectorDistance(Vector3 a, Vector3 b)
+    {
+        return Vector3.Distance(a, b);
+    }
 
-        [ShizukuFunction("向量点乘", "数学/向量", Pure = true)]
-        public static float VectorDot(Vector3 a, Vector3 b)
+    [ShizukuFunction("向量点乘", "数学/向量", Pure = true)]
+    public static float VectorDot(Vector3 a, Vector3 b)
+    {
+        return Vector3.Dot(a, b);
+    }
+}
+
+/// <summary>
+/// 示例 2：字符串工具类
+/// </summary>
+[ShizukuClass]
+public static class StringUtils
+{
+    [ShizukuFunction("拼接字符串", "字符串/操作", Pure = true)]
+    public static string Concat(string a, string b)
+    {
+        return string.Concat(a, b);
+    }
+
+    [ShizukuFunction("转大写", "字符串/转换", Pure = true)]
+    public static string ToUpper(string str)
+    {
+        return str?.ToUpper();
+    }
+
+    [ShizukuFunction("转小写", "字符串/转换", Pure = true)]
+    public static string ToLower(string str)
+    {
+        return str?.ToLower();
+    }
+
+    [ShizukuFunction("包含子串", "字符串/查询", Pure = true)]
+    public static bool Contains(string str, string substring)
+    {
+        return str?.Contains(substring) ?? false;
+    }
+}
+
+/// <summary>
+/// 示例 3：GameObject 工具类
+/// </summary>
+public static class GameObjectUtils
+{
+    [ShizukuFunction("设置激活状态", "GameObject/操作")]
+    public static void SetActive(GameObject obj, bool active)
+    {
+        if (obj != null)
         {
-            return Vector3.Dot(a, b);
+            obj.SetActive(active);
         }
     }
 
-    /// <summary>
-    /// 示例 2：字符串工具类
-    /// </summary>
-    public static class StringUtils
+    [ShizukuFunction("查找子物体", "GameObject/查询")]
+    public static Transform FindChild(Transform parent, string childName)
     {
-        [ShizukuFunction("拼接字符串", "字符串/操作", Pure = true)]
-        public static string Concat(string a, string b)
-        {
-            return string.Concat(a, b);
-        }
-
-        [ShizukuFunction("转大写", "字符串/转换", Pure = true)]
-        public static string ToUpper(string str)
-        {
-            return str?.ToUpper();
-        }
-
-        [ShizukuFunction("转小写", "字符串/转换", Pure = true)]
-        public static string ToLower(string str)
-        {
-            return str?.ToLower();
-        }
-
-        [ShizukuFunction("包含子串", "字符串/查询", Pure = true)]
-        public static bool Contains(string str, string substring)
-        {
-            return str?.Contains(substring) ?? false;
-        }
+        return parent?.Find(childName);
     }
 
-    /// <summary>
-    /// 示例 3：GameObject 工具类
-    /// </summary>
-    public static class GameObjectUtils
+    [ShizukuFunction("销毁物体", "GameObject/操作")]
+    public static void DestroyObject(GameObject obj)
     {
-        [ShizukuFunction("设置激活状态", "GameObject/操作")]
-        public static void SetActive(GameObject obj, bool active)
+        if (obj != null)
         {
-            if (obj != null)
-            {
-                obj.SetActive(active);
-            }
-        }
-
-        [ShizukuFunction("查找子物体", "GameObject/查询")]
-        public static Transform FindChild(Transform parent, string childName)
-        {
-            return parent?.Find(childName);
-        }
-
-        [ShizukuFunction("销毁物体", "GameObject/操作")]
-        public static void DestroyObject(GameObject obj)
-        {
-            if (obj != null)
-            {
-                Object.Destroy(obj);
-            }
+            Object.Destroy(obj);
         }
     }
 }
+
 
 /// <summary>
 /// 示例 4：自定义类型作为 ShizukuClass
@@ -128,4 +128,3 @@ public class SkillData
     public float Damage;
     public float Range;
 }
-

@@ -113,6 +113,12 @@ public class EnemyConfig
     public float AttackPower = 10f;
     public float MoveSpeed = 5f;
     public Color NameColor = Color.red;
+    
+    [ShizukuFunction("计算伤害", "游戏/技能")]
+    public float CalculateDamage(float baseDamage)
+    {        
+        return baseDamage * (1 + AttackPower / 100f);
+    }
 }
 
 /// <summary>

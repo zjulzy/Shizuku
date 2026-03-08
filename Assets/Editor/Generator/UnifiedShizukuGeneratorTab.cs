@@ -226,11 +226,14 @@ namespace Editor.Generator
                 var functions = ShizukuTypeRegistry.GetFunctionsForType(classInfo.Type);
                 foreach (var funcInfo in functions)
                 {
+                    var unsupportedMessage = GetUnsupportedTypesMessage(funcInfo);
                     var funcEntry = new FunctionEntry
                     {
                         FunctionInfo = funcInfo,
                         NodeClassName = funcInfo.GetNodeClassName(),
-                        IsGenerated = CheckIfFunctionNodeGenerated(funcInfo)
+                        IsGenerated = CheckIfFunctionNodeGenerated(funcInfo),
+                        HasUnsupportedTypes = !string.IsNullOrEmpty(unsupportedMessage),
+                        UnsupportedTypesMessage = unsupportedMessage
                     };
                     entry.Functions.Add(funcEntry);
                 }
@@ -495,9 +498,11 @@ namespace Editor.Generator
                     paddingBottom = 5,
                     paddingLeft = 10,
                     paddingRight = 10,
-                    backgroundColor = funcEntry.IsGenerated
-                        ? new Color(0.2f, 0.3f, 0.2f, 0.3f)
-                        : new Color(0.3f, 0.2f, 0.2f, 0.3f),
+                    backgroundColor = funcEntry.HasUnsupportedTypes
+                        ? new Color(0.4f, 0.2f, 0.2f, 0.3f)
+                        : funcEntry.IsGenerated
+                            ? new Color(0.2f, 0.3f, 0.2f, 0.3f)
+                            : new Color(0.3f, 0.2f, 0.2f, 0.3f),
                     marginBottom = 2
                 }
             };
@@ -532,6 +537,21 @@ namespace Editor.Generator
             infoContainer.Add(nameLabel);
             infoContainer.Add(signatureLabel);
 
+            // 如果有不支持的类型，显示错误信息
+            if (funcEntry.HasUnsupportedTypes)
+            {
+                var errorLabel = new Label($"⚠ Unsupported types: {funcEntry.UnsupportedTypesMessage}")
+                {
+                    style =
+                    {
+                        fontSize = 9,
+                        color = new Color(1f, 0.5f, 0.3f, 1f),
+                        whiteSpace = WhiteSpace.Normal
+                    }
+                };
+                infoContainer.Add(errorLabel);
+            }
+
             // 右侧按钮
             var buttonContainer = new VisualElement
             {
@@ -542,15 +562,32 @@ namespace Editor.Generator
                 }
             };
 
-            var statusLabel = new Label(funcEntry.IsGenerated ? "✓ Generated" : "⚠ Pending")
+            // 状态标签
+            Label statusLabel;
+            if (funcEntry.HasUnsupportedTypes)
             {
-                style =
+                statusLabel = new Label("⚠ Cannot Generate")
                 {
-                    marginRight = 10,
-                    fontSize = 10,
-                    color = funcEntry.IsGenerated ? Color.green : Color.yellow
-                }
-            };
+                    style =
+                    {
+                        marginRight = 10,
+                        fontSize = 10,
+                        color = new Color(1f, 0.5f, 0.3f, 1f)
+                    }
+                };
+            }
+            else
+            {
+                statusLabel = new Label(funcEntry.IsGenerated ? "✓ Generated" : "⚠ Pending")
+                {
+                    style =
+                    {
+                        marginRight = 10,
+                        fontSize = 10,
+                        color = funcEntry.IsGenerated ? Color.green : Color.yellow
+                    }
+                };
+            }
 
             var generateButton = new Button(() => GenerateSingleFunction(funcEntry))
             {
@@ -563,6 +600,13 @@ namespace Editor.Generator
                         : new Color(0.2f, 0.6f, 0.2f, 0.8f)
                 }
             };
+
+            // 如果有不支持的类型，禁用生成按钮
+            if (funcEntry.HasUnsupportedTypes)
+            {
+                generateButton.SetEnabled(false);
+                generateButton.style.backgroundColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
+            }
 
             if (funcEntry.IsGenerated)
             {
@@ -631,17 +675,34 @@ namespace Editor.Generator
         {
             var pendingFunctions = _classEntries
                 .SelectMany(e => e.Functions)
-                .Where(f => !f.IsGenerated)
+                .Where(f => !f.IsGenerated && !f.HasUnsupportedTypes)
                 .ToList();
+
+            var unsupportedCount = _classEntries
+                .SelectMany(e => e.Functions)
+                .Count(f => !f.IsGenerated && f.HasUnsupportedTypes);
 
             if (pendingFunctions.Count == 0)
             {
-                EditorUtility.DisplayDialog("Info", "All function nodes are already generated!", "OK");
+                if (unsupportedCount > 0)
+                {
+                    EditorUtility.DisplayDialog("Info", 
+                        $"All pending function nodes have unsupported types ({unsupportedCount} function(s)).\nPlease check the error messages.", "OK");
+                }
+                else
+                {
+                    EditorUtility.DisplayDialog("Info", "All function nodes are already generated!", "OK");
+                }
                 return;
             }
 
-            if (!EditorUtility.DisplayDialog("Confirm",
-                $"Generate {pendingFunctions.Count} function node(s)?", "Generate", "Cancel"))
+            var message = $"Generate {pendingFunctions.Count} function node(s)?";
+            if (unsupportedCount > 0)
+            {
+                message += $"\n({unsupportedCount} function(s) with unsupported types will be skipped)";
+            }
+
+            if (!EditorUtility.DisplayDialog("Confirm", message, "Generate", "Cancel"))
             {
                 return;
             }
@@ -658,8 +719,13 @@ namespace Editor.Generator
             AssetDatabase.Refresh();
             ScanAll();
 
-            EditorUtility.DisplayDialog("Complete",
-                $"Successfully generated {successCount}/{pendingFunctions.Count} node class(es)!", "OK");
+            var resultMessage = $"Successfully generated {successCount}/{pendingFunctions.Count} node class(es)!";
+            if (unsupportedCount > 0)
+            {
+                resultMessage += $"\n({unsupportedCount} function(s) with unsupported types were skipped)";
+            }
+
+            EditorUtility.DisplayDialog("Complete", resultMessage, "OK");
         }
 
         /// <summary>
@@ -796,6 +862,15 @@ namespace Editor.Generator
             sb.AppendLine("    public override Color TitleBarColor => new Color(0.6f, 0.4f, 0.8f, 1f);");
             sb.AppendLine();
 
+            // 如果是非静态方法，添加 self 端口
+            if (!funcInfo.IsStatic)
+            {
+                var selfPortType = GetPortTypeName(funcInfo.DeclaringType);
+                sb.AppendLine($"    [SerializeReference]");
+                sb.AppendLine($"    private {selfPortType} _self = new() {{ IsOut = false, Name = \"self\" }};");
+                sb.AppendLine();
+            }
+
             // 输入端口（参数）
             if (funcInfo.Parameters.Count > 0)
             {
@@ -849,10 +924,26 @@ namespace Editor.Generator
                 }
                 else
                 {
-                    // 实例方法需要获取实例（TODO: 支持从端口传入）
-                    sb.AppendLine("        // TODO: Get instance from input port or BlueprintBehavior");
-                    sb.AppendLine($"        // var instance = ...;");
-                    sb.AppendLine($"        // instance.{funcInfo.Method.Name}(...);");
+                    // 实例方法调用 - 从 self 端口获取实例
+                    sb.AppendLine($"        var instance = _self.Value as {funcInfo.DeclaringType.Name};");
+                    sb.AppendLine($"        if (instance == null)");
+                    sb.AppendLine($"        {{");
+                    sb.AppendLine($"            Debug.LogError(\"[{funcInfo.GetNodeClassName()}] Self instance is null!\");");
+                    sb.AppendLine($"            return;");
+                    sb.AppendLine($"        }}");
+                    sb.AppendLine();
+
+                    var paramNames = funcInfo.Parameters.Select(p => $"_{p.Name}.Value").ToArray();
+                    var call = $"instance.{funcInfo.Method.Name}({string.Join(", ", paramNames)})";
+
+                    if (funcInfo.ReturnType != typeof(void))
+                    {
+                        sb.AppendLine($"        _result.Value = {call};");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"        {call};");
+                    }
                 }
 
                 sb.AppendLine("    }");
@@ -878,9 +969,18 @@ namespace Editor.Generator
                 }
                 else
                 {
-                    sb.AppendLine("        // TODO: Get instance from input port or BlueprintBehavior");
-                    sb.AppendLine($"        // var instance = ...;");
-                    sb.AppendLine($"        // _result.Value = instance.{funcInfo.Method.Name}(...);");
+                    // 实例方法调用 - 从 self 端口获取实例
+                    sb.AppendLine($"        var instance = _self.Value;");
+                    sb.AppendLine($"        if (instance != null)");
+                    sb.AppendLine($"        {{");
+                    var paramNames = funcInfo.Parameters.Select(p => $"_{p.Name}.Value").ToArray();
+                    var call = $"instance.{funcInfo.Method.Name}({string.Join(", ", paramNames)})";
+                    sb.AppendLine($"            _result.Value = {call};");
+                    sb.AppendLine($"        }}");
+                    sb.AppendLine($"        else");
+                    sb.AppendLine($"        {{");
+                    sb.AppendLine($"            Debug.LogWarning(\"[{funcInfo.GetNodeClassName()}] Self instance is null, using default value.\");");
+                    sb.AppendLine($"        }}");
                 }
 
                 sb.AppendLine("    }");
@@ -889,6 +989,61 @@ namespace Editor.Generator
             sb.AppendLine("}");
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// 检查类型是否支持节点生成
+        /// </summary>
+        private bool IsTypeSupportedForNode(Type type)
+        {
+            if (type == typeof(void)) return true;
+            if (type == typeof(int)) return true;
+            if (type == typeof(float)) return true;
+            if (type == typeof(bool)) return true;
+            if (type == typeof(string)) return true;
+            if (type == typeof(Vector2)) return true;
+            if (type == typeof(Vector3)) return true;
+            if (type == typeof(GameObject)) return true;
+            if (type == typeof(Transform)) return true;
+            if (type == typeof(Color)) return true;
+
+            // 检查是否是 ShizukuClass 类型
+            if (ShizukuTypeRegistry.IsShizukuClass(type))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 获取不支持的类型名称
+        /// </summary>
+        private string GetUnsupportedTypesMessage(ShizukuFunctionInfo funcInfo)
+        {
+            var unsupportedTypes = new List<string>();
+
+            // 检查返回值类型
+            if (!IsTypeSupportedForNode(funcInfo.ReturnType))
+            {
+                unsupportedTypes.Add($"Return: {GetTypeName(funcInfo.ReturnType)}");
+            }
+
+            // 检查参数类型
+            foreach (var param in funcInfo.Parameters)
+            {
+                if (!IsTypeSupportedForNode(param.ParameterType))
+                {
+                    unsupportedTypes.Add($"Param '{param.Name}': {GetTypeName(param.ParameterType)}");
+                }
+            }
+
+            if (unsupportedTypes.Count > 0)
+            {
+                return string.Join(", ", unsupportedTypes);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -1221,6 +1376,8 @@ namespace Editor.Generator
             public ShizukuFunctionInfo FunctionInfo;
             public string NodeClassName;
             public bool IsGenerated;
+            public bool HasUnsupportedTypes;
+            public string UnsupportedTypesMessage;
         }
     }
 

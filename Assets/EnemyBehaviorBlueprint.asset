@@ -24,6 +24,7 @@ MonoBehaviour:
   - rid: 254579876135174216
   - rid: 254579904546340925
   - rid: 254579904546340931
+  - rid: 254580064646332475
   _edges:
   - rid: 522454395759624272
   - rid: 522454395759624273
@@ -35,7 +36,18 @@ MonoBehaviour:
   _groups: []
   RootNodeGUID: 
   _variables:
-  - GUID: ff567a4e-e1dc-4f43-b4dd-102bc1321bd1
+  - Custom_SkillDataValue:
+      SkillName: 
+      Cooldown: 0
+      ManaCost: 0
+      Damage: 0
+      Range: 0
+    Custom_EnemyConfigValue:
+      MaxHealth: 100
+      AttackPower: 10
+      MoveSpeed: 5
+      NameColor: {r: 1, g: 0, b: 0, a: 1}
+    GUID: ff567a4e-e1dc-4f43-b4dd-102bc1321bd1
     Name: test
     Type: 1
     IntValue: 0
@@ -137,10 +149,10 @@ MonoBehaviour:
       data:
         GUID: baf46880-b823-4328-8e47-dcfbea3d3ee7
         PositionAndSize:
-          x: 1091.6
-          y: 300.8
-          z: 150
-          w: 80
+          x: 1038.4
+          y: 318.4
+          z: 152
+          w: 76.79999
         _input:
           rid: 254579904546340934
         _output:
@@ -177,6 +189,36 @@ MonoBehaviour:
         IsOut: 1
         Value: 50000.00
         DefaultValue: 
+    - rid: 254580064646332475
+      type: {class: GetVariableNode_Custom_SkillData, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 9b5e51de-7ae0-462b-92d7-f506908d1fc9
+        PositionAndSize:
+          x: 469.6
+          y: 216.00002
+          z: 146.40002
+          w: 76.80002
+        VariableGUID: 
+        Output:
+          rid: 254580064646332476
+    - rid: 254580064646332476
+      type: {class: SkillDataParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: Value
+        InputEdgeGUID: 
+        IsOut: 1
+        Value:
+          SkillName: 
+          Cooldown: 0
+          ManaCost: 0
+          Damage: 0
+          Range: 0
+        DefaultValue:
+          SkillName: 
+          Cooldown: 0
+          ManaCost: 0
+          Damage: 0
+          Range: 0
     - rid: 522454392492261445
       type: {class: BlueprintEventNode, ns: , asm: Assembly-CSharp}
       data:

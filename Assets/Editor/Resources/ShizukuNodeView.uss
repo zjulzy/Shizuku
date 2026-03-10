@@ -24,3 +24,9 @@
     background-color: rgba(120, 170, 255, 1) !important;
 }
 
+/* 确保输出端口容器始终靠右对齐 */
+#output {
+    flex-grow: 1;
+    align-items: flex-end;
+}
+

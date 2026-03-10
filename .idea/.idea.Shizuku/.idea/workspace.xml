@@ -7,7 +7,12 @@
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/UnifiedShizukuGeneratorTab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Generator/UnifiedShizukuGeneratorTab.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ShizukuAttributeExamples.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ShizukuAttributeExamples.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuNodeView.uss" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuNodeView.uss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/GraphVariable.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/GraphVariable.Generated.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/ShizukuGraphBase.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/ShizukuGraphBase.Generated.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/VariableType.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/VariableType.Generated.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_Contains_String_String_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_Contains_String_String_Node.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -230,7 +235,8 @@
       <workItem from="1772729591713" duration="1210000" />
       <workItem from="1772814692022" duration="1085000" />
       <workItem from="1772899251975" duration="2049000" />
-      <workItem from="1772978634822" duration="3756000" />
+      <workItem from="1772978634822" duration="4008000" />
+      <workItem from="1773155321545" duration="2283000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -448,7 +454,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772906708058</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="优化生成逻辑，下一步需要基于shizukuclass这个attribute生成对应设置和获取的节点">
+      <option name="closed" value="true" />
+      <created>1772987391340</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1772987391340</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -475,7 +489,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="拆分代码文件" />
     <MESSAGE value="优化节点的继承关系" />
     <MESSAGE value="修bug，支持修改port默认值" />
     <MESSAGE value="增加对group的支持" />
@@ -500,7 +513,8 @@
     <MESSAGE value="完全基于ai生成的自定义类型及函数调用生成器，下一步需要全盘检查代码，并限制自定义函数调用的输入值和输出值必须是支持类型，并将多个代码生成面板和到一个里面去" />
     <MESSAGE value="整理生成文件和生成ui窗口" />
     <MESSAGE value="整理生成代码界面，修正自定义类型和自定义节点的限制" />
-    <option name="LAST_COMMIT_MESSAGE" value="整理生成代码界面，修正自定义类型和自定义节点的限制" />
+    <MESSAGE value="优化生成逻辑，下一步需要基于shizukuclass这个attribute生成对应设置和获取的节点" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化生成逻辑，下一步需要基于shizukuclass这个attribute生成对应设置和获取的节点" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

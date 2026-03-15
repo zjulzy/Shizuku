@@ -2,312 +2,77 @@ using System;
 using UnityEngine;
 
 // ============================================================
-// Set Variable 节点（零装箱版）
+// Set Variable 节点（零装箱版 - 基于泛型中间层）
 // ============================================================
 
 [Serializable]
 [NodeMenuItem("变量/设置/Int", NodeCategory.Variable, Description = "设置整数变量")]
-public class SetVariableNode_Int : ShizukuRunnableNode
+public class SetVariableNode_Int : SetVariableNodeBase<IntParameterEdgePort, int>
 {
-    [SerializeField]
-    public string VariableGUID;
-    
-    [SerializeReference]
-    public IntParameterEdgePort Input = new IntParameterEdgePort { IsOut = false, Name = "Value" };
-    
-    [SerializeField]
-    private ChainPort _nextPort = new ChainPort { Name = "Next" };
-    
-    public override string Title => GetDisplayName();
-    public override Color TitleBarColor => new Color(0.9f, 0.5f, 0.8f, 1f);
-    
-    protected override void OnExecute()
-    {
-        _parentGraph.SetVariableInt(VariableGUID, Input.Value);
-    }
-    
-    protected override bool OnSelectNextNode(out string nextNodeGUID)
-    {
-        nextNodeGUID = _nextPort.NextNodeGuid;
-        return !string.IsNullOrEmpty(nextNodeGUID);
-    }
-    
-    private string GetDisplayName()
-    {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
-        return variable != null ? $"Set {variable.Name}" : "Set <未设置>";
-    }
+    public override VariableType TargetVariableType => VariableType.Int;
+    protected override void SetVariable(string guid, int value) => _parentGraph.SetVariableInt(guid, value);
 }
 
 [Serializable]
 [NodeMenuItem("变量/设置/Float", NodeCategory.Variable, Description = "设置浮点数变量")]
-public class SetVariableNode_Float : ShizukuRunnableNode
+public class SetVariableNode_Float : SetVariableNodeBase<FloatParameterEdgePort, float>
 {
-    [SerializeField]
-    public string VariableGUID;
-    
-    [SerializeReference]
-    public FloatParameterEdgePort Input = new FloatParameterEdgePort { IsOut = false, Name = "Value" };
-    
-    [SerializeField]
-    private ChainPort _nextPort = new ChainPort { Name = "Next" };
-    
-    public override string Title => GetDisplayName();
-    public override Color TitleBarColor => new Color(0.9f, 0.5f, 0.8f, 1f);
-    
-    protected override void OnExecute()
-    {
-        _parentGraph.SetVariableFloat(VariableGUID, Input.Value);
-    }
-    
-    protected override bool OnSelectNextNode(out string nextNodeGUID)
-    {
-        nextNodeGUID = _nextPort.NextNodeGuid;
-        return !string.IsNullOrEmpty(nextNodeGUID);
-    }
-    
-    private string GetDisplayName()
-    {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
-        return variable != null ? $"Set {variable.Name}" : "Set <未设置>";
-    }
+    public override VariableType TargetVariableType => VariableType.Float;
+    protected override void SetVariable(string guid, float value) => _parentGraph.SetVariableFloat(guid, value);
 }
 
 [Serializable]
 [NodeMenuItem("变量/设置/Bool", NodeCategory.Variable, Description = "设置布尔变量")]
-public class SetVariableNode_Bool : ShizukuRunnableNode
+public class SetVariableNode_Bool : SetVariableNodeBase<BoolParameterEdgePort, bool>
 {
-    [SerializeField]
-    public string VariableGUID;
-    
-    [SerializeReference]
-    public BoolParameterEdgePort Input = new BoolParameterEdgePort { IsOut = false, Name = "Value" };
-    
-    [SerializeField]
-    private ChainPort _nextPort = new ChainPort { Name = "Next" };
-    
-    public override string Title => GetDisplayName();
-    public override Color TitleBarColor => new Color(0.9f, 0.5f, 0.8f, 1f);
-    
-    protected override void OnExecute()
-    {
-        _parentGraph.SetVariableBool(VariableGUID, Input.Value);
-    }
-    
-    protected override bool OnSelectNextNode(out string nextNodeGUID)
-    {
-        nextNodeGUID = _nextPort.NextNodeGuid;
-        return !string.IsNullOrEmpty(nextNodeGUID);
-    }
-    
-    private string GetDisplayName()
-    {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
-        return variable != null ? $"Set {variable.Name}" : "Set <未设置>";
-    }
+    public override VariableType TargetVariableType => VariableType.Bool;
+    protected override void SetVariable(string guid, bool value) => _parentGraph.SetVariableBool(guid, value);
 }
 
 [Serializable]
 [NodeMenuItem("变量/设置/String", NodeCategory.Variable, Description = "设置字符串变量")]
-public class SetVariableNode_String : ShizukuRunnableNode
+public class SetVariableNode_String : SetVariableNodeBase<StringParameterEdgePort, string>
 {
-    [SerializeField]
-    public string VariableGUID;
-    
-    [SerializeReference]
-    public StringParameterEdgePort Input = new StringParameterEdgePort { IsOut = false, Name = "Value" };
-    
-    [SerializeField]
-    private ChainPort _nextPort = new ChainPort { Name = "Next" };
-    
-    public override string Title => GetDisplayName();
-    public override Color TitleBarColor => new Color(0.9f, 0.5f, 0.8f, 1f);
-    
-    protected override void OnExecute()
-    {
-        _parentGraph.SetVariableString(VariableGUID, Input.Value);
-    }
-    
-    protected override bool OnSelectNextNode(out string nextNodeGUID)
-    {
-        nextNodeGUID = _nextPort.NextNodeGuid;
-        return !string.IsNullOrEmpty(nextNodeGUID);
-    }
-    
-    private string GetDisplayName()
-    {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
-        return variable != null ? $"Set {variable.Name}" : "Set <未设置>";
-    }
+    public override VariableType TargetVariableType => VariableType.String;
+    protected override void SetVariable(string guid, string value) => _parentGraph.SetVariableString(guid, value);
 }
 
 [Serializable]
 [NodeMenuItem("变量/设置/Vector2", NodeCategory.Variable, Description = "设置Vector2变量")]
-public class SetVariableNode_Vector2 : ShizukuRunnableNode
+public class SetVariableNode_Vector2 : SetVariableNodeBase<Vector2ParameterEdgePort, Vector2>
 {
-    [SerializeField]
-    public string VariableGUID;
-    
-    [SerializeReference]
-    public Vector2ParameterEdgePort Input = new Vector2ParameterEdgePort { IsOut = false, Name = "Value" };
-    
-    [SerializeField]
-    private ChainPort _nextPort = new ChainPort { Name = "Next" };
-    
-    public override string Title => GetDisplayName();
-    public override Color TitleBarColor => new Color(0.9f, 0.5f, 0.8f, 1f);
-    
-    protected override void OnExecute()
-    {
-        _parentGraph.SetVariableVector2(VariableGUID, Input.Value);
-    }
-    
-    protected override bool OnSelectNextNode(out string nextNodeGUID)
-    {
-        nextNodeGUID = _nextPort.NextNodeGuid;
-        return !string.IsNullOrEmpty(nextNodeGUID);
-    }
-    
-    private string GetDisplayName()
-    {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
-        return variable != null ? $"Set {variable.Name}" : "Set <未设置>";
-    }
+    public override VariableType TargetVariableType => VariableType.Vector2;
+    protected override void SetVariable(string guid, Vector2 value) => _parentGraph.SetVariableVector2(guid, value);
 }
 
 [Serializable]
 [NodeMenuItem("变量/设置/Vector3", NodeCategory.Variable, Description = "设置Vector3变量")]
-public class SetVariableNode_Vector3 : ShizukuRunnableNode
+public class SetVariableNode_Vector3 : SetVariableNodeBase<Vector3ParameterEdgePort, Vector3>
 {
-    [SerializeField]
-    public string VariableGUID;
-    
-    [SerializeReference]
-    public Vector3ParameterEdgePort Input = new Vector3ParameterEdgePort { IsOut = false, Name = "Value" };
-    
-    [SerializeField]
-    private ChainPort _nextPort = new ChainPort { Name = "Next" };
-    
-    public override string Title => GetDisplayName();
-    public override Color TitleBarColor => new Color(0.9f, 0.5f, 0.8f, 1f);
-    
-    protected override void OnExecute()
-    {
-        _parentGraph.SetVariableVector3(VariableGUID, Input.Value);
-    }
-    
-    protected override bool OnSelectNextNode(out string nextNodeGUID)
-    {
-        nextNodeGUID = _nextPort.NextNodeGuid;
-        return !string.IsNullOrEmpty(nextNodeGUID);
-    }
-    
-    private string GetDisplayName()
-    {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
-        return variable != null ? $"Set {variable.Name}" : "Set <未设置>";
-    }
+    public override VariableType TargetVariableType => VariableType.Vector3;
+    protected override void SetVariable(string guid, Vector3 value) => _parentGraph.SetVariableVector3(guid, value);
 }
 
 [Serializable]
 [NodeMenuItem("变量/设置/GameObject", NodeCategory.Variable, Description = "设置GameObject变量")]
-public class SetVariableNode_GameObject : ShizukuRunnableNode
+public class SetVariableNode_GameObject : SetVariableNodeBase<GameObjectParameterEdgePort, GameObject>
 {
-    [SerializeField]
-    public string VariableGUID;
-    
-    [SerializeReference]
-    public GameObjectParameterEdgePort Input = new GameObjectParameterEdgePort { IsOut = false, Name = "Value" };
-    
-    [SerializeField]
-    private ChainPort _nextPort = new ChainPort { Name = "Next" };
-    
-    public override string Title => GetDisplayName();
-    public override Color TitleBarColor => new Color(0.9f, 0.5f, 0.8f, 1f);
-    
-    protected override void OnExecute()
-    {
-        _parentGraph.SetVariableGameObject(VariableGUID, Input.Value);
-    }
-    
-    protected override bool OnSelectNextNode(out string nextNodeGUID)
-    {
-        nextNodeGUID = _nextPort.NextNodeGuid;
-        return !string.IsNullOrEmpty(nextNodeGUID);
-    }
-    
-    private string GetDisplayName()
-    {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
-        return variable != null ? $"Set {variable.Name}" : "Set <未设置>";
-    }
+    public override VariableType TargetVariableType => VariableType.GameObject;
+    protected override void SetVariable(string guid, GameObject value) => _parentGraph.SetVariableGameObject(guid, value);
 }
 
 [Serializable]
 [NodeMenuItem("变量/设置/Transform", NodeCategory.Variable, Description = "设置Transform变量")]
-public class SetVariableNode_Transform : ShizukuRunnableNode
+public class SetVariableNode_Transform : SetVariableNodeBase<TransformParameterEdgePort, Transform>
 {
-    [SerializeField]
-    public string VariableGUID;
-    
-    [SerializeReference]
-    public TransformParameterEdgePort Input = new TransformParameterEdgePort { IsOut = false, Name = "Value" };
-    
-    [SerializeField]
-    private ChainPort _nextPort = new ChainPort { Name = "Next" };
-    
-    public override string Title => GetDisplayName();
-    public override Color TitleBarColor => new Color(0.9f, 0.5f, 0.8f, 1f);
-    
-    protected override void OnExecute()
-    {
-        _parentGraph.SetVariableTransform(VariableGUID, Input.Value);
-    }
-    
-    protected override bool OnSelectNextNode(out string nextNodeGUID)
-    {
-        nextNodeGUID = _nextPort.NextNodeGuid;
-        return !string.IsNullOrEmpty(nextNodeGUID);
-    }
-    
-    private string GetDisplayName()
-    {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
-        return variable != null ? $"Set {variable.Name}" : "Set <未设置>";
-    }
+    public override VariableType TargetVariableType => VariableType.Transform;
+    protected override void SetVariable(string guid, Transform value) => _parentGraph.SetVariableTransform(guid, value);
 }
 
 [Serializable]
 [NodeMenuItem("变量/设置/Color", NodeCategory.Variable, Description = "设置Color变量")]
-public class SetVariableNode_Color : ShizukuRunnableNode
+public class SetVariableNode_Color : SetVariableNodeBase<ColorParameterEdgePort, Color>
 {
-    [SerializeField]
-    public string VariableGUID;
-    
-    [SerializeReference]
-    public ColorParameterEdgePort Input = new ColorParameterEdgePort { IsOut = false, Name = "Value" };
-    
-    [SerializeField]
-    private ChainPort _nextPort = new ChainPort { Name = "Next" };
-    
-    public override string Title => GetDisplayName();
-    public override Color TitleBarColor => new Color(0.9f, 0.5f, 0.8f, 1f);
-    
-    protected override void OnExecute()
-    {
-        _parentGraph.SetVariableColor(VariableGUID, Input.Value);
-    }
-    
-    protected override bool OnSelectNextNode(out string nextNodeGUID)
-    {
-        nextNodeGUID = _nextPort.NextNodeGuid;
-        return !string.IsNullOrEmpty(nextNodeGUID);
-    }
-    
-    private string GetDisplayName()
-    {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
-        return variable != null ? $"Set {variable.Name}" : "Set <未设置>";
-    }
+    public override VariableType TargetVariableType => VariableType.Color;
+    protected override void SetVariable(string guid, Color value) => _parentGraph.SetVariableColor(guid, value);
 }
-

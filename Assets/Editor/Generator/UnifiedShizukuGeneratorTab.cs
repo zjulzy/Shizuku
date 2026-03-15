@@ -1467,7 +1467,7 @@ namespace Editor.Generator
 
                 sb.AppendLine($"[Serializable]");
                 sb.AppendLine($"[NodeMenuItem(\"{menuPath}\", NodeCategory.Variable, Description = \"获取{typeInfo.DisplayName}变量\")]");
-                sb.AppendLine($"public class GetVariableNode_Custom_{simpleTypeName} : ShizukuValueNode");
+                sb.AppendLine($"public class GetVariableNode_Custom_{simpleTypeName} : ShizukuValueNode, IVariableNode");
                 sb.AppendLine($"{{");
                 sb.AppendLine($"    [SerializeField]");
                 sb.AppendLine($"    public string VariableGUID;");
@@ -1477,6 +1477,8 @@ namespace Editor.Generator
                 sb.AppendLine();
                 sb.AppendLine($"    public override string Title => GetDisplayName();");
                 sb.AppendLine($"    public override Color TitleBarColor => new Color(0.8f, 0.4f, 0.8f, 1f);");
+                sb.AppendLine();
+                sb.AppendLine($"    public VariableType TargetVariableType => VariableType.Custom_{simpleTypeName};");
                 sb.AppendLine();
                 sb.AppendLine($"    public override void GetOutputValues()");
                 sb.AppendLine($"    {{");
@@ -1533,7 +1535,7 @@ namespace Editor.Generator
 
                 sb.AppendLine($"[Serializable]");
                 sb.AppendLine($"[NodeMenuItem(\"{menuPath}\", NodeCategory.Variable, Description = \"设置{typeInfo.DisplayName}变量\")]");
-                sb.AppendLine($"public class SetVariableNode_Custom_{simpleTypeName} : ShizukuRunnableNode");
+                sb.AppendLine($"public class SetVariableNode_Custom_{simpleTypeName} : ShizukuRunnableNode, IVariableNode");
                 sb.AppendLine($"{{");
                 sb.AppendLine($"    [SerializeField]");
                 sb.AppendLine($"    public string VariableGUID;");
@@ -1546,6 +1548,8 @@ namespace Editor.Generator
                 sb.AppendLine();
                 sb.AppendLine($"    public override string Title => GetDisplayName();");
                 sb.AppendLine($"    public override Color TitleBarColor => new Color(0.9f, 0.5f, 0.8f, 1f);");
+                sb.AppendLine();
+                sb.AppendLine($"    public VariableType TargetVariableType => VariableType.Custom_{simpleTypeName};");
                 sb.AppendLine();
                 sb.AppendLine($"    protected override void OnExecute()");
                 sb.AppendLine($"    {{");

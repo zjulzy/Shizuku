@@ -751,7 +751,14 @@ public class BaseGraphEditorExtension : IGraphEditorExtension
         
         string currentGuid = field.GetValue(node) as string;
         
-        // 构建变量选项列表
+        // 获取节点的目标变量类型（如果实现了 IVariableNode）
+        VariableType? targetType = null;
+        if (node is IVariableNode variableNode)
+        {
+            targetType = variableNode.TargetVariableType;
+        }
+        
+        // 构建变量选项列表（按类型过滤）
         var choices = new List<string> { "<未选择>" };
         var guidMap = new Dictionary<string, string>(); // 显示名 -> GUID
         
@@ -759,6 +766,10 @@ public class BaseGraphEditorExtension : IGraphEditorExtension
         {
             foreach (var variable in _currentGraph.Variables)
             {
+                // 如果节点指定了目标类型，则只显示匹配类型的变量
+                if (targetType.HasValue && variable.Type != targetType.Value)
+                    continue;
+                    
                 string displayName = $"{variable.Name} ({variable.Type})";
                 choices.Add(displayName);
                 guidMap[displayName] = variable.GUID;

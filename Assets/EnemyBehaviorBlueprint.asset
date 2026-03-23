@@ -59,6 +59,29 @@ MonoBehaviour:
     GameObjectValue: {fileID: 0}
     TransformValue: {fileID: 0}
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
+  - Custom_SkillDataValue:
+      SkillName: 
+      Cooldown: 0
+      ManaCost: 0
+      Damage: 0
+      Range: 0
+    Custom_EnemyConfigValue:
+      MaxHealth: 100
+      AttackPower: 10
+      MoveSpeed: 5
+      NameColor: {r: 1, g: 0, b: 0, a: 1}
+    GUID: fba9ce08-1e18-4ca2-94dd-def705cbe8ae
+    Name: NewVariable
+    Type: 9
+    IntValue: 0
+    FloatValue: 0
+    BoolValue: 0
+    StringValue: 
+    Vector2Value: {x: 0, y: 0}
+    Vector3Value: {x: 0, y: 0, z: 0}
+    GameObjectValue: {fileID: 0}
+    TransformValue: {fileID: 0}
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
   references:
     version: 2
     RefIds:
@@ -71,6 +94,7 @@ MonoBehaviour:
           y: 404.79996
           z: 157.6001
           w: 108.79999
+        HasBreakPoint: 0
         _parameter:
           rid: 254579876135174148
         _parameterResult:
@@ -115,8 +139,8 @@ MonoBehaviour:
       data:
         GUID: 0fff85d7-c21f-4ed0-9003-92fdbd2f5325
         PositionAndSize:
-          x: 252.00003
-          y: 840
+          x: 232
+          y: 831.2
           z: 163.19998
           w: 76
         _nextPort:
@@ -254,6 +278,7 @@ MonoBehaviour:
           y: 405.08002
           z: 121.599976
           w: 132.79999
+        HasBreakPoint: 0
         Message:
           rid: 522454392492261448
         _nextPort:
@@ -358,6 +383,7 @@ MonoBehaviour:
           y: 430.4
           z: 157.59998
           w: 108.80002
+        HasBreakPoint: 0
         Message:
           rid: 522454395759624288
         _nextPort:

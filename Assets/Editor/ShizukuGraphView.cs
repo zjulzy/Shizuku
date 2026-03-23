@@ -122,6 +122,9 @@ public partial class ShizukuGraphView : GraphView
 
         evt.menu.AppendSeparator();
         evt.menu.AppendAction("清空所有节点", (a) => ClearAllNodes());
+        
+        // 调试菜单
+        BuildDebugContextualMenu(evt);
     }
 
     private void OnMouseDown(MouseDownEvent evt)
@@ -851,6 +854,9 @@ public partial class ShizukuGraphView : GraphView
                 groupData.PositionAndSize.z, groupData.PositionAndSize.w));
             AddElement(group);
         });
+        
+        // 刷新断点视觉标记
+        RefreshAllBreakpointVisuals();
     }
 
     public void SaveToAsset()

@@ -35,21 +35,21 @@
 - [x] 支持 `[NodeMenuItem]` 特性标注元数据
 - [x] 节点搜索功能（Unity SearchWindow）
 
-**3. 扩展类型系统** ⭐⭐
+**3. 扩展类型系统** ⭐⭐ ✅
 - [x] 新增 `Vector3ParameterEdgePort`
 - [x] 新增 `Vector2ParameterEdgePort`
 - [x] 新增 `GameObjectParameterEdgePort`
 - [x] 新增 `TransformParameterEdgePort`
 - [x] 新增 `ColorParameterEdgePort`
-- [ ] 类型注册中心（支持自定义类型）
+- [x] 类型注册中心（支持自定义类型）— `ShizukuTypeRegistry`
 
 **4. 更多实用节点** ⭐⭐
 - [x] 数学节点：Add, Subtract, Multiply, Divide, Clamp, Lerp
 - [x] 逻辑节点：And, Or, Not, Xor, Compare (支持 Int/Float/String/Bool 类型比较)
 - [ ] 工具节点：GetComponent, FindGameObject, SetActive
-- [ ] 属性节点：GetProperty, SetProperty（通用版本）
+- [x] 属性节点：GetProperty, SetProperty（通用版本）
 
-**5. 蓝图自定义变量** ⭐⭐⭐
+**5. 蓝图自定义变量** ⭐⭐⭐ ✅
 - [x] **变量定义系统**
   - [x] 在蓝图中定义局部变量
   - [x] 支持常见类型（Int, Float, Bool, String, Vector2/3, GameObject, Transform, Color）
@@ -66,13 +66,11 @@
   - [x] 变量类型修改
   - [x] 变量默认值编辑（所有类型）
   - [ ] 变量分组/排序
-- [ ] **编辑器增强**
-  - [ ] 变量选择器（下拉菜单）
-  - [ ] 节点上显示变量名
+- [x] **编辑器增强**
+  - [x] 变量选择器（下拉菜单）— `CreateVariableGUIDSelector`
+  - [x] 节点上显示变量名 — `GetDisplayName()` / `RefreshNodeTitle()`
 - [ ] **变量作用域**
   - [x] 局部变量（当前蓝图）
-  - [ ] 全局变量（跨蓝图共享，可选）
-  - [ ] 静态变量支持（可选）
 
 **6. 编辑器优化** ⭐
 - [ ] 节点搜索框（Ctrl+Space 唤起）
@@ -101,7 +99,7 @@
   - [ ] 添加错误码和文档链接
   - [ ] 支持自定义错误处理器
 
-**9. 数据类型传递优化** ⭐⭐⭐
+**9. 数据类型传递优化** ⭐⭐⭐ ✅
 - [x] **显式类型转换节点**
   - [x] 实现 `TypeConverterNode` 基类
   - [x] 实现常用转换节点（Float↔Int, Vector3↔Vector2, String↔Number）
@@ -112,32 +110,32 @@
   - [x] Vector3/Vector2/GameObject/Transform/Color 类型端口
   - [ ] Quaternion 等其他 Unity 常用类型
 
-**10. ShizukuClass 和 ShizukuFunction 支持** ⭐⭐⭐⭐
-- [ ] **Attribute 定义**
-  - [ ] `[ShizukuClass]` - 标记类可在蓝图中使用
-  - [ ] `[ShizukuFunction]` - 标记方法可生成蓝图节点
-  - [ ] 支持元数据（DisplayName、Category、Description 等）
-- [ ] **注册中心**
-  - [ ] `ShizukuTypeRegistry` - 反射扫描和注册系统
-  - [ ] 类型信息缓存（ShizukuClassInfo、ShizukuFunctionInfo）
-  - [ ] 编辑器下自动重新扫描（InitializeOnLoad）
-- [ ] **自定义类型支持**
-  - [ ] 作为变量类型（GraphVariable 扩展）
-  - [ ] 作为端口类型（CreatePortForType 扩展）
-  - [ ] 泛型端口类 `ShizukuClassParameterEdgePort<T>`
-- [ ] **函数节点代码生成**
-  - [ ] `ShizukuFunctionNodeGenerator` - 代码生成工具
-  - [ ] 为每个 [ShizukuFunction] 生成专用节点类
-  - [ ] 自动创建输入/输出端口
-  - [ ] 支持参数和返回值映射
-  - [ ] 生成节点管理窗口
-- [ ] **SearchWindow 集成**
-  - [ ] 在节点搜索中显示函数节点
-  - [ ] 按类型/分类组织菜单
-  - [ ] 支持快速搜索和过滤
+**10. ShizukuClass 和 ShizukuFunction 支持** ⭐⭐⭐⭐ ✅
+- [x] **Attribute 定义**
+  - [x] `[ShizukuClass]` - 标记类可在蓝图中使用
+  - [x] `[ShizukuFunction]` - 标记方法可生成蓝图节点
+  - [x] 支持元数据（DisplayName、Category、Description 等）
+- [x] **注册中心**
+  - [x] `ShizukuTypeRegistry` - 反射扫描和注册系统
+  - [x] 类型信息缓存（ShizukuClassInfo、ShizukuFunctionInfo）
+  - [x] 编辑器下自动重新扫描（InitializeOnLoad）
+- [x] **自定义类型支持**
+  - [x] 作为变量类型（GraphVariable 扩展）
+  - [x] 作为端口类型（CreatePortForType 扩展）
+  - [x] 泛型端口类 `ShizukuClassParameterEdgePort<T>`
+- [x] **函数节点代码生成**
+  - [x] `ShizukuFunctionNodeGenerator` - 代码生成工具
+  - [x] 为每个 [ShizukuFunction] 生成专用节点类
+  - [x] 自动创建输入/输出端口
+  - [x] 支持参数和返回值映射
+  - [x] 生成节点管理窗口
+- [x] **SearchWindow 集成**
+  - [x] 在节点搜索中显示函数节点
+  - [x] 按类型/分类组织菜单
+  - [x] 支持快速搜索和过滤
 - [ ] **高级功能**
   - [ ] 泛型方法支持（指定具体类型）
-  - [ ] 实例方法 vs 静态方法
+  - [x] 实例方法 vs 静态方法
   - [ ] 重载方法处理
   - [ ] 可选参数和默认值
 
@@ -150,29 +148,39 @@
 
 #### 功能列表
 
-**1. 调试器基础架构** ⭐⭐⭐
-- [ ] `ShizukuDebugger` 单例管理器
-- [ ] 节点执行历史记录
-- [ ] 执行状态可视化（运行中/已完成/错误）
+**1. 调试器基础架构** ⭐⭐⭐ ✅
+- [x] `ShizukuDebugger` 静态管理器
+- [x] 节点执行历史记录（帧缓冲双队列）
+- [x] 执行状态可视化（运行中/暂停/断点命中）
+- [x] 断点快照系统（`DebugSnapshot` + `RuntimeVariableStore.Clone`）
 
-**2. 断点系统** ⭐⭐⭐
-- [ ] 节点断点设置/移除
-- [ ] 断点触发时暂停执行
-- [ ] 继续执行 / 单步执行
+**2. 断点系统** ⭐⭐⭐ ✅
+- [x] 节点断点设置/移除（`ShizukuRunnableNode.HasBreakPoint`）
+- [x] 断点触发时暂停执行（快照 + 恢复点机制）
+- [x] 继续执行 / 单步执行（`StepExecute` / `ContinueExecute`）
 - [ ] 条件断点（高级）
 
-**3. 变量监视** ⭐⭐
-- [ ] 实时查看节点输入/输出值
-- [ ] 监视窗口（类似 Watch 窗口）
+**3. 变量监视** ⭐⭐ ✅
+- [x] 断点快照变量查看（调试信息面板）
+- [x] 监视窗口（变量面板显示快照时刻变量值）
 - [ ] 支持表达式求值（高级）
 
-**4. 执行可视化** ⭐⭐
-- [ ] 当前执行节点高亮显示
+**4. 执行可视化** ⭐⭐ ✅
+- [x] 当前执行节点高亮显示（绿色边框 `.debug-executed`）
+- [x] 断点暂停节点高亮（黄色边框 `.debug-paused`）
+- [x] 断点红色标记（节点左侧红点）
 - [ ] 执行路径动画
 - [ ] 数据流动画（显示值传递过程）
 - [ ] 性能热点标注（慢节点标红）
 
-**5. 性能分析** ⭐
+**5. 调试编辑器 UI** ⭐⭐⭐ ✅
+- [x] 调试工具栏（Debug 开关/继续/单步/停止按钮）
+- [x] 调试状态显示（当前状态、暂停节点名、帧号）
+- [x] 调试信息面板（快照变量值查看）
+- [x] 右键菜单断点操作
+- [x] Play 模式自动清理
+
+**6. 性能分析** ⭐
 - [ ] 节点执行耗时统计
 - [ ] 调用次数统计
 - [ ] 性能报告导出
@@ -441,5 +449,5 @@
 - 版本发布日期为预估，实际可能延后
 - 标注 ⭐ 的功能为核心优先功能
 
-**最后更新**：2026-03-02
+**最后更新**：2026-03-20
 **下次更新**：每月第一个周一

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-public class ShizukuNormalNode : ShizukuNodeBase
+public abstract class ShizukuNormalNode : ShizukuNodeBase
 {
     // 用于editor下，向后的控制port
     [NonSerialized]
@@ -39,15 +39,16 @@ public class ShizukuRootNode : ShizukuNormalNode
     [SerializeField]
     protected ChainPort _nextPort = new() { Name = "next" };
 
-    public void StartExcute()
+    public ExecuteResult StartExcute()
     {
         var nextNodeGUID = _nextPort.NextNodeGuid;
         if (_parentGraph.Guid2NodeMap.TryGetValue(nextNodeGUID, out var nextNode))
         {
             if (nextNode is ShizukuRunnableNode runnable)
             {
-                runnable.Execute();
+                return runnable.Execute();
             }
         }
+        return ExecuteResult.Continue;
     }
 }

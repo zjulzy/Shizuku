@@ -1,4 +1,3 @@
-
 #title-label {
     -unity-text-align: middle-center;
     -unity-font-style: bold;
@@ -30,3 +29,17 @@
     align-items: flex-end;
 }
 
+
+/* ========== Debug 可视化样式 ========== */
+
+/* 断点暂停的节点 - 黄色边框 */
+.debug-paused #node-border {
+    border-width: 3px !important;
+    border-color: rgba(255, 200, 0, 1) !important;
+}
+
+/* 本帧执行过的节点 - 绿色边框 */
+.debug-executed #node-border {
+    border-width: 2px !important;
+    border-color: rgba(0, 220, 80, 0.9) !important;
+}

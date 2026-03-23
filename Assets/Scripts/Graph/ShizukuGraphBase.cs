@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEditorInternal;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ShizukuGraph", menuName = "Shizuku/Graph", order = 1)]
-public partial class ShizukuGraphBase :ScriptableObject
+public class ShizukuGraphBase : ScriptableObject
 {
     [SerializeField]
     public string GUID;
@@ -38,18 +36,44 @@ public partial class ShizukuGraphBase :ScriptableObject
     private Dictionary<string , ParameterEdge> _guid2EdgeMap = new Dictionary<string, ParameterEdge>();
     public Dictionary<string , ParameterEdge> Guid2EdgeMap => _guid2EdgeMap;
     
-    // 运行时变量存储（分类型字典，零装箱）
-    [NonSerialized] private Dictionary<string, int> _runtimeInts;
-    [NonSerialized] private Dictionary<string, float> _runtimeFloats;
-    [NonSerialized] private Dictionary<string, bool> _runtimeBools;
-    [NonSerialized] private Dictionary<string, string> _runtimeStrings;
-    [NonSerialized] private Dictionary<string, Vector2> _runtimeVector2s;
-    [NonSerialized] private Dictionary<string, Vector3> _runtimeVector3s;
-    [NonSerialized] private Dictionary<string, GameObject> _runtimeGameObjects;
-    [NonSerialized] private Dictionary<string, Transform> _runtimeTransforms;
-    [NonSerialized] private Dictionary<string, Color> _runtimeColors;
+    // 运行时变量存储
+    [NonSerialized] private RuntimeVariableStore _variableStore;
+    public RuntimeVariableStore VariableStore => _variableStore;
     
+    // 调试恢复点：断点/单步中断后，记录从哪个节点恢复执行
+    [NonSerialized] public string PendingResumeNodeGuid;
+
+    #region Debug 相关
+
+    /// <summary>
+    /// 给节点设置/取消断点
+    /// </summary>
+    public void ToggleBreakpoint(string nodeGuid)
+    {
+        if (_guid2NodeMap.TryGetValue(nodeGuid, out var node) && node is ShizukuRunnableNode runnable)
+        {
+            runnable.HasBreakPoint = !runnable.HasBreakPoint;
+        }
+    }
     
+    /// <summary>
+    /// 拍摄当前状态的快照（断点命中时由节点调用）
+    /// </summary>
+    public DebugSnapshot CaptureSnapshot(string pausedAtNodeGuid)
+    {
+        var clonedGraph = Instantiate(this);
+        clonedGraph.name = $"{name}_DebugSnapshot";
+        clonedGraph._variableStore = _variableStore?.Clone();
+        
+        return new DebugSnapshot
+        {
+            FrameCount = Time.frameCount,
+            PausedAtNodeGuid = pausedAtNodeGuid,
+            GraphClone = clonedGraph,
+        };
+    }
+
+    #endregion
     
     public void AddNode(ShizukuNodeBase node)
     {
@@ -91,169 +115,110 @@ public partial class ShizukuGraphBase :ScriptableObject
     
     public void Update()
     {
-        if (!string.IsNullOrEmpty(RootNodeGUID))
+        if (string.IsNullOrEmpty(RootNodeGUID))
+            return;
+        
+        if (!ShizukuDebugger.Enabled)
         {
-            if (_guid2NodeMap.TryGetValue(RootNodeGUID, out var rootNode))
+            // ---- 正常模式：递归一帧跑完 ----
+            if (_guid2NodeMap.TryGetValue(RootNodeGUID, out var rootNode) && rootNode is ShizukuRootNode root)
             {
-                if (rootNode is ShizukuRootNode)
-                {
-                    (rootNode as ShizukuRootNode).StartExcute();
-                }
+                root.StartExcute();
             }
+            return;
         }
+        
+        // ---- Debug 模式 ----
+        
+        ShizukuDebugger.BeginFrame();
+        
+        // 暂停中 → 什么都不做，等编辑器按钮驱动 StepExecute / ContinueExecute
+        if (ShizukuDebugger.IsPaused)
+            return;
+        
+        // 有恢复点 → 说明上次被断点/单步中断了，等编辑器按钮驱动，不在 Update 里自动恢复
+        if (!string.IsNullOrEmpty(PendingResumeNodeGuid))
+            return;
+        
+        // 无恢复点 → 新的一帧，从 Root 开始执行（可能碰到断点）
+        if (_guid2NodeMap.TryGetValue(RootNodeGUID, out var debugRootNode) && debugRootNode is ShizukuRootNode debugRoot)
+        {
+            debugRoot.StartExcute();
+        }
+    }
+    
+    /// <summary>
+    /// 由编辑器"单步"按钮调用，同帧内执行一个节点后暂停
+    /// </summary>
+    public void StepExecute()
+    {
+        if (string.IsNullOrEmpty(PendingResumeNodeGuid))
+            return;
+        
+        if (!_guid2NodeMap.TryGetValue(PendingResumeNodeGuid, out var node) || node is not ShizukuRunnableNode runnable)
+            return;
+        
+        // 设置单步标志，同时告知调试器跳过恢复起点节点的断点检查
+        ShizukuDebugger.Step(PendingResumeNodeGuid);
+        
+        // 清除恢复点（Execute 内部如果再次中断会重新设置）
+        PendingResumeNodeGuid = null;
+        
+        runnable.Execute();
+    }
+    
+    /// <summary>
+    /// 由编辑器"继续"按钮调用，同帧内从断点处继续执行直到链结束或下一个断点
+    /// </summary>
+    public void ContinueExecute()
+    {
+        if (string.IsNullOrEmpty(PendingResumeNodeGuid))
+            return;
+        
+        if (!_guid2NodeMap.TryGetValue(PendingResumeNodeGuid, out var node) || node is not ShizukuRunnableNode runnable)
+            return;
+        
+        // 告知调试器跳过恢复起点节点的断点检查
+        ShizukuDebugger.Continue(PendingResumeNodeGuid);
+        
+        // 清除恢复点
+        PendingResumeNodeGuid = null;
+        
+        runnable.Execute();
     }
     
     #region 变量管理
     
     /// <summary>
-    /// 初始化运行时变量存储（零装箱）
+    /// 初始化运行时变量存储
     /// </summary>
     private void InitVariables()
     {
-        _runtimeInts = new Dictionary<string, int>();
-        _runtimeFloats = new Dictionary<string, float>();
-        _runtimeBools = new Dictionary<string, bool>();
-        _runtimeStrings = new Dictionary<string, string>();
-        _runtimeVector2s = new Dictionary<string, Vector2>();
-        _runtimeVector3s = new Dictionary<string, Vector3>();
-        _runtimeGameObjects = new Dictionary<string, GameObject>();
-        _runtimeTransforms = new Dictionary<string, Transform>();
-        _runtimeColors = new Dictionary<string, Color>();
-        
-        // 初始化自定义类型字典（由生成代码实现）
-        InitCustomTypeVariables();
-        
-        foreach (var variable in _variables)
-        {
-            switch (variable.Type)
-            {
-                case VariableType.Int:
-                    _runtimeInts[variable.GUID] = variable.IntValue;
-                    break;
-                case VariableType.Float:
-                    _runtimeFloats[variable.GUID] = variable.FloatValue;
-                    break;
-                case VariableType.Bool:
-                    _runtimeBools[variable.GUID] = variable.BoolValue;
-                    break;
-                case VariableType.String:
-                    _runtimeStrings[variable.GUID] = variable.StringValue;
-                    break;
-                case VariableType.Vector2:
-                    _runtimeVector2s[variable.GUID] = variable.Vector2Value;
-                    break;
-                case VariableType.Vector3:
-                    _runtimeVector3s[variable.GUID] = variable.Vector3Value;
-                    break;
-                case VariableType.GameObject:
-                    _runtimeGameObjects[variable.GUID] = variable.GameObjectValue;
-                    break;
-                case VariableType.Transform:
-                    _runtimeTransforms[variable.GUID] = variable.TransformValue;
-                    break;
-                case VariableType.Color:
-                    _runtimeColors[variable.GUID] = variable.ColorValue;
-                    break;
-                default:
-                    // 自定义类型由生成代码处理
-                    InitCustomTypeVariable(variable);
-                    break;
-            }
-        }
+        _variableStore = new RuntimeVariableStore();
+        _variableStore.Init();
+        _variableStore.LoadFromVariables(_variables);
     }
     
-    /// <summary>
-    /// 初始化自定义类型字典（由生成代码实现）
-    /// </summary>
-    partial void InitCustomTypeVariables();
+    // 零装箱的变量访问方法（委托给 RuntimeVariableStore）
+    public bool TryGetVariableInt(string guid, out int value) => _variableStore.Ints.TryGetValue(guid, out value);
+    public bool TryGetVariableFloat(string guid, out float value) => _variableStore.Floats.TryGetValue(guid, out value);
+    public bool TryGetVariableBool(string guid, out bool value) => _variableStore.Bools.TryGetValue(guid, out value);
+    public bool TryGetVariableString(string guid, out string value) => _variableStore.Strings.TryGetValue(guid, out value);
+    public bool TryGetVariableVector2(string guid, out Vector2 value) => _variableStore.Vector2s.TryGetValue(guid, out value);
+    public bool TryGetVariableVector3(string guid, out Vector3 value) => _variableStore.Vector3s.TryGetValue(guid, out value);
+    public bool TryGetVariableGameObject(string guid, out GameObject value) => _variableStore.GameObjects.TryGetValue(guid, out value);
+    public bool TryGetVariableTransform(string guid, out Transform value) => _variableStore.Transforms.TryGetValue(guid, out value);
+    public bool TryGetVariableColor(string guid, out Color value) => _variableStore.Colors.TryGetValue(guid, out value);
     
-    /// <summary>
-    /// 初始化单个自定义类型变量（由生成代码实现）
-    /// </summary>
-    partial void InitCustomTypeVariable(GraphVariable variable);
-    
-    // 零装箱的泛型变量访问方法
-    public bool TryGetVariableInt(string guid, out int value)
-    {
-        if (_runtimeInts != null && _runtimeInts.TryGetValue(guid, out value))
-            return true;
-        value = default;
-        return false;
-    }
-    
-    public bool TryGetVariableFloat(string guid, out float value)
-    {
-        if (_runtimeFloats != null && _runtimeFloats.TryGetValue(guid, out value))
-            return true;
-        value = default;
-        return false;
-    }
-    
-    public bool TryGetVariableBool(string guid, out bool value)
-    {
-        if (_runtimeBools != null && _runtimeBools.TryGetValue(guid, out value))
-            return true;
-        value = default;
-        return false;
-    }
-    
-    public bool TryGetVariableString(string guid, out string value)
-    {
-        if (_runtimeStrings != null && _runtimeStrings.TryGetValue(guid, out value))
-            return true;
-        value = default;
-        return false;
-    }
-    
-    public bool TryGetVariableVector2(string guid, out Vector2 value)
-    {
-        if (_runtimeVector2s != null && _runtimeVector2s.TryGetValue(guid, out value))
-            return true;
-        value = default;
-        return false;
-    }
-    
-    public bool TryGetVariableVector3(string guid, out Vector3 value)
-    {
-        if (_runtimeVector3s != null && _runtimeVector3s.TryGetValue(guid, out value))
-            return true;
-        value = default;
-        return false;
-    }
-    
-    public bool TryGetVariableGameObject(string guid, out GameObject value)
-    {
-        if (_runtimeGameObjects != null && _runtimeGameObjects.TryGetValue(guid, out value))
-            return true;
-        value = default;
-        return false;
-    }
-    
-    public bool TryGetVariableTransform(string guid, out Transform value)
-    {
-        if (_runtimeTransforms != null && _runtimeTransforms.TryGetValue(guid, out value))
-            return true;
-        value = default;
-        return false;
-    }
-    
-    public bool TryGetVariableColor(string guid, out Color value)
-    {
-        if (_runtimeColors != null && _runtimeColors.TryGetValue(guid, out value))
-            return true;
-        value = default;
-        return false;
-    }
-    
-    public void SetVariableInt(string guid, int value) { if (_runtimeInts != null) _runtimeInts[guid] = value; }
-    public void SetVariableFloat(string guid, float value) { if (_runtimeFloats != null) _runtimeFloats[guid] = value; }
-    public void SetVariableBool(string guid, bool value) { if (_runtimeBools != null) _runtimeBools[guid] = value; }
-    public void SetVariableString(string guid, string value) { if (_runtimeStrings != null) _runtimeStrings[guid] = value; }
-    public void SetVariableVector2(string guid, Vector2 value) { if (_runtimeVector2s != null) _runtimeVector2s[guid] = value; }
-    public void SetVariableVector3(string guid, Vector3 value) { if (_runtimeVector3s != null) _runtimeVector3s[guid] = value; }
-    public void SetVariableGameObject(string guid, GameObject value) { if (_runtimeGameObjects != null) _runtimeGameObjects[guid] = value; }
-    public void SetVariableTransform(string guid, Transform value) { if (_runtimeTransforms != null) _runtimeTransforms[guid] = value; }
-    public void SetVariableColor(string guid, Color value) { if (_runtimeColors != null) _runtimeColors[guid] = value; }
+    public void SetVariableInt(string guid, int value) => _variableStore.Ints[guid] = value;
+    public void SetVariableFloat(string guid, float value) => _variableStore.Floats[guid] = value;
+    public void SetVariableBool(string guid, bool value) => _variableStore.Bools[guid] = value;
+    public void SetVariableString(string guid, string value) => _variableStore.Strings[guid] = value;
+    public void SetVariableVector2(string guid, Vector2 value) => _variableStore.Vector2s[guid] = value;
+    public void SetVariableVector3(string guid, Vector3 value) => _variableStore.Vector3s[guid] = value;
+    public void SetVariableGameObject(string guid, GameObject value) => _variableStore.GameObjects[guid] = value;
+    public void SetVariableTransform(string guid, Transform value) => _variableStore.Transforms[guid] = value;
+    public void SetVariableColor(string guid, Color value) => _variableStore.Colors[guid] = value;
     
     // 编辑器辅助方法
     public GraphVariable GetVariableByGUID(string guid)

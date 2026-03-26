@@ -20,6 +20,7 @@ public class SubtractNode_Int : ShizukuValueNode
 
     public override void GetOutputValues()
     {
+        GetInputValues();
         _result.Value = _a.Value - _b.Value;
     }
 }
@@ -43,6 +44,7 @@ public class SubtractNode_Float : ShizukuValueNode
 
     public override void GetOutputValues()
     {
+        GetInputValues();
         _result.Value = _a.Value - _b.Value;
     }
 }
@@ -66,6 +68,7 @@ public class SubtractNode_Vector2 : ShizukuValueNode
 
     public override void GetOutputValues()
     {
+        GetInputValues();
         _result.Value = _a.Value - _b.Value;
     }
 }

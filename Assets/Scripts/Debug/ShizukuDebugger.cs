@@ -19,6 +19,12 @@ public class DebugSnapshot
     /// 整个图的深拷贝（包含所有序列化数据 + 运行时变量）
     /// </summary>
     public ShizukuGraphBase GraphClone;
+    
+    /// <summary>
+    /// Behavior 字段快照（仅蓝图类图有值）
+    /// Key: 字段名, Value: 断点时刻的字段值
+    /// </summary>
+    public Dictionary<string, object> BehaviorFields;
 }
 
 /// <summary>

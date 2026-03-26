@@ -16,7 +16,7 @@ using UnityEngine;
 /// 
 /// 新增功能：
 /// - 事件系统：支持蓝图重写Behavior的虚拟方法
-/// - 属性访问：支持蓝图读写Behavior的protected字段
+/// - 字段访问：支持蓝图读写Behavior的public/protected字段
 /// </remarks>
 public abstract class ShizukuBluePrint : ShizukuGraphBase
 {
@@ -47,8 +47,8 @@ public abstract class ShizukuBluePrint<T> : ShizukuBluePrint where T : Blueprint
         // 注册蓝图事件
         RegisterBlueprintEvents(behavior);
 
-        // 注册属性访问器
-        RegisterPropertyAccessors(behavior);
+        // 注册字段访问器
+        RegisterFieldAccessors(behavior);
     }
 
     #region 注册各种东西
@@ -78,11 +78,11 @@ public abstract class ShizukuBluePrint<T> : ShizukuBluePrint where T : Blueprint
     }
 
     /// <summary>
-    /// 注册属性访问器
-    /// 通过反射为Behavior的protected字段生成访问器
+    /// 注册字段访问器
+    /// 通过反射为Behavior的public/protected字段生成访问器
     /// 使用静态缓存优化性能（首次反射，后续复用）
     /// </summary>
-    protected virtual void RegisterPropertyAccessors(T behavior)
+    protected virtual void RegisterFieldAccessors(T behavior)
     {
         // 首次调用时构建缓存
         if (!_accessorsCached)
@@ -106,8 +106,10 @@ public abstract class ShizukuBluePrint<T> : ShizukuBluePrint where T : Blueprint
     }
 
     /// <summary>
-    /// 构建属性访问器缓存（只在首次调用时执行）
-    /// 基于语法树，会比正常的基于反射的快一些
+    /// 构建字段访问器缓存（只在首次调用时执行）
+    /// 基于 Expression Tree，编译后比反射快约 50 倍
+    /// 只注册用户在 Behavior 子类中显式声明的 public/protected 字段，
+    /// 通过 DeclaredOnly 过滤掉 MonoBehaviour / Component / BlueprintBehavior 等基类的成员。
     /// </summary>
     private static void BuildAccessorCache()
     {
@@ -115,12 +117,15 @@ public abstract class ShizukuBluePrint<T> : ShizukuBluePrint where T : Blueprint
         _cachedSetters = new Dictionary<string, Action<T, object>>();
 
         var behaviorType = typeof(T);
-        var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        // 只收集声明在 T 自身的成员（DeclaredOnly 排除所有继承成员）
+        var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
-        // 字段访问器
         foreach (var field in behaviorType.GetFields(flags))
         {
-            if (field.Name.StartsWith("m_")) continue;
+            // 只暴露 public 和 protected 字段
+            if (!field.IsPublic && !field.IsFamily) continue;
+            // 跳过编译器生成的 backing field 和 Unity 内部字段
+            if (field.Name.StartsWith("<") || field.Name.StartsWith("m_")) continue;
 
             var fieldName = field.Name;
 
@@ -129,10 +134,10 @@ public abstract class ShizukuBluePrint<T> : ShizukuBluePrint where T : Blueprint
             var fieldAccess = Expression.Field(paramGet, field);
             var convertGet = Expression.Convert(fieldAccess, typeof(object));
             var lambdaGet = Expression.Lambda<Func<T, object>>(convertGet, paramGet);
-            _cachedGetters[fieldName] = lambdaGet.Compile();  // ✅ 编译一次，快 50 倍
+            _cachedGetters[fieldName] = lambdaGet.Compile();
 
             // === Expression Tree 生成 Setter ===
-            if (!field.IsInitOnly)  // 不是 readonly
+            if (!field.IsInitOnly)
             {
                 var paramSet = Expression.Parameter(typeof(T), "b");
                 var paramValue = Expression.Parameter(typeof(object), "value");
@@ -147,38 +152,63 @@ public abstract class ShizukuBluePrint<T> : ShizukuBluePrint where T : Blueprint
                 _cachedSetters[fieldName] = lambdaSet.Compile();
             }
         }
+    }
 
-        // 属性访问器（类似）
-        foreach (var property in behaviorType.GetProperties(flags))
+    #endregion
+
+    #region Debug 快照支持
+
+    /// <summary>
+    /// 重写快照：额外捕获 Behavior 上所有 public/protected 字段的当前值
+    /// </summary>
+    public override DebugSnapshot CaptureSnapshot(string pausedAtNodeGuid)
+    {
+        var snapshot = base.CaptureSnapshot(pausedAtNodeGuid);
+        
+        if (_behavior != null && _cachedGetters != null)
         {
-            if (!property.CanRead && !property.CanWrite) continue;
-
-            var propertyName = property.Name;
-
-            // Getter
-            if (property.CanRead)
+            var props = new Dictionary<string, object>();
+            foreach (var kvp in _cachedGetters)
             {
-                var paramGet = Expression.Parameter(typeof(T), "b");
-                var propertyAccess = Expression.Property(paramGet, property);
-                var convertGet = Expression.Convert(propertyAccess, typeof(object));
-                var lambdaGet = Expression.Lambda<Func<T, object>>(convertGet, paramGet);
-                _cachedGetters[propertyName] = lambdaGet.Compile();
+                try
+                {
+                    props[kvp.Key] = kvp.Value(_behavior);
+                }
+                catch
+                {
+                    props[kvp.Key] = "<error>";
+                }
             }
+            snapshot.BehaviorFields = props;
+        }
+        
+        return snapshot;
+    }
 
-            // Setter
-            if (property.CanWrite)
+    /// <summary>
+    /// 重写还原：额外把快照中的 Behavior 字段写回。
+    /// 只涉及 public/protected 字段，无属性 setter 的副作用风险。
+    /// </summary>
+    protected override void RestoreVariablesFromSnapshot()
+    {
+        base.RestoreVariablesFromSnapshot();
+        
+        var snapshot = ShizukuDebugger.CurrentSnapshot;
+        if (snapshot?.BehaviorFields == null || _behavior == null || _cachedSetters == null)
+            return;
+        
+        foreach (var kvp in snapshot.BehaviorFields)
+        {
+            if (_cachedSetters.TryGetValue(kvp.Key, out var setter))
             {
-                var paramSet = Expression.Parameter(typeof(T), "b");
-                var paramValue = Expression.Parameter(typeof(object), "value");
-                var convertValue = Expression.Convert(paramValue, property.PropertyType);
-                var assignExpr = Expression.Assign(
-                    Expression.Property(paramSet, property),
-                    convertValue
-                );
-                var lambdaSet = Expression.Lambda<Action<T, object>>(
-                    assignExpr, paramSet, paramValue
-                );
-                _cachedSetters[propertyName] = lambdaSet.Compile();
+                try
+                {
+                    setter(_behavior, kvp.Value);
+                }
+                catch
+                {
+                    // readonly 字段或类型不匹配，静默跳过
+                }
             }
         }
     }

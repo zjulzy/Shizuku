@@ -18,7 +18,7 @@ using UnityEngine;
 /// - 蓝图会在Init时主动查找并绑定到持有它的Behavior实例
 /// - 生成的蓝图类使用泛型ShizukuBluePrint&lt;T&gt;，保持类型安全
 /// - 支持事件系统：允许蓝图"重写"Behavior中的虚拟方法
-/// - 支持属性访问：允许蓝图读写Behavior中的protected字段
+/// - 支持字段访问：允许蓝图读写Behavior中的public/protected字段
 /// </remarks>
 public abstract class BlueprintBehavior<T> : MonoBehaviour where T : BlueprintBehavior<T>
 {

@@ -330,6 +330,20 @@ public class ShizukuGraphWindow : EditorWindow
         {
             AddInfoLabel("(快照无数据)", new Color(0.5f, 0.5f, 0.5f));
         }
+        
+        // 显示 Behavior 字段（蓝图类图才有）
+        if (snapshot.BehaviorFields != null && snapshot.BehaviorFields.Count > 0)
+        {
+            AddInfoSeparator();
+            AddInfoLabel("🎮 Behavior 字段 (快照)", new Color(1f, 0.8f, 0.6f));
+            
+            foreach (var kvp in snapshot.BehaviorFields)
+            {
+                string valueStr = kvp.Value != null ? kvp.Value.ToString() : "null";
+                string typeStr = kvp.Value != null ? kvp.Value.GetType().Name : "?";
+                AddVariableRow(kvp.Key, typeStr, valueStr);
+            }
+        }
     }
     
     private string GetVariableValueString(RuntimeVariableStore store, GraphVariable variable)

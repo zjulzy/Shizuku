@@ -24,7 +24,13 @@ MonoBehaviour:
   - rid: 254579876135174216
   - rid: 254579904546340925
   - rid: 254579904546340931
-  - rid: 254580064646332475
+  - rid: 254580426323263547
+  - rid: 254580426323263548
+  - rid: 254580426323263550
+  - rid: 254580426323263551
+  - rid: 254580426323263557
+  - rid: 254580426323263558
+  - rid: 254580426323263559
   _edges:
   - rid: 522454395759624272
   - rid: 522454395759624273
@@ -33,8 +39,12 @@ MonoBehaviour:
   - rid: 254579876135174147
   - rid: 254579904546340932
   - rid: 254579904546340933
+  - rid: 254580426323263552
+  - rid: 254580426323263553
+  - rid: 254580426323263560
+  - rid: 254580426323263561
   _groups: []
-  RootNodeGUID: 
+  RootNodeGUID: 5c0c152e-46a4-4f60-bdf7-a8d983428a33
   _variables:
   - Custom_SkillDataValue:
       SkillName: 
@@ -144,7 +154,7 @@ MonoBehaviour:
           z: 163.19998
           w: 76
         _nextPort:
-          NextNodeGuid: 
+          NextNodeGuid: 898dfeab-49a7-4f50-8b91-5de4b82c486a
           Name: next
         EventName: OnDeath
         EventParameters: []
@@ -213,36 +223,205 @@ MonoBehaviour:
         IsOut: 1
         Value: 50000.00
         DefaultValue: 
-    - rid: 254580064646332475
-      type: {class: GetVariableNode_Custom_SkillData, ns: , asm: Assembly-CSharp}
+    - rid: 254580426323263547
+      type: {class: ShizukuRootNode, ns: , asm: Assembly-CSharp}
       data:
-        GUID: 9b5e51de-7ae0-462b-92d7-f506908d1fc9
+        GUID: 5c0c152e-46a4-4f60-bdf7-a8d983428a33
         PositionAndSize:
-          x: 469.6
-          y: 216.00002
-          z: 146.40002
-          w: 76.80002
-        VariableGUID: 
+          x: 411.5999
+          y: 1344.7482
+          z: 124.80005
+          w: 76
+        _nextPort:
+          NextNodeGuid: d903233b-1021-4bb7-a3f9-06bd27b01ea1
+          Name: next
+    - rid: 254580426323263548
+      type: {class: GetPropertyNode_Float, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 95347ba8-2f1d-4668-98ac-30c9a1328bd1
+        PositionAndSize:
+          x: 326.79993
+          y: 1475.9481
+          z: 177.60004
+          w: 76.80005
+        PropertyName: health
         Output:
-          rid: 254580064646332476
-    - rid: 254580064646332476
-      type: {class: SkillDataParameterEdgePort, ns: , asm: Assembly-CSharp}
+          rid: 254580426323263549
+    - rid: 254580426323263549
+      type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
         Name: Value
         InputEdgeGUID: 
         IsOut: 1
-        Value:
-          SkillName: 
-          Cooldown: 0
-          ManaCost: 0
-          Damage: 0
-          Range: 0
-        DefaultValue:
-          SkillName: 
-          Cooldown: 0
-          ManaCost: 0
-          Damage: 0
-          Range: 0
+        Value: 100
+        DefaultValue: 0
+    - rid: 254580426323263550
+      type: {class: ShizukuLogNode, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: d903233b-1021-4bb7-a3f9-06bd27b01ea1
+        PositionAndSize:
+          x: 694.8
+          y: 1344.7482
+          z: 157.60004
+          w: 108.80005
+        HasBreakPoint: 0
+        Message:
+          rid: 254580426323263554
+        _nextPort:
+          NextNodeGuid: 
+          Name: next
+    - rid: 254580426323263551
+      type: {class: FloatToStringConverter, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: ae015144-e95f-40c0-9d96-e5076d79de08
+        PositionAndSize:
+          x: 461.19995
+          y: 1590.3481
+          z: 152
+          w: 76.80005
+        _input:
+          rid: 254580426323263555
+        _output:
+          rid: 254580426323263556
+    - rid: 254580426323263552
+      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 760c2e68-d7a8-42dd-bb18-63496ed80c9d
+        OutputNodeGuid: 95347ba8-2f1d-4668-98ac-30c9a1328bd1
+        OutputPortName: Value
+        InputNodeGuid: ae015144-e95f-40c0-9d96-e5076d79de08
+        InputPortName: Float
+    - rid: 254580426323263553
+      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: fb7f91bd-b400-4fd9-bb41-87e58ba66647
+        OutputNodeGuid: ae015144-e95f-40c0-9d96-e5076d79de08
+        OutputPortName: String
+        InputNodeGuid: d903233b-1021-4bb7-a3f9-06bd27b01ea1
+        InputPortName: message
+    - rid: 254580426323263554
+      type: {class: StringParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: message
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: 100.00
+        DefaultValue: 
+    - rid: 254580426323263555
+      type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: Float
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: 100
+        DefaultValue: 0
+    - rid: 254580426323263556
+      type: {class: StringParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: String
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 100.00
+        DefaultValue: 
+    - rid: 254580426323263557
+      type: {class: SetPropertyNode_Float, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 898dfeab-49a7-4f50-8b91-5de4b82c486a
+        PositionAndSize:
+          x: 773.60004
+          y: 820.8
+          z: 193.60004
+          w: 108.79999
+        HasBreakPoint: 0
+        PropertyName: health
+        Input:
+          rid: 254580426323263562
+        _nextPort:
+          NextNodeGuid: 
+          Name: Next
+    - rid: 254580426323263558
+      type: {class: SubtractNode_Float, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 328b8186-64ab-4d82-927a-5407a9b25a7e
+        PositionAndSize:
+          x: 536.0001
+          y: 1050.7203
+          z: 164.79999
+          w: 100.80005
+        _a:
+          rid: 254580426323263563
+        _b:
+          rid: 254580426323263564
+        _result:
+          rid: 254580426323263565
+    - rid: 254580426323263559
+      type: {class: GetPropertyNode_Float, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 53e31d2d-ff07-4d0d-a4f3-eaa336d4ca31
+        PositionAndSize:
+          x: 295.2
+          y: 1128
+          z: 200
+          w: 100
+        PropertyName: health
+        Output:
+          rid: 254580426323263566
+    - rid: 254580426323263560
+      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: 085310fa-1e2c-4729-bbfd-80087029a87c
+        OutputNodeGuid: 53e31d2d-ff07-4d0d-a4f3-eaa336d4ca31
+        OutputPortName: Value
+        InputNodeGuid: 328b8186-64ab-4d82-927a-5407a9b25a7e
+        InputPortName: A
+    - rid: 254580426323263561
+      type: {class: ParameterEdge, ns: , asm: Assembly-CSharp}
+      data:
+        GUID: a8dc7af8-adeb-40a4-a871-a21fb1af4017
+        OutputNodeGuid: 328b8186-64ab-4d82-927a-5407a9b25a7e
+        OutputPortName: Result
+        InputNodeGuid: 898dfeab-49a7-4f50-8b91-5de4b82c486a
+        InputPortName: Value
+    - rid: 254580426323263562
+      type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: Value
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: 0
+        DefaultValue: 0
+    - rid: 254580426323263563
+      type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: A
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: 0
+        DefaultValue: 0
+    - rid: 254580426323263564
+      type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: B
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: 0
+        DefaultValue: -10
+    - rid: 254580426323263565
+      type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: Result
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 0
+        DefaultValue: 0
+    - rid: 254580426323263566
+      type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
+      data:
+        Name: Value
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 0
+        DefaultValue: 0
     - rid: 522454392492261445
       type: {class: BlueprintEventNode, ns: , asm: Assembly-CSharp}
       data:

@@ -59,7 +59,7 @@ public class ShizukuGraphBase : ScriptableObject
     /// <summary>
     /// 拍摄当前状态的快照（断点命中时由节点调用）
     /// </summary>
-    public DebugSnapshot CaptureSnapshot(string pausedAtNodeGuid)
+    public virtual DebugSnapshot CaptureSnapshot(string pausedAtNodeGuid)
     {
         var clonedGraph = Instantiate(this);
         clonedGraph.name = $"{name}_DebugSnapshot";
@@ -158,7 +158,11 @@ public class ShizukuGraphBase : ScriptableObject
         if (!_guid2NodeMap.TryGetValue(PendingResumeNodeGuid, out var node) || node is not ShizukuRunnableNode runnable)
             return;
         
+        // 从快照还原变量状态，防止断点到恢复之间被外部逻辑污染
+        RestoreVariablesFromSnapshot();
+        
         // 设置单步标志，同时告知调试器跳过恢复起点节点的断点检查
+        // 注意：必须在 RestoreVariablesFromSnapshot 之后调用，因为 Step 会清除 CurrentSnapshot
         ShizukuDebugger.Step(PendingResumeNodeGuid);
         
         // 清除恢复点（Execute 内部如果再次中断会重新设置）
@@ -178,6 +182,9 @@ public class ShizukuGraphBase : ScriptableObject
         if (!_guid2NodeMap.TryGetValue(PendingResumeNodeGuid, out var node) || node is not ShizukuRunnableNode runnable)
             return;
         
+        // 从快照还原变量状态，防止断点到恢复之间被外部逻辑污染
+        RestoreVariablesFromSnapshot();
+        
         // 告知调试器跳过恢复起点节点的断点检查
         ShizukuDebugger.Continue(PendingResumeNodeGuid);
         
@@ -185,6 +192,20 @@ public class ShizukuGraphBase : ScriptableObject
         PendingResumeNodeGuid = null;
         
         runnable.Execute();
+    }
+    
+    /// <summary>
+    /// 从调试快照中还原运行时变量，确保恢复执行时的状态与断点时刻一致。
+    /// 断点命中 → Debug.Break() → 帧尾暂停，这之间外部脚本可能修改了变量，
+    /// 所以恢复执行前必须从快照 clone 回来。
+    /// </summary>
+    protected virtual void RestoreVariablesFromSnapshot()
+    {
+        var snapshot = ShizukuDebugger.CurrentSnapshot;
+        if (snapshot?.GraphClone?.VariableStore != null)
+        {
+            _variableStore = snapshot.GraphClone.VariableStore.Clone();
+        }
     }
     
     #region 变量管理

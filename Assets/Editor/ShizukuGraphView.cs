@@ -12,7 +12,6 @@ public partial class ShizukuGraphView : GraphView
 {
     private Vector2 _localMousePosition;
     private ShizukuGraphBase _runtimeGraph;
-    private ShizukuNodeView _entryNode;
 
     private Dictionary<string, ShizukuNodeView> _guidToNodeViewMap = new Dictionary<string, ShizukuNodeView>();
     
@@ -315,44 +314,17 @@ public partial class ShizukuGraphView : GraphView
 
     private void CreateNode<TNode>(Vector2 mousePosition) where TNode : ShizukuNodeBase, new()
     {
-        if (typeof(TNode) == typeof(ShizukuRootNode) && _entryNode != null)
-        {
-            Debug.LogWarning("只能有一个根节点！");
-            return;
-        }
-
-        var node = new TNode();
-
-        var nodeView = new ShizukuNodeView(node, _runtimeGraph);
-        nodeView.InitPort();
-        nodeView.SetPosition(new Rect(mousePosition, new Vector2(200, 100)));
-
-        _runtimeGraph.AddNode(node);
-        AddElement(nodeView);
-        EditorUtility.SetDirty(_runtimeGraph);
-
-        if (typeof(TNode) == typeof(ShizukuRootNode))
-        {
-            _entryNode = nodeView;
-            _runtimeGraph.RootNodeGUID = node.GUID;
-        }
+        CreateNodeFromType(typeof(TNode), mousePosition);
     }
     
     /// <summary>
-    /// 用于 SearchWindow创建节点
-    /// AI-generated
+    /// 通过 Type 创建节点（SearchWindow 和右键菜单统一入口）
     /// </summary>
     public void CreateNodeFromType(Type nodeType, Vector2 mousePosition)
     {
         if (!typeof(ShizukuNodeBase).IsAssignableFrom(nodeType))
         {
             Debug.LogError($"类型 {nodeType.Name} 不是有效的节点类型！");
-            return;
-        }
-
-        if (nodeType == typeof(ShizukuRootNode) && _entryNode != null)
-        {
-            Debug.LogWarning("只能有一个根节点！");
             return;
         }
 
@@ -374,9 +346,9 @@ public partial class ShizukuGraphView : GraphView
             AddElement(nodeView);
             EditorUtility.SetDirty(_runtimeGraph);
 
-            if (nodeType == typeof(ShizukuRootNode))
+            // 只有精确的 ShizukuRootNode（非子类如 BlueprintEventNode）才能作为根节点
+            if (node.GetType() == typeof(ShizukuRootNode) && string.IsNullOrEmpty(_runtimeGraph.RootNodeGUID))
             {
-                _entryNode = nodeView;
                 _runtimeGraph.RootNodeGUID = node.GUID;
             }
             
@@ -428,7 +400,6 @@ public partial class ShizukuGraphView : GraphView
             }
 
             // 清空内部引用
-            _entryNode = null;
             _guidToNodeViewMap.Clear();
         }
     }
@@ -739,10 +710,9 @@ public partial class ShizukuGraphView : GraphView
                 // 处理节点的移除
                 else if (element is ShizukuNodeView nodeView)
                 {
-                    // 如果删除的是根节点，清空引用
-                    if (nodeView == _entryNode)
+                    // 如果删除的恰好是当前根节点，清空引用
+                    if (nodeView.RuntimeNode.GUID == _runtimeGraph.RootNodeGUID)
                     {
-                        _entryNode = null;
                         _runtimeGraph.RootNodeGUID = null;
                     }
 
@@ -779,7 +749,6 @@ public partial class ShizukuGraphView : GraphView
 
         // 清空所有现有元素
         DeleteElements(graphElements.ToList());
-        _entryNode = null;
         _guidToNodeViewMap.Clear();
 
         // 初始化节点
@@ -791,12 +760,6 @@ public partial class ShizukuGraphView : GraphView
                 nodeData.PositionAndSize.w));
             _guidToNodeViewMap[nodeData.GUID] = nodeView;
             AddElement(nodeView);
-
-            // 如果是根节点，设置_entryNode引用
-            if (nodeData is ShizukuRootNode)
-            {
-                _entryNode = nodeView;
-            }
         });
 
         // 初始化控制流连接

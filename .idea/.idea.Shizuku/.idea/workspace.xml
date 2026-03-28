@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/copilotDiffState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/copilotDiffState.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/SubtractNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/SubtractNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,15 +194,13 @@
       <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false" ignored-value-for-modified-check="38932">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="38932" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
-        <list>
-          <MonoRuntime />
-        </list>
+        <list />
       </option>
       <option name="selectedOptions">
         <list />
@@ -273,7 +269,7 @@
       <workItem from="1774272113854" duration="774000" />
       <workItem from="1774279329927" duration="3706000" />
       <workItem from="1774362420384" duration="5078000" />
-      <workItem from="1774538156429" duration="3284000" />
+      <workItem from="1774538156429" duration="3335000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -531,7 +527,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774542137116</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="修复bug">
+      <option name="closed" value="true" />
+      <created>1774542230080</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1774542230080</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -558,7 +562,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="自定义port" />
     <MESSAGE value="自定义控制流节点，以及初步设计蓝图系统" />
     <MESSAGE value="基于ai先尝试实现一下blueprint，与graph结果先隔离" />
     <MESSAGE value="蓝图代码生成器" />
@@ -583,7 +586,8 @@
     <MESSAGE value="为变量node提供抽象层" />
     <MESSAGE value="初步实现debug功能" />
     <MESSAGE value="对蓝图屏蔽蓝图behavior的属性" />
-    <option name="LAST_COMMIT_MESSAGE" value="对蓝图屏蔽蓝图behavior的属性" />
+    <MESSAGE value="修复bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复bug" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -253,7 +253,7 @@ MonoBehaviour:
         Name: Value
         InputEdgeGUID: 
         IsOut: 1
-        Value: 100
+        Value: 120
         DefaultValue: 0
     - rid: 254580426323263550
       type: {class: ShizukuLogNode, ns: , asm: Assembly-CSharp}
@@ -305,7 +305,7 @@ MonoBehaviour:
         Name: message
         InputEdgeGUID: 
         IsOut: 0
-        Value: 100.00
+        Value: 120.00
         DefaultValue: 
     - rid: 254580426323263555
       type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
@@ -313,7 +313,7 @@ MonoBehaviour:
         Name: Float
         InputEdgeGUID: 
         IsOut: 0
-        Value: 100
+        Value: 120
         DefaultValue: 0
     - rid: 254580426323263556
       type: {class: StringParameterEdgePort, ns: , asm: Assembly-CSharp}
@@ -321,7 +321,7 @@ MonoBehaviour:
         Name: String
         InputEdgeGUID: 
         IsOut: 1
-        Value: 100.00
+        Value: 120.00
         DefaultValue: 
     - rid: 254580426323263557
       type: {class: SetPropertyNode_Float, ns: , asm: Assembly-CSharp}
@@ -344,8 +344,8 @@ MonoBehaviour:
       data:
         GUID: 328b8186-64ab-4d82-927a-5407a9b25a7e
         PositionAndSize:
-          x: 536.0001
-          y: 1050.7203
+          x: 536
+          y: 1051.2
           z: 164.79999
           w: 100.80005
         _a:
@@ -388,7 +388,7 @@ MonoBehaviour:
         Name: Value
         InputEdgeGUID: 
         IsOut: 0
-        Value: 0
+        Value: 120
         DefaultValue: 0
     - rid: 254580426323263563
       type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
@@ -396,7 +396,7 @@ MonoBehaviour:
         Name: A
         InputEdgeGUID: 
         IsOut: 0
-        Value: 0
+        Value: 110
         DefaultValue: 0
     - rid: 254580426323263564
       type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
@@ -404,15 +404,15 @@ MonoBehaviour:
         Name: B
         InputEdgeGUID: 
         IsOut: 0
-        Value: 0
-        DefaultValue: -10
+        Value: -10
+        DefaultValue: 10
     - rid: 254580426323263565
       type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
       data:
         Name: Result
         InputEdgeGUID: 
         IsOut: 1
-        Value: 0
+        Value: 120
         DefaultValue: 0
     - rid: 254580426323263566
       type: {class: FloatParameterEdgePort, ns: , asm: Assembly-CSharp}
@@ -420,7 +420,7 @@ MonoBehaviour:
         Name: Value
         InputEdgeGUID: 
         IsOut: 1
-        Value: 0
+        Value: 110
         DefaultValue: 0
     - rid: 522454392492261445
       type: {class: BlueprintEventNode, ns: , asm: Assembly-CSharp}

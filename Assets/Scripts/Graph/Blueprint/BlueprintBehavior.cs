@@ -130,6 +130,10 @@ public abstract class BlueprintBehavior<T> : MonoBehaviour where T : BlueprintBe
         // 初始化蓝图（蓝图会主动绑定到this）
         if (_blueprint != null)
         {
+            // 运行时克隆 SO，避免多个 Behavior 引用同一份蓝图资产导致状态共享
+            _blueprint = Instantiate(_blueprint);
+            _blueprint.name = $"{_blueprint.name}_{GetInstanceID()}";
+            
             // 强制转换：this 在运行时实际上是 T 类型（如 EnemyBehavior）
             _blueprint.InitializeBehavior((T)this);
         }
@@ -152,5 +156,12 @@ public abstract class BlueprintBehavior<T> : MonoBehaviour where T : BlueprintBe
         _blueprintEvents?.Clear();
         _propertyGetters?.Clear();
         _propertySetters?.Clear();
+        
+        // 销毁运行时克隆的蓝图 SO 实例
+        if (_blueprint != null)
+        {
+            Destroy(_blueprint);
+            _blueprint = null;
+        }
     }
 }

@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuDebugger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuDebugger.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +17,9 @@
     <persistenceIdMap>
       <entry key="_U:/projects/game/Unity/Shizuku" value="377AR09yome4aRj4WuHKADIS4Mj" />
     </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedChatMode">
+    <option name="chatModeId" value="Agent" />
   </component>
   <component name="CopilotUserSelectedModel">
     <selectedModels>
@@ -270,6 +274,7 @@
       <workItem from="1774279329927" duration="3706000" />
       <workItem from="1774362420384" duration="5078000" />
       <workItem from="1774538156429" duration="3335000" />
+      <workItem from="1774701335567" duration="5631000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -535,7 +540,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774542230080</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="graph在运行时初始化时需要拷贝一下">
+      <option name="closed" value="true" />
+      <created>1774706303326</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1774706303326</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -562,7 +575,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="自定义控制流节点，以及初步设计蓝图系统" />
     <MESSAGE value="基于ai先尝试实现一下blueprint，与graph结果先隔离" />
     <MESSAGE value="蓝图代码生成器" />
     <MESSAGE value="优化节点间的数据类型传递，将类型转换显式表现出来" />
@@ -587,7 +599,8 @@
     <MESSAGE value="初步实现debug功能" />
     <MESSAGE value="对蓝图屏蔽蓝图behavior的属性" />
     <MESSAGE value="修复bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="修复bug" />
+    <MESSAGE value="graph在运行时初始化时需要拷贝一下" />
+    <option name="LAST_COMMIT_MESSAGE" value="graph在运行时初始化时需要拷贝一下" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

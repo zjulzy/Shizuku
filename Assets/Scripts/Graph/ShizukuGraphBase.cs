@@ -168,7 +168,13 @@ public class ShizukuGraphBase : ScriptableObject
         // 清除恢复点（Execute 内部如果再次中断会重新设置）
         PendingResumeNodeGuid = null;
         
-        runnable.Execute();
+        var result = runnable.Execute();
+        
+        // 链自然结束（最后一个节点没有后续），单步等同于继续，清理残留标志
+        if (result == ExecuteResult.Continue)
+        {
+            ShizukuDebugger.EndStepping();
+        }
     }
     
     /// <summary>

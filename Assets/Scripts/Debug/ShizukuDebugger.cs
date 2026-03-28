@@ -155,6 +155,14 @@ public static class ShizukuDebugger
     }
     
     /// <summary>
+    /// 单步执行后链自然结束（无下一个节点），清理残留的单步标志
+    /// </summary>
+    public static void EndStepping()
+    {
+        _stepping = false;
+    }
+    
+    /// <summary>
     /// 停止调试，重置所有状态
     /// </summary>
     public static void Stop()

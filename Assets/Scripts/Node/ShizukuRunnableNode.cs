@@ -15,17 +15,11 @@ public enum ExecuteResult
 }
 
 [Serializable]
-public abstract class ShizukuRunnableNode : ShizukuNormalNode
+public abstract partial class ShizukuRunnableNode : ShizukuNormalNode
 {
     public sealed override bool SupportControlInput => true;
     public sealed override bool SupportControlOutput => true;
-    
-    
-    #region 编辑器中调试相关
 
-    public bool HasBreakPoint = false;
-
-    #endregion
 
     public override void Init(ShizukuGraphBase parentGraph)
     {
@@ -34,27 +28,14 @@ public abstract class ShizukuRunnableNode : ShizukuNormalNode
 
     public ExecuteResult Execute()
     {
-        // ---- Debug：执行前检查是否需要暂停 ----
+#if UNITY_EDITOR
         if (ShizukuDebugger.Enabled)
         {
-            // 恢复执行的起点节点 → 跳过断点/单步检查，直接执行
-            if (!ShizukuDebugger.IsResumingFrom(GUID))
-            {
-                if (HasBreakPoint || ShizukuDebugger.ShouldPauseAfterStep())
-                {
-                    // 拍快照（此刻节点尚未执行，快照反映断点前状态）
-                    var snapshot = _parentGraph.CaptureSnapshot(GUID);
-                    ShizukuDebugger.Pause(snapshot);
-                    
-                    // 记录恢复点
-                    _parentGraph.PendingResumeNodeGuid = GUID;
-                    
-                    return ExecuteResult.Halted;
-                }
-            }
-            
-            ShizukuDebugger.RecordNodeExecution(GUID);
+            var debugResult = DebugCheck();
+            if (debugResult == ExecuteResult.Halted)
+                return ExecuteResult.Halted;
         }
+#endif
         
         // ---- 正常执行 ----
         GetInputValues();

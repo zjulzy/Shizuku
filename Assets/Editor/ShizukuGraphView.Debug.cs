@@ -28,14 +28,10 @@ public partial class ShizukuGraphView
     /// </summary>
     public void ToggleBreakpoint(string nodeGuid)
     {
-        if (_runtimeGraph == null) return;
-
-        _runtimeGraph.ToggleBreakpoint(nodeGuid);
+        bool hasBreakpoint = ShizukuDebugger.ToggleBreakpoint(nodeGuid);
 
         if (_guidToNodeViewMap.TryGetValue(nodeGuid, out var nodeView))
         {
-            var runnableNode = nodeView.RuntimeNode as ShizukuRunnableNode;
-            bool hasBreakpoint = runnableNode != null && runnableNode.HasBreakPoint;
             SetBreakpointVisual(nodeView, hasBreakpoint);
         }
     }
@@ -135,14 +131,10 @@ public partial class ShizukuGraphView
     /// </summary>
     public void RefreshAllBreakpointVisuals()
     {
-        if (_runtimeGraph == null) return;
-
-        foreach (var node in _runtimeGraph.Nodes)
+        foreach (var kvp in _guidToNodeViewMap)
         {
-            if (node is ShizukuRunnableNode runnable && _guidToNodeViewMap.TryGetValue(node.GUID, out var nodeView))
-            {
-                SetBreakpointVisual(nodeView, runnable.HasBreakPoint);
-            }
+            bool hasBp = ShizukuDebugger.HasBreakpoint(kvp.Key);
+            SetBreakpointVisual(kvp.Value, hasBp);
         }
     }
 
@@ -162,9 +154,9 @@ public partial class ShizukuGraphView
         HighlightExecutedNodes(ShizukuDebugger.ExecutedNodesLastFrame);
 
         // 如果暂停中，高亮当前暂停节点
-        if (ShizukuDebugger.IsPaused && ShizukuDebugger.CurrentSnapshot != null)
+        if (ShizukuDebugger.IsPaused && ShizukuDebugger.HasSnapshot)
         {
-            HighlightPausedNode(ShizukuDebugger.CurrentSnapshot.PausedAtNodeGuid);
+            HighlightPausedNode(ShizukuDebugger.SnapshotPausedNodeGuid);
         }
         else
         {
@@ -212,7 +204,8 @@ public partial class ShizukuGraphView
             if (nodeView.RuntimeNode is ShizukuRunnableNode runnable)
             {
                 evt.menu.AppendSeparator();
-                string label = runnable.HasBreakPoint ? "移除断点" : "设置断点";
+                bool hasBp = ShizukuDebugger.HasBreakpoint(runnable.GUID);
+                string label = hasBp ? "移除断点" : "设置断点";
                 evt.menu.AppendAction($"调试/{label}", _ =>
                 {
                     ToggleBreakpoint(runnable.GUID);

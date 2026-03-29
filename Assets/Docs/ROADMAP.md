@@ -155,9 +155,9 @@
 - [x] 断点快照系统（`DebugSnapshot` + `RuntimeVariableStore.Clone`）
 
 **2. 断点系统** ⭐⭐⭐ ✅
-- [x] 节点断点设置/移除（`ShizukuRunnableNode.HasBreakPoint`）
+- [x] 节点断点设置/移除（`ShizukuDebugger` 全局 `HashSet<GUID>` 管理，与图实例解耦）
 - [x] 断点触发时暂停执行（快照 + 恢复点机制）
-- [x] 继续执行 / 单步执行（`StepExecute` / `ContinueExecute`）
+- [x] 继续执行 / 单步执行（`ShizukuDebugger.StepExecute` / `ContinueExecute`）
 - [ ] 条件断点（高级）
 
 **3. 变量监视** ⭐⭐ ✅

@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 
 /// <summary>
@@ -29,7 +30,7 @@ public class DebugSnapshot
 
 /// <summary>
 /// Shizuku 图调试器，全局静态管理类
-/// 管理 Debug 开关、暂停/单步状态、快照、执行记录
+/// 管理 Debug 开关、暂停/单步状态、快照、执行记录、恢复执行
 /// </summary>
 public static class ShizukuDebugger
 {
@@ -44,6 +45,16 @@ public static class ShizukuDebugger
     public static bool IsPaused { get; private set; }
     
     /// <summary>
+    /// 当前暂停所在的运行时图实例（暂停时记录，恢复后清除）
+    /// </summary>
+    public static ShizukuGraphBase PausedGraph { get; private set; }
+    
+    /// <summary>
+    /// 恢复执行的目标节点 GUID（暂停时记录，恢复后清除）
+    /// </summary>
+    public static string PendingResumeNodeGuid { get; private set; }
+    
+    /// <summary>
     /// 是否处于单步模式
     /// </summary>
     private static bool _stepping;
@@ -55,9 +66,28 @@ public static class ShizukuDebugger
     private static string _resumingFromNodeGuid;
     
     /// <summary>
-    /// 最近一次断点的快照
+    /// 最近一次断点的快照（私有，外部通过只读访问器获取具体数据）
     /// </summary>
-    public static DebugSnapshot CurrentSnapshot { get; private set; }
+    private static DebugSnapshot _currentSnapshot;
+    
+    // ---- 快照只读访问器 ----
+    
+    /// <summary>是否存在有效快照</summary>
+    public static bool HasSnapshot => _currentSnapshot != null;
+    /// <summary>快照暂停节点 GUID</summary>
+    public static string SnapshotPausedNodeGuid => _currentSnapshot?.PausedAtNodeGuid;
+    /// <summary>快照帧号</summary>
+    public static int SnapshotFrameCount => _currentSnapshot?.FrameCount ?? -1;
+    /// <summary>快照中的图克隆体（用于变量读取）</summary>
+    public static ShizukuGraphBase SnapshotGraphClone => _currentSnapshot?.GraphClone;
+    /// <summary>快照中的 Behavior 字段（仅蓝图类图有值）</summary>
+    public static Dictionary<string, object> SnapshotBehaviorFields => _currentSnapshot?.BehaviorFields;
+    
+    /// <summary>
+    /// 全局断点集合（存储节点 GUID）。
+    /// 断点与图实例无关，只看 GUID，这样编辑器设置的断点在运行时克隆体上也能生效。
+    /// </summary>
+    private static readonly HashSet<string> _breakpointNodeGuids = new HashSet<string>();
     
     /// <summary>
     /// 本帧执行过的节点 GUID 列表（供编辑器高亮使用）
@@ -79,6 +109,34 @@ public static class ShizukuDebugger
     {
         (_executedNodesThisFrame, _executedNodesLastFrame) = (_executedNodesLastFrame, _executedNodesThisFrame);
         _executedNodesThisFrame.Clear();
+    }
+    
+    // ---- 断点管理 ----
+    
+    /// <summary>
+    /// 检查指定节点是否有断点
+    /// </summary>
+    public static bool HasBreakpoint(string nodeGuid) => _breakpointNodeGuids.Contains(nodeGuid);
+    
+    /// <summary>
+    /// 切换指定节点的断点状态，返回切换后是否有断点
+    /// </summary>
+    public static bool ToggleBreakpoint(string nodeGuid)
+    {
+        if (!_breakpointNodeGuids.Remove(nodeGuid))
+        {
+            _breakpointNodeGuids.Add(nodeGuid);
+            return true;
+        }
+        return false;
+    }
+    
+    /// <summary>
+    /// 清除所有断点
+    /// </summary>
+    public static void ClearAllBreakpoints()
+    {
+        _breakpointNodeGuids.Clear();
     }
     
     // ---- 节点执行时调用 ----
@@ -106,14 +164,15 @@ public static class ShizukuDebugger
     }
     
     /// <summary>
-    /// 节点触发暂停（断点命中或单步完成），同时拍摄快照
-    /// 快照已在调用前捕获，之后调用 Debug.Break() 让 Unity 在帧尾暂停编辑器
+    /// 节点触发暂停（断点命中或单步完成）。
+    /// 由 Debugger 拍摄快照、记录恢复信息，然后调用 Debug.Break() 让 Unity 在帧尾暂停。
     /// </summary>
-    public static void Pause(DebugSnapshot snapshot)
+    public static void Pause(ShizukuGraphBase graph, string pausedAtNodeGuid)
     {
         IsPaused = true;
-        CurrentSnapshot = snapshot;
-        // 快照已保存断点时刻的完整状态，帧尾暂停不影响快照数据正确性
+        PausedGraph = graph;
+        PendingResumeNodeGuid = pausedAtNodeGuid;
+        _currentSnapshot = graph.CaptureSnapshot(pausedAtNodeGuid);
         UnityEngine.Debug.Break();
     }
     
@@ -133,33 +192,65 @@ public static class ShizukuDebugger
     // ---- 编辑器控制按钮调用 ----
     
     /// <summary>
-    /// 继续执行，直到碰到下一个断点或链结束
+    /// 由编辑器"继续"按钮调用：从断点处恢复执行，直到链结束或下一个断点
     /// </summary>
-    public static void Continue(string resumeNodeGuid)
+    public static void ContinueExecute()
     {
+        if (PausedGraph == null || string.IsNullOrEmpty(PendingResumeNodeGuid))
+            return;
+        
+        if (!PausedGraph.Guid2NodeMap.TryGetValue(PendingResumeNodeGuid, out var node)
+            || node is not ShizukuRunnableNode runnable)
+            return;
+        
+        // 先还原快照变量（必须在清除 _currentSnapshot 之前）
+        PausedGraph.RestoreVariablesFromSnapshot();
+        
+        var resumeGuid = PendingResumeNodeGuid;
+        
+        // 清除暂停状态，设置跳过恢复点的标记
         IsPaused = false;
         _stepping = false;
-        _resumingFromNodeGuid = resumeNodeGuid;
-        CurrentSnapshot = null;
+        _resumingFromNodeGuid = resumeGuid;
+        _currentSnapshot = null;
+        PausedGraph = null;
+        PendingResumeNodeGuid = null;
+        
+        runnable.Execute();
     }
     
     /// <summary>
-    /// 单步执行：执行当前节点后，在下一个节点前暂停
+    /// 由编辑器"单步"按钮调用：执行当前暂停的节点，在下一个节点前暂停
     /// </summary>
-    public static void Step(string resumeNodeGuid)
+    public static void StepExecute()
     {
+        if (PausedGraph == null || string.IsNullOrEmpty(PendingResumeNodeGuid))
+            return;
+        
+        if (!PausedGraph.Guid2NodeMap.TryGetValue(PendingResumeNodeGuid, out var node)
+            || node is not ShizukuRunnableNode runnable)
+            return;
+        
+        // 先还原快照变量（必须在清除 _currentSnapshot 之前）
+        PausedGraph.RestoreVariablesFromSnapshot();
+        
+        var resumeGuid = PendingResumeNodeGuid;
+        
+        // 清除暂停状态，设置单步标志和跳过恢复点的标记
         IsPaused = false;
         _stepping = true;
-        _resumingFromNodeGuid = resumeNodeGuid;
-        CurrentSnapshot = null;
-    }
-    
-    /// <summary>
-    /// 单步执行后链自然结束（无下一个节点），清理残留的单步标志
-    /// </summary>
-    public static void EndStepping()
-    {
-        _stepping = false;
+        _resumingFromNodeGuid = resumeGuid;
+        _currentSnapshot = null;
+        PausedGraph = null;
+        PendingResumeNodeGuid = null;
+        
+        var result = runnable.Execute();
+        
+        // 链自然结束（最后一个节点没有后续），清理残留的单步标志
+        if (result == ExecuteResult.Continue)
+        {
+            _stepping = false;
+        }
     }
     
     /// <summary>
@@ -171,9 +262,11 @@ public static class ShizukuDebugger
         IsPaused = false;
         _stepping = false;
         _resumingFromNodeGuid = null;
-        CurrentSnapshot = null;
+        _currentSnapshot = null;
+        PausedGraph = null;
+        PendingResumeNodeGuid = null;
         _executedNodesThisFrame.Clear();
         _executedNodesLastFrame.Clear();
     }
 }
-
+#endif

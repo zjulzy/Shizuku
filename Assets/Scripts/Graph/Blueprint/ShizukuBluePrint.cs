@@ -24,7 +24,7 @@ public abstract class ShizukuBluePrint : ShizukuGraphBase
     public abstract bool TrySetProperty(string propertyName, object value);
 }
 
-public abstract class ShizukuBluePrint<T> : ShizukuBluePrint where T : BlueprintBehavior<T>
+public abstract partial class ShizukuBluePrint<T> : ShizukuBluePrint where T : BlueprintBehavior<T>
 {
     private T _behavior;
 
@@ -150,65 +150,6 @@ public abstract class ShizukuBluePrint<T> : ShizukuBluePrint where T : Blueprint
                     assignExpr, paramSet, paramValue
                 );
                 _cachedSetters[fieldName] = lambdaSet.Compile();
-            }
-        }
-    }
-
-    #endregion
-
-    #region Debug 快照支持
-
-    /// <summary>
-    /// 重写快照：额外捕获 Behavior 上所有 public/protected 字段的当前值
-    /// </summary>
-    public override DebugSnapshot CaptureSnapshot(string pausedAtNodeGuid)
-    {
-        var snapshot = base.CaptureSnapshot(pausedAtNodeGuid);
-        
-        if (_behavior != null && _cachedGetters != null)
-        {
-            var props = new Dictionary<string, object>();
-            foreach (var kvp in _cachedGetters)
-            {
-                try
-                {
-                    props[kvp.Key] = kvp.Value(_behavior);
-                }
-                catch
-                {
-                    props[kvp.Key] = "<error>";
-                }
-            }
-            snapshot.BehaviorFields = props;
-        }
-        
-        return snapshot;
-    }
-
-    /// <summary>
-    /// 重写还原：额外把快照中的 Behavior 字段写回。
-    /// 只涉及 public/protected 字段，无属性 setter 的副作用风险。
-    /// </summary>
-    protected override void RestoreVariablesFromSnapshot()
-    {
-        base.RestoreVariablesFromSnapshot();
-        
-        var snapshot = ShizukuDebugger.CurrentSnapshot;
-        if (snapshot?.BehaviorFields == null || _behavior == null || _cachedSetters == null)
-            return;
-        
-        foreach (var kvp in snapshot.BehaviorFields)
-        {
-            if (_cachedSetters.TryGetValue(kvp.Key, out var setter))
-            {
-                try
-                {
-                    setter(_behavior, kvp.Value);
-                }
-                catch
-                {
-                    // readonly 字段或类型不匹配，静默跳过
-                }
             }
         }
     }

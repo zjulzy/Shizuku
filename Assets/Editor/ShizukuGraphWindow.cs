@@ -276,15 +276,13 @@ public class ShizukuGraphWindow : EditorWindow
         if (_debugInfoScrollView == null) return;
         _debugInfoScrollView.Clear();
         
-        var snapshot = ShizukuDebugger.CurrentSnapshot;
-        
         if (!ShizukuDebugger.Enabled)
         {
             AddInfoLabel("调试模式未开启", new Color(0.6f, 0.6f, 0.6f));
             return;
         }
         
-        if (!ShizukuDebugger.IsPaused || snapshot == null)
+        if (!ShizukuDebugger.IsPaused || !ShizukuDebugger.HasSnapshot)
         {
             AddInfoLabel("运行中...", new Color(0.5f, 0.8f, 0.5f));
             AddInfoLabel($"已执行节点: {ShizukuDebugger.ExecutedNodesLastFrame.Count}", new Color(0.7f, 0.7f, 0.7f));
@@ -292,12 +290,14 @@ public class ShizukuGraphWindow : EditorWindow
         }
         
         // ---- 暂停状态：显示快照信息 ----
-        AddInfoLabel($"⏸ 暂停于帧 #{snapshot.FrameCount}", new Color(1f, 0.85f, 0.3f));
+        AddInfoLabel($"⏸ 暂停于帧 #{ShizukuDebugger.SnapshotFrameCount}", new Color(1f, 0.85f, 0.3f));
         
         // 暂停节点名称
-        if (snapshot.GraphClone != null && !string.IsNullOrEmpty(snapshot.PausedAtNodeGuid))
+        var graphClone = ShizukuDebugger.SnapshotGraphClone;
+        var pausedNodeGuid = ShizukuDebugger.SnapshotPausedNodeGuid;
+        if (graphClone != null && !string.IsNullOrEmpty(pausedNodeGuid))
         {
-            var pausedNode = snapshot.GraphClone.Nodes.FirstOrDefault(n => n.GUID == snapshot.PausedAtNodeGuid);
+            var pausedNode = graphClone.Nodes.FirstOrDefault(n => n.GUID == pausedNodeGuid);
             if (pausedNode != null)
             {
                 AddInfoLabel($"节点: {pausedNode.Title}", Color.white);
@@ -308,10 +308,10 @@ public class ShizukuGraphWindow : EditorWindow
         AddInfoLabel("📦 变量值 (快照)", new Color(0.7f, 0.85f, 1f));
         
         // 显示快照中的变量
-        if (snapshot.GraphClone != null && snapshot.GraphClone.VariableStore != null)
+        if (graphClone != null && graphClone.VariableStore != null)
         {
-            var store = snapshot.GraphClone.VariableStore;
-            var variables = snapshot.GraphClone.Variables;
+            var store = graphClone.VariableStore;
+            var variables = graphClone.Variables;
             bool hasAny = false;
             
             foreach (var variable in variables)
@@ -332,12 +332,13 @@ public class ShizukuGraphWindow : EditorWindow
         }
         
         // 显示 Behavior 字段（蓝图类图才有）
-        if (snapshot.BehaviorFields != null && snapshot.BehaviorFields.Count > 0)
+        var behaviorFields = ShizukuDebugger.SnapshotBehaviorFields;
+        if (behaviorFields != null && behaviorFields.Count > 0)
         {
             AddInfoSeparator();
             AddInfoLabel("🎮 Behavior 字段 (快照)", new Color(1f, 0.8f, 0.6f));
             
-            foreach (var kvp in snapshot.BehaviorFields)
+            foreach (var kvp in behaviorFields)
             {
                 string valueStr = kvp.Value != null ? kvp.Value.ToString() : "null";
                 string typeStr = kvp.Value != null ? kvp.Value.GetType().Name : "?";
@@ -487,29 +488,23 @@ public class ShizukuGraphWindow : EditorWindow
     
     private void OnContinue()
     {
-        if (_currentGraph == null || !ShizukuDebugger.Enabled || !ShizukuDebugger.IsPaused) return;
+        if (!ShizukuDebugger.Enabled || !ShizukuDebugger.IsPaused) return;
         
-        _currentGraph.ContinueExecute();
+        ShizukuDebugger.ContinueExecute();
         RefreshDebugUIState();
     }
     
     private void OnStep()
     {
-        if (_currentGraph == null || !ShizukuDebugger.Enabled) return;
+        if (!ShizukuDebugger.Enabled || !ShizukuDebugger.IsPaused) return;
         
-        if (!ShizukuDebugger.IsPaused && string.IsNullOrEmpty(_currentGraph.PendingResumeNodeGuid))
-        {
-            // 还没暂停，不能单步
-            return;
-        }
-        
-        _currentGraph.StepExecute();
+        ShizukuDebugger.StepExecute();
         RefreshDebugUIState();
         
         // 单步后如果暂停了，聚焦到暂停节点
-        if (ShizukuDebugger.IsPaused && ShizukuDebugger.CurrentSnapshot != null)
+        if (ShizukuDebugger.IsPaused && ShizukuDebugger.HasSnapshot)
         {
-            _graphView?.FocusOnNode(ShizukuDebugger.CurrentSnapshot.PausedAtNodeGuid);
+            _graphView?.FocusOnNode(ShizukuDebugger.SnapshotPausedNodeGuid);
         }
     }
     
@@ -555,14 +550,13 @@ public class ShizukuGraphWindow : EditorWindow
         }
         else if (isPaused)
         {
-            var snapshot = ShizukuDebugger.CurrentSnapshot;
             string nodeInfo = "";
-            if (snapshot != null && _currentGraph != null)
+            if (ShizukuDebugger.HasSnapshot && _currentGraph != null)
             {
-                var node = _currentGraph.Nodes.FirstOrDefault(n => n.GUID == snapshot.PausedAtNodeGuid);
+                var node = _currentGraph.Nodes.FirstOrDefault(n => n.GUID == ShizukuDebugger.SnapshotPausedNodeGuid);
                 if (node != null) nodeInfo = $" @ {node.Title}";
             }
-            _debugStatusLabel.text = $"⏸ 断点暂停{nodeInfo} (帧 #{snapshot?.FrameCount})";
+            _debugStatusLabel.text = $"⏸ 断点暂停{nodeInfo} (帧 #{ShizukuDebugger.SnapshotFrameCount})";
             _debugStatusLabel.style.color = new Color(1f, 0.85f, 0.3f);
         }
         else

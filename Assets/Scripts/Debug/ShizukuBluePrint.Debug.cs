@@ -42,7 +42,7 @@ public abstract partial class ShizukuBluePrint<T>
     {
         base.RestoreVariablesFromSnapshot();
         
-        var behaviorFields = ShizukuDebugger.SnapshotBehaviorFields;
+        var behaviorFields = ShizukuDebugger.CurrentSnapshot?.BehaviorFields;
         if (behaviorFields == null || _behavior == null || _cachedSetters == null)
             return;
         

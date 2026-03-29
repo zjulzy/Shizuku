@@ -14,7 +14,7 @@ public partial class ShizukuGraphBase
     {
         ShizukuDebugger.BeginFrame();
         
-        // 暂停中 → 什么都不做，等编辑器按钮驱动 ShizukuDebugger.StepExecute / ContinueExecute
+        // 暂停中 → 什么都不做，等编辑器按钮驱动 ShizukuDebugger.ResumeExecute
         if (ShizukuDebugger.IsPaused)
             return;
         
@@ -48,7 +48,7 @@ public partial class ShizukuGraphBase
     /// </summary>
     public virtual void RestoreVariablesFromSnapshot()
     {
-        var clonedStore = ShizukuDebugger.SnapshotGraphClone?.VariableStore;
+        var clonedStore = ShizukuDebugger.CurrentSnapshot?.GraphClone?.VariableStore;
         if (clonedStore != null)
         {
             _variableStore = clonedStore.Clone();

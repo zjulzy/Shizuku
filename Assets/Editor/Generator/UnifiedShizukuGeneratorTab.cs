@@ -1215,7 +1215,7 @@ namespace Editor.Generator
             sb.AppendLine("/// </summary>");
             // 由于是partial类，不要添加[Serializable]特性，以免与原类冲突
             // sb.AppendLine("[Serializable]");
-            
+
             sb.AppendLine("public partial class GraphVariable");
             sb.AppendLine("{");
 

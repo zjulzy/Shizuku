@@ -115,4 +115,3 @@ public partial class RuntimeVariableStore
         return clone;
     }
 }
-

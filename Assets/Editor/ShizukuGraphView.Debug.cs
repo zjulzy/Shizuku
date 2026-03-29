@@ -154,9 +154,9 @@ public partial class ShizukuGraphView
         HighlightExecutedNodes(ShizukuDebugger.ExecutedNodesLastFrame);
 
         // 如果暂停中，高亮当前暂停节点
-        if (ShizukuDebugger.IsPaused && ShizukuDebugger.HasSnapshot)
+        if (ShizukuDebugger.IsPaused && ShizukuDebugger.CurrentSnapshot != null)
         {
-            HighlightPausedNode(ShizukuDebugger.SnapshotPausedNodeGuid);
+            HighlightPausedNode(ShizukuDebugger.CurrentSnapshot.PausedAtNodeGuid);
         }
         else
         {

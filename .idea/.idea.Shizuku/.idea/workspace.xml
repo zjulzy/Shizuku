@@ -5,20 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuBluePrint.Debug.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuBluePrint.Debug.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuGraphBase.Debug.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuGraphBase.Debug.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuRunnableNode.Debug.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuRunnableNode.Debug.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/UnifiedShizukuGeneratorTab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Generator/UnifiedShizukuGeneratorTab.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.Debug.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.Debug.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuBluePrint.Debug.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuBluePrint.Debug.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuDebugger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuDebugger.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/ShizukuBluePrint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/ShizukuBluePrint.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuRunnableNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuRunnableNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuGraphBase.Debug.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuGraphBase.Debug.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/RuntimeVariableStore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/RuntimeVariableStore.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -290,6 +285,7 @@
       <workItem from="1774538156429" duration="3335000" />
       <workItem from="1774701335567" duration="5631000" />
       <workItem from="1774753658397" duration="7754000" />
+      <workItem from="1774781163587" duration="4954000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />

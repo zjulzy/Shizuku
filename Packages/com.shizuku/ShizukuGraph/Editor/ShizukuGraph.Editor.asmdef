@@ -1,0 +1,23 @@
+﻿{
+    "name": "ShizukuGraph.Editor",
+    "rootNamespace": "Shizuku.Graph.Editor",
+    "references": [
+        "ShizukuCore.Runtime",
+        "ShizukuGraph.Runtime",
+        "Unity.Mathematics"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "SHIZUKU_GRAPH"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+

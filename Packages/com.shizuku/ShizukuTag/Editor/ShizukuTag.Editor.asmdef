@@ -1,0 +1,22 @@
+﻿{
+    "name": "ShizukuTag.Editor",
+    "rootNamespace": "Shizuku.Tag.Editor",
+    "references": [
+        "ShizukuCore.Runtime",
+        "ShizukuTag.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "SHIZUKU_TAG"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+

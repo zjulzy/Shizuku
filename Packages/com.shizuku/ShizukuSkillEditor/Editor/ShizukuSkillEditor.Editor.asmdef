@@ -1,0 +1,24 @@
+﻿{
+    "name": "ShizukuSkillEditor.Editor",
+    "rootNamespace": "Shizuku.SkillEditor.Editor",
+    "references": [
+        "ShizukuCore.Runtime",
+        "ShizukuGraph.Runtime",
+        "ShizukuTag.Runtime",
+        "ShizukuSkillEditor.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "SHIZUKU_SKILL_EDITOR"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+

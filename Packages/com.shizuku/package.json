@@ -1,0 +1,17 @@
+{
+    "name": "com.shizuku",
+    "version": "0.3.0",
+    "displayName": "Shizuku",
+    "description": "A visual blueprint/graph system for Unity gameplay programming.",
+    "unity": "6000.1",
+    "author": {
+        "name": "Shizuku"
+    },
+    "keywords": [
+        "graph",
+        "blueprint",
+        "visual-scripting",
+        "gameplay"
+    ]
+}
+

@@ -1,0 +1,19 @@
+﻿{
+    "name": "ShizukuCore.Editor",
+    "rootNamespace": "Shizuku.Core.Editor",
+    "references": [
+        "ShizukuCore.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+

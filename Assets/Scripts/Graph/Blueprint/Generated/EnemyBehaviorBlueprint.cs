@@ -1,4 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
+using Shizuku.Core;
+using Shizuku.Graph;
 
 /// <summary>
 /// Blueprint class for EnemyBehavior

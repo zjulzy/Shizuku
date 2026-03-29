@@ -1,0 +1,20 @@
+﻿{
+    "name": "ShizukuGraph.Runtime",
+    "rootNamespace": "Shizuku.Graph",
+    "references": [
+        "ShizukuCore.Runtime",
+        "Unity.Mathematics"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "SHIZUKU_GRAPH"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+

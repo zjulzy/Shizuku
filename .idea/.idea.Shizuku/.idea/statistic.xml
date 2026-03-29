@@ -5,7 +5,6 @@
     <option name="excludedDirectories">
       <list>
         <option value="$PROJECT_DIR$/Library" />
-        <option value="$PROJECT_DIR$/Packages" />
         <option value="$PROJECT_DIR$/Temp" />
         <option value="$PROJECT_DIR$/../../../../engine" />
       </list>

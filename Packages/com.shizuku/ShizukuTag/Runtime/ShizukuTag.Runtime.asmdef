@@ -1,0 +1,19 @@
+﻿{
+    "name": "ShizukuTag.Runtime",
+    "rootNamespace": "Shizuku.Tag",
+    "references": [
+        "ShizukuCore.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "SHIZUKU_TAG"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+

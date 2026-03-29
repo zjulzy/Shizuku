@@ -1,4 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
+using Shizuku.Core;
+using Shizuku.Graph;
 
 /// <summary>
 /// ShizukuClass 和 ShizukuFunction 使用示例

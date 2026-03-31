@@ -5,178 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagExtension.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagExtension.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/statistic.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/statistic.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagDefinition.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagDefinition.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ControlFlowPort.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ControlFlowPort.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ControlFlowPortContainer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ControlFlowPortContainer.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/CustomGroup.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/CustomGroup.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Extension.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Extension/BaseGraphEditorExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Extension/BaseGraphEditorExtension.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Extension/BlueprintEditorExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Extension/BlueprintEditorExtension.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Extension/IGraphEditorExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Extension/IGraphEditorExtension.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Extension/VariableCreationDialog.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Extension/VariableCreationDialog.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/BlueprintGeneratorTab.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/BlueprintGeneratorTab.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/ShizukuGeneratorWindow.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/ShizukuGeneratorWindow.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/UnifiedShizukuGeneratorTab.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Generator/UnifiedShizukuGeneratorTab.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/NodeSearchWindowProvider.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/NodeSearchWindowProvider.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPort.uss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPort.uss.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPortContainer.uss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ControlFlowPortContainer.uss.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuGraphView.uss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuGraphView.uss.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuNodeView.uss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Resources/ShizukuNodeView.uss.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.AIAssistant.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.AIAssistant.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.Debug.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.Debug.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphView.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphViewExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphViewExtensions.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphWindow.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuGraphWindow.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/ShizukuNodeView.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuBluePrint.Debug.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuBluePrint.Debug.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuDebugger.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuDebugger.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuGraphBase.Debug.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuGraphBase.Debug.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuRunnableNode.Debug.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/ShizukuRunnableNode.Debug.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/BlueprintBehavior.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/BlueprintBehavior.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/BlueprintExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/BlueprintExtensions.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/BlueprintOverridableAttribute.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/BlueprintOverridableAttribute.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EnemyBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EnemyBehavior.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/Generated/EnemyBehaviorBlueprint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/Generated/EnemyBehaviorBlueprint.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/ShizukuBluePrint.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/ShizukuBluePrint.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/GraphVariable.Generated.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/GraphVariable.Generated.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/RuntimeVariableStore.Generated.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/RuntimeVariableStore.Generated.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/VariableType.Generated.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Generated/VariableType.Generated.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/GraphVariable.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/GraphVariable.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/GroupData.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/GroupData.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/ParameterEdge.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/ParameterEdge.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/RuntimeVariableStore.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/RuntimeVariableStore.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/ShizukuGraphBase.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GraphRunner.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GraphRunner.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/BlueprintEventNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/BlueprintEventNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/PropertyNodes.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/BlueprintNodes/PropertyNodes.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/BasicTypeConverters.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/BasicTypeConverters.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/ConverterNodeRegistry.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/TypeConverterNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/TypeConverterNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/VectorTypeConverters.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ConverterNodes/VectorTypeConverters.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/EnemyConfig_CalculateDamage_Float_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/EnemyConfig_CalculateDamage_Float_Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/MathUtils_Clamp01_Float_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/MathUtils_Clamp01_Float_Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/MathUtils_Sqrt_Float_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/MathUtils_Sqrt_Float_Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/MathUtils_Square_Float_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/MathUtils_Square_Float_Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/MathUtils_VectorDistance_Vector3_Vector3_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/MathUtils_VectorDistance_Vector3_Vector3_Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/MathUtils_VectorDot_Vector3_Vector3_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/MathUtils_VectorDot_Vector3_Vector3_Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_Concat_String_String_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_Concat_String_String_Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_Contains_String_String_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_Contains_String_String_Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_ToLower_String_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_ToLower_String_Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_ToUpper_String_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/StringUtils_ToUpper_String_Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Logic/CompareNodes.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Logic/CompareNodes.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Logic/LogicNodes.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Logic/LogicNodes.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/AddNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/AddNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/ClampNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/ClampNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/DivideNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/DivideNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/LerpNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/LerpNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/MultiplyNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/MultiplyNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/SubtractNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Math/SubtractNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizikuAddOneNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizikuAddOneNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuForNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuForNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuIfNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuIfNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuLogNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuLogNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuRootNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/ShizukuRootNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/Generated/CustomParameterEdgePorts.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/Generated/CustomParameterEdgePorts.Generated.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/NodeCategory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/NodeCategory.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/NodeMenuItemAttribute.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/NodeMenuItemAttribute.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ParameterEdgePort.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ParameterEdgePort.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuClassAttribute.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuClassAttribute.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuFunctionAttribute.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuFunctionAttribute.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuNodeBase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuNodeBase.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuRunnableNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuRunnableNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuTypeInfo.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuTypeInfo.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuTypeRegistry.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuTypeRegistry.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuValueNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/ShizukuValueNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/GetVariableNodes.Custom.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/GetVariableNodes.Custom.Generated.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/SetVariableNodes.Custom.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/SetVariableNodes.Custom.Generated.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/GetVariableNodeBase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/GetVariableNodeBase.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/GetVariableNodes.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/GetVariableNodes.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/IVariableNode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/IVariableNode.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/SetVariableNodeBase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/SetVariableNodeBase.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/SetVariableNodes.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/SetVariableNodes.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ShizukuAttributeExamples.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ShizukuAttributeExamples.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Generator/UnifiedShizukuGeneratorTab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Generator/UnifiedShizukuGeneratorTab.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/ShizukuTag.Runtime.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/ShizukuTag.Runtime.asmdef" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagContainer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagContainer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagExtension.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,6 +70,10 @@
     <setting file="file://$PROJECT_DIR$/Assets/Docs/Guide_ShizukuAttributes.md.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Plugins.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Plugins/Sirenix/Odin Inspector/Config/Resources.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Plugins/Sirenix/Odin Inspector/Config/Resources/Sirenix.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Plugins/Sirenix/Odin Inspector/Config/Resources/Sirenix/GlobalSerializationConfig.asset" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Plugins/Sirenix/Odin Inspector/Config/Resources/Sirenix/GlobalSerializationConfig.asset.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/Generated/EnemyBehaviorBlueprint.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Graph/Generated.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/EnemyConfig_CalculateDamage_Float_Node.cs" root0="FORCE_HIGHLIGHTING" />
@@ -251,7 +90,10 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/GetVariableNodes.Custom.Generated.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/SetVariableNodes.Custom.Generated.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/ShizukuAttributeExamples.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TagCollection.asset" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TagCollection.asset.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/VisualScripting/New Script Graph.asset" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagDefinition.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagExtension.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/package.json" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -386,7 +228,9 @@
       <workItem from="1774538156429" duration="3335000" />
       <workItem from="1774701335567" duration="5631000" />
       <workItem from="1774753658397" duration="7754000" />
-      <workItem from="1774781163587" duration="12833000" />
+      <workItem from="1774781163587" duration="13115000" />
+      <workItem from="1774883612034" duration="3064000" />
+      <workItem from="1774968691865" duration="2921000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -668,7 +512,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774794547412</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="拆分插件结构">
+      <option name="closed" value="true" />
+      <created>1774802056518</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1774802056518</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -695,7 +547,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="蓝图代码生成器" />
     <MESSAGE value="优化节点间的数据类型传递，将类型转换显式表现出来" />
     <MESSAGE value="优化面板ui" />
     <MESSAGE value="更新文档" />
@@ -720,7 +571,8 @@
     <MESSAGE value="修复bug" />
     <MESSAGE value="graph在运行时初始化时需要拷贝一下" />
     <MESSAGE value="整理debug代码" />
-    <option name="LAST_COMMIT_MESSAGE" value="整理debug代码" />
+    <MESSAGE value="拆分插件结构" />
+    <option name="LAST_COMMIT_MESSAGE" value="拆分插件结构" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

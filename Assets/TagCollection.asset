@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: TagCollection
+  m_EditorClassIdentifier: ShizukuTag.Runtime:Shizuku.Tag:TagCollection
+  _tags:
+  - Name: we.play
+    Value: 16842752
+  - Name: agg.ere
+    Value: 33554432
+  - Name: agg.ere.pop
+    Value: 33619968
+  - Name: a
+    Value: 50331648
+  - Name: a.b
+    Value: 50397184
+  - Name: a.b.c
+    Value: 50397440
+  - Name: a.b.c.d
+    Value: 50397441

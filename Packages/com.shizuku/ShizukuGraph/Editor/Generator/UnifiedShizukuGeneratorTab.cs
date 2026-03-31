@@ -25,7 +25,6 @@ namespace Shizuku.Graph.Editor
         private ScrollView _scrollView;
         private VisualElement _contentContainer;
         private Label _statusLabel;
-        private TextField _functionNodePathField;
 
         public void BuildUI(VisualElement parent)
         {
@@ -96,60 +95,6 @@ namespace Shizuku.Graph.Editor
             titleBar.Add(buttonContainer);
             parent.Add(titleBar);
 
-            // 生成路径配置
-            var pathContainer = new VisualElement
-            {
-                style =
-                {
-                    paddingTop = 5,
-                    paddingBottom = 5,
-                    paddingLeft = 10,
-                    paddingRight = 10,
-                    backgroundColor = new Color(0.25f, 0.25f, 0.25f, 1f),
-                    flexDirection = FlexDirection.Row
-                }
-            };
-
-            var pathLabel = new Label("Function Node Path:")
-            {
-                style =
-                {
-                    width = 130,
-                    unityTextAlign = TextAnchor.MiddleLeft
-                }
-            };
-
-            _functionNodePathField = new TextField
-            {
-                value = FUNCTION_NODE_PATH,
-                style =
-                {
-                    flexGrow = 1,
-                    marginRight = 5
-                }
-            };
-
-            var browseButton = new Button(() =>
-            {
-                var path = EditorUtility.OpenFolderPanel("Select Generation Folder", "Assets", "");
-                if (!string.IsNullOrEmpty(path))
-                {
-                    if (path.StartsWith(Application.dataPath))
-                    {
-                        path = "Assets" + path.Substring(Application.dataPath.Length);
-                    }
-                    _functionNodePathField.value = path;
-                }
-            })
-            {
-                text = "Browse",
-                style = { width = 80 }
-            };
-
-            pathContainer.Add(pathLabel);
-            pathContainer.Add(_functionNodePathField);
-            pathContainer.Add(browseButton);
-            parent.Add(pathContainer);
 
             // 状态栏
             var statusContainer = new VisualElement
@@ -802,7 +747,7 @@ namespace Shizuku.Graph.Editor
             {
                 var code = GenerateFunctionCode(funcEntry.FunctionInfo);
                 var fileName = $"{funcEntry.NodeClassName}.cs";
-                var path = _functionNodePathField.value;
+                var path = FUNCTION_NODE_PATH;
 
                 // 确保目录存在
                 if (!Directory.Exists(path))

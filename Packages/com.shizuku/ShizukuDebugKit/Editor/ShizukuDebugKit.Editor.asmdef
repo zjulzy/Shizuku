@@ -1,0 +1,21 @@
+{
+    "name": "ShizukuDebugKit.Editor",
+    "rootNamespace": "Shizuku.DebugKit.Editor",
+    "references": [
+        "ShizukuDebugKit.Runtime",
+        "ShizukuCore.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "SHIZUKU_DEBUGKIT"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -8,7 +8,7 @@ namespace Shizuku.Tag
     ///   [Layer1 : 8][Layer2 : 8][Layer3 : 8][Layer4 : 8]
     /// 例如 0x01_02_03_00 表示三级标签（第四层为 0）。
     /// </summary>
-    public class TagContainer
+    public class TagCollection
     {
         private readonly HashSet<uint> _tags = new HashSet<uint>();
 

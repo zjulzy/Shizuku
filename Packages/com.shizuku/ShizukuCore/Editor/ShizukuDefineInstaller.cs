@@ -20,6 +20,7 @@ namespace Shizuku.Core.Editor
             "SHIZUKU_GRAPH",
             "SHIZUKU_TAG",
             "SHIZUKU_SKILL_EDITOR",
+            "SHIZUKU_DEBUGKIT",
         };
 
         static ShizukuDefineInstaller()

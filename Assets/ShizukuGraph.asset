@@ -9,49 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4759b60cdbdd5054481ea8ad65078372, type: 3}
+  m_Script: {fileID: 11500000, guid: 0022573f1acaaa94db50cd4c6fbad4f9, type: 3}
   m_Name: ShizukuGraph
-  m_EditorClassIdentifier: Assembly-CSharp::ShizukuGraphBase
+  m_EditorClassIdentifier: ShizukuGraph.Runtime::Shizuku.Graph.ShizukuGraphBase
   GUID: 
-  _nodes:
-  - rid: 2162348022557835329
-  - rid: 2162348022557835330
+  _nodes: []
   _edges: []
   _groups: []
-  RootNodeGUID: 6d3394ea-fc1c-4dc3-a4e8-a862917cfedb
+  RootNodeGUID: 
+  _variables: []
+  _methods: []
   references:
     version: 2
-    RefIds:
-    - rid: 2162348022557835329
-      type: {class: ShizukuRootNode, ns: , asm: Assembly-CSharp}
-      data:
-        GUID: 6d3394ea-fc1c-4dc3-a4e8-a862917cfedb
-        PositionAndSize:
-          x: 916.8
-          y: 339.2
-          z: 200
-          w: 100
-        _nextPort:
-          NextNodeGuid: 
-          Name: next
-    - rid: 2162348022557835330
-      type: {class: ShizukuLogNode, ns: , asm: Assembly-CSharp}
-      data:
-        GUID: 1c5263dd-a078-4c69-8087-28990b14116a
-        PositionAndSize:
-          x: 1239.2001
-          y: 488.80002
-          z: 200
-          w: 100
-        Message:
-          rid: 2162348022557835331
-        _nextPort:
-          NextNodeGuid: 
-          Name: next
-    - rid: 2162348022557835331
-      type: {class: StringParameterEdgePort, ns: , asm: Assembly-CSharp}
-      data:
-        Name: message
-        InputEdgeGUID: 
-        IsOut: 0
-        Value: 
+    RefIds: []

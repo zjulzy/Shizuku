@@ -278,6 +278,38 @@ namespace Shizuku.Graph.Editor
                 }
             }
 
+            // 函数入口节点的动态输出端口
+            if (_node is MethodEntryNode entryNode)
+            {
+                foreach (var methodPort in entryNode.OutputPorts)
+                {
+                    if (methodPort.Port != null)
+                    {
+                        var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, methodPort.Port.GetType());
+                        outputPort.portName = methodPort.Name;
+                        outputPort.AddToClassList("parameter-port");
+                        SetPortTooltip(outputPort, methodPort.Port.GetType());
+                        outputContainer.Add(outputPort);
+                    }
+                }
+            }
+
+            // 函数返回节点的动态输入端口
+            if (_node is MethodReturnNode returnNode)
+            {
+                foreach (var methodPort in returnNode.InputPorts)
+                {
+                    if (methodPort.Port != null)
+                    {
+                        var inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, methodPort.Port.GetType());
+                        inputPort.portName = methodPort.Name;
+                        inputPort.AddToClassList("parameter-port");
+                        SetPortTooltip(inputPort, methodPort.Port.GetType());
+                        inputContainer.Add(inputPort);
+                    }
+                }
+            }
+
             foreach (var field in fields)
             {
                 if (typeof(ParameterEdgePort).IsAssignableFrom(field.FieldType))

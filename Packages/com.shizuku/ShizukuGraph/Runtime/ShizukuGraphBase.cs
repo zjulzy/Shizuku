@@ -31,6 +31,11 @@ namespace Shizuku.Graph
         private List<GraphVariable> _variables = new List<GraphVariable>();
         public List<GraphVariable> Variables => _variables;
 
+        // 函数系统
+        [SerializeField]
+        private List<ShizukuMethod> _methods = new List<ShizukuMethod>();
+        public List<ShizukuMethod> Methods => _methods;
+
         [NonSerialized]
         private Dictionary<string , ShizukuNodeBase> _guid2NodeMap = new Dictionary<string, ShizukuNodeBase>();
         public Dictionary<string , ShizukuNodeBase> Guid2NodeMap => _guid2NodeMap;
@@ -61,7 +66,15 @@ namespace Shizuku.Graph
 
         public virtual void Init()
         {
-            // 初始化节点
+            // 清理反序列化失败的 null 节点/边（[SerializeReference] 类型变更后会出现）
+            int removedNodes = _nodes.RemoveAll(n => n == null);
+            int removedEdges = _edges.RemoveAll(e => e == null);
+            if (removedNodes > 0 || removedEdges > 0)
+            {
+                Debug.LogWarning($"[ShizukuGraph] 检测到 {removedNodes} 个无效节点和 {removedEdges} 条无效边已被清理（可能是类型变更导致反序列化失败）");
+            }
+
+            // 初始化主图节点
             _guid2NodeMap.Clear();
             foreach (var node in _nodes)
             {
@@ -69,12 +82,18 @@ namespace Shizuku.Graph
                 node.Init(this);
             }
 
-            // 初始化边
+            // 初始化主图边
             _guid2EdgeMap.Clear();
             foreach (var edge in _edges)
             {
                 _guid2EdgeMap[edge.GUID] = edge;
                 edge.ConnectPorts(this);
+            }
+
+            // 初始化函数子图（内部节点/边会被注册到全局映射）
+            foreach (var method in _methods)
+            {
+                method.Init(this);
             }
 
             // 初始化变量
@@ -174,6 +193,42 @@ namespace Shizuku.Graph
             if (variable != null)
             {
                 variable.Name = newName;
+                return true;
+            }
+            return false;
+        }
+
+        #endregion
+
+        #region 函数管理
+        
+
+        public ShizukuMethod GetMethodByGUID(string guid)
+        {
+            return _methods.Find(m => m.GUID == guid);
+        }
+
+        public ShizukuMethod GetMethodByName(string name)
+        {
+            return _methods.Find(m => m.Name == name);
+        }
+
+        public void AddMethod(ShizukuMethod method)
+        {
+            _methods.Add(method);
+        }
+
+        public void RemoveMethod(string guid)
+        {
+            _methods.RemoveAll(m => m.GUID == guid);
+        }
+
+        public bool RenameMethod(string guid, string newName)
+        {
+            var method = GetMethodByGUID(guid);
+            if (method != null)
+            {
+                method.Name = newName;
                 return true;
             }
             return false;

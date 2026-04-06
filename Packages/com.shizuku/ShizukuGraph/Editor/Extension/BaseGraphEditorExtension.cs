@@ -21,6 +21,7 @@ namespace Shizuku.Graph.Editor
         private VisualElement _rightPanel;
         private ScrollView _nodeInspectorPanel;
         private ScrollView _variablesPanel;
+        private ScrollView _functionsPanel;
         private VisualElement _horizontalResizer;
         private ShizukuNodeBase _selectedNode;
 
@@ -61,6 +62,7 @@ namespace Shizuku.Graph.Editor
             _rightPanel = null;
             _nodeInspectorPanel = null;
             _variablesPanel = null;
+            _functionsPanel = null;
             _currentGraph = null;
             _selectedNode = null;
         }
@@ -69,6 +71,7 @@ namespace Shizuku.Graph.Editor
         {
             _currentGraph = graph;
             RefreshVariablesPanel();
+            RefreshFunctionsPanel();
         }
 
         private void BuildUI()
@@ -179,6 +182,56 @@ namespace Shizuku.Graph.Editor
                 }
             };
             _rightPanel.Add(_variablesPanel);
+
+            // ===== 函数列表面板 =====
+            var functionsHeaderContainer = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row,
+                    backgroundColor = new Color(0.25f, 0.25f, 0.25f),
+                    paddingTop = 8,
+                    paddingBottom = 8,
+                    paddingLeft = 10,
+                    paddingRight = 10,
+                    justifyContent = Justify.SpaceBetween
+                }
+            };
+
+            var functionsHeaderLabel = new Label("函数列表")
+            {
+                style =
+                {
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    fontSize = 14,
+                    unityTextAlign = TextAnchor.MiddleLeft
+                }
+            };
+
+            var addFunctionButton = new Button(() => OnAddFunctionClicked())
+            {
+                text = "+",
+                style =
+                {
+                    width = 24,
+                    height = 24,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    fontSize = 16
+                }
+            };
+
+            functionsHeaderContainer.Add(functionsHeaderLabel);
+            functionsHeaderContainer.Add(addFunctionButton);
+            _rightPanel.Add(functionsHeaderContainer);
+
+            _functionsPanel = new ScrollView(ScrollViewMode.Vertical)
+            {
+                style =
+                {
+                    flexGrow = 1
+                }
+            };
+            _rightPanel.Add(_functionsPanel);
 
             // 水平拖拽条（调整右侧面板宽度）
             _horizontalResizer = new VisualElement
@@ -849,6 +902,176 @@ namespace Shizuku.Graph.Editor
         private bool _isResizingHorizontal = false;
         private float _startMouseX;
         private float _startPanelWidth;
+
+        #region 函数列表
+
+        private void OnAddFunctionClicked()
+        {
+            if (_currentGraph == null) return;
+
+            var baseName = "NewFunction";
+            var name = baseName;
+            int index = 1;
+            while (_currentGraph.GetMethodByName(name) != null)
+            {
+                name = $"{baseName}_{index++}";
+            }
+
+            var method = new ShizukuMethod(name);
+
+            // 自动创建入口节点
+            var entryNode = new MethodEntryNode
+            {
+                MethodGUID = method.GUID,
+                PositionAndSize = new Unity.Mathematics.float4(100, 200, 200, 100)
+            };
+            method.AddNode(entryNode);
+            method.EntryNodeGUID = entryNode.GUID;
+
+            _currentGraph.AddMethod(method);
+            EditorUtility.SetDirty(_currentGraph);
+
+            RefreshFunctionsPanel();
+            Debug.Log($"已创建函数: {name}");
+        }
+
+        private void RefreshFunctionsPanel()
+        {
+            if (_functionsPanel == null) return;
+            _functionsPanel.Clear();
+
+            if (_currentGraph == null) return;
+
+            var methods = _currentGraph.Methods;
+            if (methods.Count == 0)
+            {
+                _functionsPanel.Add(new Label("暂无函数")
+                {
+                    style =
+                    {
+                        paddingTop = 10,
+                        paddingLeft = 10,
+                        color = new Color(0.6f, 0.6f, 0.6f),
+                        unityTextAlign = TextAnchor.UpperCenter
+                    }
+                });
+                return;
+            }
+
+            foreach (var method in methods)
+            {
+                var methodRow = new VisualElement
+                {
+                    style =
+                    {
+                        flexDirection = FlexDirection.Row,
+                        paddingLeft = 10,
+                        paddingRight = 5,
+                        paddingTop = 4,
+                        paddingBottom = 4,
+                        justifyContent = Justify.SpaceBetween,
+                        alignItems = Align.Center
+                    }
+                };
+
+                var isEditing = _graphView != null && _graphView.CurrentMethod == method;
+                var label = new Label($"ƒ  {method.Name}")
+                {
+                    style =
+                    {
+                        flexGrow = 1,
+                        color = isEditing ? new Color(0.4f, 0.8f, 1f) : new Color(0.85f, 0.85f, 0.85f),
+                        unityFontStyleAndWeight = isEditing ? FontStyle.Bold : FontStyle.Normal,
+                        fontSize = 12
+                    }
+                };
+
+                var paramCount = method.InputParameters.Count;
+                var returnCount = method.OutputParameters.Count;
+                var hintLabel = new Label($"({paramCount}→{returnCount})")
+                {
+                    style =
+                    {
+                        color = new Color(0.5f, 0.5f, 0.5f),
+                        fontSize = 10,
+                        marginRight = 5
+                    }
+                };
+
+                // 双击进入函数编辑
+                var capturedMethod = method;
+                label.RegisterCallback<MouseDownEvent>(evt =>
+                {
+                    if (evt.clickCount == 2 && evt.button == 0)
+                    {
+                        OnEnterMethod(capturedMethod);
+                        evt.StopPropagation();
+                    }
+                });
+
+                // 悬停效果
+                methodRow.RegisterCallback<MouseEnterEvent>(evt =>
+                {
+                    methodRow.style.backgroundColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
+                });
+                methodRow.RegisterCallback<MouseLeaveEvent>(evt =>
+                {
+                    methodRow.style.backgroundColor = new Color(0, 0, 0, 0);
+                });
+
+                // 删除按钮
+                var deleteBtn = new Button(() => OnDeleteMethod(capturedMethod))
+                {
+                    text = "×",
+                    style =
+                    {
+                        width = 24,
+                        height = 24,
+                        backgroundColor = new Color(0.8f, 0.3f, 0.3f),
+                        color = Color.white,
+                        unityTextAlign = TextAnchor.MiddleCenter,
+                        fontSize = 16,
+                        unityFontStyleAndWeight = FontStyle.Bold
+                    }
+                };
+
+                methodRow.Add(label);
+                methodRow.Add(hintLabel);
+                methodRow.Add(deleteBtn);
+                _functionsPanel.Add(methodRow);
+            }
+        }
+
+        private void OnEnterMethod(ShizukuMethod method)
+        {
+            if (_window != null)
+            {
+                _window.EnterMethodGraph(method);
+                RefreshFunctionsPanel();
+            }
+        }
+
+        private void OnDeleteMethod(ShizukuMethod method)
+        {
+            if (_currentGraph == null) return;
+
+            if (_graphView != null && _graphView.CurrentMethod == method)
+            {
+                _graphView.ReturnToMainGraph();
+            }
+
+            if (EditorUtility.DisplayDialog("删除函数",
+                $"确定要删除函数 \"{method.Name}\" 吗？\n函数内的所有节点和边都将被删除。",
+                "删除", "取消"))
+            {
+                _currentGraph.RemoveMethod(method.GUID);
+                EditorUtility.SetDirty(_currentGraph);
+                RefreshFunctionsPanel();
+                Debug.Log($"已删除函数: {method.Name}");
+            }
+        }
+
+        #endregion
 
         private void OnHorizontalResizerMouseDown(MouseDownEvent evt)
         {

@@ -15,16 +15,12 @@ namespace Shizuku.Graph.Editor
         private ShizukuGraphView _graphView;
         private VisualElement _rootElement;
         private ShizukuGraphBase _currentGraph;
-
         private VisualElement _leftPanel;
         private VisualElement _propertiesContainer;
         private VisualElement _eventsContainer;
-        private VisualElement _functionsContainer;
         private ScrollView _propertiesPanel;
         private ScrollView _eventsPanel;
-        private ScrollView _functionsPanel;
         private VisualElement _resizer1;
-        private VisualElement _resizer2;
         private VisualElement _horizontalResizer;
 
         public bool CanHandle(ShizukuGraphBase graph)
@@ -53,7 +49,6 @@ namespace Shizuku.Graph.Editor
             _leftPanel = null;
             _propertiesPanel = null;
             _eventsPanel = null;
-            _functionsPanel = null;
             _currentGraph = null;
         }
 
@@ -179,101 +174,6 @@ namespace Shizuku.Graph.Editor
 
             _leftPanel.Add(_eventsContainer);
 
-            // 第二个可拖动的分隔条（事件 - 函数）
-            _resizer2 = new VisualElement
-            {
-                style =
-                {
-                    height = 8,
-                    backgroundColor = new Color(0.15f, 0.15f, 0.15f)
-                }
-            };
-
-            // 添加悬停效果
-            _resizer2.RegisterCallback<MouseEnterEvent>(evt =>
-            {
-                _resizer2.style.backgroundColor = new Color(0.3f, 0.5f, 0.8f, 0.8f);
-            });
-            _resizer2.RegisterCallback<MouseLeaveEvent>(evt =>
-            {
-                if (!_isResizing2)
-                {
-                    _resizer2.style.backgroundColor = new Color(0.15f, 0.15f, 0.15f);
-                }
-            });
-
-            // 添加拖动功能
-            _resizer2.RegisterCallback<MouseDownEvent>(OnResizer2MouseDown);
-
-            _leftPanel.Add(_resizer2);
-
-            // 函数列表容器
-            _functionsContainer = new VisualElement
-            {
-                style =
-                {
-                    flexGrow = 1,
-                    flexShrink = 1,
-                    minHeight = 100
-                }
-            };
-
-            // 函数列表标题栏（包含加号按钮）
-            var functionsHeaderContainer = new VisualElement
-            {
-                style =
-                {
-                    flexDirection = FlexDirection.Row,
-                    backgroundColor = new Color(0.25f, 0.25f, 0.25f),
-                    paddingTop = 5,
-                    paddingBottom = 5,
-                    paddingLeft = 10,
-                    paddingRight = 5,
-                    justifyContent = Justify.SpaceBetween,
-                    alignItems = Align.Center
-                }
-            };
-
-            var functionsHeader = new Label("函数列表")
-            {
-                style =
-                {
-                    unityFontStyleAndWeight = FontStyle.Bold,
-                    fontSize = 14
-                }
-            };
-            functionsHeaderContainer.Add(functionsHeader);
-
-            var addFunctionButton = new Button(() => OnAddFunctionClicked())
-            {
-                text = "+",
-                style =
-                {
-                    width = 24,
-                    height = 24,
-                    backgroundColor = new Color(0.3f, 0.5f, 0.8f),
-                    color = Color.white,
-                    unityTextAlign = TextAnchor.MiddleCenter,
-                    fontSize = 16,
-                    unityFontStyleAndWeight = FontStyle.Bold,
-                    marginRight = 5
-                }
-            };
-            functionsHeaderContainer.Add(addFunctionButton);
-
-            _functionsContainer.Add(functionsHeaderContainer);
-
-            _functionsPanel = new ScrollView(ScrollViewMode.Vertical)
-            {
-                style =
-                {
-                    flexGrow = 1
-                }
-            };
-            _functionsContainer.Add(_functionsPanel);
-
-            _leftPanel.Add(_functionsContainer);
-
             // 水平拖拽条（调整左侧面板宽度）
             _horizontalResizer = new VisualElement
             {
@@ -310,13 +210,11 @@ namespace Shizuku.Graph.Editor
         }
 
         private bool _isResizing1 = false;
-        private bool _isResizing2 = false;
         private bool _isResizingHorizontal = false;
         private float _startMouseY;
         private float _startMouseX;
         private float _startPropertiesHeight;
         private float _startEventsHeight;
-        private float _startFunctionsHeight;
         private float _startPanelWidth;
 
         private void OnResizer1MouseDown(MouseDownEvent evt)
@@ -361,20 +259,6 @@ namespace Shizuku.Graph.Editor
                 _eventsContainer.style.flexGrow = 0;
                 _eventsContainer.style.flexShrink = 0;
 
-                // 确保函数列表保持固定或自动调整
-                if (_functionsContainer.style.height.value.value > 0)
-                {
-                    // 如果函数区域已经有固定高度，保持不变
-                    _functionsContainer.style.flexGrow = 0;
-                    _functionsContainer.style.flexShrink = 0;
-                }
-                else
-                {
-                    // 否则让它填充剩余空间
-                    _functionsContainer.style.flexGrow = 1;
-                    _functionsContainer.style.flexShrink = 1;
-                }
-
                 evt.StopPropagation();
             }
         }
@@ -390,82 +274,6 @@ namespace Shizuku.Graph.Editor
 
                 // 恢复分隔条颜色
                 _resizer1.style.backgroundColor = new Color(0.15f, 0.15f, 0.15f);
-
-                evt.StopPropagation();
-            }
-        }
-
-        private void OnResizer2MouseDown(MouseDownEvent evt)
-        {
-            if (evt.button == 0) // 左键
-            {
-                _isResizing2 = true;
-                _startMouseY = evt.mousePosition.y;
-                _startEventsHeight = _eventsContainer.resolvedStyle.height;
-                _startFunctionsHeight = _functionsContainer.resolvedStyle.height;
-
-                _resizer2.CaptureMouse();
-                _resizer2.RegisterCallback<MouseMoveEvent>(OnResizer2MouseMove);
-                _resizer2.RegisterCallback<MouseUpEvent>(OnResizer2MouseUp);
-
-                evt.StopPropagation();
-            }
-        }
-
-        private void OnResizer2MouseMove(MouseMoveEvent evt)
-        {
-            if (_isResizing2)
-            {
-                float deltaY = evt.mousePosition.y - _startMouseY;
-
-                // 计算新高度，确保最小值
-                float newEventsHeight = Mathf.Max(100, _startEventsHeight + deltaY);
-                float newFunctionsHeight = Mathf.Max(100, _startFunctionsHeight - deltaY);
-
-                // 检查是否达到最小值限制
-                if (newEventsHeight <= 100 && deltaY < 0)
-                    return; // 事件区域已达最小值，不能再缩小
-                if (newFunctionsHeight <= 100 && deltaY > 0)
-                    return; // 函数区域已达最小值，不能再缩小
-
-                // 应用新高度
-                _eventsContainer.style.height = newEventsHeight;
-                _eventsContainer.style.flexGrow = 0;
-                _eventsContainer.style.flexShrink = 0;
-
-                _functionsContainer.style.height = newFunctionsHeight;
-                _functionsContainer.style.flexGrow = 0;
-                _functionsContainer.style.flexShrink = 0;
-
-                // 确保属性列表保持固定
-                if (_propertiesContainer.style.height.value.value > 0)
-                {
-                    // 如果属性区域已经有固定高度，保持不变
-                    _propertiesContainer.style.flexGrow = 0;
-                    _propertiesContainer.style.flexShrink = 0;
-                }
-                else
-                {
-                    // 否则让它填充剩余空间
-                    _propertiesContainer.style.flexGrow = 1;
-                    _propertiesContainer.style.flexShrink = 1;
-                }
-
-                evt.StopPropagation();
-            }
-        }
-
-        private void OnResizer2MouseUp(MouseUpEvent evt)
-        {
-            if (_isResizing2)
-            {
-                _isResizing2 = false;
-                _resizer2.ReleaseMouse();
-                _resizer2.UnregisterCallback<MouseMoveEvent>(OnResizer2MouseMove);
-                _resizer2.UnregisterCallback<MouseUpEvent>(OnResizer2MouseUp);
-
-                // 恢复分隔条颜色
-                _resizer2.style.backgroundColor = new Color(0.15f, 0.15f, 0.15f);
 
                 evt.StopPropagation();
             }
@@ -516,14 +324,6 @@ namespace Shizuku.Graph.Editor
             }
         }
 
-        /// <summary>
-        /// 点击函数列表的加号按钮
-        /// </summary>
-        private void OnAddFunctionClicked()
-        {
-            // TODO: 实现添加函数的逻辑
-            Debug.Log("点击了添加函数按钮");
-        }
 
         private void RefreshPanels()
         {

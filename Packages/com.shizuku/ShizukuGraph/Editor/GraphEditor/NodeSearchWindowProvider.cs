@@ -141,6 +141,8 @@ namespace Shizuku.Graph.Editor
                         // 跳过某些特殊节点
                         if (type == typeof(ShizukuRootNode) || 
                             type == typeof(BlueprintEventNode) ||
+                            type == typeof(MethodEntryNode) ||
+                            type == typeof(MethodReturnNode) ||
                             type.Name.Contains("TypeConverterNode"))
                             continue;
 

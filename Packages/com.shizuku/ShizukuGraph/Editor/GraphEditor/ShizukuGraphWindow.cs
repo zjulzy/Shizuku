@@ -22,6 +22,10 @@ namespace Shizuku.Graph.Editor
         private VisualElement _contentContainer;
         private List<IGraphEditorExtension> _availableExtensions = new List<IGraphEditorExtension>();
 
+        // ---- 面包屑导航 ----
+        private VisualElement _breadcrumbBar;
+        private Label _breadcrumbLabel;
+
         // ---- Debug UI ----
         private VisualElement _debugToolbar;
         private Button _debugToggleButton;
@@ -83,6 +87,9 @@ namespace Shizuku.Graph.Editor
             // 调试工具栏
             BuildDebugToolbar();
 
+            // 面包屑导航栏
+            BuildBreadcrumbBar();
+
             // 内容容器
             _contentContainer = new VisualElement
             {
@@ -97,6 +104,7 @@ namespace Shizuku.Graph.Editor
             // 图视图
             _graphView = new ShizukuGraphView();
             _graphView.style.flexGrow = 1;
+            _graphView.OnEditingContextChanged += OnEditingContextChanged;
             _contentContainer.Add(_graphView);
 
             // 调试信息面板（右侧，默认隐藏）
@@ -105,6 +113,93 @@ namespace Shizuku.Graph.Editor
             // 初始化调试 UI 状态
             RefreshDebugUIState();
         }
+
+        #region 面包屑导航
+
+        private void BuildBreadcrumbBar()
+        {
+            _breadcrumbBar = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row,
+                    alignItems = Align.Center,
+                    paddingLeft = 10,
+                    paddingRight = 10,
+                    paddingTop = 4,
+                    paddingBottom = 4,
+                    backgroundColor = new Color(0.2f, 0.2f, 0.25f, 1f),
+                    borderBottomWidth = 1,
+                    borderBottomColor = new Color(0.1f, 0.1f, 0.1f, 1f),
+                    height = 26,
+                    display = DisplayStyle.None // 主图时隐藏
+                }
+            };
+
+            _breadcrumbLabel = new Label("")
+            {
+                style =
+                {
+                    fontSize = 12,
+                    color = new Color(0.85f, 0.85f, 0.95f),
+                    unityTextAlign = TextAnchor.MiddleLeft,
+                    flexGrow = 1
+                }
+            };
+            _breadcrumbBar.Add(_breadcrumbLabel);
+
+            var backButton = new Button(() => _graphView?.ReturnToMainGraph())
+            {
+                text = "← 返回主图",
+                style =
+                {
+                    height = 20,
+                    paddingLeft = 8,
+                    paddingRight = 8,
+                    fontSize = 11,
+                    backgroundColor = new Color(0.3f, 0.4f, 0.6f),
+                    color = Color.white,
+                    borderTopLeftRadius = 3,
+                    borderTopRightRadius = 3,
+                    borderBottomLeftRadius = 3,
+                    borderBottomRightRadius = 3
+                }
+            };
+            _breadcrumbBar.Add(backButton);
+
+            rootVisualElement.Add(_breadcrumbBar);
+        }
+
+        private void OnEditingContextChanged(ShizukuMethod method)
+        {
+            UpdateBreadcrumb(method);
+        }
+
+        private void UpdateBreadcrumb(ShizukuMethod method)
+        {
+            if (method != null)
+            {
+                // 正在编辑函数
+                _breadcrumbBar.style.display = DisplayStyle.Flex;
+                var graphName = _currentGraph != null ? _currentGraph.name : "Graph";
+                _breadcrumbLabel.text = $"📂 {graphName}  ›  ƒ {method.Name}";
+            }
+            else
+            {
+                // 回到主图
+                _breadcrumbBar.style.display = DisplayStyle.None;
+            }
+        }
+
+        /// <summary>
+        /// 外部调用：进入函数编辑模式
+        /// </summary>
+        public void EnterMethodGraph(ShizukuMethod method)
+        {
+            _graphView?.EnterMethodGraph(method);
+        }
+
+        #endregion
 
         #region Debug 工具栏
 

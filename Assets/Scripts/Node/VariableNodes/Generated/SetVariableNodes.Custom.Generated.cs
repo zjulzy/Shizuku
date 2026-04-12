@@ -25,7 +25,7 @@ public class SetVariableNode_Custom_SkillData : ShizukuRunnableNode, IVariableNo
 
     protected override void OnExecute()
     {
-        _parentGraph.SetCustomVariable(VariableGUID, Input.Value);
+        RootGraph.SetCustomVariable(VariableGUID, Input.Value);
     }
 
     protected override bool OnSelectNextNode(out string nextNodeGUID)
@@ -36,7 +36,7 @@ public class SetVariableNode_Custom_SkillData : ShizukuRunnableNode, IVariableNo
 
     private string GetDisplayName()
     {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
+        var variable = RootGraph?.GetVariableByGUID(VariableGUID);
         return variable != null ? $"Set {variable.Name}" : "Set <未设置>";
     }
 }
@@ -55,7 +55,7 @@ public class SetVariableNode_Custom_EnemyConfig : ShizukuRunnableNode, IVariable
 
     protected override void OnExecute()
     {
-        _parentGraph.SetCustomVariable(VariableGUID, Input.Value);
+        RootGraph.SetCustomVariable(VariableGUID, Input.Value);
     }
 
     protected override bool OnSelectNextNode(out string nextNodeGUID)
@@ -66,8 +66,7 @@ public class SetVariableNode_Custom_EnemyConfig : ShizukuRunnableNode, IVariable
 
     private string GetDisplayName()
     {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
+        var variable = RootGraph?.GetVariableByGUID(VariableGUID);
         return variable != null ? $"Set {variable.Name}" : "Set <未设置>";
     }
 }
-

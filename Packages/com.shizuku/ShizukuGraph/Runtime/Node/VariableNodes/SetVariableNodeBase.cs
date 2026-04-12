@@ -43,13 +43,13 @@ namespace Shizuku.Graph
         }
 
         /// <summary>
-        /// 子类实现：调用 _parentGraph 上对应类型的 SetVariable 方法
+        /// 子类实现：调用 RootGraph 上对应类型的 SetVariable 方法
         /// </summary>
         protected abstract void SetVariable(string guid, TValue value);
 
         private string GetDisplayName()
         {
-            var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
+            var variable = RootGraph?.GetVariableByGUID(VariableGUID);
             return variable != null ? $"Set {variable.Name}" : "Set <未设置>";
         }
     }

@@ -1,18 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-/// <summary>
-/// ShizukuGraphView 的调试功能部分
-/// 负责：断点标记可视化、节点执行高亮、右键菜单断点操作、调试状态刷新
-/// </summary>
 namespace Shizuku.Graph.Editor
 {
-    using Shizuku.Graph;
-    using Shizuku.Core;
+    
+    /// <summary>
+    /// ShizukuGraphView 的调试功能部分
+    /// 负责：断点标记可视化、节点执行高亮、右键菜单断点操作、调试状态刷新
+    /// </summary>
     public partial class ShizukuGraphView
     {
         #region Debug 可视化
@@ -198,8 +195,11 @@ namespace Shizuku.Graph.Editor
         /// 在 BuildContextualMenu 中追加调试相关菜单项
         /// 需要在主 ShizukuGraphView.cs 的 BuildContextualMenu 中调用
         /// </summary>
-        public void BuildDebugContextualMenu(ContextualMenuPopulateEvent evt)
+        private void BuildDebugContextualMenu(ContextualMenuPopulateEvent evt)
         {
+            // 方法内节点不支持断点
+            if (IsEditingMethod) return;
+
             // 查找是否右键点击在某个 RunnableNode 上
             var selectedNodeViews = selection.OfType<ShizukuNodeView>().ToList();
             if (selectedNodeViews.Count == 1)
@@ -211,6 +211,7 @@ namespace Shizuku.Graph.Editor
                     bool hasBp = ShizukuDebugger.HasBreakpoint(runnable.GUID);
                     string label = hasBp ? "移除断点" : "设置断点";
                     evt.menu.AppendAction($"调试/{label}", _ =>
+                    
                     {
                         ToggleBreakpoint(runnable.GUID);
                     });

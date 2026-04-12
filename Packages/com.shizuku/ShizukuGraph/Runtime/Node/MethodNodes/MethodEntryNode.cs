@@ -27,9 +27,9 @@ namespace Shizuku.Graph
         public override string Title => "▶ 函数入口";
         public override Color TitleBarColor => new Color(0.2f, 0.6f, 0.3f, 1f);
 
-        public override void Init(ShizukuGraphBase parentGraph)
+        public override void Init(INodeContext context)
         {
-            base.Init(parentGraph);
+            base.Init(context);
 
             // 将动态端口注册到 SelfOutputPorts，使参数边系统能找到它们
             foreach (var methodPort in OutputPorts)

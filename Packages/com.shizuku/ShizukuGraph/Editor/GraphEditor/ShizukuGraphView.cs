@@ -105,7 +105,7 @@ namespace Shizuku.Graph.Editor
             var graphMousePosition = contentViewContainer.WorldToLocal(windowMousePosition);
 
             var provider = ScriptableObject.CreateInstance<NodeSearchWindowProvider>();
-            provider.Initialize(this, graphMousePosition);
+            provider.Initialize(this, graphMousePosition, _runtimeGraph);
             return provider;
         }
 
@@ -144,6 +144,10 @@ namespace Shizuku.Graph.Editor
             evt.menu.AppendSeparator();
             evt.menu.AppendAction("创建分组", (a) => CreateGroup(_localMousePosition));
 
+            // 调用函数菜单
+            evt.menu.AppendSeparator();
+            BuildInvokeMethodMenu(evt);
+
             evt.menu.AppendSeparator();
             evt.menu.AppendAction("清空所有节点", (a) => ClearAllNodes());
 
@@ -155,6 +159,53 @@ namespace Shizuku.Graph.Editor
         {
             // 将鼠标位置转换为内容容器的本地坐标并保存，目前主要给右键菜单定位用
             _localMousePosition = contentViewContainer.WorldToLocal(evt.mousePosition);
+        }
+
+        private void BuildInvokeMethodMenu(ContextualMenuPopulateEvent evt)
+        {
+            if (_runtimeGraph == null || _runtimeGraph.Methods.Count == 0)
+            {
+                evt.menu.AppendAction("调用函数/暂无函数", null, DropdownMenuAction.Status.Disabled);
+                return;
+            }
+
+            foreach (var method in _runtimeGraph.Methods)
+            {
+                // 不允许在函数自身内部递归调用自身（可选，也可以允许）
+                // if (IsEditingMethod && _currentMethod.GUID == method.GUID) continue;
+
+                var capturedMethod = method;
+                evt.menu.AppendAction($"调用函数/{method.Name}", (a) => CreateInvokeMethodNode(capturedMethod, _localMousePosition));
+            }
+        }
+
+        /// <summary>
+        /// 创建调用函数节点
+        /// </summary>
+        public void CreateInvokeMethodNode(ShizukuMethod method, Vector2 mousePosition)
+        {
+            var node = new InvokeMethodNode
+            {
+                TargetMethodGUID = method.GUID,
+                TargetMethodName = method.Name,
+            };
+            node.SyncPortsFromMethod(method);
+
+            var nodeView = new ShizukuNodeView(node, _runtimeGraph);
+            nodeView.InitPort();
+            nodeView.SetPosition(new Rect(mousePosition, new Vector2(200, 100)));
+
+            // 根据编辑上下文添加节点到对应容器
+            if (IsEditingMethod)
+                _currentMethod.AddNode(node);
+            else
+                _runtimeGraph.AddNode(node);
+
+            _guidToNodeViewMap[node.GUID] = nodeView;
+            AddElement(nodeView);
+            EditorUtility.SetDirty(_runtimeGraph);
+
+            OnGraphChanged?.Invoke();
         }
 
         private void BuildBlueprintEventMenu(ContextualMenuPopulateEvent evt)
@@ -993,6 +1044,14 @@ namespace Shizuku.Graph.Editor
             {
                 nodeView.title = node.Title;
             }
+        }
+
+        /// <summary>
+        /// 重新加载当前编辑上下文的所有节点/边/分组（用于参数变更后刷新视图）
+        /// </summary>
+        public void RefreshCurrentView()
+        {
+            LoadCurrentContext();
         }
 
         #endregion

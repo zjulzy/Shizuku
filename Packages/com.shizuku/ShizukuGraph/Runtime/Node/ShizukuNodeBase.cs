@@ -23,7 +23,12 @@ namespace Shizuku.Graph
         public virtual bool SupportControlOutput => true;
 
         [NonSerialized]
-        protected ShizukuGraphBase _parentGraph;
+        protected INodeContext _context;
+
+        /// <summary>
+        /// 便捷访问根图（变量、函数等全局资源）
+        /// </summary>
+        protected ShizukuGraphBase RootGraph => _context?.RootGraph;
 
         [NonSerialized]
         public readonly List<ParameterEdgePort> SelfOutputPorts = new List<ParameterEdgePort>();
@@ -34,9 +39,9 @@ namespace Shizuku.Graph
         [NonSerialized]
         public readonly List<ShizukuNodeBase> DependentNodes = new List<ShizukuNodeBase>();
 
-        public virtual void Init(ShizukuGraphBase parentGraph)
+        public virtual void Init(INodeContext context)
         {
-            _parentGraph = parentGraph;
+            _context = context;
             var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             SelfOutputPorts.Clear();

@@ -6,7 +6,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [CreateAssetMenu(fileName = "ShizukuGraph", menuName = "Shizuku/Graph", order = 1)]
-    public partial class ShizukuGraphBase : ScriptableObject
+    public partial class ShizukuGraphBase : ScriptableObject, INodeContext
     {
         [SerializeField]
         public string GUID;
@@ -43,6 +43,11 @@ namespace Shizuku.Graph
         [NonSerialized]
         private Dictionary<string , ParameterEdge> _guid2EdgeMap = new Dictionary<string, ParameterEdge>();
         public Dictionary<string , ParameterEdge> Guid2EdgeMap => _guid2EdgeMap;
+
+        /// <summary>
+        /// INodeContext 实现：图自身就是根图
+        /// </summary>
+        public ShizukuGraphBase RootGraph => this;
 
         // 运行时变量存储
         [NonSerialized] private RuntimeVariableStore _variableStore;
@@ -90,7 +95,7 @@ namespace Shizuku.Graph
                 edge.ConnectPorts(this);
             }
 
-            // 初始化函数子图（内部节点/边会被注册到全局映射）
+            // 初始化函数子图
             foreach (var method in _methods)
             {
                 method.Init(this);

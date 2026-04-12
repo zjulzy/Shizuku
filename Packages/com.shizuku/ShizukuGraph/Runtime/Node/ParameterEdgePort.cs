@@ -33,6 +33,10 @@ namespace Shizuku.Graph
             return null;
         }
 
+        public virtual void SetSelfValue(object value)
+        {
+        }
+
     }
 
     // 输入输出值的接口
@@ -71,6 +75,29 @@ namespace Shizuku.Graph
         public override object GetSelfValue()
         {
             return Value;
+        }
+
+        public override void SetSelfValue(object value)
+        {
+            if (value is T typedValue)
+            {
+                Value = typedValue;
+            }
+            else if (value != null)
+            {
+                try
+                {
+                    Value = (T)Convert.ChangeType(value, typeof(T));
+                }
+                catch
+                {
+                    Debug.LogWarning($"[ParameterEdgePort] 无法将 {value.GetType().Name} 转换为 {typeof(T).Name}");
+                }
+            }
+            else
+            {
+                Value = default;
+            }
         }
     }
 

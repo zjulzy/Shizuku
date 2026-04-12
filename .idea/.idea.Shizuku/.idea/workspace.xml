@@ -3,28 +3,47 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodEntryNode.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodEntryNode.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodPort.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodPort.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodReturnNode.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodReturnNode.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuMethod.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuMethod.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/plan-nodeContextRefactor.prompt.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Docs/plan-nodeContextRefactor.prompt.md.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/INodeContext.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/INodeContext.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/InvokeMethodNode.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/InvokeMethodNode.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkill.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkill.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ShizukuGraph.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ShizukuGraph.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ShizukuGraph.asset.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ShizukuGraph.asset.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/GetVariableNodes.Custom.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/GetVariableNodes.Custom.Generated.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/SetVariableNodes.Custom.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/SetVariableNodes.Custom.Generated.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Extension/BaseGraphEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Extension/BaseGraphEditorExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Extension/BlueprintEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Extension/BlueprintEditorExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Generator/UnifiedShizukuGeneratorTab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Generator/UnifiedShizukuGeneratorTab.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/NodeSearchWindowProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/NodeSearchWindowProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphView.Debug.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphView.Debug.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphWindow.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuNodeView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuNodeView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Debug/ShizukuRunnableNode.Debug.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Debug/ShizukuRunnableNode.Debug.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/BlueprintEventNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/BlueprintEventNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/PropertyNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/PropertyNodes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizukuRootNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizukuRootNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodEntryNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodEntryNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodReturnNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodReturnNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ParameterEdgePort.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ParameterEdgePort.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ShizukuNodeBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ShizukuNodeBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ShizukuRunnableNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ShizukuRunnableNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/GetVariableNodeBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/GetVariableNodeBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/GetVariableNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/GetVariableNodes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/SetVariableNodeBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/SetVariableNodeBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/SetVariableNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/SetVariableNodes.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuGraphBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuGraphBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuMethod.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuMethod.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,17 +85,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3272951baa974b2ab5e8de68d60bfc1e46ae00/b3/93aaabe4/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/0b/65960d28/Dictionary`2.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/70/8ff87dc9/Type.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/77/4230ea42/Object.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5ff4b547bab14ebb9b1631f70822126643000/3f/01f457cc/GraphView.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5ff4b547bab14ebb9b1631f70822126643000/de/4a3e41b3/Port.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/84fcf9255ea045aab003a751cdb5a2f6573620/3c/42f590a9/Type.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ec8e42e1933446f39ba5dfae3473755f224200/23/40da70ea/VisualElement.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f27f375161264267910e5cbe7a0862ec1f7600/6b/4acc2bff/Behaviour.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f27f375161264267910e5cbe7a0862ec1f7600/9b/39454f88/MonoBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f27f375161264267910e5cbe7a0862ec1f7600/da/5a8454b4/Component.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Docs/ARCHITECTURE.md.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Docs/BLUEPRINT_GENERATOR.md.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Docs/CONTRIBUTING.md.meta" root0="FORCE_HIGHLIGHTING" />
@@ -109,18 +117,29 @@
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuCore/Editor/ShizukuDefineInstaller.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuCore/Runtime/ShizukuTypeInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuDebugKit/Editor.meta" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuDebugKit/Runtime/ShizukuGizmos.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuDebugKit/Runtime/ShizukuLog.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Extension/BaseGraphEditorExtension.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Extension/BlueprintEditorExtension.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Generator/BlueprintGeneratorTab.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Generator/UnifiedShizukuGeneratorTab.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/NodeSearchWindowProvider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphView.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphWindow.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuNodeView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Blueprint/BlueprintBehavior.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/INodeContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/BlueprintEventNode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodEntryNode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodPort.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodReturnNode.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ParameterEdgePort.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ParameterEdge.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/RuntimeVariableStore.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuGraphBase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuMethod.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/ShizukuSkillEditorWindow.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkill.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/ShizukuTag.Runtime.asmdef" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagConfig.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagExtension.cs" root0="FORCE_HIGHLIGHTING" />
@@ -139,25 +158,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.github.copilot.settings.network.NetworkConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;附加到 Unity 编辑器.附加到 Unity 编辑器.executor&quot;: &quot;Debug&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.github.copilot.settings.network.NetworkConfigurable",
+    "vue.rearranger.settings.migration": "true",
+    "附加到 Unity 编辑器.附加到 Unity 编辑器.executor": "Debug"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="附加到 Unity 编辑器.附加到 Unity 编辑器">
     <configuration name="启动 Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="U:\engine\6000.2.14f1\Unity.exe" />
@@ -267,7 +290,10 @@
       <workItem from="1775226279367" duration="3310000" />
       <workItem from="1775468357199" duration="2706000" />
       <workItem from="1775478063076" duration="537000" />
-      <workItem from="1775478633733" duration="7323000" />
+      <workItem from="1775478633733" duration="8921000" />
+      <workItem from="1775874656093" duration="1353000" />
+      <workItem from="1775960632877" duration="466000" />
+      <workItem from="1775962008481" duration="15262000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -573,7 +599,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775230506441</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="创建shizukumethod类">
+      <option name="closed" value="true" />
+      <created>1775489008553</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1775489008553</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -600,7 +634,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="优化面板ui" />
     <MESSAGE value="更新文档" />
     <MESSAGE value="创建基础数学节点" />
     <MESSAGE value="实现节点搜索添加窗口" />
@@ -625,7 +658,8 @@
     <MESSAGE value="整理debug代码" />
     <MESSAGE value="拆分插件结构" />
     <MESSAGE value="tag插件" />
-    <option name="LAST_COMMIT_MESSAGE" value="tag插件" />
+    <MESSAGE value="创建shizukumethod类" />
+    <option name="LAST_COMMIT_MESSAGE" value="创建shizukumethod类" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

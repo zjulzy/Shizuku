@@ -1,11 +1,11 @@
 ﻿#if UNITY_EDITOR
-/// <summary>
-/// ShizukuRunnableNode 的调试功能部分
-/// 负责：断点检查、单步检查、执行记录
-/// </summary>
+
 namespace Shizuku.Graph
 {
-    using Shizuku.Core;
+    /// <summary>
+    /// ShizukuRunnableNode 的调试功能部分
+    /// 负责：断点检查、单步检查、执行记录
+    /// </summary>
     public abstract partial class ShizukuRunnableNode
     {
         /// <summary>
@@ -20,7 +20,7 @@ namespace Shizuku.Graph
             {
                 if (ShizukuDebugger.HasBreakpoint(GUID) || ShizukuDebugger.ShouldPauseAfterStep())
                 {
-                    ShizukuDebugger.Pause(_parentGraph, GUID);
+                    ShizukuDebugger.Pause(RootGraph, GUID);
                     return ExecuteResult.Halted;
                 }
             }

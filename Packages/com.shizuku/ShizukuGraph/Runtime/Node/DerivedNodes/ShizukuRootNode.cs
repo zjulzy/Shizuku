@@ -12,9 +12,9 @@ namespace Shizuku.Graph
         [NonSerialized]
         public Dictionary<string, ChainPort> ChainPorts = new Dictionary<string, ChainPort>();
 
-        public override void Init(ShizukuGraphBase parentGraph)
+        public override void Init(INodeContext context)
         {
-            base.Init(parentGraph);
+            base.Init(context);
             ChainPorts.Clear();
             var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var field in fields)
@@ -45,7 +45,7 @@ namespace Shizuku.Graph
         public ExecuteResult StartExcute()
         {
             var nextNodeGUID = _nextPort.NextNodeGuid;
-            if (_parentGraph.Guid2NodeMap.TryGetValue(nextNodeGUID, out var nextNode))
+            if (_context.Guid2NodeMap.TryGetValue(nextNodeGUID, out var nextNode))
             {
                 if (nextNode is ShizukuRunnableNode runnable)
                 {

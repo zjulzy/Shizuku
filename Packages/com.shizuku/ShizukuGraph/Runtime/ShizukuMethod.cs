@@ -35,7 +35,7 @@ namespace Shizuku.Graph
     /// 构成一段可被复用调用的执行子链。
     /// </summary>
     [Serializable]
-    public class ShizukuMethod
+    public class ShizukuMethod : INodeContext
     {
         [SerializeField] public string GUID;
         [SerializeField] public string Name;
@@ -95,6 +95,13 @@ namespace Shizuku.Graph
         private Dictionary<string, ParameterEdge> _guid2EdgeMap = new Dictionary<string, ParameterEdge>();
         public Dictionary<string, ParameterEdge> Guid2EdgeMap => _guid2EdgeMap;
 
+        /// <summary>
+        /// 运行时父图引用（由 Init 设置，不序列化）
+        /// </summary>
+        [NonSerialized]
+        private ShizukuGraphBase _rootGraph;
+        public ShizukuGraphBase RootGraph => _rootGraph;
+
         #region 构造
 
         public ShizukuMethod()
@@ -119,6 +126,8 @@ namespace Shizuku.Graph
         /// </summary>
         public void Init(ShizukuGraphBase parentGraph)
         {
+            _rootGraph = parentGraph;
+
             // 清理反序列化失败的 null 节点/边
             _nodes.RemoveAll(n => n == null);
             _edges.RemoveAll(e => e == null);
@@ -127,20 +136,14 @@ namespace Shizuku.Graph
             foreach (var node in _nodes)
             {
                 _guid2NodeMap[node.GUID] = node;
-                node.Init(parentGraph);
-
-                // 同时注册到父图的全局映射，运行时 Execute 链可以统一查找
-                parentGraph.Guid2NodeMap[node.GUID] = node;
+                node.Init(this); // 传方法自身作为上下文
             }
 
             _guid2EdgeMap.Clear();
             foreach (var edge in _edges)
             {
                 _guid2EdgeMap[edge.GUID] = edge;
-                // 边的连接在函数内部节点之间，使用函数自己的节点列表来连接
                 ConnectEdge(edge);
-
-                parentGraph.Guid2EdgeMap[edge.GUID] = edge;
             }
         }
 

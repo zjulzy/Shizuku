@@ -960,85 +960,379 @@ namespace Shizuku.Graph.Editor
 
             foreach (var method in methods)
             {
-                var methodRow = new VisualElement
-                {
-                    style =
-                    {
-                        flexDirection = FlexDirection.Row,
-                        paddingLeft = 10,
-                        paddingRight = 5,
-                        paddingTop = 4,
-                        paddingBottom = 4,
-                        justifyContent = Justify.SpaceBetween,
-                        alignItems = Align.Center
-                    }
-                };
+                var methodCard = CreateMethodCard(method);
+                _functionsPanel.Add(methodCard);
+            }
+        }
 
-                var isEditing = _graphView != null && _graphView.CurrentMethod == method;
-                var label = new Label($"ƒ  {method.Name}")
+        /// <summary>
+        /// 创建函数卡片（包含标题行 + 可展开的参数编辑区域）
+        /// </summary>
+        private VisualElement CreateMethodCard(ShizukuMethod method)
+        {
+            var card = new VisualElement
+            {
+                style =
                 {
-                    style =
-                    {
-                        flexGrow = 1,
-                        color = isEditing ? new Color(0.4f, 0.8f, 1f) : new Color(0.85f, 0.85f, 0.85f),
-                        unityFontStyleAndWeight = isEditing ? FontStyle.Bold : FontStyle.Normal,
-                        fontSize = 12
-                    }
-                };
+                    marginTop = 4,
+                    marginBottom = 4,
+                    marginLeft = 5,
+                    marginRight = 5,
+                    backgroundColor = new Color(0.22f, 0.22f, 0.22f),
+                    borderTopLeftRadius = 4,
+                    borderTopRightRadius = 4,
+                    borderBottomLeftRadius = 4,
+                    borderBottomRightRadius = 4
+                }
+            };
 
-                var paramCount = method.InputParameters.Count;
-                var returnCount = method.OutputParameters.Count;
-                var hintLabel = new Label($"({paramCount}→{returnCount})")
+            // ===== 标题行 =====
+            var headerRow = new VisualElement
+            {
+                style =
                 {
-                    style =
-                    {
-                        color = new Color(0.5f, 0.5f, 0.5f),
-                        fontSize = 10,
-                        marginRight = 5
-                    }
-                };
+                    flexDirection = FlexDirection.Row,
+                    paddingLeft = 8,
+                    paddingRight = 5,
+                    paddingTop = 6,
+                    paddingBottom = 6,
+                    justifyContent = Justify.SpaceBetween,
+                    alignItems = Align.Center
+                }
+            };
 
-                // 双击进入函数编辑
-                var capturedMethod = method;
-                label.RegisterCallback<MouseDownEvent>(evt =>
+            var isEditing = _graphView != null && _graphView.CurrentMethod == method;
+
+            // 展开/折叠箭头
+            var foldoutArrow = new Label("▶")
+            {
+                style =
                 {
-                    if (evt.clickCount == 2 && evt.button == 0)
-                    {
-                        OnEnterMethod(capturedMethod);
-                        evt.StopPropagation();
-                    }
+                    fontSize = 10,
+                    color = new Color(0.6f, 0.6f, 0.6f),
+                    width = 14,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                    marginRight = 4
+                }
+            };
+
+            var nameLabel = new Label($"ƒ  {method.Name}")
+            {
+                style =
+                {
+                    flexGrow = 1,
+                    color = isEditing ? new Color(0.4f, 0.8f, 1f) : new Color(0.85f, 0.85f, 0.85f),
+                    unityFontStyleAndWeight = isEditing ? FontStyle.Bold : FontStyle.Normal,
+                    fontSize = 12
+                }
+            };
+
+            var paramCount = method.InputParameters.Count;
+            var returnCount = method.OutputParameters.Count;
+            var hintLabel = new Label($"({paramCount}→{returnCount})")
+            {
+                style =
+                {
+                    color = new Color(0.5f, 0.5f, 0.5f),
+                    fontSize = 10,
+                    marginRight = 5
+                }
+            };
+
+            var deleteBtn = new Button(() => OnDeleteMethod(method))
+            {
+                text = "×",
+                style =
+                {
+                    width = 24,
+                    height = 24,
+                    backgroundColor = new Color(0.8f, 0.3f, 0.3f),
+                    color = Color.white,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                    fontSize = 16,
+                    unityFontStyleAndWeight = FontStyle.Bold
+                }
+            };
+
+            headerRow.Add(foldoutArrow);
+            headerRow.Add(nameLabel);
+            headerRow.Add(hintLabel);
+            headerRow.Add(deleteBtn);
+            card.Add(headerRow);
+
+            // ===== 参数编辑区域（默认折叠） =====
+            var detailPanel = new VisualElement
+            {
+                style =
+                {
+                    display = DisplayStyle.None,
+                    paddingLeft = 10,
+                    paddingRight = 10,
+                    paddingBottom = 8
+                }
+            };
+
+            // 函数名编辑
+            var nameRow = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row,
+                    alignItems = Align.Center,
+                    marginBottom = 6
+                }
+            };
+            nameRow.Add(new Label("名称") { style = { width = 50, color = new Color(0.7f, 0.7f, 0.7f), fontSize = 11 } });
+            var nameField = new TextField { value = method.Name, style = { flexGrow = 1 } };
+            nameField.RegisterValueChangedCallback(evt =>
+            {
+                if (!string.IsNullOrWhiteSpace(evt.newValue) && _currentGraph.RenameMethod(method.GUID, evt.newValue))
+                {
+                    nameLabel.text = $"ƒ  {evt.newValue}";
+                    EditorUtility.SetDirty(_currentGraph);
+                    SyncAllInvokeMethodNodes(method);
+                }
+            });
+            nameRow.Add(nameField);
+            detailPanel.Add(nameRow);
+
+            // --- 输入参数区域 ---
+            detailPanel.Add(CreateParameterSection("输入参数", method.InputParameters, method));
+
+            // --- 输出参数区域 ---
+            detailPanel.Add(CreateParameterSection("输出参数（返回值）", method.OutputParameters, method));
+
+            card.Add(detailPanel);
+
+            // ===== 交互 =====
+            // 双击进入函数编辑
+            var capturedMethod = method;
+            nameLabel.RegisterCallback<MouseDownEvent>(evt =>
+            {
+                if (evt.clickCount == 2 && evt.button == 0)
+                {
+                    OnEnterMethod(capturedMethod);
+                    evt.StopPropagation();
+                }
+            });
+
+            // 单击标题行展开/折叠
+            bool expanded = false;
+            foldoutArrow.RegisterCallback<MouseDownEvent>(evt =>
+            {
+                if (evt.button == 0)
+                {
+                    expanded = !expanded;
+                    detailPanel.style.display = expanded ? DisplayStyle.Flex : DisplayStyle.None;
+                    foldoutArrow.text = expanded ? "▼" : "▶";
+                    evt.StopPropagation();
+                }
+            });
+
+            // 悬停效果
+            headerRow.RegisterCallback<MouseEnterEvent>(evt =>
+            {
+                headerRow.style.backgroundColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
+            });
+            headerRow.RegisterCallback<MouseLeaveEvent>(evt =>
+            {
+                headerRow.style.backgroundColor = new Color(0, 0, 0, 0);
+            });
+
+            return card;
+        }
+
+        /// <summary>
+        /// 创建参数列表编辑区域（输入参数或输出参数）
+        /// </summary>
+        private VisualElement CreateParameterSection(string sectionTitle, List<MethodParameter> parameters, ShizukuMethod method)
+        {
+            var section = new VisualElement { style = { marginTop = 6, marginBottom = 2 } };
+
+            var sectionHeader = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row,
+                    justifyContent = Justify.SpaceBetween,
+                    alignItems = Align.Center,
+                    marginBottom = 4
+                }
+            };
+            sectionHeader.Add(new Label(sectionTitle)
+            {
+                style =
+                {
+                    fontSize = 11,
+                    color = new Color(0.6f, 0.8f, 0.6f),
+                    unityFontStyleAndWeight = FontStyle.Bold
+                }
+            });
+
+            var addBtn = new Button(() =>
+            {
+                parameters.Add(new MethodParameter($"param{parameters.Count}", VariableType.Float));
+                EditorUtility.SetDirty(_currentGraph);
+                OnMethodParametersChanged(method);
+                RefreshFunctionsPanel();
+            })
+            {
+                text = "+",
+                style =
+                {
+                    width = 22,
+                    height = 20,
+                    fontSize = 14,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    unityTextAlign = TextAnchor.MiddleCenter
+                }
+            };
+            sectionHeader.Add(addBtn);
+            section.Add(sectionHeader);
+
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                section.Add(CreateParameterRow(parameters, i, method));
+            }
+
+            if (parameters.Count == 0)
+            {
+                section.Add(new Label("  （无）")
+                {
+                    style = { color = new Color(0.5f, 0.5f, 0.5f), fontSize = 10, marginLeft = 4 }
                 });
+            }
 
-                // 悬停效果
-                methodRow.RegisterCallback<MouseEnterEvent>(evt =>
-                {
-                    methodRow.style.backgroundColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
-                });
-                methodRow.RegisterCallback<MouseLeaveEvent>(evt =>
-                {
-                    methodRow.style.backgroundColor = new Color(0, 0, 0, 0);
-                });
+            return section;
+        }
 
-                // 删除按钮
-                var deleteBtn = new Button(() => OnDeleteMethod(capturedMethod))
+        /// <summary>
+        /// 创建单个参数编辑行（名称 + 类型下拉 + 删除按钮）
+        /// </summary>
+        private VisualElement CreateParameterRow(List<MethodParameter> parameters, int index, ShizukuMethod method)
+        {
+            var param = parameters[index];
+            var row = new VisualElement
+            {
+                style =
                 {
-                    text = "×",
-                    style =
+                    flexDirection = FlexDirection.Row,
+                    alignItems = Align.Center,
+                    marginBottom = 3,
+                    marginLeft = 8
+                }
+            };
+
+            var nameField = new TextField
+            {
+                value = param.Name,
+                style = { flexGrow = 1, marginRight = 4 }
+            };
+            nameField.RegisterValueChangedCallback(evt =>
+            {
+                if (!string.IsNullOrWhiteSpace(evt.newValue))
+                {
+                    param.Name = evt.newValue;
+                    EditorUtility.SetDirty(_currentGraph);
+                    OnMethodParametersChanged(method);
+                }
+            });
+
+            var typeField = new EnumField(param.Type)
+            {
+                style = { width = 85, marginRight = 4 }
+            };
+            typeField.RegisterValueChangedCallback(evt =>
+            {
+                param.Type = (VariableType)evt.newValue;
+                EditorUtility.SetDirty(_currentGraph);
+                OnMethodParametersChanged(method);
+            });
+
+            var deleteBtn = new Button(() =>
+            {
+                parameters.RemoveAt(index);
+                EditorUtility.SetDirty(_currentGraph);
+                OnMethodParametersChanged(method);
+                RefreshFunctionsPanel();
+            })
+            {
+                text = "×",
+                style =
+                {
+                    width = 20,
+                    height = 20,
+                    fontSize = 12,
+                    backgroundColor = new Color(0.6f, 0.25f, 0.25f),
+                    color = Color.white,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                    unityFontStyleAndWeight = FontStyle.Bold
+                }
+            };
+
+            row.Add(nameField);
+            row.Add(typeField);
+            row.Add(deleteBtn);
+            return row;
+        }
+
+        /// <summary>
+        /// 当函数参数定义改变后，同步所有相关节点的端口
+        /// </summary>
+        private void OnMethodParametersChanged(ShizukuMethod method)
+        {
+            // 同步入口节点
+            if (!string.IsNullOrEmpty(method.EntryNodeGUID))
+            {
+                var entryNode = method.GetNodeByGUID(method.EntryNodeGUID) as MethodEntryNode;
+                entryNode?.SyncPortsFromMethod(method);
+            }
+
+            // 同步返回节点
+            if (!string.IsNullOrEmpty(method.ReturnNodeGUID))
+            {
+                var returnNode = method.GetNodeByGUID(method.ReturnNodeGUID) as MethodReturnNode;
+                returnNode?.SyncPortsFromMethod(method);
+            }
+
+            // 同步所有调用该函数的 InvokeMethodNode
+            SyncAllInvokeMethodNodes(method);
+
+            EditorUtility.SetDirty(_currentGraph);
+
+            // 刷新图视图
+            if (_graphView != null)
+            {
+                _graphView.RefreshCurrentView();
+            }
+        }
+
+        /// <summary>
+        /// 同步所有引用指定函数的 InvokeMethodNode
+        /// </summary>
+        private void SyncAllInvokeMethodNodes(ShizukuMethod method)
+        {
+            if (_currentGraph == null) return;
+
+            // 主图
+            foreach (var node in _currentGraph.Nodes)
+            {
+                if (node is InvokeMethodNode invokeNode && invokeNode.TargetMethodGUID == method.GUID)
+                {
+                    invokeNode.SyncPortsFromMethod(method);
+                }
+            }
+
+            // 所有函数子图
+            foreach (var m in _currentGraph.Methods)
+            {
+                foreach (var node in m.Nodes)
+                {
+                    if (node is InvokeMethodNode invokeNode && invokeNode.TargetMethodGUID == method.GUID)
                     {
-                        width = 24,
-                        height = 24,
-                        backgroundColor = new Color(0.8f, 0.3f, 0.3f),
-                        color = Color.white,
-                        unityTextAlign = TextAnchor.MiddleCenter,
-                        fontSize = 16,
-                        unityFontStyleAndWeight = FontStyle.Bold
+                        invokeNode.SyncPortsFromMethod(method);
                     }
-                };
-
-                methodRow.Add(label);
-                methodRow.Add(hintLabel);
-                methodRow.Add(deleteBtn);
-                _functionsPanel.Add(methodRow);
+                }
             }
         }
 

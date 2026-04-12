@@ -14,19 +14,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBehaviorBlueprint
   GUID: 
   _nodes:
-  - rid: 2302385193099722812
-  - rid: 2302385193099722813
+  - rid: 2302385320231960640
+  - rid: 2302385320231960641
+  - rid: 2302385320231960654
   _edges: []
   _groups: []
   RootNodeGUID: 
   _variables: []
   _methods:
-  - GUID: 5f553420-a755-4397-b96f-f1c6fa8ca206
+  - GUID: ce7b314f-0e14-4bb2-b69c-d0a78160144e
     Name: NewFunction
-    EntryNodeGUID: f5241cf3-239a-4dfc-9762-8c5afd3c0adf
+    EntryNodeGUID: ad9db8df-365f-4f13-bab7-99688f622dc2
+    ReturnNodeGUID: 76bb1f18-e11e-4988-abc8-80a1b6fd9daa
+    _nodes:
+    - rid: 2302385320231960662
+    - rid: 2302385320231960663
+    - rid: 2302385320231960664
+    _edges: []
+    _groups: []
+    InputParameters:
+    - Name: param0
+      Type: 1
+      CustomTypeName: 
+    - Name: param1
+      Type: 1
+      CustomTypeName: 
+    OutputParameters:
+    - Name: param0
+      Type: 1
+      CustomTypeName: 
+  - GUID: f57eadfb-a905-471d-9450-1cdf16514b90
+    Name: NewFunction_1
+    EntryNodeGUID: a5b6a656-c737-4c93-ac66-c7d24df04f73
     ReturnNodeGUID: 
     _nodes:
-    - rid: 2302385193099722819
+    - rid: 2302385320231960638
     _edges: []
     _groups: []
     InputParameters: []
@@ -34,27 +56,41 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 2302385193099722812
-      type: {class: BlueprintEventNode, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+    - rid: 2302385320231960638
+      type: {class: MethodEntryNode, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
       data:
-        GUID: 0e133724-3ef0-4825-ad46-4042d8c33122
+        GUID: a5b6a656-c737-4c93-ac66-c7d24df04f73
         PositionAndSize:
-          x: 362.57666
-          y: 276.19092
+          x: 100
+          y: 200
           z: 200
           w: 100
         _nextPort:
           NextNodeGuid: 
           Name: next
-        EventName: OnDeath
-        EventParameters: []
-    - rid: 2302385193099722813
+        MethodGUID: f57eadfb-a905-471d-9450-1cdf16514b90
+        OutputPorts: []
+    - rid: 2302385320231960640
       type: {class: BlueprintEventNode, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
       data:
-        GUID: 7c604727-63a2-4af2-ad3c-25368faf11b0
+        GUID: 82f221e0-eb78-4a6c-9159-9aef72c08397
         PositionAndSize:
-          x: 365.6
-          y: 500.8
+          x: 432.00003
+          y: 300.8
+          z: 200
+          w: 100
+        _nextPort:
+          NextNodeGuid: 78cc0d35-7ba5-4fcd-b4cb-d7da16ed3a31
+          Name: next
+        EventName: OnDeath
+        EventParameters: []
+    - rid: 2302385320231960641
+      type: {class: BlueprintEventNode, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        GUID: 2d1a6174-191a-4a82-9edb-c96664382661
+        PositionAndSize:
+          x: 452.00003
+          y: 518.4
           z: 200
           w: 100
         _nextPort:
@@ -65,8 +101,8 @@ MonoBehaviour:
         - Name: damage
           TypeName: Single
           OutputPort:
-            rid: 2302385193099722814
-    - rid: 2302385193099722814
+            rid: 2302385320231960642
+    - rid: 2302385320231960642
       type: {class: FloatParameterEdgePort, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
       data:
         Name: damage
@@ -74,17 +110,138 @@ MonoBehaviour:
         IsOut: 1
         Value: 0
         DefaultValue: 0
-    - rid: 2302385193099722819
-      type: {class: MethodEntryNode, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+    - rid: 2302385320231960654
+      type: {class: InvokeMethodNode, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
       data:
-        GUID: f5241cf3-239a-4dfc-9762-8c5afd3c0adf
+        GUID: 78cc0d35-7ba5-4fcd-b4cb-d7da16ed3a31
         PositionAndSize:
-          x: 178.4
-          y: 326.39996
-          z: 131.20001
-          w: 76
+          x: 1017.6
+          y: 344.8
+          z: 171.20007
+          w: 132.79999
+        TargetMethodGUID: ce7b314f-0e14-4bb2-b69c-d0a78160144e
+        TargetMethodName: NewFunction
+        DynamicInputPorts:
+        - Name: param0
+          Type: 1
+          Port:
+            rid: 2302385320231960655
+        - Name: param1
+          Type: 1
+          Port:
+            rid: 2302385320231960656
+        DynamicOutputPorts:
+        - Name: param0
+          Type: 1
+          Port:
+            rid: 2302385320231960657
         _nextPort:
           NextNodeGuid: 
           Name: next
-        MethodGUID: 5f553420-a755-4397-b96f-f1c6fa8ca206
-        OutputPorts: []
+    - rid: 2302385320231960655
+      type: {class: FloatParameterEdgePort, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        Name: param0
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: 0
+        DefaultValue: 0
+    - rid: 2302385320231960656
+      type: {class: FloatParameterEdgePort, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        Name: param1
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: 0
+        DefaultValue: 0
+    - rid: 2302385320231960657
+      type: {class: FloatParameterEdgePort, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        Name: param0
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 0
+        DefaultValue: 0
+    - rid: 2302385320231960662
+      type: {class: MethodEntryNode, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        GUID: ad9db8df-365f-4f13-bab7-99688f622dc2
+        PositionAndSize:
+          x: 100
+          y: 200
+          z: 200
+          w: 100
+        _nextPort:
+          NextNodeGuid: 4683134d-ef31-4dfd-957c-6dbe57b670dc
+          Name: next
+        MethodGUID: ce7b314f-0e14-4bb2-b69c-d0a78160144e
+        OutputPorts:
+        - Name: param0
+          Type: 1
+          Port:
+            rid: 2302385320231960665
+        - Name: param1
+          Type: 1
+          Port:
+            rid: 2302385320231960666
+    - rid: 2302385320231960663
+      type: {class: MethodReturnNode, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        GUID: 76bb1f18-e11e-4988-abc8-80a1b6fd9daa
+        PositionAndSize:
+          x: 600
+          y: 200
+          z: 200
+          w: 100
+        MethodGUID: ce7b314f-0e14-4bb2-b69c-d0a78160144e
+        InputPorts:
+        - Name: param0
+          Type: 1
+          Port:
+            rid: 2302385320231960667
+    - rid: 2302385320231960664
+      type: {class: ShizukuLogNode, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        GUID: 4683134d-ef31-4dfd-957c-6dbe57b670dc
+        PositionAndSize:
+          x: 401.6
+          y: 320
+          z: 200
+          w: 100
+        Message:
+          rid: 2302385320231960668
+        _nextPort:
+          NextNodeGuid: 76bb1f18-e11e-4988-abc8-80a1b6fd9daa
+          Name: next
+    - rid: 2302385320231960665
+      type: {class: FloatParameterEdgePort, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        Name: param0
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 0
+        DefaultValue: 0
+    - rid: 2302385320231960666
+      type: {class: FloatParameterEdgePort, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        Name: param1
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 0
+        DefaultValue: 0
+    - rid: 2302385320231960667
+      type: {class: FloatParameterEdgePort, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        Name: param0
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: 0
+        DefaultValue: 0
+    - rid: 2302385320231960668
+      type: {class: StringParameterEdgePort, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        Name: message
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: 
+        DefaultValue: 123

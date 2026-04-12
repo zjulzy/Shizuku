@@ -16,6 +16,7 @@ namespace Shizuku.Graph.Editor
     {
         private ShizukuGraphView _graphView;
         private Vector2 _nodePosition;
+        private ShizukuGraphBase _graphAsset;
 
         /// <summary>
         /// 初始化提供者
@@ -24,6 +25,16 @@ namespace Shizuku.Graph.Editor
         {
             _graphView = graphView;
             _nodePosition = nodePosition;
+        }
+
+        /// <summary>
+        /// 初始化提供者（带图资产引用，用于显示函数调用项）
+        /// </summary>
+        public void Initialize(ShizukuGraphView graphView, Vector2 nodePosition, ShizukuGraphBase graphAsset)
+        {
+            _graphView = graphView;
+            _nodePosition = nodePosition;
+            _graphAsset = graphAsset;
         }
 
         /// <summary>
@@ -97,7 +108,31 @@ namespace Shizuku.Graph.Editor
                 }
             }
 
+            // 添加"调用函数"分组
+            AddMethodCallEntries(tree);
+
             return tree;
+        }
+
+        /// <summary>
+        /// 将图中定义的函数添加为搜索条目
+        /// </summary>
+        private void AddMethodCallEntries(List<SearchTreeEntry> tree)
+        {
+            if (_graphAsset == null || _graphAsset.Methods.Count == 0)
+                return;
+
+            tree.Add(new SearchTreeGroupEntry(new GUIContent("调用函数"), 1));
+
+            foreach (var method in _graphAsset.Methods)
+            {
+                var content = new GUIContent($"📞 {method.Name}", $"调用函数 {method.Name}");
+                tree.Add(new SearchTreeEntry(content)
+                {
+                    level = 2,
+                    userData = method
+                });
+            }
         }
 
         /// <summary>
@@ -110,6 +145,13 @@ namespace Shizuku.Graph.Editor
                 _graphView.CreateNodeFromType(nodeInfo.NodeType, _nodePosition);
                 return true;
             }
+
+            if (entry.userData is ShizukuMethod method)
+            {
+                _graphView.CreateInvokeMethodNode(method, _nodePosition);
+                return true;
+            }
+
             return false;
         }
 
@@ -143,6 +185,7 @@ namespace Shizuku.Graph.Editor
                             type == typeof(BlueprintEventNode) ||
                             type == typeof(MethodEntryNode) ||
                             type == typeof(MethodReturnNode) ||
+                            type == typeof(InvokeMethodNode) ||
                             type.Name.Contains("TypeConverterNode"))
                             continue;
 

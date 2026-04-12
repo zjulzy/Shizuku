@@ -20,7 +20,7 @@ namespace Shizuku.Graph
 
         public override void GetOutputValues()
         {
-            if (_parentGraph != null && (_parentGraph as ShizukuBluePrint).TryGetProperty(PropertyName, out var value))
+            if (RootGraph != null && (RootGraph as ShizukuBluePrint).TryGetProperty(PropertyName, out var value))
             {
                 try
                 {
@@ -61,10 +61,10 @@ namespace Shizuku.Graph
 
         protected override void OnExecute()
         {
-            if (_parentGraph != null)
+            if (RootGraph != null)
             {
                 var value = GetInputValue();
-                (_parentGraph as ShizukuBluePrint).TrySetProperty(PropertyName, value);
+                (RootGraph as ShizukuBluePrint).TrySetProperty(PropertyName, value);
             }
         }
 

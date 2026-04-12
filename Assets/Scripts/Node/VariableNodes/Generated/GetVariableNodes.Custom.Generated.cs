@@ -24,13 +24,13 @@ public class GetVariableNode_Custom_SkillData : ShizukuValueNode, IVariableNode
 
     public override void GetOutputValues()
     {
-        var dict = _parentGraph.VariableStore.GetOrCreateCustomDict<SkillData>();
+        var dict = RootGraph.VariableStore.GetOrCreateCustomDict<SkillData>();
         Output.Value = dict.TryGetValue(VariableGUID, out var v) ? v : default;
     }
 
     private string GetDisplayName()
     {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
+        var variable = RootGraph?.GetVariableByGUID(VariableGUID);
         return variable != null ? $"Get {variable.Name}" : "Get <未设置>";
     }
 }
@@ -48,14 +48,13 @@ public class GetVariableNode_Custom_EnemyConfig : ShizukuValueNode, IVariableNod
 
     public override void GetOutputValues()
     {
-        var dict = _parentGraph.VariableStore.GetOrCreateCustomDict<EnemyConfig>();
+        var dict = RootGraph.VariableStore.GetOrCreateCustomDict<EnemyConfig>();
         Output.Value = dict.TryGetValue(VariableGUID, out var v) ? v : default;
     }
 
     private string GetDisplayName()
     {
-        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);
+        var variable = RootGraph?.GetVariableByGUID(VariableGUID);
         return variable != null ? $"Get {variable.Name}" : "Get <未设置>";
     }
 }
-

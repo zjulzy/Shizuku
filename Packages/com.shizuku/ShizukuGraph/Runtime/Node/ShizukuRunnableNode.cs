@@ -24,9 +24,9 @@ namespace Shizuku.Graph
         public sealed override bool SupportControlOutput => true;
 
 
-        public override void Init(ShizukuGraphBase parentGraph)
+        public override void Init(INodeContext context)
         {
-            base.Init(parentGraph);
+            base.Init(context);
         }
 
         public ExecuteResult Execute()
@@ -46,7 +46,7 @@ namespace Shizuku.Graph
 
             if (OnSelectNextNode(out var guid))
             {
-                if (_parentGraph.Guid2NodeMap.TryGetValue(guid, out var nextNode))
+                if (_context.Guid2NodeMap.TryGetValue(guid, out var nextNode))
                 {
                     if (nextNode is ShizukuRunnableNode runnable)
                     {

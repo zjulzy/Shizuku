@@ -13,7 +13,7 @@ namespace Shizuku.Graph
     public class SetVariableNode_Int : SetVariableNodeBase<IntParameterEdgePort, int>
     {
         public override VariableType TargetVariableType => VariableType.Int;
-        protected override void SetVariable(string guid, int value) => _parentGraph.SetVariableInt(guid, value);
+        protected override void SetVariable(string guid, int value) => RootGraph.SetVariableInt(guid, value);
     }
 
     [Serializable]
@@ -21,7 +21,7 @@ namespace Shizuku.Graph
     public class SetVariableNode_Float : SetVariableNodeBase<FloatParameterEdgePort, float>
     {
         public override VariableType TargetVariableType => VariableType.Float;
-        protected override void SetVariable(string guid, float value) => _parentGraph.SetVariableFloat(guid, value);
+        protected override void SetVariable(string guid, float value) => RootGraph.SetVariableFloat(guid, value);
     }
 
     [Serializable]
@@ -29,7 +29,7 @@ namespace Shizuku.Graph
     public class SetVariableNode_Bool : SetVariableNodeBase<BoolParameterEdgePort, bool>
     {
         public override VariableType TargetVariableType => VariableType.Bool;
-        protected override void SetVariable(string guid, bool value) => _parentGraph.SetVariableBool(guid, value);
+        protected override void SetVariable(string guid, bool value) => RootGraph.SetVariableBool(guid, value);
     }
 
     [Serializable]
@@ -37,7 +37,7 @@ namespace Shizuku.Graph
     public class SetVariableNode_String : SetVariableNodeBase<StringParameterEdgePort, string>
     {
         public override VariableType TargetVariableType => VariableType.String;
-        protected override void SetVariable(string guid, string value) => _parentGraph.SetVariableString(guid, value);
+        protected override void SetVariable(string guid, string value) => RootGraph.SetVariableString(guid, value);
     }
 
     [Serializable]
@@ -45,7 +45,7 @@ namespace Shizuku.Graph
     public class SetVariableNode_Vector2 : SetVariableNodeBase<Vector2ParameterEdgePort, Vector2>
     {
         public override VariableType TargetVariableType => VariableType.Vector2;
-        protected override void SetVariable(string guid, Vector2 value) => _parentGraph.SetVariableVector2(guid, value);
+        protected override void SetVariable(string guid, Vector2 value) => RootGraph.SetVariableVector2(guid, value);
     }
 
     [Serializable]
@@ -53,7 +53,7 @@ namespace Shizuku.Graph
     public class SetVariableNode_Vector3 : SetVariableNodeBase<Vector3ParameterEdgePort, Vector3>
     {
         public override VariableType TargetVariableType => VariableType.Vector3;
-        protected override void SetVariable(string guid, Vector3 value) => _parentGraph.SetVariableVector3(guid, value);
+        protected override void SetVariable(string guid, Vector3 value) => RootGraph.SetVariableVector3(guid, value);
     }
 
     [Serializable]
@@ -61,7 +61,7 @@ namespace Shizuku.Graph
     public class SetVariableNode_GameObject : SetVariableNodeBase<GameObjectParameterEdgePort, GameObject>
     {
         public override VariableType TargetVariableType => VariableType.GameObject;
-        protected override void SetVariable(string guid, GameObject value) => _parentGraph.SetVariableGameObject(guid, value);
+        protected override void SetVariable(string guid, GameObject value) => RootGraph.SetVariableGameObject(guid, value);
     }
 
     [Serializable]
@@ -69,7 +69,7 @@ namespace Shizuku.Graph
     public class SetVariableNode_Transform : SetVariableNodeBase<TransformParameterEdgePort, Transform>
     {
         public override VariableType TargetVariableType => VariableType.Transform;
-        protected override void SetVariable(string guid, Transform value) => _parentGraph.SetVariableTransform(guid, value);
+        protected override void SetVariable(string guid, Transform value) => RootGraph.SetVariableTransform(guid, value);
     }
 
     [Serializable]
@@ -77,7 +77,7 @@ namespace Shizuku.Graph
     public class SetVariableNode_Color : SetVariableNodeBase<ColorParameterEdgePort, Color>
     {
         public override VariableType TargetVariableType => VariableType.Color;
-        protected override void SetVariable(string guid, Color value) => _parentGraph.SetVariableColor(guid, value);
+        protected override void SetVariable(string guid, Color value) => RootGraph.SetVariableColor(guid, value);
     }
 
 }

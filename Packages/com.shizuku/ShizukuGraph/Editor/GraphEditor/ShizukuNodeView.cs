@@ -24,10 +24,23 @@ namespace Shizuku.Graph.Editor
         // 静态缓存样式表，只加载一次
         private static StyleSheet s_StyleSheet;
 
+        // 静态缓存：同一节点类型的 FieldInfo 只反射一次
+        private static readonly Dictionary<Type, FieldInfo[]> s_FieldInfoCache = new();
+
         static ShizukuNodeView()
         {
             // 静态构造函数，只会执行一次
             s_StyleSheet = Resources.Load<StyleSheet>("ShizukuNodeView");
+        }
+
+        private static FieldInfo[] GetCachedFields(Type nodeType)
+        {
+            if (!s_FieldInfoCache.TryGetValue(nodeType, out var fields))
+            {
+                fields = nodeType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                s_FieldInfoCache[nodeType] = fields;
+            }
+            return fields;
         }
 
         public ShizukuNodeBase RuntimeNode => _node;
@@ -219,7 +232,7 @@ namespace Shizuku.Graph.Editor
                 return;
             }
             var nodeType = _node.GetType();
-            var fields = nodeType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            var fields = GetCachedFields(nodeType);
 
             #region chain端口
 
@@ -260,6 +273,7 @@ namespace Shizuku.Graph.Editor
 
             #region 参数端口
 
+            // 首先基于蓝图事件节点和图方法的相关节点做特殊处理，因为这些节点的port是保存在列表里面的
             if (_node is BlueprintEventNode eventNode)
             {
                 foreach (var param in eventNode.EventParameters)
@@ -279,7 +293,7 @@ namespace Shizuku.Graph.Editor
             }
 
             // 函数入口节点的动态输出端口
-            if (_node is MethodEntryNode entryNode)
+            else if (_node is MethodEntryNode entryNode)
             {
                 foreach (var methodPort in entryNode.OutputPorts)
                 {
@@ -295,7 +309,7 @@ namespace Shizuku.Graph.Editor
             }
 
             // 函数返回节点的动态输入端口
-            if (_node is MethodReturnNode returnNode)
+            else if (_node is MethodReturnNode returnNode)
             {
                 foreach (var methodPort in returnNode.InputPorts)
                 {
@@ -306,6 +320,36 @@ namespace Shizuku.Graph.Editor
                         inputPort.AddToClassList("parameter-port");
                         SetPortTooltip(inputPort, methodPort.Port.GetType());
                         inputContainer.Add(inputPort);
+                    }
+                }
+            }
+
+            // 调用函数节点的动态端口
+            else if (_node is InvokeMethodNode invokeNode)
+            {
+                // 动态输入端口（调用者传入的参数）
+                foreach (var methodPort in invokeNode.DynamicInputPorts)
+                {
+                    if (methodPort.Port != null)
+                    {
+                        var inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, methodPort.Port.GetType());
+                        inputPort.portName = methodPort.Name;
+                        inputPort.AddToClassList("parameter-port");
+                        SetPortTooltip(inputPort, methodPort.Port.GetType());
+                        inputContainer.Add(inputPort);
+                    }
+                }
+
+                // 动态输出端口（函数的返回值）
+                foreach (var methodPort in invokeNode.DynamicOutputPorts)
+                {
+                    if (methodPort.Port != null)
+                    {
+                        var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, methodPort.Port.GetType());
+                        outputPort.portName = methodPort.Name;
+                        outputPort.AddToClassList("parameter-port");
+                        SetPortTooltip(outputPort, methodPort.Port.GetType());
+                        outputContainer.Add(outputPort);
                     }
                 }
             }

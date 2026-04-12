@@ -19,9 +19,9 @@ namespace Shizuku.Graph
         public override string Title => $"Event: {EventName}";
         public override Color TitleBarColor => IsValid() ? new Color(1f, 0.3f, 0.3f, 1f) : new Color(0.8f, 0.4f, 0f, 1f);
 
-        public override void Init(ShizukuGraphBase parentGraph)
+        public override void Init(INodeContext context)
         {
-            base.Init(parentGraph);
+            base.Init(context);
 
             foreach (var param in EventParameters)
             {
@@ -81,7 +81,7 @@ namespace Shizuku.Graph
 
         public bool IsValid()
         {
-            if (_parentGraph == null) return true;
+            if (RootGraph == null) return true;
 
             var methodInfo = FindMatchingMethod();
             if (methodInfo == null)
@@ -108,7 +108,7 @@ namespace Shizuku.Graph
 
         public string GetValidationMessage()
         {
-            if (_parentGraph == null) return "图未初始化";
+            if (RootGraph == null) return "图未初始化";
 
             var methodInfo = FindMatchingMethod();
             if (methodInfo == null)
@@ -157,9 +157,9 @@ namespace Shizuku.Graph
 
         private Type GetBehaviorType()
         {
-            if (_parentGraph == null) return null;
+            if (RootGraph == null) return null;
 
-            var graphType = _parentGraph.GetType();
+            var graphType = RootGraph.GetType();
             while (graphType != null && graphType != typeof(object))
             {
                 if (graphType.IsGenericType)

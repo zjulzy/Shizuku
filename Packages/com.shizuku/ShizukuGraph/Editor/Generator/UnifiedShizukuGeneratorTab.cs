@@ -1181,13 +1181,13 @@ namespace Shizuku.Graph.Editor
                 sb.AppendLine();
                 sb.AppendLine($"    public override void GetOutputValues()");
                 sb.AppendLine($"    {{");
-                sb.AppendLine($"        var dict = _parentGraph.VariableStore.GetOrCreateCustomDict<{fullTypeName}>();");
+                sb.AppendLine($"        var dict = RootGraph.VariableStore.GetOrCreateCustomDict<{fullTypeName}>();");
                 sb.AppendLine($"        Output.Value = dict.TryGetValue(VariableGUID, out var v) ? v : default;");
                 sb.AppendLine($"    }}");
                 sb.AppendLine();
                 sb.AppendLine($"    private string GetDisplayName()");
                 sb.AppendLine($"    {{");
-                sb.AppendLine($"        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);");
+                sb.AppendLine($"        var variable = RootGraph?.GetVariableByGUID(VariableGUID);");
                 sb.AppendLine($"        return variable != null ? $\"Get {{variable.Name}}\" : \"Get <未设置>\";");
                 sb.AppendLine($"    }}");
                 sb.AppendLine($"}}");
@@ -1242,7 +1242,7 @@ namespace Shizuku.Graph.Editor
                 sb.AppendLine();
                 sb.AppendLine($"    protected override void OnExecute()");
                 sb.AppendLine($"    {{");
-                sb.AppendLine($"        _parentGraph.SetCustomVariable(VariableGUID, Input.Value);");
+                sb.AppendLine($"        RootGraph.SetCustomVariable(VariableGUID, Input.Value);");
                 sb.AppendLine($"    }}");
                 sb.AppendLine();
                 sb.AppendLine($"    protected override bool OnSelectNextNode(out string nextNodeGUID)");
@@ -1253,7 +1253,7 @@ namespace Shizuku.Graph.Editor
                 sb.AppendLine();
                 sb.AppendLine($"    private string GetDisplayName()");
                 sb.AppendLine($"    {{");
-                sb.AppendLine($"        var variable = _parentGraph?.GetVariableByGUID(VariableGUID);");
+                sb.AppendLine($"        var variable = RootGraph?.GetVariableByGUID(VariableGUID);");
                 sb.AppendLine($"        return variable != null ? $\"Set {{variable.Name}}\" : \"Set <未设置>\";");
                 sb.AppendLine($"    }}");
                 sb.AppendLine($"}}");

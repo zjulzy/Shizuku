@@ -31,9 +31,9 @@ namespace Shizuku.Graph
         public sealed override bool SupportControlInput => true;
         public sealed override bool SupportControlOutput => false;
 
-        public override void Init(ShizukuGraphBase parentGraph)
+        public override void Init(INodeContext context)
         {
-            base.Init(parentGraph);
+            base.Init(context);
 
             // 将动态端口注册到 SelfInputPorts，使参数边系统能找到它们
             foreach (var methodPort in InputPorts)

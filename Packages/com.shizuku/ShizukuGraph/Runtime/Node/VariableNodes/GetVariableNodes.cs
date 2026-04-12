@@ -13,7 +13,7 @@ namespace Shizuku.Graph
     public class GetVariableNode_Int : GetVariableNodeBase<IntParameterEdgePort, int>
     {
         public override VariableType TargetVariableType => VariableType.Int;
-        protected override bool TryGetVariable(string guid, out int value) => _parentGraph.TryGetVariableInt(guid, out value);
+        protected override bool TryGetVariable(string guid, out int value) => RootGraph.TryGetVariableInt(guid, out value);
         protected override int GetDefaultValue() => 0;
     }
 
@@ -22,7 +22,7 @@ namespace Shizuku.Graph
     public class GetVariableNode_Float : GetVariableNodeBase<FloatParameterEdgePort, float>
     {
         public override VariableType TargetVariableType => VariableType.Float;
-        protected override bool TryGetVariable(string guid, out float value) => _parentGraph.TryGetVariableFloat(guid, out value);
+        protected override bool TryGetVariable(string guid, out float value) => RootGraph.TryGetVariableFloat(guid, out value);
         protected override float GetDefaultValue() => 0f;
     }
 
@@ -31,7 +31,7 @@ namespace Shizuku.Graph
     public class GetVariableNode_Bool : GetVariableNodeBase<BoolParameterEdgePort, bool>
     {
         public override VariableType TargetVariableType => VariableType.Bool;
-        protected override bool TryGetVariable(string guid, out bool value) => _parentGraph.TryGetVariableBool(guid, out value);
+        protected override bool TryGetVariable(string guid, out bool value) => RootGraph.TryGetVariableBool(guid, out value);
         protected override bool GetDefaultValue() => false;
     }
 
@@ -40,7 +40,7 @@ namespace Shizuku.Graph
     public class GetVariableNode_String : GetVariableNodeBase<StringParameterEdgePort, string>
     {
         public override VariableType TargetVariableType => VariableType.String;
-        protected override bool TryGetVariable(string guid, out string value) => _parentGraph.TryGetVariableString(guid, out value);
+        protected override bool TryGetVariable(string guid, out string value) => RootGraph.TryGetVariableString(guid, out value);
         protected override string GetDefaultValue() => "";
     }
 
@@ -49,7 +49,7 @@ namespace Shizuku.Graph
     public class GetVariableNode_Vector2 : GetVariableNodeBase<Vector2ParameterEdgePort, Vector2>
     {
         public override VariableType TargetVariableType => VariableType.Vector2;
-        protected override bool TryGetVariable(string guid, out Vector2 value) => _parentGraph.TryGetVariableVector2(guid, out value);
+        protected override bool TryGetVariable(string guid, out Vector2 value) => RootGraph.TryGetVariableVector2(guid, out value);
         protected override Vector2 GetDefaultValue() => Vector2.zero;
     }
 
@@ -58,7 +58,7 @@ namespace Shizuku.Graph
     public class GetVariableNode_Vector3 : GetVariableNodeBase<Vector3ParameterEdgePort, Vector3>
     {
         public override VariableType TargetVariableType => VariableType.Vector3;
-        protected override bool TryGetVariable(string guid, out Vector3 value) => _parentGraph.TryGetVariableVector3(guid, out value);
+        protected override bool TryGetVariable(string guid, out Vector3 value) => RootGraph.TryGetVariableVector3(guid, out value);
         protected override Vector3 GetDefaultValue() => Vector3.zero;
     }
 
@@ -67,7 +67,7 @@ namespace Shizuku.Graph
     public class GetVariableNode_GameObject : GetVariableNodeBase<GameObjectParameterEdgePort, GameObject>
     {
         public override VariableType TargetVariableType => VariableType.GameObject;
-        protected override bool TryGetVariable(string guid, out GameObject value) => _parentGraph.TryGetVariableGameObject(guid, out value);
+        protected override bool TryGetVariable(string guid, out GameObject value) => RootGraph.TryGetVariableGameObject(guid, out value);
         protected override GameObject GetDefaultValue() => null;
     }
 
@@ -76,7 +76,7 @@ namespace Shizuku.Graph
     public class GetVariableNode_Transform : GetVariableNodeBase<TransformParameterEdgePort, Transform>
     {
         public override VariableType TargetVariableType => VariableType.Transform;
-        protected override bool TryGetVariable(string guid, out Transform value) => _parentGraph.TryGetVariableTransform(guid, out value);
+        protected override bool TryGetVariable(string guid, out Transform value) => RootGraph.TryGetVariableTransform(guid, out value);
         protected override Transform GetDefaultValue() => null;
     }
 
@@ -85,7 +85,7 @@ namespace Shizuku.Graph
     public class GetVariableNode_Color : GetVariableNodeBase<ColorParameterEdgePort, Color>
     {
         public override VariableType TargetVariableType => VariableType.Color;
-        protected override bool TryGetVariable(string guid, out Color value) => _parentGraph.TryGetVariableColor(guid, out value);
+        protected override bool TryGetVariable(string guid, out Color value) => RootGraph.TryGetVariableColor(guid, out value);
         protected override Color GetDefaultValue() => Color.white;
     }
 

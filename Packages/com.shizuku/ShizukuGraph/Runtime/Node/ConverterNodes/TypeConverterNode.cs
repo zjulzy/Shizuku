@@ -33,19 +33,11 @@ namespace Shizuku.Graph
         protected abstract void ConvertValue();
 
         /// <summary>
-        /// 值节点输出计算
-        /// 获取输入值 → 执行转换 → 输出结果
+        /// 计算输出值：执行类型转换
+        /// 输入值已由基类 GetOutputValues() 自动准备好
         /// </summary>
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
-            GetInputValues();
-            // 1. 获取输入端口的值（使用基类的第一个输入端口）
-            if (SelfInputPorts.Count > 0)
-            {
-                SelfInputPorts[0].GetSourceValue();
-            }
-
-            // 2. 执行类型转换
             ConvertValue();
         }
     }

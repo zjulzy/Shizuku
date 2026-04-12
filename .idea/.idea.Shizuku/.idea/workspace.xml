@@ -11,39 +11,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Docs/plan-nodeContextRefactor.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Docs/plan-nodeContextRefactor.prompt.md.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/INodeContext.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/INodeContext.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/InvokeMethodNode.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/InvokeMethodNode.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkill.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkill.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/GetVariableNodes.Custom.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/GetVariableNodes.Custom.Generated.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/SetVariableNodes.Custom.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/SetVariableNodes.Custom.Generated.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Extension/BaseGraphEditorExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Extension/BaseGraphEditorExtension.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Generator/UnifiedShizukuGeneratorTab.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/Generator/UnifiedShizukuGeneratorTab.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/NodeSearchWindowProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/NodeSearchWindowProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphView.Debug.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphView.Debug.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuNodeView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuNodeView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Debug/ShizukuRunnableNode.Debug.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Debug/ShizukuRunnableNode.Debug.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/BlueprintEventNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/BlueprintEventNode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/PropertyNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/PropertyNodes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizukuRootNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizukuRootNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodEntryNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodEntryNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodReturnNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/MethodNodes/MethodReturnNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ParameterEdgePort.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ParameterEdgePort.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ShizukuNodeBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ShizukuNodeBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ConverterNodes/TypeConverterNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ConverterNodes/TypeConverterNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Logic/CompareNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Logic/CompareNodes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Logic/LogicNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Logic/LogicNodes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/AddNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/AddNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/ClampNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/ClampNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/DivideNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/DivideNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/LerpNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/LerpNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/MultiplyNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/MultiplyNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/SubtractNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/SubtractNode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ShizukuRunnableNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ShizukuRunnableNode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ShizukuValueNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ShizukuValueNode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/GetVariableNodeBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/GetVariableNodeBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/GetVariableNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/GetVariableNodes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/SetVariableNodeBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/SetVariableNodeBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/SetVariableNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/SetVariableNodes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuGraphBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuGraphBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuMethod.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuMethod.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -293,7 +277,7 @@
       <workItem from="1775478633733" duration="8921000" />
       <workItem from="1775874656093" duration="1353000" />
       <workItem from="1775960632877" duration="466000" />
-      <workItem from="1775962008481" duration="15262000" />
+      <workItem from="1775962008481" duration="18519000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -607,7 +591,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775489008553</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="图方法功能实现完毕">
+      <option name="closed" value="true" />
+      <created>1775985519589</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1775985519589</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -634,7 +626,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="更新文档" />
     <MESSAGE value="创建基础数学节点" />
     <MESSAGE value="实现节点搜索添加窗口" />
     <MESSAGE value="优化外观" />
@@ -659,7 +650,8 @@
     <MESSAGE value="拆分插件结构" />
     <MESSAGE value="tag插件" />
     <MESSAGE value="创建shizukumethod类" />
-    <option name="LAST_COMMIT_MESSAGE" value="创建shizukumethod类" />
+    <MESSAGE value="图方法功能实现完毕" />
+    <option name="LAST_COMMIT_MESSAGE" value="图方法功能实现完毕" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

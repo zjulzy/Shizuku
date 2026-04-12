@@ -41,6 +41,8 @@ namespace Shizuku.Graph
     #endif
 
             // ---- 正常执行 ----
+            // 递增拉取代，使值节点缓存失效（同一次 pull 内仍可复用）
+            ShizukuValueNode.CurrentPullGeneration++;
             GetInputValues();
             OnExecute();
 

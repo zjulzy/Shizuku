@@ -906,7 +906,7 @@ namespace Shizuku.Graph.Editor
             else
             {
                 // 值节点
-                sb.AppendLine("    public override void GetOutputValues()");
+                sb.AppendLine("    protected override void OnComputeOutputValues()");
                 sb.AppendLine("    {");
 
                 if (funcInfo.IsStatic)
@@ -1179,7 +1179,7 @@ namespace Shizuku.Graph.Editor
                 sb.AppendLine($"    public override Color TitleBarColor => new Color(0.8f, 0.4f, 0.8f, 1f);");
                 sb.AppendLine($"    public VariableType TargetVariableType => VariableType.Custom;");
                 sb.AppendLine();
-                sb.AppendLine($"    public override void GetOutputValues()");
+                sb.AppendLine($"    protected override void OnComputeOutputValues()");
                 sb.AppendLine($"    {{");
                 sb.AppendLine($"        var dict = RootGraph.VariableStore.GetOrCreateCustomDict<{fullTypeName}>();");
                 sb.AppendLine($"        Output.Value = dict.TryGetValue(VariableGUID, out var v) ? v : default;");

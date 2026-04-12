@@ -22,7 +22,7 @@ public class GetVariableNode_Custom_SkillData : ShizukuValueNode, IVariableNode
     public override Color TitleBarColor => new Color(0.8f, 0.4f, 0.8f, 1f);
     public VariableType TargetVariableType => VariableType.Custom;
 
-    public override void GetOutputValues()
+    protected override void OnComputeOutputValues()
     {
         var dict = RootGraph.VariableStore.GetOrCreateCustomDict<SkillData>();
         Output.Value = dict.TryGetValue(VariableGUID, out var v) ? v : default;
@@ -46,7 +46,7 @@ public class GetVariableNode_Custom_EnemyConfig : ShizukuValueNode, IVariableNod
     public override Color TitleBarColor => new Color(0.8f, 0.4f, 0.8f, 1f);
     public VariableType TargetVariableType => VariableType.Custom;
 
-    public override void GetOutputValues()
+    protected override void OnComputeOutputValues()
     {
         var dict = RootGraph.VariableStore.GetOrCreateCustomDict<EnemyConfig>();
         Output.Value = dict.TryGetValue(VariableGUID, out var v) ? v : default;

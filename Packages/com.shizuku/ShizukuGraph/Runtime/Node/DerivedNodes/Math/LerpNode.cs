@@ -27,7 +27,7 @@ namespace Shizuku.Graph
         public override string Title => "Lerp (Float)";
         public override Color TitleBarColor => new Color(0.8f, 0.6f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = Mathf.Lerp(InputA.Value, InputB.Value, InputT.Value);
         }
@@ -52,7 +52,7 @@ namespace Shizuku.Graph
         public override string Title => "Lerp (Vector2)";
         public override Color TitleBarColor => new Color(0.8f, 0.6f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = Vector2.Lerp(InputA.Value, InputB.Value, InputT.Value);
         }
@@ -77,7 +77,7 @@ namespace Shizuku.Graph
         public override string Title => "Lerp (Vector3)";
         public override Color TitleBarColor => new Color(0.8f, 0.6f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = Vector3.Lerp(InputA.Value, InputB.Value, InputT.Value);
         }
@@ -102,7 +102,7 @@ namespace Shizuku.Graph
         public override string Title => "Lerp (Color)";
         public override Color TitleBarColor => new Color(0.8f, 0.6f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = Color.Lerp(InputA.Value, InputB.Value, InputT.Value);
         }

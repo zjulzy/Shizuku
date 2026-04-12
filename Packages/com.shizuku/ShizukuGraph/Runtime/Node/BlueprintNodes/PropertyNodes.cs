@@ -18,7 +18,7 @@ namespace Shizuku.Graph
         public override string Title => $"Get {PropertyName} ({TypeName})";
         public override Color TitleBarColor => new Color(0.2f, 0.6f, 1f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             if (RootGraph != null && (RootGraph as ShizukuBluePrint).TryGetProperty(PropertyName, out var value))
             {

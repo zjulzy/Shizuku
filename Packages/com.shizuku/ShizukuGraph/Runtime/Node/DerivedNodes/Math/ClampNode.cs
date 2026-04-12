@@ -27,7 +27,7 @@ namespace Shizuku.Graph
         public override string Title => "Clamp (Int)";
         public override Color TitleBarColor => new Color(0.6f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = Mathf.Clamp(InputValue.Value, InputMin.Value, InputMax.Value);
         }
@@ -52,7 +52,7 @@ namespace Shizuku.Graph
         public override string Title => "Clamp (Float)";
         public override Color TitleBarColor => new Color(0.6f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = Mathf.Clamp(InputValue.Value, InputMin.Value, InputMax.Value);
         }

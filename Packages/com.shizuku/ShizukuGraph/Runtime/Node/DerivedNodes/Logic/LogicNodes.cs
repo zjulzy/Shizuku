@@ -24,7 +24,7 @@ namespace Shizuku.Graph
         public override string Title => "And (&&)";
         public override Color TitleBarColor => new Color(0.4f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value && InputB.Value;
         }
@@ -50,7 +50,7 @@ namespace Shizuku.Graph
         public override string Title => "Or (||)";
         public override Color TitleBarColor => new Color(0.4f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value || InputB.Value;
         }
@@ -73,7 +73,7 @@ namespace Shizuku.Graph
         public override string Title => "Not (!)";
         public override Color TitleBarColor => new Color(0.4f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = !Input.Value;
         }
@@ -99,7 +99,7 @@ namespace Shizuku.Graph
         public override string Title => "Xor (^)";
         public override Color TitleBarColor => new Color(0.4f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value ^ InputB.Value;
         }

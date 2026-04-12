@@ -28,7 +28,7 @@ namespace Shizuku.Graph
         /// </summary>
         public abstract VariableType TargetVariableType { get; }
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             if (TryGetVariable(VariableGUID, out var value))
             {

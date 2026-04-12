@@ -21,9 +21,8 @@ namespace Shizuku.Graph
         [SerializeReference]
         private IntParameterEdgePort _result = new() { IsOut = true, Name = "Result" };
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
-            GetInputValues();
             if (_b.Value == 0)
             {
                 Debug.LogWarning($"[DivideNode_Int] 除数为 0，返回 0");
@@ -53,9 +52,8 @@ namespace Shizuku.Graph
         [SerializeReference]
         private FloatParameterEdgePort _result = new() { IsOut = true, Name = "Result" };
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
-            GetInputValues();
             if (Mathf.Approximately(_b.Value, 0f))
             {
                 Debug.LogWarning($"[DivideNode_Float] 除数接近 0，返回 0");
@@ -86,9 +84,8 @@ namespace Shizuku.Graph
         [SerializeReference]
         private Vector2ParameterEdgePort _result = new() { IsOut = true, Name = "Result" };
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
-            GetInputValues();
             if (Mathf.Approximately(_scalar.Value, 0f))
             {
                 Debug.LogWarning($"[DivideNode_Vector2] 除数接近 0，返回 Vector2.zero");
@@ -119,9 +116,8 @@ namespace Shizuku.Graph
         [SerializeReference]
         private Vector3ParameterEdgePort _result = new() { IsOut = true, Name = "Result" };
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
-            GetInputValues();
             if (Mathf.Approximately(_scalar.Value, 0f))
             {
                 Debug.LogWarning($"[DivideNode_Vector3] 除数接近 0，返回 Vector3.zero");

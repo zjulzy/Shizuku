@@ -24,7 +24,7 @@ namespace Shizuku.Graph
         public override string Title => "Int Equal (==)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value == InputB.Value;
         }
@@ -46,7 +46,7 @@ namespace Shizuku.Graph
         public override string Title => "Int Not Equal (!=)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value != InputB.Value;
         }
@@ -68,7 +68,7 @@ namespace Shizuku.Graph
         public override string Title => "Int Greater (>)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value > InputB.Value;
         }
@@ -90,7 +90,7 @@ namespace Shizuku.Graph
         public override string Title => "Int Greater Or Equal (>=)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value >= InputB.Value;
         }
@@ -112,7 +112,7 @@ namespace Shizuku.Graph
         public override string Title => "Int Less (<)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value < InputB.Value;
         }
@@ -134,7 +134,7 @@ namespace Shizuku.Graph
         public override string Title => "Int Less Or Equal (<=)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value <= InputB.Value;
         }
@@ -163,7 +163,7 @@ namespace Shizuku.Graph
         public override string Title => "Float Equal (≈)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = Mathf.Abs(InputA.Value - InputB.Value) <= Tolerance.Value;
         }
@@ -185,7 +185,7 @@ namespace Shizuku.Graph
         public override string Title => "Float Greater (>)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value > InputB.Value;
         }
@@ -207,7 +207,7 @@ namespace Shizuku.Graph
         public override string Title => "Float Greater Or Equal (>=)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value >= InputB.Value;
         }
@@ -229,7 +229,7 @@ namespace Shizuku.Graph
         public override string Title => "Float Less (<)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value < InputB.Value;
         }
@@ -251,7 +251,7 @@ namespace Shizuku.Graph
         public override string Title => "Float Less Or Equal (<=)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value <= InputB.Value;
         }
@@ -277,7 +277,7 @@ namespace Shizuku.Graph
         public override string Title => "String Equal";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value == InputB.Value;
         }
@@ -299,7 +299,7 @@ namespace Shizuku.Graph
         public override string Title => "String Not Equal";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value != InputB.Value;
         }
@@ -325,7 +325,7 @@ namespace Shizuku.Graph
         public override string Title => "Bool Equal";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
             Output.Value = InputA.Value == InputB.Value;
         }

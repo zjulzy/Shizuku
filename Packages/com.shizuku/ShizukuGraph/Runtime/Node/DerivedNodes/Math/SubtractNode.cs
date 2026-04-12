@@ -21,9 +21,8 @@ namespace Shizuku.Graph
         [SerializeReference]
         private IntParameterEdgePort _result = new() { IsOut = true, Name = "Result" };
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
-            GetInputValues();
             _result.Value = _a.Value - _b.Value;
         }
     }
@@ -45,9 +44,8 @@ namespace Shizuku.Graph
         [SerializeReference]
         private FloatParameterEdgePort _result = new() { IsOut = true, Name = "Result" };
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
-            GetInputValues();
             _result.Value = _a.Value - _b.Value;
         }
     }
@@ -69,9 +67,8 @@ namespace Shizuku.Graph
         [SerializeReference]
         private Vector2ParameterEdgePort _result = new() { IsOut = true, Name = "Result" };
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
-            GetInputValues();
             _result.Value = _a.Value - _b.Value;
         }
     }
@@ -94,9 +91,8 @@ namespace Shizuku.Graph
         [SerializeReference]
         private Vector3ParameterEdgePort _result = new() { IsOut = true, Name = "Result" };
 
-        public override void GetOutputValues()
+        protected override void OnComputeOutputValues()
         {
-            GetInputValues();
             _result.Value = _a.Value - _b.Value;
         }
     }

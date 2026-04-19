@@ -11,43 +11,46 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/BlueprintReturnNode.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/BlueprintReturnNode.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuCore/Runtime/ShizukuObjectPool.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuCore/Runtime/ShizukuObjectPool.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/TimelineView.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/TimelineView.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes/ClipForTrackAttribute.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes/ClipForTrackAttribute.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes/TrackRunnerAttribute.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes/TrackRunnerAttribute.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillContext.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillContext.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillPlayer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillPlayer.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillClipTypes.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillClipTypes.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillDataBase.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillDataBase.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillTrackTypes.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillTrackTypes.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/AnimationTrackRunner.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/AnimationTrackRunner.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/ClipHandlerRegistry.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/ClipHandlerRegistry.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/IClipHandler.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/IClipHandler.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/ITrackRunner.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/ITrackRunner.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/LogicClipHandler.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/LogicClipHandler.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/SimpleTrackRunner.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/SimpleTrackRunner.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Docs/KNOWN_ISSUES.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/KNOWN_ISSUES.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/ROADMAP.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/EnemyBehaviorBlueprint.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EnemyBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Graph/Blueprint/EnemyBehavior.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/EnemyConfig_CalculateDamage_Float_Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/DerivedNodes/Generated/EnemyConfig_CalculateDamage_Float_Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/Generated/CustomParameterEdgePorts.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/Generated/CustomParameterEdgePorts.Generated.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/GetVariableNodes.Custom.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/GetVariableNodes.Custom.Generated.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/SetVariableNodes.Custom.Generated.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Node/VariableNodes/Generated/SetVariableNodes.Custom.Generated.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ShizukuAttributeExamples.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ShizukuAttributeExamples.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuGraphView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuNodeView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Editor/GraphEditor/ShizukuNodeView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Blueprint/BlueprintBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Blueprint/BlueprintBehavior.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Blueprint/ShizukuBluePrint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Blueprint/ShizukuBluePrint.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/BlueprintEventNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/BlueprintEventNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/PropertyNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/BlueprintNodes/PropertyNodes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ConverterNodes/BasicTypeConverters.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ConverterNodes/BasicTypeConverters.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ConverterNodes/VectorTypeConverters.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ConverterNodes/VectorTypeConverters.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Logic/CompareNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Logic/CompareNodes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Logic/LogicNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Logic/LogicNodes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/AddNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/AddNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/ClampNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/ClampNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/DivideNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/DivideNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/LerpNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/LerpNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/MultiplyNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/MultiplyNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/SubtractNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/Math/SubtractNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizikuAddOneNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizikuAddOneNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizukuForNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizukuForNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizukuIfNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizukuIfNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizukuLogNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizukuLogNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizukuRootNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/DerivedNodes/ShizukuRootNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ShizukuRunnableNode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/ShizukuRunnableNode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/GetVariableNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/GetVariableNodes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/SetVariableNodes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/Node/VariableNodes/SetVariableNodes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/ShizukuSkillEditor.Editor.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/ShizukuSkillEditor.Editor.asmdef" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/ShizukuSkillEditorWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/ShizukuSkillEditorWindow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkill.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkill.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkillEditor.Runtime.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkillEditor.Runtime.asmdef" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +63,7 @@
     </persistenceIdMap>
   </component>
   <component name="CopilotUserSelectedChatMode">
-    <option name="chatModeId" value="file:///c%3A/snapshot/copilot-intellij/dist/assets/agents/Plan.agent.md" />
+    <option name="chatModeId" value="Agent" />
   </component>
   <component name="CopilotUserSelectedModel">
     <selectedModels>
@@ -91,6 +94,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3272951baa974b2ab5e8de68d60bfc1e46ae00/79/be89c56a/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/eb/4ead3fda/Object.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ec8e42e1933446f39ba5dfae3473755f224200/22/4b1eee7a/MouseEventBase`1.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Docs/ARCHITECTURE.md.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Docs/BLUEPRINT_GENERATOR.md.meta" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Docs/CONTRIBUTING.md.meta" root0="FORCE_HIGHLIGHTING" />
@@ -146,7 +150,14 @@
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuGraphBase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuGraph/Runtime/ShizukuMethod.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/ShizukuSkillEditorWindow.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkill.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes/ClipForTrackAttribute.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes/TrackRunnerAttribute.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillPlayer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillClipTypes.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillDataBase.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillTrackTypes.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/ITrackRunner.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/ShizukuTag.Runtime.asmdef" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagConfig.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Packages/com.shizuku/ShizukuTag/Runtime/TagExtension.cs" root0="FORCE_HIGHLIGHTING" />
@@ -303,7 +314,7 @@
       <workItem from="1775874656093" duration="1353000" />
       <workItem from="1775960632877" duration="466000" />
       <workItem from="1775962008481" duration="18556000" />
-      <workItem from="1776495537509" duration="20803000" />
+      <workItem from="1776495537509" duration="48918000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -633,7 +644,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776008544994</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="蓝图覆写方法支持返回值&amp;整理代码">
+      <option name="closed" value="true" />
+      <created>1776568281124</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1776568281124</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -660,7 +679,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="实现节点搜索添加窗口" />
     <MESSAGE value="优化外观" />
     <MESSAGE value="优化参数port默认值相关逻辑" />
     <MESSAGE value="继续拓展端口数据类型" />
@@ -685,7 +703,8 @@
     <MESSAGE value="创建shizukumethod类" />
     <MESSAGE value="图方法功能实现完毕" />
     <MESSAGE value="值节点计算的缓存与标脏" />
-    <option name="LAST_COMMIT_MESSAGE" value="值节点计算的缓存与标脏" />
+    <MESSAGE value="蓝图覆写方法支持返回值&amp;整理代码" />
+    <option name="LAST_COMMIT_MESSAGE" value="蓝图覆写方法支持返回值&amp;整理代码" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

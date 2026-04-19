@@ -37,7 +37,14 @@ namespace Shizuku.Graph.Editor
         {
             if (!s_FieldInfoCache.TryGetValue(nodeType, out var fields))
             {
-                fields = nodeType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                var list = new List<FieldInfo>();
+                var type = nodeType;
+                while (type != null && type != typeof(object))
+                {
+                    list.AddRange(type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                    type = type.BaseType;
+                }
+                fields = list.ToArray();
                 s_FieldInfoCache[nodeType] = fields;
             }
             return fields;

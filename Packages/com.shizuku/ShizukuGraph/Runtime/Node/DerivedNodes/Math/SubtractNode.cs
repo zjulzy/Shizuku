@@ -8,6 +8,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
+    [NodeMenuItem("减法/Int", NodeCategory.Math, Description = "整数减法")]
     public class SubtractNode_Int : ShizukuValueNode
     {
         public override string Title => "Subtract (Int)";
@@ -31,6 +32,7 @@ namespace Shizuku.Graph
     /// 减法节点 - Float 版本
     /// </summary>
     [Serializable]
+    [NodeMenuItem("减法/Float", NodeCategory.Math, Description = "浮点数减法")]
     public class SubtractNode_Float : ShizukuValueNode
     {
         public override string Title => "Subtract (Float)";
@@ -54,6 +56,7 @@ namespace Shizuku.Graph
     /// 减法节点 - Vector2 版本
     /// </summary>
     [Serializable]
+    [NodeMenuItem("减法/Vector2", NodeCategory.Math, Description = "二维向量减法")]
     public class SubtractNode_Vector2 : ShizukuValueNode
     {
         public override string Title => "Subtract (Vector2)";
@@ -77,7 +80,7 @@ namespace Shizuku.Graph
     /// 减法节点 - Vector3 版本
     /// </summary>
     [Serializable]
-    [NodeMenuItem("数学/减法/三维向量", NodeCategory.Math, Description = "三维向量减法")]
+    [NodeMenuItem("减法/Vector3", NodeCategory.Math, Description = "三维向量减法")]
     public class SubtractNode_Vector3 : ShizukuValueNode
     {
         public override string Title => "Subtract (Vector3)";

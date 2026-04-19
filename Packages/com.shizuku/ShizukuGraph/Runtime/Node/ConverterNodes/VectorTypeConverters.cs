@@ -9,6 +9,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
+    [NodeMenuItem("向量/Vector3 → Vector2", NodeCategory.Converter, Description = "三维向量转二维向量（丢弃Z）")]
     public class Vector3ToVector2Converter : TypeConverterNode
     {
         [SerializeReference]
@@ -29,6 +30,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
+    [NodeMenuItem("向量/Vector2 → Vector3", NodeCategory.Converter, Description = "二维向量转三维向量（Z=0）")]
     public class Vector2ToVector3Converter : TypeConverterNode
     {
         [SerializeReference]

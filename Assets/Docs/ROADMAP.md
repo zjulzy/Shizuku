@@ -24,10 +24,11 @@
 
 #### 功能列表
 
-**1. 值节点缓存机制** ⭐⭐⭐
-- [ ] 同一帧内避免重复计算
-- [ ] 添加 `_outputComputedFrame` 缓存标记
-- [ ] 实现 `OnComputeOutputValues()` 接口
+**1. 值节点缓存机制** ⭐⭐⭐ ✅
+- [x] 同一拉取代（Pull Generation）内避免重复计算
+- [x] `ShizukuValueNode` 基类实现 `_lastComputedGeneration` 缓存
+- [x] 实现 `OnComputeOutputValues()` 接口
+- [x] `ShizukuRunnableNode.Execute()` 递增全局 `CurrentPullGeneration`
 
 **2. 节点库自动发现** ⭐⭐⭐ ✅
 - [x] 通过反射扫描所有 `ShizukuNodeBase` 子类
@@ -214,10 +215,6 @@
   - [x] 面包屑导航（`EnterMethodGraph` / `ReturnToMainGraph`）
   - [x] 参数编辑（名称、类型下拉、添加/删除参数行）
   - [x] 调用节点自动同步（`SyncAllInvokeMethodNodes`）
-- [ ] **高级子图功能**
-  - [ ] 子图嵌套（函数内调用函数）
-  - [ ] 子图库管理（跨蓝图复用函数）
-  - [ ] 递归调用保护
 
 **2. 蓝图函数扩展** ⭐⭐⭐
 - [ ] **有返回值的方法重写**
@@ -518,7 +515,7 @@
 
 | 功能 | 重要性 | 紧急度 | 难度 | 状态 | 优先级 |
 |-----|-------|-------|------|------|-------|
-| 值节点缓存 | 高 | 高 | 低 | ❌ 未开始 | ⭐⭐⭐ |
+| 值节点缓存 | 高 | 高 | 低 | ✅ 完成 | ⭐⭐⭐ |
 | 节点自动发现 | 高 | 高 | 中 | ✅ 完成 | ⭐⭐⭐ |
 | 调试工具 | 高 | 中 | 高 | ✅ 核心完成 | ⭐⭐⭐ |
 | 函数/子图系统 | 高 | 中 | 高 | ✅ 核心完成 | ⭐⭐⭐ |
@@ -541,10 +538,9 @@
 以下是截至当前所有**未完成**的功能项，按优先级排序：
 
 ### 🔴 高优先级（建议近期完成）
-1. **值节点缓存机制** — 同一帧避免重复计算，性能影响大
-2. **循环节点实现** — `ShizukuForNode` 已占位但逻辑为空，ForEach / While / Break 缺失
-3. **运行时错误处理** — 异常捕获、友好错误信息、错误恢复
-4. **工具节点** — GetComponent, FindGameObject, SetActive
+1. **循环节点实现** — `ShizukuForNode` 已占位但逻辑为空，ForEach / While / Break 缺失
+2. **运行时错误处理** — 异常捕获、友好错误信息、错误恢复
+3. **工具节点** — GetComponent, FindGameObject, SetActive
 
 ### 🟠 技能系统（v0.5.0 核心）
 5. **技能数据模型** — 填充 `ShizukuSkillConfig` / `ShizukuSkill` 空类，定义轨道和关键帧数据结构
@@ -559,7 +555,6 @@
 12. **蓝图函数扩展** — 有返回值的方法重写、CallParent 节点
 13. **Quaternion 等类型** — 扩展类型端口
 14. **编辑器优化** — Ctrl+Space 搜索框、节点折叠、快捷键、网格吸附
-15. **子图高级功能** — 嵌套调用、跨蓝图复用、递归保护
 
 ### 🟢 低优先级（未来版本）
 16. **条件断点** / **表达式求值** — 调试高级功能

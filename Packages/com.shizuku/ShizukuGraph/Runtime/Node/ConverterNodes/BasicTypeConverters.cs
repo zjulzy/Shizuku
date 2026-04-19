@@ -9,6 +9,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
+    [NodeMenuItem("数值/Float → Int", NodeCategory.Converter, Description = "浮点数转整数（截断取整）")]
     public class FloatToIntConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -32,6 +33,7 @@ namespace Shizuku.Graph
     /// Int → Float 转换节点
     /// </summary>
     [Serializable]
+    [NodeMenuItem("数值/Int → Float", NodeCategory.Converter, Description = "整数转浮点数")]
     public class IntToFloatConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -56,6 +58,7 @@ namespace Shizuku.Graph
     /// 0 → false, 非零 → true
     /// </summary>
     [Serializable]
+    [NodeMenuItem("数值/Int → Bool", NodeCategory.Converter, Description = "整数转布尔（0为false，非零为true）")]
     public class IntToBoolConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -80,6 +83,7 @@ namespace Shizuku.Graph
     /// false → 0, true → 1
     /// </summary>
     [Serializable]
+    [NodeMenuItem("数值/Bool → Int", NodeCategory.Converter, Description = "布尔转整数（false为0，true为1）")]
     public class BoolToIntConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -103,6 +107,7 @@ namespace Shizuku.Graph
     /// Float → String 转换节点
     /// </summary>
     [Serializable]
+    [NodeMenuItem("字符串/Float → String", NodeCategory.Converter, Description = "浮点数转字符串")]
     public class FloatToStringConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -126,6 +131,7 @@ namespace Shizuku.Graph
     /// Int → String 转换节点
     /// </summary>
     [Serializable]
+    [NodeMenuItem("字符串/Int → String", NodeCategory.Converter, Description = "整数转字符串")]
     public class IntToStringConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -150,6 +156,7 @@ namespace Shizuku.Graph
     /// 解析失败返回 0
     /// </summary>
     [Serializable]
+    [NodeMenuItem("字符串/String → Int", NodeCategory.Converter, Description = "字符串转整数（失败返回0）")]
     public class StringToIntConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -181,6 +188,7 @@ namespace Shizuku.Graph
     /// 解析失败返回 0.0f
     /// </summary>
     [Serializable]
+    [NodeMenuItem("字符串/String → Float", NodeCategory.Converter, Description = "字符串转浮点数（失败返回0）")]
     public class StringToFloatConverter : TypeConverterNode
     {
         [SerializeReference]

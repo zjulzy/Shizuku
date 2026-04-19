@@ -3,7 +3,7 @@
 namespace Shizuku.Graph
 {
     using Shizuku.Core;
-    [NodeMenuItem("基础/打印", NodeCategory.Basic, Description = "输出日志消息")]
+    [NodeMenuItem("打印", NodeCategory.Basic, Description = "输出日志消息")]
     public class ShizukuLogNode : ShizukuRunnableNode
     {
         public override string Title => "Log Node";

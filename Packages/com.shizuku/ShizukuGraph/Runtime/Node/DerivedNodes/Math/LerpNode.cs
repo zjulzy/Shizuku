@@ -9,7 +9,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
-    [NodeMenuItem("数学/线性插值/Float", NodeCategory.Math, Description = "浮点数线性插值")]
+    [NodeMenuItem("线性插值/Float", NodeCategory.Math, Description = "浮点数线性插值")]
     public class LerpNode_Float : ShizukuValueNode
     {
         [SerializeReference]
@@ -34,7 +34,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("数学/线性插值/Vector2", NodeCategory.Math, Description = "Vector2 线性插值")]
+    [NodeMenuItem("线性插值/Vector2", NodeCategory.Math, Description = "Vector2 线性插值")]
     public class LerpNode_Vector2 : ShizukuValueNode
     {
         [SerializeReference]
@@ -59,7 +59,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("数学/线性插值/Vector3", NodeCategory.Math, Description = "Vector3 线性插值")]
+    [NodeMenuItem("线性插值/Vector3", NodeCategory.Math, Description = "Vector3 线性插值")]
     public class LerpNode_Vector3 : ShizukuValueNode
     {
         [SerializeReference]
@@ -84,7 +84,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("数学/线性插值/Color", NodeCategory.Math, Description = "颜色线性插值")]
+    [NodeMenuItem("线性插值/Color", NodeCategory.Math, Description = "颜色线性插值")]
     public class LerpNode_Color : ShizukuValueNode
     {
         [SerializeReference]

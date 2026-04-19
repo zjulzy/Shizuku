@@ -34,6 +34,18 @@ public class EnemyBehavior : BlueprintBehavior<EnemyBehavior>
         Debug.Log($"{gameObject.name} attacks");
     }
 
+    [Button]
+    [BlueprintOverridable("GetHp")]
+    public virtual float GetHp()
+    {
+        if (TryExecuteBlueprintOverride<float>(nameof(GetHp), out var result))
+        {
+            return result;
+        }
+
+        return 0;
+    }
+
     // 不标记 Attribute 的方法不会被蓝图重写
     public void Heal(float amount)
     {

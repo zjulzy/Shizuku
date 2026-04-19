@@ -8,6 +8,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
+    [NodeMenuItem("除法/Int", NodeCategory.Math, Description = "整数除法")]
     public class DivideNode_Int : ShizukuValueNode
     {
         public override string Title => "Divide (Int)";
@@ -39,6 +40,7 @@ namespace Shizuku.Graph
     /// 除法节点 - Float 版本
     /// </summary>
     [Serializable]
+    [NodeMenuItem("除法/Float", NodeCategory.Math, Description = "浮点数除法")]
     public class DivideNode_Float : ShizukuValueNode
     {
         public override string Title => "Divide (Float)";
@@ -70,7 +72,7 @@ namespace Shizuku.Graph
     /// 除法节点 - Vector2 版本（标量除法）
     /// </summary>
     [Serializable]
-    [NodeMenuItem("数学/除法/二维向量", NodeCategory.Math, Description = "二维向量标量除法")]
+    [NodeMenuItem("除法/Vector2", NodeCategory.Math, Description = "二维向量标量除法")]
     public class DivideNode_Vector2 : ShizukuValueNode
     {
         public override string Title => "Divide (Vector2)";
@@ -102,7 +104,7 @@ namespace Shizuku.Graph
     /// 除法节点 - Vector3 版本（标量除法）
     /// </summary>
     [Serializable]
-    [NodeMenuItem("数学/除法/三维向量", NodeCategory.Math, Description = "三维向量标量除法")]
+    [NodeMenuItem("除法/Vector3", NodeCategory.Math, Description = "三维向量标量除法")]
     public class DivideNode_Vector3 : ShizukuValueNode
     {
         public override string Title => "Divide (Vector3)";

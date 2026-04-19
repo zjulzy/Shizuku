@@ -268,6 +268,18 @@ namespace Shizuku.Graph.Editor
                 node.EventParameters.Add(eventParam);
             }
 
+            // 如果方法有返回值，自动创建 BlueprintReturnNode 并关联
+            BlueprintReturnNode returnNode = null;
+            if (method.ReturnType != typeof(void))
+            {
+                returnNode = new BlueprintReturnNode
+                {
+                    EventName = eventName,
+                    ReturnPort = CreatePortForType("返回值", method.ReturnType, isOut: false)
+                };
+                node.ReturnNodeGUID = returnNode.GUID;
+            }
+
             var nodeView = new ShizukuNodeView(node, _runtimeGraph);
             nodeView.InitPort();
             nodeView.SetPosition(new Rect(mousePosition, new Vector2(200, 100)));
@@ -277,33 +289,48 @@ namespace Shizuku.Graph.Editor
             else
                 _runtimeGraph.AddNode(node);
             AddElement(nodeView);
+
+            // 添加返回节点（放在事件节点右侧）
+            if (returnNode != null)
+            {
+                var returnNodeView = new ShizukuNodeView(returnNode, _runtimeGraph);
+                returnNodeView.InitPort();
+                returnNodeView.SetPosition(new Rect(mousePosition + new Vector2(400, 0), new Vector2(200, 100)));
+
+                if (IsEditingMethod)
+                    _currentMethod.AddNode(returnNode);
+                else
+                    _runtimeGraph.AddNode(returnNode);
+                AddElement(returnNodeView);
+            }
+
             EditorUtility.SetDirty(_runtimeGraph);
 
             OnGraphChanged?.Invoke();
         }
 
-        private ParameterEdgePort CreatePortForType(string name, Type type)
+        private ParameterEdgePort CreatePortForType(string name, Type type, bool isOut = true)
         {
             if (type == typeof(float))
-                return new FloatParameterEdgePort { IsOut = true, Name = name };
+                return new FloatParameterEdgePort { IsOut = isOut, Name = name };
             else if (type == typeof(int))
-                return new IntParameterEdgePort { IsOut = true, Name = name };
+                return new IntParameterEdgePort { IsOut = isOut, Name = name };
             else if (type == typeof(bool))
-                return new BoolParameterEdgePort { IsOut = true, Name = name };
+                return new BoolParameterEdgePort { IsOut = isOut, Name = name };
             else if (type == typeof(string))
-                return new StringParameterEdgePort { IsOut = true, Name = name };
+                return new StringParameterEdgePort { IsOut = isOut, Name = name };
             else if (type == typeof(Vector2))
-                return new Vector2ParameterEdgePort { IsOut = true, Name = name };
+                return new Vector2ParameterEdgePort { IsOut = isOut, Name = name };
             else if (type == typeof(Vector3))
-                return new Vector3ParameterEdgePort { IsOut = true, Name = name };
+                return new Vector3ParameterEdgePort { IsOut = isOut, Name = name };
             else if (type == typeof(GameObject))
-                return new GameObjectParameterEdgePort { IsOut = true, Name = name };
+                return new GameObjectParameterEdgePort { IsOut = isOut, Name = name };
             else if (type == typeof(Transform))
-                return new TransformParameterEdgePort { IsOut = true, Name = name };
+                return new TransformParameterEdgePort { IsOut = isOut, Name = name };
             else if (type == typeof(Color))
-                return new ColorParameterEdgePort { IsOut = true, Name = name };
+                return new ColorParameterEdgePort { IsOut = isOut, Name = name };
             else
-                return new ObjectParameterEdgePort { IsOut = true, Name = name };
+                return new ObjectParameterEdgePort { IsOut = isOut, Name = name };
         }
 
         private Type GetBehaviorType()

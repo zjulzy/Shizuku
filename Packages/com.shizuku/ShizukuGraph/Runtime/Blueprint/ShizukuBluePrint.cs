@@ -71,10 +71,10 @@ namespace Shizuku.Graph
                 {
                     _eventNodes[eventNode.EventName] = eventNode;
 
-                    // 注册事件处理器
+                    // 统一注册 Func 版本，无返回值时返回 null
                     behavior.RegisterBlueprintEvent(eventNode.EventName, (args) =>
                     {
-                        eventNode.TriggerEvent(args);
+                        return eventNode.TriggerEventWithReturn(args);
                     });
                 }
             }

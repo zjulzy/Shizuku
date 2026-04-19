@@ -8,6 +8,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
+    [NodeMenuItem("加法/Int", NodeCategory.Math, Description = "整数加法")]
     public class AddNode_Int : ShizukuValueNode
     {
         public override string Title => "Add (Int)";
@@ -31,6 +32,7 @@ namespace Shizuku.Graph
     /// 加法节点 - Float 版本
     /// </summary>
     [Serializable]
+    [NodeMenuItem("加法/Float", NodeCategory.Math, Description = "浮点数加法")]
     public class AddNode_Float : ShizukuValueNode
     {
         public override string Title => "Add (Float)";
@@ -54,6 +56,7 @@ namespace Shizuku.Graph
     /// 加法节点 - Vector2 版本
     /// </summary>
     [Serializable]
+    [NodeMenuItem("加法/Vector2", NodeCategory.Math, Description = "二维向量加法")]
     public class AddNode_Vector2 : ShizukuValueNode
     {
         public override string Title => "Add (Vector2)";
@@ -77,7 +80,7 @@ namespace Shizuku.Graph
     /// 加法节点 - Vector3 版本
     /// </summary>
     [Serializable]
-    [NodeMenuItem("数学/加法/三维向量", NodeCategory.Math, Description = "三维向量加法")]
+    [NodeMenuItem("加法/Vector3", NodeCategory.Math, Description = "三维向量加法")]
     public class AddNode_Vector3 : ShizukuValueNode
     {
         public override string Title => "Add (Vector3)";

@@ -54,9 +54,19 @@ namespace Shizuku.Graph
                     {
                         return runnable.Execute();
                     }
+                    if(nextNode is MethodReturnNode)
+                    {
+                        // 遇到函数返回节点，结束当前执行链
+                        return ExecuteResult.Continue;
+                    }
+                    if(nextNode is BlueprintReturnNode)
+                    {
+                        // 遇到蓝图事件返回节点，结束当前执行链
+                        return ExecuteResult.Continue;
+                    }
                     else
                     {
-                        Debug.LogError($"Next node is not a runnable node: {guid}");
+                        Debug.LogError($"Next node is not a legal node: {guid}");
                     }
                 }
                 else

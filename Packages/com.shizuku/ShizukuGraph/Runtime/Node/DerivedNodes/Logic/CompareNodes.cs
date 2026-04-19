@@ -9,7 +9,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
-    [NodeMenuItem("逻辑/比较/整数相等", NodeCategory.Logic, Description = "比较两个整数是否相等")]
+    [NodeMenuItem("比较/整数相等", NodeCategory.Logic, Description = "比较两个整数是否相等")]
     public class CompareNode_Int_Equal : ShizukuValueNode
     {
         [SerializeReference]
@@ -31,7 +31,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/整数不等", NodeCategory.Logic, Description = "比较两个整数是否不等")]
+    [NodeMenuItem("比较/整数不等", NodeCategory.Logic, Description = "比较两个整数是否不等")]
     public class CompareNode_Int_NotEqual : ShizukuValueNode
     {
         [SerializeReference]
@@ -53,7 +53,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/整数大于", NodeCategory.Logic, Description = "比较A是否大于B")]
+    [NodeMenuItem("比较/整数大于", NodeCategory.Logic, Description = "比较A是否大于B")]
     public class CompareNode_Int_Greater : ShizukuValueNode
     {
         [SerializeReference]
@@ -75,7 +75,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/整数大于等于", NodeCategory.Logic, Description = "比较A是否大于等于B")]
+    [NodeMenuItem("比较/整数大于等于", NodeCategory.Logic, Description = "比较A是否大于等于B")]
     public class CompareNode_Int_GreaterOrEqual : ShizukuValueNode
     {
         [SerializeReference]
@@ -97,7 +97,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/整数小于", NodeCategory.Logic, Description = "比较A是否小于B")]
+    [NodeMenuItem("比较/整数小于", NodeCategory.Logic, Description = "比较A是否小于B")]
     public class CompareNode_Int_Less : ShizukuValueNode
     {
         [SerializeReference]
@@ -119,7 +119,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/整数小于等于", NodeCategory.Logic, Description = "比较A是否小于等于B")]
+    [NodeMenuItem("比较/整数小于等于", NodeCategory.Logic, Description = "比较A是否小于等于B")]
     public class CompareNode_Int_LessOrEqual : ShizukuValueNode
     {
         [SerializeReference]
@@ -145,7 +145,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/浮点数相等", NodeCategory.Logic, Description = "比较两个浮点数是否相等（带容差）")]
+    [NodeMenuItem("比较/浮点数相等", NodeCategory.Logic, Description = "比较两个浮点数是否相等（带容差）")]
     public class CompareNode_Float_Equal : ShizukuValueNode
     {
         [SerializeReference]
@@ -170,7 +170,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/浮点数大于", NodeCategory.Logic, Description = "比较A是否大于B")]
+    [NodeMenuItem("比较/浮点数大于", NodeCategory.Logic, Description = "比较A是否大于B")]
     public class CompareNode_Float_Greater : ShizukuValueNode
     {
         [SerializeReference]
@@ -192,7 +192,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/浮点数大于等于", NodeCategory.Logic, Description = "比较A是否大于等于B")]
+    [NodeMenuItem("比较/浮点数大于等于", NodeCategory.Logic, Description = "比较A是否大于等于B")]
     public class CompareNode_Float_GreaterOrEqual : ShizukuValueNode
     {
         [SerializeReference]
@@ -214,7 +214,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/浮点数小于", NodeCategory.Logic, Description = "比较A是否小于B")]
+    [NodeMenuItem("比较/浮点数小于", NodeCategory.Logic, Description = "比较A是否小于B")]
     public class CompareNode_Float_Less : ShizukuValueNode
     {
         [SerializeReference]
@@ -236,7 +236,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/浮点数小于等于", NodeCategory.Logic, Description = "比较A是否小于等于B")]
+    [NodeMenuItem("比较/浮点数小于等于", NodeCategory.Logic, Description = "比较A是否小于等于B")]
     public class CompareNode_Float_LessOrEqual : ShizukuValueNode
     {
         [SerializeReference]
@@ -262,7 +262,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/字符串相等", NodeCategory.Logic, Description = "比较两个字符串是否相等")]
+    [NodeMenuItem("比较/字符串相等", NodeCategory.Logic, Description = "比较两个字符串是否相等")]
     public class CompareNode_String_Equal : ShizukuValueNode
     {
         [SerializeReference]
@@ -284,7 +284,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/字符串不等", NodeCategory.Logic, Description = "比较两个字符串是否不等")]
+    [NodeMenuItem("比较/字符串不等", NodeCategory.Logic, Description = "比较两个字符串是否不等")]
     public class CompareNode_String_NotEqual : ShizukuValueNode
     {
         [SerializeReference]
@@ -310,7 +310,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("逻辑/比较/布尔相等", NodeCategory.Logic, Description = "比较两个布尔值是否相等")]
+    [NodeMenuItem("比较/布尔相等", NodeCategory.Logic, Description = "比较两个布尔值是否相等")]
     public class CompareNode_Bool_Equal : ShizukuValueNode
     {
         [SerializeReference]

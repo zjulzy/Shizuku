@@ -13,6 +13,12 @@ namespace Shizuku.Graph
         [SerializeField]
         public string EventName = "OnEvent";
 
+        /// <summary>
+        /// 关联的返回节点 GUID（可选，有返回值的事件需要设置）
+        /// </summary>
+        [SerializeField]
+        public string ReturnNodeGUID;
+
         [SerializeField]
         public List<EventParameter> EventParameters = new List<EventParameter>();
 
@@ -77,6 +83,34 @@ namespace Shizuku.Graph
             }
 
             StartExcute();
+        }
+
+        /// <summary>
+        /// 触发事件并收集返回值（统一入口，无返回值时返回 null）
+        /// </summary>
+        public object TriggerEventWithReturn(params object[] args)
+        {
+            if (EventParameters.Count != args.Length)
+            {
+                Debug.LogWarning($"Event '{EventName}' parameter count mismatch. Expected {EventParameters.Count}, got {args.Length}");
+            }
+
+            for (int i = 0; i < EventParameters.Count && i < args.Length; i++)
+            {
+                EventParameters[i].SetValue(args[i]);
+            }
+
+            StartExcute();
+
+            // 从返回节点收集返回值
+            if (!string.IsNullOrEmpty(ReturnNodeGUID) && _context.Guid2NodeMap.TryGetValue(ReturnNodeGUID, out var node))
+            {
+                if (node is BlueprintReturnNode returnNode)
+                {
+                    return returnNode.CollectReturnValue();
+                }
+            }
+            return null;
         }
 
         public bool IsValid()

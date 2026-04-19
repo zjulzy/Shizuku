@@ -16,17 +16,22 @@ namespace Shizuku.Graph
         {
             base.Init(context);
             ChainPorts.Clear();
-            var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            foreach (var field in fields)
+            var type = GetType();
+            while (type != null && type != typeof(object))
             {
-                if (typeof(ChainPort).IsAssignableFrom(field.FieldType))
+                var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+                foreach (var field in fields)
                 {
-                    var port = field.GetValue(this) as ChainPort;
-                    if (port != null)
+                    if (typeof(ChainPort).IsAssignableFrom(field.FieldType))
                     {
-                        ChainPorts[port.Name] = port;
+                        var port = field.GetValue(this) as ChainPort;
+                        if (port != null)
+                        {
+                            ChainPorts[port.Name] = port;
+                        }
                     }
                 }
+                type = type.BaseType;
             }
         }
     }

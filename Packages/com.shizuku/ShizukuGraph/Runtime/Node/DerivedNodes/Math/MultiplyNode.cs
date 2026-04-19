@@ -8,6 +8,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
+    [NodeMenuItem("乘法/Int", NodeCategory.Math, Description = "整数乘法")]
     public class MultiplyNode_Int : ShizukuValueNode
     {
         public override string Title => "Multiply (Int)";
@@ -31,6 +32,7 @@ namespace Shizuku.Graph
     /// 乘法节点 - Float 版本
     /// </summary>
     [Serializable]
+    [NodeMenuItem("乘法/Float", NodeCategory.Math, Description = "浮点数乘法")]
     public class MultiplyNode_Float : ShizukuValueNode
     {
         public override string Title => "Multiply (Float)";
@@ -54,6 +56,7 @@ namespace Shizuku.Graph
     /// 乘法节点 - Vector2 版本（标量乘法）
     /// </summary>
     [Serializable]
+    [NodeMenuItem("乘法/Vector2", NodeCategory.Math, Description = "二维向量标量乘法")]
     public class MultiplyNode_Vector2 : ShizukuValueNode
     {
         public override string Title => "Multiply (Vector2)";
@@ -77,7 +80,7 @@ namespace Shizuku.Graph
     /// 乘法节点 - Vector3 版本（标量乘法）
     /// </summary>
     [Serializable]
-    [NodeMenuItem("数学/乘法/三维向量", NodeCategory.Math, Description = "三维向量标量乘法")]
+    [NodeMenuItem("乘法/Vector3", NodeCategory.Math, Description = "三维向量标量乘法")]
     public class MultiplyNode_Vector3 : ShizukuValueNode
     {
         public override string Title => "Multiply (Vector3)";

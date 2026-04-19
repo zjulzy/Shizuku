@@ -9,7 +9,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
-    [NodeMenuItem("数学/限制范围/Int", NodeCategory.Math, Description = "限制整数在指定范围内")]
+    [NodeMenuItem("限制范围/Int", NodeCategory.Math, Description = "限制整数在指定范围内")]
     public class ClampNode_Int : ShizukuValueNode
     {
         [SerializeReference]
@@ -34,7 +34,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("数学/限制范围/Float", NodeCategory.Math, Description = "限制浮点数在指定范围内")]
+    [NodeMenuItem("限制范围/Float", NodeCategory.Math, Description = "限制浮点数在指定范围内")]
     public class ClampNode_Float : ShizukuValueNode
     {
         [SerializeReference]

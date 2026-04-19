@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -33,13 +32,16 @@ namespace Shizuku.Graph
 
         #region 蓝图事件系统
 
-        private Dictionary<string, Action<object[]>> _blueprintEvents = new Dictionary<string, Action<object[]>>();
+        /// <summary>
+        /// 蓝图事件处理器（统一使用 Func，无返回值时返回 null）
+        /// </summary>
+        private Dictionary<string, Func<object[], object>> _blueprintEvents = new Dictionary<string, Func<object[], object>>();
 
         private Dictionary<string, Func<object>> _propertyGetters = new Dictionary<string, Func<object>>();
 
         private Dictionary<string, Action<object>> _propertySetters = new Dictionary<string, Action<object>>();
 
-        public void RegisterBlueprintEvent(string eventName, Action<object[]> handler)
+        public void RegisterBlueprintEvent(string eventName, Func<object[], object> handler)
         {
             _blueprintEvents[eventName] = handler;
         }
@@ -50,20 +52,6 @@ namespace Shizuku.Graph
         }
 
         /// <summary>
-        /// 执行蓝图事件
-        /// 在Behavior的方法中调用，如果蓝图实现了该事件，则执行蓝图逻辑
-        /// </summary>
-        protected bool ExecuteBlueprintEvent(string eventName, params object[] args)
-        {
-            if (_blueprintEvents != null && _blueprintEvents.TryGetValue(eventName, out var handler))
-            {
-                handler?.Invoke(args);
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
         /// 检查蓝图是否实现了某个事件
         /// </summary>
         protected bool IsBlueprintEventImplemented(string eventName)
@@ -71,17 +59,39 @@ namespace Shizuku.Graph
             return _blueprintEvents != null && _blueprintEvents.ContainsKey(eventName);
         }
 
+        /// <summary>
+        /// 尝试执行蓝图覆写（无返回值版本）
+        /// </summary>
         /// <param name="methodName">方法名（使用 nameof(方法名)）</param>
         /// <param name="args">方法参数</param>
         /// <returns>蓝图是否实现了该方法</returns>
         protected bool TryExecuteBlueprintOverride(string methodName, params object[] args)
         {
-            if(!IsBlueprintEventImplemented(methodName))
+            if (_blueprintEvents != null && _blueprintEvents.TryGetValue(methodName, out var handler))
             {
-                return false;
+                handler(args);
+                return true;
             }
-            ExecuteBlueprintEvent(methodName, args);
-            return true;
+            return false;
+        }
+
+        /// <summary>
+        /// 尝试执行蓝图覆写（带返回值版本）
+        /// 用法：if (TryExecuteBlueprintOverride&lt;float&gt;(nameof(CalcDamage), out var result, baseDmg)) return result;
+        /// </summary>
+        protected bool TryExecuteBlueprintOverride<TReturn>(string methodName, out TReturn result, params object[] args)
+        {
+            result = default;
+            if (_blueprintEvents != null && _blueprintEvents.TryGetValue(methodName, out var handler))
+            {
+                var rawResult = handler(args);
+                if (rawResult is TReturn typed)
+                {
+                    result = typed;
+                }
+                return true;
+            }
+            return false;
         }
 
         /// <summary>

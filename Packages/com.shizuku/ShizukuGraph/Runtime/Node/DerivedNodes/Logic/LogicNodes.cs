@@ -9,7 +9,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
-    [NodeMenuItem("逻辑/与", NodeCategory.Logic, Description = "逻辑与运算，所有输入为真时返回真")]
+    [NodeMenuItem("与", NodeCategory.Logic, Description = "逻辑与运算，所有输入为真时返回真")]
     public class AndNode : ShizukuValueNode
     {
         [SerializeReference]
@@ -35,7 +35,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("逻辑/或", NodeCategory.Logic, Description = "逻辑或运算，任意输入为真时返回真")]
+    [NodeMenuItem("或", NodeCategory.Logic, Description = "逻辑或运算，任意输入为真时返回真")]
     public class OrNode : ShizukuValueNode
     {
         [SerializeReference]
@@ -61,7 +61,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("逻辑/非", NodeCategory.Logic, Description = "逻辑非运算，反转布尔值")]
+    [NodeMenuItem("非", NodeCategory.Logic, Description = "逻辑非运算，反转布尔值")]
     public class NotNode : ShizukuValueNode
     {
         [SerializeReference]
@@ -84,7 +84,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("逻辑/异或", NodeCategory.Logic, Description = "逻辑异或运算，两个输入不同时返回真")]
+    [NodeMenuItem("异或", NodeCategory.Logic, Description = "逻辑异或运算，两个输入不同时返回真")]
     public class XorNode : ShizukuValueNode
     {
         [SerializeReference]

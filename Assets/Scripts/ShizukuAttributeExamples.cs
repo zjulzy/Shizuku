@@ -107,7 +107,7 @@ public static class GameObjectUtils
 /// <summary>
 /// 示例 4：自定义类型作为 ShizukuClass
 /// </summary>
-[ShizukuClass("敌人配置", "游戏/配置")]
+[ShizukuClass("敌人配置", "示例/EnemyConfig")]
 [System.Serializable]
 public class EnemyConfig
 {
@@ -116,7 +116,7 @@ public class EnemyConfig
     public float MoveSpeed = 5f;
     public Color NameColor = Color.red;
     
-    [ShizukuFunction("计算伤害", "游戏/技能")]
+    [ShizukuFunction("计算伤害", "示例/EnemyConfig")]
     public float CalculateDamage(float baseDamage)
     {        
         return baseDamage * (1 + AttackPower / 100f);
@@ -126,7 +126,7 @@ public class EnemyConfig
 /// <summary>
 /// 示例 5：技能数据
 /// </summary>
-[ShizukuClass("技能数据", "游戏/技能")]
+[ShizukuClass("技能数据", "示例/SkillData")]
 [System.Serializable]
 public class SkillData
 {

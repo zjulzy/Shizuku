@@ -9,11 +9,16 @@ namespace Shizuku.SkillEditor.Editor
     {
         private VisualElement _toolbar;
         private TimelineView _timelineView;
-        private VisualElement _inspector;
-        private VisualElement _inspectorContent;
-        private Label _inspectorHeader;
+        private ScrollView _inspector;
+
+        // 检查器三层容器
+        private VisualElement _skillSection;
+        private VisualElement _trackSection;
+        private VisualElement _clipSection;
 
         private ShizukuSkillConfig _config;
+        private SkillTrack _selectedTrack;
+        private SkillClip _selectedClip;
 
         [MenuItem("Shizuku/Skill Editor")]
         public static void OpenWindow()
@@ -41,8 +46,11 @@ namespace Shizuku.SkillEditor.Editor
         public void LoadConfig(ShizukuSkillConfig config)
         {
             _config = config;
+            _selectedTrack = null;
+            _selectedClip = null;
             if (_timelineView != null)
                 _timelineView.SetConfig(_config);
+            RefreshInspector();
         }
 
         private void OnEnable()
@@ -89,11 +97,12 @@ namespace Shizuku.SkillEditor.Editor
             // ---- 左侧：时间轴 ----
             _timelineView = new TimelineView();
             _timelineView.OnClipSelected += OnClipSelected;
+            _timelineView.OnTrackSelected += OnTrackSelected;
             _timelineView.OnSelectionCleared += OnSelectionCleared;
             contentContainer.Add(_timelineView);
 
-            // ---- 右侧：检查器 ----
-            _inspector = new VisualElement
+            // ---- 右侧：检查器（可滚动） ----
+            _inspector = new ScrollView(ScrollViewMode.Vertical)
             {
                 style =
                 {
@@ -101,53 +110,117 @@ namespace Shizuku.SkillEditor.Editor
                     borderLeftWidth = 1,
                     borderLeftColor = new Color(0.13f, 0.13f, 0.13f, 1f),
                     backgroundColor = new Color(0.22f, 0.22f, 0.22f, 1f),
-                    paddingTop = 8, paddingBottom = 8,
-                    paddingLeft = 8, paddingRight = 8
                 }
             };
-            _inspectorHeader = new Label("检查器")
-            {
-                style =
-                {
-                    unityFontStyleAndWeight = FontStyle.Bold,
-                    fontSize = 13, paddingBottom = 8,
-                    borderBottomWidth = 1,
-                    borderBottomColor = new Color(0.13f, 0.13f, 0.13f, 1f)
-                }
-            };
-            _inspector.Add(_inspectorHeader);
 
-            _inspectorContent = new VisualElement();
-            _inspectorContent.Add(new Label("选中 Clip 后显示属性")
-            {
-                style = { paddingTop = 16, color = new Color(0.5f, 0.5f, 0.5f), unityTextAlign = TextAnchor.UpperCenter }
-            });
-            _inspector.Add(_inspectorContent);
+            _skillSection = new VisualElement();
+            _trackSection = new VisualElement();
+            _clipSection = new VisualElement();
+            _inspector.Add(_skillSection);
+            _inspector.Add(_trackSection);
+            _inspector.Add(_clipSection);
             contentContainer.Add(_inspector);
 
             // 如果已有 config 则刷新
             if (_config != null)
                 _timelineView.SetConfig(_config);
+            RefreshInspector();
         }
 
         // ============================================================
-        // 检查器
+        // 检查器 - 分层刷新
         // ============================================================
-        private void OnClipSelected(SkillClip clip, SkillTrack track)
-        {
-            _inspectorContent.Clear();
-            _inspectorHeader.text = $"检查器 - {clip.GetType().Name}";
 
-            // 用 SerializedObject 方式暂不可行（clip 不是 UnityEngine.Object），
-            // 简单用 IMGUIContainer 显示字段
-            var imgui = new IMGUIContainer(() =>
+        private static readonly Color SectionBorderColor = new(0.13f, 0.13f, 0.13f, 1f);
+
+        private VisualElement CreateSectionHeader(string title)
+        {
+            return new Label(title)
+            {
+                style =
+                {
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    fontSize = 12,
+                    paddingTop = 8, paddingBottom = 4,
+                    paddingLeft = 8,
+                    borderBottomWidth = 1,
+                    borderBottomColor = SectionBorderColor,
+                    color = new Color(0.8f, 0.8f, 0.8f),
+                }
+            };
+        }
+
+        private void RefreshInspector()
+        {
+            RefreshSkillSection();
+            RefreshTrackSection();
+            RefreshClipSection();
+        }
+
+        private void RefreshSkillSection()
+        {
+            _skillSection.Clear();
+            if (_config == null)
+            {
+                _skillSection.Add(new Label("未加载技能配置")
+                {
+                    style = { paddingTop = 16, paddingLeft = 8, color = new Color(0.5f, 0.5f, 0.5f), unityTextAlign = TextAnchor.UpperCenter }
+                });
+                return;
+            }
+
+            _skillSection.Add(CreateSectionHeader("技能信息"));
+            _skillSection.Add(new IMGUIContainer(() =>
+            {
+                if (_config == null) return;
+                EditorGUI.BeginChangeCheck();
+                _config.SkillName = EditorGUILayout.TextField("技能名称", _config.SkillName);
+                _config.Duration = EditorGUILayout.FloatField("总时长", _config.Duration);
+                EditorGUILayout.LabelField("轨道数", _config.Tracks.Count.ToString());
+                if (EditorGUI.EndChangeCheck())
+                    EditorUtility.SetDirty(_config);
+            })
+            {
+                style = { paddingLeft = 8, paddingRight = 8, paddingTop = 4, paddingBottom = 8 }
+            });
+        }
+
+        private void RefreshTrackSection()
+        {
+            _trackSection.Clear();
+            if (_selectedTrack == null) return;
+
+            _trackSection.Add(CreateSectionHeader($"轨道 - {_selectedTrack.GetType().Name}"));
+            var track = _selectedTrack;
+            _trackSection.Add(new IMGUIContainer(() =>
+            {
+                if (track == null) return;
+                EditorGUI.BeginChangeCheck();
+                track.TrackName = EditorGUILayout.TextField("轨道名", track.TrackName);
+                track.Enabled = EditorGUILayout.Toggle("启用", track.Enabled);
+                EditorGUILayout.LabelField("Clip 数", track.Clips.Count.ToString());
+                if (EditorGUI.EndChangeCheck() && _config != null)
+                    EditorUtility.SetDirty(_config);
+            })
+            {
+                style = { paddingLeft = 8, paddingRight = 8, paddingTop = 4, paddingBottom = 8 }
+            });
+        }
+
+        private void RefreshClipSection()
+        {
+            _clipSection.Clear();
+            if (_selectedClip == null) return;
+
+            _clipSection.Add(CreateSectionHeader($"Clip - {_selectedClip.GetType().Name}"));
+            var clip = _selectedClip;
+            _clipSection.Add(new IMGUIContainer(() =>
             {
                 if (clip == null) return;
                 EditorGUI.BeginChangeCheck();
                 clip.StartTime = EditorGUILayout.FloatField("开始时间", clip.StartTime);
                 clip.Duration = EditorGUILayout.FloatField("时长", clip.Duration);
 
-                // 根据类型显示额外字段
                 switch (clip)
                 {
                     case LogicClipData logic:
@@ -174,18 +247,34 @@ namespace Shizuku.SkillEditor.Editor
                     if (_config != null) EditorUtility.SetDirty(_config);
                     _timelineView.MarkDirtyRepaint();
                 }
+            })
+            {
+                style = { paddingLeft = 8, paddingRight = 8, paddingTop = 4, paddingBottom = 8 }
             });
-            _inspectorContent.Add(imgui);
+        }
+
+        private void OnClipSelected(SkillClip clip, SkillTrack track)
+        {
+            _selectedTrack = track;
+            _selectedClip = clip;
+            RefreshTrackSection();
+            RefreshClipSection();
+        }
+
+        private void OnTrackSelected(SkillTrack track)
+        {
+            _selectedTrack = track;
+            _selectedClip = null;
+            RefreshTrackSection();
+            RefreshClipSection();
         }
 
         private void OnSelectionCleared()
         {
-            _inspectorContent.Clear();
-            _inspectorHeader.text = "检查器";
-            _inspectorContent.Add(new Label("选中 Clip 后显示属性")
-            {
-                style = { paddingTop = 16, color = new Color(0.5f, 0.5f, 0.5f), unityTextAlign = TextAnchor.UpperCenter }
-            });
+            _selectedTrack = null;
+            _selectedClip = null;
+            RefreshTrackSection();
+            RefreshClipSection();
         }
 
         // ============================================================
@@ -202,6 +291,9 @@ namespace Shizuku.SkillEditor.Editor
             AssetDatabase.CreateAsset(_config, path);
             AssetDatabase.SaveAssets();
             _timelineView.SetConfig(_config);
+            _selectedTrack = null;
+            _selectedClip = null;
+            RefreshInspector();
         }
 
         private void OnOpenSkill()
@@ -216,6 +308,9 @@ namespace Shizuku.SkillEditor.Editor
             {
                 _config = config;
                 _timelineView.SetConfig(_config);
+                _selectedTrack = null;
+                _selectedClip = null;
+                RefreshInspector();
             }
         }
 

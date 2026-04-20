@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: NewSkillConfig
+  m_EditorClassIdentifier: ShizukuSkillEditor.Runtime:Shizuku.SkillEditor:ShizukuSkillConfig
+  SkillName: 
+  Duration: 1
+  Tracks:
+  - rid: 2302385511694860288
+  - rid: 2302385511694860350
+  references:
+    version: 2
+    RefIds:
+    - rid: 2302385511694860288
+      type: {class: AnimationTrack, ns: Shizuku.SkillEditor, asm: ShizukuSkillEditor.Runtime}
+      data:
+        TrackName: Animation
+        Enabled: 1
+        Clips:
+        - rid: 2302385511694860349
+    - rid: 2302385511694860349
+      type: {class: AnimationClipData, ns: Shizuku.SkillEditor, asm: ShizukuSkillEditor.Runtime}
+      data:
+        StartTime: 0.23333333
+        Duration: 0.5
+        Clip: {fileID: 0}
+        BlendIn: 0
+        BlendOut: 0
+    - rid: 2302385511694860350
+      type: {class: LogicTrack, ns: Shizuku.SkillEditor, asm: ShizukuSkillEditor.Runtime}
+      data:
+        TrackName: Logic
+        Enabled: 1
+        Clips: []

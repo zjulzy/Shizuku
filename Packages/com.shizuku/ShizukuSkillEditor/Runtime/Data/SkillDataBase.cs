@@ -35,7 +35,7 @@ namespace Shizuku.SkillEditor
     public class ShizukuSkillConfig : ScriptableObject
     {
         public string SkillName;
-        public float Duration = 1f;
+        public float Duration = 5f;
 
         [SerializeReference]
         public List<SkillTrack> Tracks = new();

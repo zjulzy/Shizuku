@@ -11,46 +11,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuCore/Runtime/ShizukuObjectPool.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuCore/Runtime/ShizukuObjectPool.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/TimelineView.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/TimelineView.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes/ClipForTrackAttribute.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes/ClipForTrackAttribute.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes/TrackRunnerAttribute.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes/TrackRunnerAttribute.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillContext.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillContext.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillPlayer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillPlayer.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillClipTypes.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillClipTypes.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillDataBase.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillDataBase.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillTrackTypes.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillTrackTypes.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/AnimationTrackRunner.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/AnimationTrackRunner.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/ClipHandlerRegistry.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/ClipHandlerRegistry.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/IClipHandler.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/IClipHandler.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/ITrackRunner.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/ITrackRunner.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/LogicClipHandler.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/LogicClipHandler.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/SimpleTrackRunner.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/SimpleTrackRunner.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/ShizukuSkillEditor.Editor.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/ShizukuSkillEditor.Editor.asmdef" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/NewSkill.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/NewSkill.asset.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/ShizukuSkillEditorWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/ShizukuSkillEditorWindow.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkill.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkill.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkillEditor.Runtime.asmdef" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/ShizukuSkillEditor.Runtime.asmdef" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/TimelineView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/TimelineView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillDataBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillDataBase.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -220,15 +186,13 @@
       <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false" ignored-value-for-modified-check="20104">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="20104" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
-        <list>
-          <MonoRuntime />
-        </list>
+        <list />
       </option>
       <option name="selectedOptions">
         <list />
@@ -314,7 +278,8 @@
       <workItem from="1775874656093" duration="1353000" />
       <workItem from="1775960632877" duration="466000" />
       <workItem from="1775962008481" duration="18556000" />
-      <workItem from="1776495537509" duration="48918000" />
+      <workItem from="1776495537509" duration="49195000" />
+      <workItem from="1776693515960" duration="5841000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -652,7 +617,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776568281124</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="技能编辑器初次提交，实现基础架构">
+      <option name="closed" value="true" />
+      <created>1776606624871</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1776606624871</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -679,7 +652,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="优化外观" />
     <MESSAGE value="优化参数port默认值相关逻辑" />
     <MESSAGE value="继续拓展端口数据类型" />
     <MESSAGE value="修复进入play模式时会将当前的编辑器清空" />
@@ -704,7 +676,8 @@
     <MESSAGE value="图方法功能实现完毕" />
     <MESSAGE value="值节点计算的缓存与标脏" />
     <MESSAGE value="蓝图覆写方法支持返回值&amp;整理代码" />
-    <option name="LAST_COMMIT_MESSAGE" value="蓝图覆写方法支持返回值&amp;整理代码" />
+    <MESSAGE value="技能编辑器初次提交，实现基础架构" />
+    <option name="LAST_COMMIT_MESSAGE" value="技能编辑器初次提交，实现基础架构" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

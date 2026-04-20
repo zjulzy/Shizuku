@@ -17,6 +17,7 @@ namespace Shizuku.SkillEditor.Editor
         private const float TrackHeight = 32f;
         private const float TrackHeaderWidth = 140f;
         private const float RulerHeight = 24f;
+        private const float FrameRate = 30f;
         private const float PixelsPerSecond = 120f;
         private const float MinClipWidth = 6f;
 
@@ -29,6 +30,7 @@ namespace Shizuku.SkillEditor.Editor
         private SkillClip _selectedClip;
         private SkillTrack _selectedTrack;
         public event Action<SkillClip, SkillTrack> OnClipSelected;
+        public event Action<SkillTrack> OnTrackSelected;
         public event Action OnSelectionCleared;
 
         // ---- Clip 拖拽 ----
@@ -115,21 +117,50 @@ namespace Shizuku.SkillEditor.Editor
             if (_config == null) return;
             float pps = PixelsPerSecond * _zoom;
 
-            // ---- 刻度数字 ----
-            float step = GetRulerStep(pps);
-            float startTime = Mathf.Floor(_scrollX / pps / step) * step;
+            // ---- 左上角标题 ----
+            var titleStyle = new GUIStyle(EditorStyles.boldLabel)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                normal = { textColor = new Color(0.7f, 0.7f, 0.7f) },
+                fontSize = 12
+            };
+            GUI.Label(new Rect(0, 0, TrackHeaderWidth, RulerHeight), "Tracks", titleStyle);
+
+            // ---- 刻度数字 (每0.5秒显示时间标签) ----
+            float visibleEnd = GetVisibleEndTime(pps);
+            float ppf = pps / FrameRate; // pixels per frame
+            int startFrame = Mathf.Max(0, Mathf.FloorToInt(_scrollX / ppf));
+            int endFrame = Mathf.CeilToInt((contentRect.width - TrackHeaderWidth + _scrollX) / ppf) + 1;
+            int maxFrame = Mathf.CeilToInt(visibleEnd * FrameRate);
+            endFrame = Mathf.Min(endFrame, maxFrame);
+
             var rulerStyle = new GUIStyle(EditorStyles.miniLabel)
             {
                 alignment = TextAnchor.UpperCenter,
                 normal = { textColor = new Color(0.6f, 0.6f, 0.6f) },
                 fontSize = 9
             };
-            for (float t = startTime; t <= _config.Duration + step; t += step)
+
+            // 计算帧标签步进：缩放很小时不是每帧都显示帧号
+            int frameLabelStep = 1;
+            if (ppf < 4f) frameLabelStep = 0; // 太密就不显示帧号
+            else if (ppf < 8f) frameLabelStep = 10;
+            else if (ppf < 16f) frameLabelStep = 5;
+
+            int halfSecFrames = Mathf.RoundToInt(FrameRate / 2f); // 15
+
+            for (int f = startFrame; f <= endFrame; f++)
             {
-                float x = TrackHeaderWidth + (t * pps) - _scrollX;
-                if (x < TrackHeaderWidth - 20 || x > contentRect.width + 20) continue;
-                string label = t < 1f ? $"{t:F2}s" : $"{t:F1}s";
-                GUI.Label(new Rect(x - 20, 2, 40, RulerHeight - 2), label, rulerStyle);
+                float x = TrackHeaderWidth + (f * ppf) - _scrollX;
+                if (x < TrackHeaderWidth - 30 || x > contentRect.width + 30) continue;
+
+                // 每半秒(15帧)显示时间标签
+                if (f % halfSecFrames == 0)
+                {
+                    float t = f / FrameRate;
+                    string label = t < 1f ? $"{t:F1}s" : $"{t:F1}s";
+                    GUI.Label(new Rect(x - 24, 1, 48, 12), label, rulerStyle);
+                }
             }
 
             // ---- 轨道名 ----
@@ -172,7 +203,11 @@ namespace Shizuku.SkillEditor.Editor
 
         private void DrawRuler(Painter2D painter, Rect rect, float pps)
         {
-            // 背景
+            // 左上角标题背景
+            painter.fillColor = new Color(0.2f, 0.2f, 0.2f);
+            DrawRect(painter, 0, 0, TrackHeaderWidth, RulerHeight);
+
+            // 刻度区背景
             painter.fillColor = new Color(0.16f, 0.16f, 0.16f);
             painter.BeginPath();
             painter.MoveTo(new Vector2(TrackHeaderWidth, 0));
@@ -182,22 +217,59 @@ namespace Shizuku.SkillEditor.Editor
             painter.ClosePath();
             painter.Fill();
 
-            // 刻度
-            float step = GetRulerStep(pps);
-            float startTime = Mathf.Floor(_scrollX / pps / step) * step;
-            painter.strokeColor = new Color(0.4f, 0.4f, 0.4f);
-            painter.lineWidth = 1f;
+            // 帧刻度
+            float ppf = pps / FrameRate;
+            float visibleEnd = GetVisibleEndTime(pps);
+            int startFrame = Mathf.Max(0, Mathf.FloorToInt(_scrollX / ppf));
+            int endFrame = Mathf.CeilToInt((rect.width - TrackHeaderWidth + _scrollX) / ppf) + 1;
+            int maxFrame = Mathf.CeilToInt(visibleEnd * FrameRate);
+            endFrame = Mathf.Min(endFrame, maxFrame);
 
-            for (float t = startTime; t <= _config.Duration + step; t += step)
+            int halfSecFrames = Mathf.RoundToInt(FrameRate / 2f); // 15
+            int fiveFrames = 5;
+
+            for (int f = startFrame; f <= endFrame; f++)
             {
-                float x = TrackHeaderWidth + (t * pps) - _scrollX;
+                float x = TrackHeaderWidth + (f * ppf) - _scrollX;
                 if (x < TrackHeaderWidth || x > rect.width) continue;
 
+                float tickHeight;
+                if (f % halfSecFrames == 0)
+                {
+                    // 半秒大刻度
+                    painter.strokeColor = new Color(0.55f, 0.55f, 0.55f);
+                    painter.lineWidth = 1f;
+                    tickHeight = RulerHeight;
+                }
+                else if (f % fiveFrames == 0)
+                {
+                    // 每5帧中刻度
+                    painter.strokeColor = new Color(0.4f, 0.4f, 0.4f);
+                    painter.lineWidth = 1f;
+                    tickHeight = RulerHeight * 0.55f;
+                }
+                else
+                {
+                    // 每帧小刻度（太密时跳过）
+                    if (ppf < 4f) continue;
+                    painter.strokeColor = new Color(0.3f, 0.3f, 0.3f);
+                    painter.lineWidth = 1f;
+                    tickHeight = RulerHeight * 0.3f;
+                }
+
                 painter.BeginPath();
-                painter.MoveTo(new Vector2(x, 0));
+                painter.MoveTo(new Vector2(x, RulerHeight - tickHeight));
                 painter.LineTo(new Vector2(x, RulerHeight));
                 painter.Stroke();
             }
+
+            // 刻度尺底部分隔线
+            painter.strokeColor = new Color(0.1f, 0.1f, 0.1f);
+            painter.lineWidth = 2.5f;
+            painter.BeginPath();
+            painter.MoveTo(new Vector2(0, RulerHeight));
+            painter.LineTo(new Vector2(rect.width, RulerHeight));
+            painter.Stroke();
         }
 
         private void DrawTracks(Painter2D painter, Rect rect, float pps)
@@ -268,8 +340,18 @@ namespace Shizuku.SkillEditor.Editor
                 else
                 {
                     _selectedClip = null;
-                    _selectedTrack = null;
-                    OnSelectionCleared?.Invoke();
+                    // 检查是否点击了某个轨道区域（无 clip 命中）
+                    int trackIdx = GetTrackIndexAtY(evt.localMousePosition.y);
+                    if (trackIdx >= 0 && trackIdx < _config.Tracks.Count)
+                    {
+                        _selectedTrack = _config.Tracks[trackIdx];
+                        OnTrackSelected?.Invoke(_selectedTrack);
+                    }
+                    else
+                    {
+                        _selectedTrack = null;
+                        OnSelectionCleared?.Invoke();
+                    }
                 }
                 MarkDirtyRepaint();
             }
@@ -285,16 +367,16 @@ namespace Shizuku.SkillEditor.Editor
             switch (_dragMode)
             {
                 case DragMode.Move:
-                    _dragClip.StartTime = Mathf.Max(0, _dragStartTime + dt);
+                    _dragClip.StartTime = SnapToFrame(Mathf.Max(0, _dragStartTime + dt));
                     break;
                 case DragMode.ResizeRight:
-                    _dragClip.Duration = Mathf.Max(0.01f, _dragStartDuration + dt);
+                    _dragClip.Duration = SnapToFrame(Mathf.Max(1f / FrameRate, _dragStartDuration + dt));
                     break;
                 case DragMode.ResizeLeft:
-                    float newStart = Mathf.Max(0, _dragStartTime + dt);
+                    float newStart = SnapToFrame(Mathf.Max(0, _dragStartTime + dt));
                     float endTime = _dragStartTime + _dragStartDuration;
                     _dragClip.StartTime = newStart;
-                    _dragClip.Duration = Mathf.Max(0.01f, endTime - newStart);
+                    _dragClip.Duration = Mathf.Max(1f / FrameRate, SnapToFrame(endTime - newStart));
                     break;
             }
             MarkDirtyRepaint();
@@ -349,7 +431,7 @@ namespace Shizuku.SkillEditor.Editor
                     evt.menu.AppendAction($"添加 Clip/{displayName}", _ =>
                     {
                         var clip = (SkillClip)Activator.CreateInstance(clipType);
-                        clip.StartTime = Mathf.Max(0, time);
+                        clip.StartTime = SnapToFrame(Mathf.Max(0, time));
                         clip.Duration = 0.5f;
                         track.Clips.Add(clip);
                         EditorUtility.SetDirty(_config);
@@ -467,12 +549,22 @@ namespace Shizuku.SkillEditor.Editor
         // ============================================================
         // 绘制工具
         // ============================================================
-        private static float GetRulerStep(float pps)
+
+        /// <summary>
+        /// 将时间吸附到最近的帧边界。
+        /// </summary>
+        private static float SnapToFrame(float time)
         {
-            float[] steps = { 0.05f, 0.1f, 0.25f, 0.5f, 1f, 2f, 5f };
-            foreach (var s in steps)
-                if (s * pps >= 40f) return s;
-            return 5f;
+            return Mathf.Round(time * FrameRate) / FrameRate;
+        }
+
+        /// <summary>
+        /// 计算可见时间轴终点：取 config.Duration 和视口可见范围的较大值，再额外留余量。
+        /// </summary>
+        private float GetVisibleEndTime(float pps)
+        {
+            float viewportSeconds = (contentRect.width - TrackHeaderWidth + _scrollX) / pps;
+            return Mathf.Max(_config.Duration, viewportSeconds) + 2f;
         }
 
         private static Color GetClipColor(Type clipType)

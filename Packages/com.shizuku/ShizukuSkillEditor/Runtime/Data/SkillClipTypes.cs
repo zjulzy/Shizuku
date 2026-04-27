@@ -11,6 +11,8 @@ namespace Shizuku.SkillEditor
         public AnimationClip Clip;
         public float BlendIn;
         public float BlendOut;
+        public AnimationCurve BlendInCurve = AnimationCurve.Linear(0, 0, 1, 1);
+        public AnimationCurve BlendOutCurve = AnimationCurve.Linear(0, 1, 1, 0);
     }
 
     // ---- 特效 ----

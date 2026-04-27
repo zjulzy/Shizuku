@@ -9,14 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 717a70188be041588a79c0628bbd401f, type: 3}
   m_Name: NewSkillConfig
   m_EditorClassIdentifier: ShizukuSkillEditor.Runtime:Shizuku.SkillEditor:ShizukuSkillConfig
   SkillName: 
-  Duration: 1
+  Duration: 2
   Tracks:
   - rid: 2302385511694860288
   - rid: 2302385511694860350
+  - rid: 2302385670283853826
+  - rid: 2302385670283853827
+  - rid: 2302385670283853828
   references:
     version: 2
     RefIds:
@@ -27,17 +30,211 @@ MonoBehaviour:
         Enabled: 1
         Clips:
         - rid: 2302385511694860349
+        - rid: 2302385670283853889
+        - rid: 2302385670283853890
     - rid: 2302385511694860349
       type: {class: AnimationClipData, ns: Shizuku.SkillEditor, asm: ShizukuSkillEditor.Runtime}
       data:
-        StartTime: 0.23333333
-        Duration: 0.5
+        StartTime: 0
+        Duration: 0.46666667
         Clip: {fileID: 0}
         BlendIn: 0
         BlendOut: 0
+        BlendInCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        BlendOutCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: -1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: -1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
     - rid: 2302385511694860350
       type: {class: LogicTrack, ns: Shizuku.SkillEditor, asm: ShizukuSkillEditor.Runtime}
       data:
         TrackName: Logic
         Enabled: 1
+        Clips:
+        - rid: 2302385670283853891
+        - rid: 2302385670283853892
+    - rid: 2302385670283853826
+      type: {class: LogicTrack, ns: Shizuku.SkillEditor, asm: ShizukuSkillEditor.Runtime}
+      data:
+        TrackName: Logic
+        Enabled: 1
         Clips: []
+    - rid: 2302385670283853827
+      type: {class: LogicTrack, ns: Shizuku.SkillEditor, asm: ShizukuSkillEditor.Runtime}
+      data:
+        TrackName: Logic
+        Enabled: 1
+        Clips: []
+    - rid: 2302385670283853828
+      type: {class: LogicTrack, ns: Shizuku.SkillEditor, asm: ShizukuSkillEditor.Runtime}
+      data:
+        TrackName: Logic
+        Enabled: 1
+        Clips: []
+    - rid: 2302385670283853889
+      type: {class: AnimationClipData, ns: Shizuku.SkillEditor, asm: ShizukuSkillEditor.Runtime}
+      data:
+        StartTime: 0.43333334
+        Duration: 0.6333333
+        Clip: {fileID: 0}
+        BlendIn: 0
+        BlendOut: 0
+        BlendInCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        BlendOutCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: -1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: -1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+    - rid: 2302385670283853890
+      type: {class: AnimationClipData, ns: Shizuku.SkillEditor, asm: ShizukuSkillEditor.Runtime}
+      data:
+        StartTime: 0.96666664
+        Duration: 0.5
+        Clip: {fileID: 0}
+        BlendIn: 0
+        BlendOut: 0
+        BlendInCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        BlendOutCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: -1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: -1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+    - rid: 2302385670283853891
+      type: {class: LogicClipData, ns: Shizuku.SkillEditor, asm: ShizukuSkillEditor.Runtime}
+      data:
+        StartTime: 0.13333334
+        Duration: 0.5
+        EventName: 
+    - rid: 2302385670283853892
+      type: {class: LogicClipData, ns: Shizuku.SkillEditor, asm: ShizukuSkillEditor.Runtime}
+      data:
+        StartTime: 0.6666667
+        Duration: 0.5
+        EventName: 

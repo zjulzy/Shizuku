@@ -178,7 +178,10 @@ namespace Shizuku.SkillEditor.Editor
                 _config.Duration = EditorGUILayout.FloatField("总时长", _config.Duration);
                 EditorGUILayout.LabelField("轨道数", _config.Tracks.Count.ToString());
                 if (EditorGUI.EndChangeCheck())
+                {
                     EditorUtility.SetDirty(_config);
+                    _timelineView.MarkDirtyRepaint();
+                }
             })
             {
                 style = { paddingLeft = 8, paddingRight = 8, paddingTop = 4, paddingBottom = 8 }
@@ -228,8 +231,10 @@ namespace Shizuku.SkillEditor.Editor
                         break;
                     case AnimationClipData anim:
                         anim.Clip = (AnimationClip)EditorGUILayout.ObjectField("动画", anim.Clip, typeof(AnimationClip), false);
-                        anim.BlendIn = EditorGUILayout.FloatField("混入", anim.BlendIn);
-                        anim.BlendOut = EditorGUILayout.FloatField("混出", anim.BlendOut);
+                        anim.BlendIn = EditorGUILayout.FloatField("混入时长", anim.BlendIn);
+                        anim.BlendInCurve = EditorGUILayout.CurveField("混入曲线", anim.BlendInCurve);
+                        anim.BlendOut = EditorGUILayout.FloatField("混出时长", anim.BlendOut);
+                        anim.BlendOutCurve = EditorGUILayout.CurveField("混出曲线", anim.BlendOutCurve);
                         break;
                     case VfxClipData vfx:
                         vfx.Prefab = (GameObject)EditorGUILayout.ObjectField("预制体", vfx.Prefab, typeof(GameObject), false);

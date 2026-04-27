@@ -267,25 +267,6 @@ public override Color TitleBarColor =>
 - **工作量**：0.5 天
 
 ---
-
-## ✅ 已解决的问题
-
-> 以下问题已在历史版本中修复，留作记录。
-
-### ~~值节点重复计算问题~~
-
-**已解决** — 通过 `ShizukuValueNode.CurrentPullGeneration` 拉取代缓存机制解决。每次 `ShizukuRunnableNode.Execute()` 递增全局 generation 计数器，值节点比较自身 `_lastComputedGeneration` 与当前 generation，相同则跳过计算。详见 `ShizukuValueNode.cs`。
-
-### ~~数据类型传递的装箱开销 / 隐式类型转换~~
-
-**已解决** — 已实现显式类型转换节点体系（`TypeConverterNode` 基类 + `BasicTypeConverters` + `VectorTypeConverters` + `ConverterNodeRegistry`）。`ConnectPorts` 不再赋值 `DifferentTypeConnectedPort`，类型不匹配直接报错。残留的 `DifferentTypeConnectedPort` 字段和 `Convert.ChangeType` 代码路径为历史遗留死代码，可在后续版本清理。
-
-### ~~ParameterEdge 连接时的类型检查开销~~
-
-**已解决** — 随着显式类型转换节点的引入，`ConnectPorts` 不再需要处理异类型连接分支，`GetType()` 比较仅用于同类型校验，开销可忽略。
-
----
-
 ## 🐛 运行时错误处理问题
 
 ### 1. 节点执行错误信息不友好

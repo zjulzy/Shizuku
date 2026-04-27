@@ -11,17 +11,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="adf4063a-266c-4fd6-99d8-0f0c77385552" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes/AllowClipOverlapAttribute.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Attributes/AllowClipOverlapAttribute.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/ShizukuSkillConfig.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/ShizukuSkillConfig.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Shizuku/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/NewSkillConfig.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/NewSkillConfig.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/ShizukuSkillEditorWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/ShizukuSkillEditorWindow.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/TimelineView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Editor/TimelineView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillClipTypes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillClipTypes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillDataBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillDataBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillTrackTypes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Data/SkillTrackTypes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Docs/KNOWN_ISSUES.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Docs/KNOWN_ISSUES.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillPlayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Context/SkillPlayer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/AnimationTrackRunner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/com.shizuku/ShizukuSkillEditor/Runtime/Runner/AnimationTrackRunner.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -289,7 +283,7 @@
       <workItem from="1776495537509" duration="49195000" />
       <workItem from="1776693515960" duration="5922000" />
       <workItem from="1776867185458" duration="4145000" />
-      <workItem from="1777298001611" duration="3653000" />
+      <workItem from="1777298001611" duration="4931000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现了一下图和节点的view与序列化，需要补全边的序列化">
       <option name="closed" value="true" />
@@ -643,7 +637,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776700778969</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="优化技能编辑器ui">
+      <option name="closed" value="true" />
+      <created>1777302167358</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1777302167358</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -670,7 +672,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="继续拓展端口数据类型" />
     <MESSAGE value="修复进入play模式时会将当前的编辑器清空" />
     <MESSAGE value="补充节点类型，新建右侧变量面板" />
     <MESSAGE value="初步支持自定义变量功能，下一步实现对蓝图变量和自定义变量的get和set" />
@@ -695,7 +696,8 @@
     <MESSAGE value="蓝图覆写方法支持返回值&amp;整理代码" />
     <MESSAGE value="技能编辑器初次提交，实现基础架构" />
     <MESSAGE value="技能编辑器ui优化" />
-    <option name="LAST_COMMIT_MESSAGE" value="技能编辑器ui优化" />
+    <MESSAGE value="优化技能编辑器ui" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化技能编辑器ui" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -11,6 +11,8 @@ namespace Shizuku.SkillEditor
         public GameObject Target;
         public Vector3 CastPosition;
         public Animator CasterAnimator;
+
+        /// <summary>当前驱动技能的 SkillPlayer 实例。</summary>
+        public SkillPlayer Player;
     }
 }
-

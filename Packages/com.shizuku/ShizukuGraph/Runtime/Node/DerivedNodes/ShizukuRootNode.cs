@@ -12,26 +12,37 @@ namespace Shizuku.Graph
         [NonSerialized]
         public Dictionary<string, ChainPort> ChainPorts = new Dictionary<string, ChainPort>();
 
+        // ---- 反射字段缓存（按 Type 共享） ----
+        private static readonly Dictionary<Type, FieldInfo[]> s_chainPortFieldCache = new();
+
+        private static FieldInfo[] GetCachedChainPortFields(Type nodeType)
+        {
+            if (s_chainPortFieldCache.TryGetValue(nodeType, out var cached)) return cached;
+            var list = new List<FieldInfo>();
+            var t = nodeType;
+            while (t != null && t != typeof(object))
+            {
+                foreach (var f in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
+                {
+                    if (typeof(ChainPort).IsAssignableFrom(f.FieldType))
+                        list.Add(f);
+                }
+                t = t.BaseType;
+            }
+            cached = list.ToArray();
+            s_chainPortFieldCache[nodeType] = cached;
+            return cached;
+        }
+
         public override void Init(INodeContext context)
         {
             base.Init(context);
             ChainPorts.Clear();
-            var type = GetType();
-            while (type != null && type != typeof(object))
+            var fields = GetCachedChainPortFields(GetType());
+            for (int i = 0; i < fields.Length; i++)
             {
-                var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
-                foreach (var field in fields)
-                {
-                    if (typeof(ChainPort).IsAssignableFrom(field.FieldType))
-                    {
-                        var port = field.GetValue(this) as ChainPort;
-                        if (port != null)
-                        {
-                            ChainPorts[port.Name] = port;
-                        }
-                    }
-                }
-                type = type.BaseType;
+                if (fields[i].GetValue(this) is ChainPort port)
+                    ChainPorts[port.Name] = port;
             }
         }
     }

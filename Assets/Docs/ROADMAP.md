@@ -44,10 +44,10 @@
 - [x] 新增 `ColorParameterEdgePort`
 - [x] 类型注册中心（支持自定义类型）— `ShizukuTypeRegistry`
 
-**4. 更多实用节点** ⭐⭐
+**4. 更多实用节点** ⭐⭐ ✅
 - [x] 数学节点：Add, Subtract, Multiply, Divide, Clamp, Lerp
 - [x] 逻辑节点：And, Or, Not, Xor, Compare (支持 Int/Float/String/Bool 类型比较)
-- [ ] 工具节点：GetComponent, FindGameObject, SetActive
+- [x] 工具节点：SetActive, FindGameObject, HasComponent, GetTransform, Get/SetPosition
 - [x] 属性节点：GetProperty, SetProperty（通用版本）
 
 **5. 蓝图自定义变量** ⭐⭐⭐ ✅
@@ -86,19 +86,16 @@
   - [ ] 提供 `EnableUpdate`/`DisableUpdate` API
 - [ ] **批量初始化优化** - 静态缓存共享（已实现）
 
-**8. 运行时错误处理** ⭐⭐⭐
-- [ ] **友好的错误信息**
-  - [ ] 捕获节点执行异常
-  - [ ] 显示：GameObject 名称、Behavior 类型、蓝图资源、节点类型
-  - [ ] 提供执行路径跟踪
-- [ ] **错误恢复机制**
-  - [ ] Try-Catch 包装节点执行
-  - [ ] 错误节点标记（Editor 中高亮）
-  - [ ] 可选的"遇错继续"模式
-- [ ] **调试日志增强**
-  - [ ] `Debug.LogWarning` 改为结构化日志
-  - [ ] 添加错误码和文档链接
-  - [ ] 支持自定义错误处理器
+**8. 运行时错误处理** ⭐⭐⭐ ✅（基础完成）
+- [x] **基础异常捕获**
+  - [x] `ShizukuRunnableNode.Execute` 包裹 try-catch
+  - [x] 错误时输出节点类型 + GUID + 异常信息
+  - [x] 循环依赖运行时保护（`_executing` 标志）
+  - [x] 执行链深度保护（防 StackOverflow）
+- [ ] **结构化错误上下文**（KNOWN_ISSUES 待办）
+  - [ ] GameObject / BlueprintAsset / 执行路径
+- [ ] **错误恢复机制 ErrorHandlingMode**（StopOnError / ContinueOnError）
+- [ ] **调试日志增强**：错误码、文档链接、自定义处理器
 
 **9. 数据类型传递优化** ⭐⭐⭐ ✅
 - [x] **显式类型转换节点**
@@ -236,11 +233,11 @@
 - [ ] 协程支持
 
 
-**4. 循环节点完善** ⭐⭐
-- [ ] For 循环（指定次数）— 占位节点已存在（`ShizukuForNode`），逻辑未实现
-- [ ] ForEach 循环（遍历集合）
-- [ ] While 循环（条件循环）
-- [ ] Break / Continue 支持
+**4. 循环节点完善** ⭐⭐ ✅（核心完成）
+- [x] For 循环（指定次数）— `ShizukuForNode` 已实现，支持 start/end/step + 子链执行 + 迭代上限保护
+- [ ] ForEach 循环（遍历集合）— 需要先实现集合类型端口
+- ~~[ ] While 循环（条件循环）~~ — 已弃用，纯定时循环用 For 即可
+- ~~[ ] Break / Continue 支持~~ — 已弃用，子链结束即跳出
 
 **5. 异常处理** ⭐
 - [ ] Try-Catch 节点
@@ -249,88 +246,90 @@
 
 ---
 
-### 🎮 v0.5.0 - 技能系统专用
+### 🎮 v0.5.0 - 技能系统专用 ✅（核心完成）
 
-> **当前进度**：`ShizukuSkillEditorWindow.cs` 已搭建基础 UI 框架（工具栏、时间轴占位区域、检查器面板、播放/暂停/停止按钮），`ShizukuSkill.cs` / `ShizukuSkillConfig` 为空类。核心的时间轴编辑与运行逻辑尚未实现。
+> **当前进度**：技能数据模型、运行时引擎（含 PlayableGraph 动画混合）、时间轴编辑器 UI 均已完成；剩余工作集中在编辑器预览、技能节点库、桥接图模块。
 
 **目标**：为 ARPG/RPG 游戏提供开箱即用的技能系统，以**时间轴编辑器**为核心。
 
 #### 功能列表
 
-**1. 技能数据模型** ⭐⭐⭐⭐
-- [ ] **`ShizukuSkillConfig`（ScriptableObject）**
-  - [ ] 技能基础属性（名称、图标、描述、冷却时间、施法距离等）
-  - [ ] 时间轴总时长（`duration`）
-  - [ ] 轨道列表（`List<SkillTrack>`）序列化
-  - [ ] 技能标签 / 分类
-- [ ] **`ShizukuSkill` 运行时实例**
-  - [ ] 从 `ShizukuSkillConfig` 实例化
-  - [ ] 运行时状态管理（冷却中、施法中、已完成）
-  - [ ] 持有运行时上下文引用
+**1. 技能数据模型** ⭐⭐⭐⭐ ✅
+- [x] **`ShizukuSkillConfig`（ScriptableObject）**
+  - [x] 技能基础属性（名称、时长）
+  - [x] 时间轴总时长（`Duration`）
+  - [x] 轨道列表（`List<SkillTrack>` + `[SerializeReference]`）
+  - [ ] 技能标签 / 分类（暂未实现）
+- [x] **运行时实例**：通过 `SkillPlayer.Play(config, ctx)` 直接驱动，无独立 ShizukuSkill 类
+  - [x] 运行时状态管理（IsPlaying / CurrentTime / Duration）
+  - [x] SkillContext 注入
 
-**2. 技能上下文** ⭐⭐⭐
-- [ ] 定义 `SkillContext` 类（包含施法者、目标、位置等信息）
-- [ ] 上下文在轨道事件 / 蓝图节点间传递
-- [ ] 上下文生命周期管理（技能开始时创建，结束时回收）
+**2. 技能上下文** ⭐⭐⭐ ✅
+- [x] `SkillContext` 类（Caster / Target / CastPosition / CasterAnimator / Player）
+- [x] 上下文在 TrackRunner 间传递
+- [x] SkillPlayer.Play 时构造，Stop/Interrupt 时释放
 
-**3. 时间轴数据结构** ⭐⭐⭐⭐
-- [ ] **`SkillTrack`（轨道）**
-  - [ ] 轨道类型枚举（Animation、Effect、Sound、Damage、Camera、Custom）
-  - [ ] 轨道名称、启用/禁用、锁定
-  - [ ] 关键帧列表（`List<SkillKeyframe>`）
-- [ ] **`SkillKeyframe`（关键帧/片段）**
-  - [ ] 开始时间、持续时间（支持瞬时事件和持续片段）
-  - [ ] 关键帧数据（多态：`AnimationClipData`、`EffectData`、`DamageBoxData` 等）
-  - [ ] 序列化与反序列化
-- [ ] **内置轨道类型**
-  - [ ] 动画轨道（AnimationClip 引用、过渡混合）
-  - [ ] 特效轨道（Prefab 引用、挂点、偏移）
-  - [ ] 音效轨道（AudioClip 引用、音量、空间混合）
-  - [ ] 判定轨道（碰撞体形状、伤害参数、命中回调）
-  - [ ] 相机轨道（震屏、镜头拉近等）
-  - [ ] 蓝图事件轨道（触发蓝图图节点执行）
+**3. 时间轴数据结构** ⭐⭐⭐⭐ ✅
+- [x] **`SkillTrack`（轨道）** — 抽象基类 + `[TrackRunner]` 绑定 Runner
+  - [x] AnimationTrack / EffectTrack / LogicTrack
+  - [x] 启用/禁用（`Enabled`）
+  - [x] Clips 列表（`List<SkillClip>` + `[SerializeReference]`）
+  - [ ] 锁定（暂未实现）
+- [x] **`SkillClip`（关键帧/片段）** — 抽象基类 + `[ClipForTrack]` 绑定轨道
+  - [x] StartTime / Duration / EndTime
+  - [x] 多态：AnimationClipData、VfxClipData、SfxClipData、LogicClipData
+  - [x] 序列化（[SerializeReference]）
+- [x] **内置轨道类型**
+  - [x] 动画轨道（AnimationClip + BlendIn/Out + 自定义曲线）
+  - [x] 特效轨道（Prefab + AttachBone + Offset）
+  - [x] 音效轨道（AudioClip + Volume）
+  - [x] 逻辑事件轨道（EventName）
+  - [ ] 判定轨道（暂未实现，预留 LogicTrack 拓展）
+  - [ ] 相机轨道（暂未实现）
+  - [ ] 蓝图事件轨道 → 由桥接包 `skilleditor-graph` 提供（待办）
 
-**4. 时间轴编辑器 UI** ⭐⭐⭐⭐
-- [ ] **轨道区域**
-  - [ ] 轨道列表渲染（左侧轨道头 + 右侧时间线内容）
-  - [ ] 添加/删除/排序轨道
-  - [ ] 轨道折叠/展开、启用/禁用、锁定
-- [ ] **时间线区域**
-  - [ ] 时间刻度尺（帧/秒切换）
-  - [ ] 播放头（Playhead）拖动与定位
-  - [ ] 缩放（滚轮）与平移（中键拖动）
-- [ ] **关键帧编辑**
-  - [ ] 关键帧/片段可视化（色块）
-  - [ ] 拖动移动、拖动边缘调整持续时间
-  - [ ] 右键菜单（添加/删除/复制关键帧）
-  - [ ] 多选与批量操作
-- [ ] **检查器面板**
-  - [ ] 选中关键帧后显示属性编辑（Inspector 区域）
-  - [ ] 根据轨道类型动态渲染不同属性字段
-  - [ ] 资源引用选择器（AnimationClip、Prefab、AudioClip 等）
-- [ ] **工具栏增强**
-  - [ ] 新建/打开/保存技能配置（连接 `ShizukuSkillConfig`）
-  - [ ] 吸附开关（Snap to Frame）
-  - [ ] 时间显示格式切换（秒 / 帧）
+**4. 时间轴编辑器 UI** ⭐⭐⭐⭐ ✅
+- [x] **轨道区域**（左侧轨道头 + 右侧时间线，独立滚动）
+  - [x] 轨道列表渲染
+  - [x] 添加/删除轨道（右键菜单反射 `[TrackRunner]`）
+  - [x] 启用/禁用
+  - [ ] 排序、折叠/展开、锁定（暂未实现）
+- [x] **时间线区域**
+  - [x] 时间刻度尺（按帧 + 半秒标签）
+  - [x] 播放头（Playhead）
+  - [x] 缩放（滚轮）+ 横向滚动条
+- [x] **关键帧编辑**
+  - [x] Clip 色块可视化
+  - [x] 拖动移动 + 拖动边缘调整时长 + 帧吸附
+  - [x] 右键菜单（反射 `[ClipForTrack]` 自动列出）
+  - [x] Clip 重叠规则（`[AllowClipOverlap]` Attribute，仅动画允许重叠且最多 2 层）
+  - [ ] 多选与批量操作（暂未实现）
+- [x] **检查器面板**
+  - [x] 三层结构（Skill / Track / Clip 信息叠加显示）
+  - [x] 选中 Clip 显示属性
+  - [x] AnimationClipData 曲线（BlendInCurve / BlendOutCurve）编辑
+- [x] **工具栏**
+  - [x] 双击 ScriptableObject 打开
+  - [ ] 新建/打开/保存（暂依赖 Unity 默认）
+  - [x] 帧吸附（Snap to Frame，已固化）
 
-**5. 时间轴运行时引擎** ⭐⭐⭐⭐
-- [ ] **`SkillTimelinePlayer`（运行时播放器）**
-  - [ ] 按时间推进，驱动所有轨道
-  - [ ] 支持播放、暂停、停止、跳转（Seek）
-  - [ ] 播放速度控制（`timeScale`）
-- [ ] **轨道执行器（`ITrackExecutor`）**
-  - [ ] 每种轨道类型实现对应执行器
-  - [ ] `OnEnter` / `OnUpdate` / `OnExit` 生命周期回调
-  - [ ] 执行器注册表（可扩展自定义轨道类型）
-- [ ] **事件调度**
-  - [ ] 瞬时事件触发（到达时间点时触发）
-  - [ ] 持续事件管理（进入/更新/退出）
-  - [ ] 事件优先级与依赖排序
-- [ ] **技能生命周期**
-  - [ ] 技能开始（初始化上下文、启动 Timeline）
-  - [ ] 技能执行中（逐帧推进、轨道事件分发）
-  - [ ] 技能结束（清理特效、重置状态）
-  - [ ] 技能打断处理（外部取消、被控制打断）
+**5. 时间轴运行时引擎** ⭐⭐⭐⭐ ✅
+- [x] **`SkillPlayer`（MonoBehaviour）**
+  - [x] 持久化 PlayableGraph（Awake 创建 / OnDestroy 销毁）
+  - [x] 按时间推进，驱动所有轨道
+  - [x] 动画槽位池（AcquireSlot / ReleaseSlot / SetSlotWeight / SetSlotTime）
+  - [x] 双层 LayerMixer：Layer0 = AnimatorController，Layer1 = 技能动画混合
+  - [x] 播放、停止、打断
+  - [ ] 暂停 / Seek / TimeScale（暂未实现）
+- [x] **轨道执行器（`ITrackRunner` + `[TrackRunner]` 绑定）**
+  - [x] 每种轨道类型实现对应执行器
+  - [x] OnSkillStart / OnTick / OnSkillEnd / OnSkillInterrupt
+  - [x] SimpleTrackRunner（通用） + AnimationTrackRunner（PlayableGraph 槽位插拔）
+  - [x] ClipHandlerRegistry 工厂注册
+- [x] **事件调度**
+  - [x] 持续事件（OnEnter / OnUpdate / OnExit）
+  - [x] VfxClipHandler / SfxClipHandler / LogicClipHandler
+- [x] **技能生命周期**：Play → Tick → Stop / Interrupt 全流程
 
 **6. 编辑器预览系统** ⭐⭐⭐
 - [ ] **编辑器内预览播放**
@@ -345,7 +344,15 @@
   - [ ] 帧步进（逐帧预览）
   - [ ] 循环播放
 
-**7. 技能节点库** ⭐⭐⭐
+**7. 技能节点库** ⭐⭐⭐（依赖图桥接子模块）
+- [x] **图桥接子模块 `ShizukuSkillEditor.GraphIntegration`** — 连接技能与图模块
+  - 方案：与 SkillEditor 同包，通过 `SHIZUKU_GRAPH` 宏 + asmdef `defineConstraints` 选择性编译；
+    图插件存在时由 `ShizukuGraphDefineSymbol`（`[InitializeOnLoad]`）自动注入宏。
+  - [x] `SkillGraph : ShizukuGraphBase` + 持有 `SkillContext`
+  - [x] `GraphClipData` / `GraphTrack`（复用 `SimpleTrackRunner`）+ `GraphClipHandler`
+  - [x] `ClipHandlerRegistry` 自动注册（运行时 + Editor）
+  - [x] `GraphClipEditorBootstrap`：Inspector 自定义绘制 + 双击跳转 SkillGraph 资产
+  - [ ] SkillGraph 专用编辑器窗口（当前直接复用 `ShizukuGraphWindow`，UI 改进待补）
 - [ ] **伤害计算**：DealDamage, DealDamageOverTime, AreaDamage
 - [ ] **效果触发**：SpawnEffect, PlaySound, CameraShake
 - [ ] **检测判定**：RaycastCheck, SphereCheck, LineOfSightCheck
@@ -519,12 +526,18 @@
 | 节点自动发现 | 高 | 高 | 中 | ✅ 完成 | ⭐⭐⭐ |
 | 调试工具 | 高 | 中 | 高 | ✅ 核心完成 | ⭐⭐⭐ |
 | 函数/子图系统 | 高 | 中 | 高 | ✅ 核心完成 | ⭐⭐⭐ |
-| 循环节点 | 高 | 中 | 中 | ❌ 未实现 | ⭐⭐⭐ |
-| 运行时错误处理 | 高 | 中 | 中 | ❌ 未开始 | ⭐⭐⭐ |
-| 技能时间轴编辑器 | 高 | 低 | 高 | 🔨 UI 外壳 | ⭐⭐⭐⭐ |
-| 技能时间轴运行时 | 高 | 低 | 高 | ❌ 未开始 | ⭐⭐⭐⭐ |
-| 技能数据模型 | 高 | 低 | 中 | ❌ 未开始 | ⭐⭐⭐ |
-| 技能节点库 | 高 | 低 | 中 | ❌ 未开始 | ⭐⭐⭐ |
+| 循环节点 | 高 | 中 | 中 | ✅ For 完成 | ⭐⭐⭐ |
+| 运行时错误处理 | 高 | 中 | 中 | ✅ 基础完成 | ⭐⭐⭐ |
+| 工具节点 | 高 | 中 | 低 | ✅ 完成 | ⭐⭐ |
+| 对象池 | 中 | 中 | 低 | ✅ 完成 | ⭐⭐ |
+| 技能数据模型 | 高 | 高 | 中 | ✅ 完成 | ⭐⭐⭐ |
+| 技能时间轴编辑器 | 高 | 高 | 高 | ✅ 完成 | ⭐⭐⭐⭐ |
+| 技能时间轴运行时 | 高 | 高 | 高 | ✅ 完成 | ⭐⭐⭐⭐ |
+| 技能编辑器预览 | 中 | 中 | 中 | ❌ 未开始 | ⭐⭐⭐ |
+| 桥接包 skilleditor-graph | 高 | 高 | 高 | ❌ 未开始 | ⭐⭐⭐⭐ |
+| 技能节点库 | 中 | 中 | 中 | ❌ 未开始 | ⭐⭐⭐ |
+| 反射缓存优化 | 中 | 中 | 低 | ❌ 未开始 | ⭐⭐ |
+| BlueprintBehavior UpdateMode | 高 | 中 | 低 | ❌ 未开始 | ⭐⭐⭐ |
 | 撤销/重做 | 中 | 高 | 中 | ❌ 未开始 | ⭐⭐ |
 | 时间轴/协程（蓝图） | 中 | 中 | 高 | ❌ 未开始 | ⭐⭐ |
 | AI 助手（基础） | 中 | 低 | 低 | 🔨 UI 外壳 | ⭐⭐ |
@@ -538,32 +551,35 @@
 以下是截至当前所有**未完成**的功能项，按优先级排序：
 
 ### 🔴 高优先级（建议近期完成）
-1. **循环节点实现** — `ShizukuForNode` 已占位但逻辑为空，ForEach / While / Break 缺失
-2. **运行时错误处理** — 异常捕获、友好错误信息、错误恢复
-3. **工具节点** — GetComponent, FindGameObject, SetActive
+1. **BlueprintBehavior UpdateMode 枚举** — 当前每帧无脑执行 Root，性能问题
+2. **反射字段缓存优化** — 节点 Init 当前每次反射，可加 static 缓存提速 3-5x
+3. **结构化错误上下文** — 错误信息加 GameObject / 蓝图资源 / 执行路径
 
-### 🟠 技能系统（v0.5.0 核心）
-5. **技能数据模型** — 填充 `ShizukuSkillConfig` / `ShizukuSkill` 空类，定义轨道和关键帧数据结构
-6. **时间轴编辑器 UI** — 在已有 `ShizukuSkillEditorWindow` 骨架上实现轨道渲染、关键帧编辑、播放头等
-7. **时间轴运行时引擎** — `SkillTimelinePlayer`、轨道执行器、事件调度、技能生命周期
-8. **编辑器预览系统** — 对接已有 ▶⏸⏹ 按钮，Scene 视图判定框 Gizmo
-9. **技能上下文** — `SkillContext`（施法者、目标、位置）
+### 🟠 技能系统（v0.5.0 剩余）
+4. **编辑器预览系统** — 非 Play 模式动画/特效预览、Scene Gizmo、帧步进
+5. **技能节点库** — 伤害、Buff、检测判定、冷却（基于已完成的 GraphIntegration 桥接子模块）
+6. **SkillGraph 专用编辑器窗口** — 当前直接复用 ShizukuGraphWindow，UI 改进待补
+7. **暂停 / Seek / TimeScale** — SkillPlayer 增强
 
 ### 🟡 中优先级
-10. **性能优化** — UpdateMode 枚举、空 Root 检测
-11. **时间轴/协程支持（蓝图）** — Delay、WaitUntil、Sequence、Parallel
-12. **蓝图函数扩展** — 有返回值的方法重写、CallParent 节点
-13. **Quaternion 等类型** — 扩展类型端口
+9. **错误恢复模式 ErrorHandlingMode** — StopOnError / ContinueOnError
+10. **时间轴/协程支持（蓝图）** — Delay、Sequence、Parallel
+11. **蓝图函数扩展** — 有返回值的方法重写、CallParent 节点
+12. **Quaternion 等类型端口** — 扩展类型系统
+13. **撤销 / 重做** — 命令模式
 14. **编辑器优化** — Ctrl+Space 搜索框、节点折叠、快捷键、网格吸附
+15. **ForEach 循环节点** — 需要先实现集合类型端口
 
 ### 🟢 低优先级（未来版本）
 16. **条件断点** / **表达式求值** — 调试高级功能
-17. **执行路径动画** / **数据流动画** — 可视化增强
-18. **性能分析** — 节点耗时统计、瓶颈分析
-19. **AI 助手命令系统** — 将 UI 外壳连接到真正的命令解析
-20. **变量分组/排序**
-21. **ShizukuFunction 高级功能** — 泛型方法、重载、可选参数
-22. **技能指示器** / **技能链** / **伤害公式编辑器** — 技能系统进阶功能
+17. **调试器子链恢复** — 循环节点暂停后从游标继续（KNOWN_ISSUES 调试器 #1）
+18. **执行路径动画** / **数据流动画** — 可视化增强
+19. **性能分析** — 节点耗时统计
+20. **AI 助手命令系统** — 将 UI 外壳连接到真正的命令解析
+21. **变量分组/排序**
+22. **ShizukuFunction 高级功能** — 泛型方法、重载、可选参数
+23. **技能进阶** — 伤害公式编辑器、技能指示器、技能链/连招
+24. **判定轨道 / 相机轨道** — 技能轨道扩展
 
 ---
 
@@ -596,5 +612,5 @@
 - 版本发布日期为预估，实际可能延后
 - 标注 ⭐ 的功能为核心优先功能
 
-**最后更新**：2026-04-12
+**最后更新**：2026-05-04
 **下次更新**：每月第一个周一

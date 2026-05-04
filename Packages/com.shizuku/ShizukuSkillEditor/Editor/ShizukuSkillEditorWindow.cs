@@ -99,6 +99,7 @@ namespace Shizuku.SkillEditor.Editor
             _timelineView.OnClipSelected += OnClipSelected;
             _timelineView.OnTrackSelected += OnTrackSelected;
             _timelineView.OnSelectionCleared += OnSelectionCleared;
+            _timelineView.OnClipDoubleClicked += OnClipDoubleClicked;
             contentContainer.Add(_timelineView);
 
             // ---- 右侧：检查器（可滚动） ----
@@ -245,6 +246,10 @@ namespace Shizuku.SkillEditor.Editor
                         sfx.Clip = (AudioClip)EditorGUILayout.ObjectField("音频", sfx.Clip, typeof(AudioClip), false);
                         sfx.Volume = EditorGUILayout.Slider("音量", sfx.Volume, 0f, 1f);
                         break;
+                    default:
+                        // 让外部模块（如 GraphIntegration）为自定义 Clip 类型注册 Inspector 绘制器
+                        ClipEditorRegistry.TryDrawInspector(clip);
+                        break;
                 }
 
                 if (EditorGUI.EndChangeCheck())
@@ -280,6 +285,12 @@ namespace Shizuku.SkillEditor.Editor
             _selectedClip = null;
             RefreshTrackSection();
             RefreshClipSection();
+        }
+
+        private void OnClipDoubleClicked(SkillClip clip, SkillTrack track)
+        {
+            // 派发到 ClipEditorRegistry，由外部模块（如 GraphIntegration）决定如何跳转。
+            ClipEditorRegistry.TryHandleDoubleClick(clip);
         }
 
         // ============================================================

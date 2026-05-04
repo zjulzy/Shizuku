@@ -357,3 +357,61 @@ public void Execute()
 - **版本**：v0.2.0
 - **优先级**：⭐⭐ 中
 - **开销**：HashSet ~O(1)，可忽略
+
+---
+
+## 🔧 调试器问题
+
+### 1. 循环 / 控制流节点的子链断点恢复会重置外层状态
+
+#### 问题描述
+
+`ShizukuForNode`（以及未来类似 ForEach 等控制流节点）通过 `ExecuteSubChain` 调用循环体子链，子链中的节点完整支持断点 / 单步。但当断点在循环体内部命中并暂停后，用户点击"继续"时：
+
+- `ShizukuDebugger` 的恢复机制是从根节点开始**重新走一遍执行链**，并通过 `IsResumingFrom(GUID)` 跳过已执行节点的断点检查
+- 但 `ShizukuForNode.OnExecute()` 是普通的 C# `for` 循环——重新进入时**循环计数器 `i` 会从 `start` 重置**
+- 结果：用户点继续后，循环不会从命中断点的那一轮接着跑，而是从第一轮重新开始（第一轮断点会被跳过，但 `_index` 输出值是错的）
+
+同样的问题影响**任何在 `OnExecute` 中维护本地控制流状态**的节点，包括未来的 ForEach、Sequence、Parallel、Switch 等。
+
+#### 影响范围
+
+- 循环体内的副作用（如 `Set Variable` / `Log`）会被多次执行：第一次部分执行到断点 → 暂停 → 继续 → 从头再跑一遍
+- `_index` 端口输出值与实际命中断点时的值不一致
+- 调试体验存在迷惑性
+
+#### 改进方案
+
+**方案 A：保存/恢复迭代游标（推荐）**
+
+让控制流节点持有一个 `[NonSerialized]` 的"恢复游标"，在 `Execute` 入口检测 `IsResumingFrom`，若为真则从游标位置继续而非从头开始；正常完成后清空游标。
+
+```csharp
+[NonSerialized] private int _resumeIndex = -1;
+
+protected override void OnExecute()
+{
+    int i = _resumeIndex >= 0 ? _resumeIndex : _start.Value;
+    _resumeIndex = -1;
+    for (; ...; i += step)
+    {
+        _index.Value = i;
+        var result = ExecuteSubChain(_bodyPort);
+        if (result == ExecuteResult.Halted)
+        {
+            _resumeIndex = i;  // 记住下一轮从哪里开始
+            return;
+        }
+    }
+}
+```
+
+**方案 B：调试器层面支持"从任意节点恢复"**
+
+让 `ShizukuDebugger.ResumeExecute` 直接从暂停节点继续，而非从根节点重走。需要重构调用栈管理，工作量较大。
+
+#### 实施计划
+
+- **版本**：v0.4.0+
+- **优先级**：⭐⭐ 中（影响调试体验，不影响运行时正确性）
+- **推荐方案**：方案 A（每个控制流节点局部修改，不影响调试器架构）

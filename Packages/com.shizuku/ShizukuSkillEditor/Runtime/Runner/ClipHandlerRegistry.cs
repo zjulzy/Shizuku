@@ -13,6 +13,8 @@ namespace Shizuku.SkillEditor
         static ClipHandlerRegistry()
         {
             Register<LogicClipData>(() => new LogicClipHandler());
+            Register<VfxClipData>(() => new VfxClipHandler());
+            Register<SfxClipData>(() => new SfxClipHandler());
         }
 
         public static void Register<TClip>(Func<IClipHandler> factory) where TClip : SkillClip

@@ -43,25 +43,26 @@ namespace Shizuku.Graph
         }
 
         // 依据记录的信息连接参数端口
-        public void ConnectPorts(ShizukuGraphBase graph)
+        // public void ConnectPorts(ShizukuGraphBase graph) => ConnectPorts((INodeContext)graph);
+
+        // 依据记录的信息连接参数端口（O(1) 字典查找版本）
+        public void ConnectPorts(INodeContext context)
         {
-            var outputNode = graph.Nodes.Find(n => n.GUID == OutputNodeGuid);
-            var inputNode = graph.Nodes.Find(n => n.GUID == InputNodeGuid);
-            if (outputNode != null && inputNode != null)
+            if (!context.Guid2NodeMap.TryGetValue(OutputNodeGuid, out var outputNode)) return;
+            if (!context.Guid2NodeMap.TryGetValue(InputNodeGuid, out var inputNode)) return;
+
+            inputNode.DependentNodes.Add(outputNode);
+            var outputPort = outputNode.SelfOutputPorts.Find(p => p.Name == OutputPortName);
+            var inputPort = inputNode.SelfInputPorts.Find(p => p.Name == InputPortName);
+            if (outputPort != null && inputPort != null)
             {
-                inputNode.DependentNodes.Add(outputNode);
-                var outputPort = outputNode.SelfOutputPorts.Find(p => p.Name == OutputPortName);
-                var inputPort = inputNode.SelfInputPorts.Find(p => p.Name == InputPortName);
-                if (outputPort != null && inputPort != null)
+                if (outputPort.GetType() == inputPort.GetType())
                 {
-                    if (outputPort.GetType() == inputPort.GetType())
-                    {
-                        inputPort.SameTypeConnectedPort = outputPort;
-                    }
-                    else
-                    {
-                        Debug.LogError($"Type mismatch when connecting ports: {outputNode.Title}.{OutputPortName} ({outputPort.GetType()}) -> {inputNode.Title}.{InputPortName} ({inputPort.GetType()})");
-                    }
+                    inputPort.SameTypeConnectedPort = outputPort;
+                }
+                else
+                {
+                    Debug.LogError($"Type mismatch when connecting ports: {outputNode.Title}.{OutputPortName} ({outputPort.GetType()}) -> {inputNode.Title}.{InputPortName} ({inputPort.GetType()})");
                 }
             }
         }

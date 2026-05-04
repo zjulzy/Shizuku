@@ -39,38 +39,37 @@ namespace Shizuku.Graph
         [NonSerialized]
         public readonly List<ShizukuNodeBase> DependentNodes = new List<ShizukuNodeBase>();
 
+        // ---- 反射字段缓存（按 Type 共享，避免每次 Init 重复反射） ----
+        private static readonly Dictionary<Type, FieldInfo[]> s_paramPortFieldCache = new();
+
+        private static FieldInfo[] GetCachedParamPortFields(Type type)
+        {
+            if (s_paramPortFieldCache.TryGetValue(type, out var cached)) return cached;
+            var list = new List<FieldInfo>();
+            foreach (var f in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                if (typeof(ParameterEdgePort).IsAssignableFrom(f.FieldType))
+                    list.Add(f);
+            }
+            cached = list.ToArray();
+            s_paramPortFieldCache[type] = cached;
+            return cached;
+        }
+
         public virtual void Init(INodeContext context)
         {
             _context = context;
-            var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var fields = GetCachedParamPortFields(GetType());
 
             SelfOutputPorts.Clear();
-
-            foreach (var field in fields)
-            {
-                if (typeof(ParameterEdgePort).IsAssignableFrom(field.FieldType))
-                {
-                    var port = field.GetValue(this) as ParameterEdgePort;
-                    if (port != null)
-                    {
-                        if (port.IsOut)
-                            SelfOutputPorts.Add(port);
-                    }
-                }
-            }
-
             SelfInputPorts.Clear();
-            foreach (var field in fields)
+
+            for (int i = 0; i < fields.Length; i++)
             {
-                if (typeof(ParameterEdgePort).IsAssignableFrom(field.FieldType))
-                {
-                    var port = field.GetValue(this) as ParameterEdgePort;
-                    if (port != null)
-                    {
-                        if (!port.IsOut)
-                            SelfInputPorts.Add(port);
-                    }
-                }
+                var port = fields[i].GetValue(this) as ParameterEdgePort;
+                if (port == null) continue;
+                if (port.IsOut) SelfOutputPorts.Add(port);
+                else SelfInputPorts.Add(port);
             }
         }
 

@@ -1,10 +1,13 @@
-﻿{
-    "name": "ShizukuGraph.Editor",
-    "rootNamespace": "Shizuku.Graph.Editor",
+{
+    "name": "ShizukuSkillEditor.GraphIntegration.Editor",
+    "rootNamespace": "Shizuku.SkillEditor.GraphIntegration.Editor",
     "references": [
         "ShizukuCore.Runtime",
+        "ShizukuSkillEditor.Runtime",
+        "ShizukuSkillEditor.Editor",
         "ShizukuGraph.Runtime",
-        "Unity.Mathematics"
+        "ShizukuGraph.Editor",
+        "ShizukuSkillEditor.GraphIntegration.Runtime"
     ],
     "includePlatforms": [
         "Editor"
@@ -14,8 +17,9 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "SHIZUKU_GRAPH"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }
-

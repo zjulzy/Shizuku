@@ -35,6 +35,8 @@ namespace Shizuku.SkillEditor.Editor
         public event Action<SkillClip, SkillTrack> OnClipSelected;
         public event Action<SkillTrack> OnTrackSelected;
         public event Action OnSelectionCleared;
+        /// <summary>双击 Clip 时触发（用于跳转到子编辑器，例如 GraphClip → SkillGraph 窗口）。</summary>
+        public event Action<SkillClip, SkillTrack> OnClipDoubleClicked;
 
         // ---- Clip 拖拽 ----
         private SkillClip _dragClip;
@@ -485,6 +487,10 @@ namespace Shizuku.SkillEditor.Editor
                     _dragStartTime = hit.StartTime;
                     _dragStartDuration = hit.Duration;
                     OnClipSelected?.Invoke(hit, track);
+
+                    // 双击：派发到外部跳转处理（如 GraphClip → SkillGraph 窗口）
+                    if (evt.clickCount >= 2)
+                        OnClipDoubleClicked?.Invoke(hit, track);
                 }
                 else
                 {

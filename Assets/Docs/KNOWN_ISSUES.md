@@ -269,35 +269,14 @@ public override Color TitleBarColor =>
 ---
 ## 🐛 运行时错误处理问题
 
-### 1. 节点执行错误信息不友好
+### 1. 节点执行错误信息不友好 ✅ 已解决（2026-05-05）
 
-#### 问题描述
-
-节点执行出错时，用户只能看到原始异常堆栈，缺少关键上下文信息：
-- ❌ 哪个 GameObject / Behavior / 蓝图资源
-- ❌ 哪个节点（类型、GUID）
-- ❌ 执行路径
-
-#### 改进方案
-
-**推荐：结构化错误上下文 + 错误码系统**
-
-```csharp
-public class ShizukuExecutionContext
-{
-    public GameObject GameObject { get; set; }
-    public string BehaviorType { get; set; }
-    public string BlueprintAssetPath { get; set; }
-    public string CurrentNodeGUID { get; set; }
-    public string CurrentNodeType { get; set; }
-    public Stack<string> ExecutionPath { get; set; }
-}
-```
-
-#### 实施计划
-
-- **版本**：v0.2.0
-- **优先级**：⭐⭐⭐ 高
+实现：
+- 新增 `ShizukuExecutionContext`（`[ThreadStatic] Current`，含 Owner / BehaviorTypeName / GraphAsset / GraphAssetPath / CurrentNode / ExecutionPath）。
+- 新增 `ShizukuErrorReporter` 统一格式化输出，`Debug.LogError(msg, ctx.Owner)` 让 Console 双击跳到出错对象。
+- `ShizukuRunnableNode.Execute` 入栈/出栈节点帧并通过 ErrorReporter 捕获异常。
+- `BlueprintBehavior.Update` / `TryExecuteBlueprintOverride` 用 `ShizukuExecutionContext.Begin(...)` 建立作用域。
+- `InvokeMethodNode` 进入子图时 `PushMethodFrame(method.Name)`，便于跨函数跟踪。
 
 ---
 

@@ -115,7 +115,7 @@ namespace Shizuku.Graph
             var method = RootGraph.GetMethodByGUID(TargetMethodGUID);
             if (method == null)
             {
-                Debug.LogError($"[InvokeMethodNode] 找不到目标函数: {TargetMethodGUID}");
+                ShizukuErrorReporter.LogError($"InvokeMethodNode 找不到目标函数: {TargetMethodGUID}", this);
                 return;
             }
 
@@ -123,7 +123,7 @@ namespace Shizuku.Graph
             var entryNode = method.GetNodeByGUID(method.EntryNodeGUID) as MethodEntryNode;
             if (entryNode == null)
             {
-                Debug.LogError($"[InvokeMethodNode] 函数 {method.Name} 没有入口节点");
+                ShizukuErrorReporter.LogError($"InvokeMethodNode 函数 {method.Name} 没有入口节点", this);
                 return;
             }
 
@@ -139,8 +139,17 @@ namespace Shizuku.Graph
                 }
             }
 
-            // 3. 从入口节点开始执行函数子图
-            entryNode.StartExcute();
+            // 3. 从入口节点开始执行函数子图（压入 Method 帧便于错误定位）
+            var ctx = ShizukuExecutionContext.Current;
+            ctx?.PushMethodFrame(method.Name);
+            try
+            {
+                entryNode.StartExcute();
+            }
+            finally
+            {
+                ctx?.PopFrame();
+            }
 
             // 4. 从返回节点收集返回值
             if (!string.IsNullOrEmpty(method.ReturnNodeGUID))

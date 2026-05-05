@@ -69,7 +69,10 @@ namespace Shizuku.Graph
         {
             if (_blueprintEvents != null && _blueprintEvents.TryGetValue(methodName, out var handler))
             {
-                handler(args);
+                using (ShizukuExecutionContext.Begin(_blueprint, gameObject, typeof(T).Name))
+                {
+                    handler(args);
+                }
                 return true;
             }
             return false;
@@ -84,7 +87,11 @@ namespace Shizuku.Graph
             result = default;
             if (_blueprintEvents != null && _blueprintEvents.TryGetValue(methodName, out var handler))
             {
-                var rawResult = handler(args);
+                object rawResult;
+                using (ShizukuExecutionContext.Begin(_blueprint, gameObject, typeof(T).Name))
+                {
+                    rawResult = handler(args);
+                }
                 if (rawResult is TReturn typed)
                 {
                     result = typed;
@@ -158,7 +165,10 @@ namespace Shizuku.Graph
             // 每帧更新蓝图图表（执行 Root Node）
             // 设计理念：Root Node 可以包含每帧执行的逻辑
             // 事件驱动的逻辑使用 BlueprintEventNode
-            if (_blueprint != null)
+            if (_blueprint == null) return;
+
+            // 建立结构化错误上下文：Owner / Behavior / Asset，节点执行链由 ShizukuRunnableNode 自动 push/pop
+            using (ShizukuExecutionContext.Begin(_blueprint, gameObject, typeof(T).Name))
             {
                 _blueprint.Update();
             }

@@ -48,16 +48,20 @@ namespace Shizuku.Graph
             // 循环依赖保护
             if (_executing)
             {
-                Debug.LogError($"[Shizuku] 检测到循环执行: {GetType().Name} ({GUID})");
+                ShizukuErrorReporter.LogError($"检测到循环执行: {GetType().Name} ({GUID})", this);
                 return ExecuteResult.Continue;
             }
 
             if (++_chainDepth > MaxChainDepth)
             {
                 _chainDepth--;
-                Debug.LogError($"[Shizuku] 执行链深度超过 {MaxChainDepth}，可能存在无限递归");
+                ShizukuErrorReporter.LogError($"执行链深度超过 {MaxChainDepth}，可能存在无限递归", this);
                 return ExecuteResult.Continue;
             }
+
+            // 结构化错误上下文：压入当前节点帧
+            var ctx = ShizukuExecutionContext.Current;
+            ctx?.PushNodeFrame(this);
 
             _executing = true;
             try
@@ -70,8 +74,9 @@ namespace Shizuku.Graph
             }
             catch (Exception e)
             {
-                Debug.LogError($"[Shizuku] 节点执行异常 [{GetType().Name}] GUID={GUID}: {e.Message}\n{e.StackTrace}");
+                ShizukuErrorReporter.LogException(e, this, ctx);
                 _executing = false;
+                ctx?.PopFrame();
                 _chainDepth--;
                 return ExecuteResult.Continue;
             }
@@ -92,15 +97,16 @@ namespace Shizuku.Graph
                     }
                     else
                     {
-                        Debug.LogError($"[Shizuku] 下一个节点不是合法的可执行节点: {guid}");
+                        ShizukuErrorReporter.LogError($"下一个节点不是合法的可执行节点: {guid}", this);
                     }
                 }
                 else
                 {
-                    Debug.LogError($"[Shizuku] 找不到下一个节点: {guid}");
+                    ShizukuErrorReporter.LogError($"找不到下一个节点: {guid}", this);
                 }
             }
 
+            ctx?.PopFrame();
             _chainDepth--;
             return result;
         }

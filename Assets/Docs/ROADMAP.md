@@ -92,8 +92,10 @@
   - [x] 错误时输出节点类型 + GUID + 异常信息
   - [x] 循环依赖运行时保护（`_executing` 标志）
   - [x] 执行链深度保护（防 StackOverflow）
-- [ ] **结构化错误上下文**（KNOWN_ISSUES 待办）
-  - [ ] GameObject / BlueprintAsset / 执行路径
+- [x] **结构化错误上下文**
+  - [x] GameObject / BlueprintAsset / 执行路径（`ShizukuExecutionContext` + `ShizukuErrorReporter`）
+  - [x] `InvokeMethodNode` 自动压入 Method 帧，跨函数定位
+  - [x] `Debug.LogError(msg, Owner)` 让 Console 双击跳转到出错对象
 - [ ] **错误恢复机制 ErrorHandlingMode**（StopOnError / ContinueOnError）
 - [ ] **调试日志增强**：错误码、文档链接、自定义处理器
 
@@ -551,35 +553,33 @@
 以下是截至当前所有**未完成**的功能项，按优先级排序：
 
 ### 🔴 高优先级（建议近期完成）
-1. **BlueprintBehavior UpdateMode 枚举** — 当前每帧无脑执行 Root，性能问题
-2. **反射字段缓存优化** — 节点 Init 当前每次反射，可加 static 缓存提速 3-5x
-3. **结构化错误上下文** — 错误信息加 GameObject / 蓝图资源 / 执行路径
+*（暂无项目，结构化错误上下文已于 2026-05-05 完成）*
 
 ### 🟠 技能系统（v0.5.0 剩余）
-4. **编辑器预览系统** — 非 Play 模式动画/特效预览、Scene Gizmo、帧步进
-5. **技能节点库** — 伤害、Buff、检测判定、冷却（基于已完成的 GraphIntegration 桥接子模块）
-6. **SkillGraph 专用编辑器窗口** — 当前直接复用 ShizukuGraphWindow，UI 改进待补
-7. **暂停 / Seek / TimeScale** — SkillPlayer 增强
+1. **编辑器预览系统** — 非 Play 模式动画/特效预览、Scene Gizmo、帧步进
+2. **技能节点库** — 伤害、Buff、检测判定、冷却（基于已完成的 GraphIntegration 桥接子模块）
+3. **SkillGraph 专用编辑器窗口** — 当前直接复用 ShizukuGraphWindow，UI 改进待补
+4. **暂停 / Seek / TimeScale** — SkillPlayer 增强
 
 ### 🟡 中优先级
-9. **错误恢复模式 ErrorHandlingMode** — StopOnError / ContinueOnError
-10. **时间轴/协程支持（蓝图）** — Delay、Sequence、Parallel
-11. **蓝图函数扩展** — 有返回值的方法重写、CallParent 节点
-12. **Quaternion 等类型端口** — 扩展类型系统
-13. **撤销 / 重做** — 命令模式
-14. **编辑器优化** — Ctrl+Space 搜索框、节点折叠、快捷键、网格吸附
-15. **ForEach 循环节点** — 需要先实现集合类型端口
+5. **错误恢复模式 ErrorHandlingMode** — StopOnError / ContinueOnError
+6. **时间轴/协程支持（蓝图）** — Delay、Sequence、Parallel
+7. **蓝图函数扩展** — 有返回值的方法重写、CallParent 节点
+8. **Quaternion 等类型端口** — 扩展类型系统
+9. **撤销 / 重做** — 命令模式
+10. **编辑器优化** — Ctrl+Space 搜索框、节点折叠、快捷键、网格吸附
+11. **ForEach 循环节点** — 需要先实现集合类型端口
 
 ### 🟢 低优先级（未来版本）
-16. **条件断点** / **表达式求值** — 调试高级功能
-17. **调试器子链恢复** — 循环节点暂停后从游标继续（KNOWN_ISSUES 调试器 #1）
-18. **执行路径动画** / **数据流动画** — 可视化增强
-19. **性能分析** — 节点耗时统计
-20. **AI 助手命令系统** — 将 UI 外壳连接到真正的命令解析
-21. **变量分组/排序**
-22. **ShizukuFunction 高级功能** — 泛型方法、重载、可选参数
-23. **技能进阶** — 伤害公式编辑器、技能指示器、技能链/连招
-24. **判定轨道 / 相机轨道** — 技能轨道扩展
+12. **条件断点** / **表达式求值** — 调试高级功能
+13. **调试器子链恢复** — 循环节点暂停后从游标继续（KNOWN_ISSUES 调试器 #1）
+14. **执行路径动画** / **数据流动画** — 可视化增强
+15. **性能分析** — 节点耗时统计
+16. **AI 助手命令系统** — 将 UI 外壳连接到真正的命令解析
+17. **变量分组/排序**
+18. **ShizukuFunction 高级功能** — 泛型方法、重载、可选参数
+19. **技能进阶** — 伤害公式编辑器、技能指示器、技能链/连招
+20. **判定轨道 / 相机轨道** — 技能轨道扩展
 
 ---
 
@@ -612,5 +612,5 @@
 - 版本发布日期为预估，实际可能延后
 - 标注 ⭐ 的功能为核心优先功能
 
-**最后更新**：2026-05-04
+**最后更新**：2026-05-05
 **下次更新**：每月第一个周一

@@ -12,6 +12,13 @@
         "blueprint",
         "visual-scripting",
         "gameplay"
-    ]
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/zjulzy/Shizuku.git"
+    },
+    "documentationUrl": "https://github.com/zjulzy/Shizuku/blob/main/README.md",
+    "changelogUrl": "https://github.com/zjulzy/Shizuku/blob/main/CHANGELOG.md",
+    "licensesUrl": "https://github.com/zjulzy/Shizuku/blob/main/LICENSE"
 }
 

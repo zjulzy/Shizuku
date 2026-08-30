@@ -69,6 +69,9 @@ namespace Shizuku.Graph.Editor
                 DeleteElements(selection.OfType<GraphElement>().ToList());
             };
 
+            // GraphView 只提供复制粘贴的命令管线，自定义节点的数据复制由这里接入。
+            ConfigureClipboard();
+
             // 注册节点创建请求，使用 SearchWindow
             nodeCreationRequest = context =>
             {

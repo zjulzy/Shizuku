@@ -58,6 +58,12 @@ namespace Shizuku.Graph.Editor
             _graphAsset = graphAsset;
             title = node.Title;
 
+            // Root、事件入口/返回、函数入口/返回等结构节点具有唯一或配对语义，不能复制。
+            if (!ShizukuGraphView.IsClipboardCopyableNode(node))
+            {
+                capabilities &= ~Capabilities.Copiable;
+            }
+
             // 应用已加载的样式表（只是引用，不会重复加载）
             if (s_StyleSheet != null && !styleSheets.Contains(s_StyleSheet))
             {

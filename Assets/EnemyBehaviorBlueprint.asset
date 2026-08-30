@@ -18,6 +18,7 @@ MonoBehaviour:
   - rid: 2302385460788330749
   - rid: 2302385460788330751
   - rid: 2302385460788330752
+  - rid: 536863635780927564
   _edges: []
   _groups: []
   RootNodeGUID: 
@@ -82,6 +83,26 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 536863635780927564
+      type: {class: GetPropertyNode_Bool, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        GUID: e8f17946-e027-4bb6-990b-d1c1c4037309
+        PositionAndSize:
+          x: 784
+          y: 314.28574
+          z: 200
+          w: 100
+        PropertyName: property
+        Output:
+          rid: 536863635780927565
+    - rid: 536863635780927565
+      type: {class: BoolParameterEdgePort, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        Name: Value
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: 0
+        DefaultValue: 0
     - rid: 2302385320231960638
       type: {class: MethodEntryNode, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
       data:

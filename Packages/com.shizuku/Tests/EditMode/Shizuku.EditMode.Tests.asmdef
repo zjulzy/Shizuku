@@ -4,7 +4,9 @@
     "references": [
         "ShizukuCore.Runtime",
         "ShizukuGraph.Runtime",
-        "ShizukuTag.Runtime"
+        "ShizukuGraph.Editor",
+        "ShizukuTag.Runtime",
+        "Unity.Mathematics"
     ],
     "includePlatforms": [
         "Editor"

@@ -68,7 +68,7 @@ namespace Shizuku.Core
             {
                 Type = type,
                 DisplayName = attr.DisplayName ?? type.Name,
-                Category = attr.Category ?? "Custom",
+                Category = attr.Category ?? "自定义",
                 Description = attr.Description ?? "",
                 ShowInVariableMenu = attr.ShowInVariableMenu,
                 Order = attr.Order
@@ -98,7 +98,7 @@ namespace Shizuku.Core
                 DeclaringType = type,
                 Method = method,
                 DisplayName = attr.DisplayName ?? method.Name,
-                Category = attr.Category ?? "Functions",
+                Category = attr.Category ?? "函数",
                 Description = attr.Description ?? "",
                 IsPure = attr.Pure,
                 Order = attr.Order,

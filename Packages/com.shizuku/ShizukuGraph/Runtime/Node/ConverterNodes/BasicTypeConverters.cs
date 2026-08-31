@@ -9,7 +9,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
-    [NodeMenuItem("数值/Float → Int", NodeCategory.Converter, Description = "浮点数转整数（截断取整）")]
+    [NodeMenuItem("类型转换/Float To Int", Description = "浮点数转整数（截断取整）")]
     public class FloatToIntConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -18,7 +18,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         private IntParameterEdgePort _output = new IntParameterEdgePort { IsOut = true, Name = "Int" };
 
-        public override string Title => "Float → Int";
 
         public override Type InputType => typeof(float);
         public override Type OutputType => typeof(int);
@@ -33,7 +32,7 @@ namespace Shizuku.Graph
     /// Int → Float 转换节点
     /// </summary>
     [Serializable]
-    [NodeMenuItem("数值/Int → Float", NodeCategory.Converter, Description = "整数转浮点数")]
+    [NodeMenuItem("类型转换/Int To Float", Description = "整数转浮点数")]
     public class IntToFloatConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -42,7 +41,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         private FloatParameterEdgePort _output = new FloatParameterEdgePort { IsOut = true, Name = "Float" };
 
-        public override string Title => "Int → Float";
 
         public override Type InputType => typeof(int);
         public override Type OutputType => typeof(float);
@@ -58,7 +56,7 @@ namespace Shizuku.Graph
     /// 0 → false, 非零 → true
     /// </summary>
     [Serializable]
-    [NodeMenuItem("数值/Int → Bool", NodeCategory.Converter, Description = "整数转布尔（0为false，非零为true）")]
+    [NodeMenuItem("类型转换/Int To Bool", Description = "整数转布尔（0为false，非零为true）")]
     public class IntToBoolConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -67,7 +65,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         private BoolParameterEdgePort _output = new BoolParameterEdgePort { IsOut = true, Name = "Bool" };
 
-        public override string Title => "Int → Bool";
 
         public override Type InputType => typeof(int);
         public override Type OutputType => typeof(bool);
@@ -83,7 +80,7 @@ namespace Shizuku.Graph
     /// false → 0, true → 1
     /// </summary>
     [Serializable]
-    [NodeMenuItem("数值/Bool → Int", NodeCategory.Converter, Description = "布尔转整数（false为0，true为1）")]
+    [NodeMenuItem("类型转换/Bool To Int", Description = "布尔转整数（false为0，true为1）")]
     public class BoolToIntConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -92,7 +89,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         private IntParameterEdgePort _output = new IntParameterEdgePort { IsOut = true, Name = "Int" };
 
-        public override string Title => "Bool → Int";
 
         public override Type InputType => typeof(bool);
         public override Type OutputType => typeof(int);
@@ -107,7 +103,7 @@ namespace Shizuku.Graph
     /// Float → String 转换节点
     /// </summary>
     [Serializable]
-    [NodeMenuItem("字符串/Float → String", NodeCategory.Converter, Description = "浮点数转字符串")]
+    [NodeMenuItem("类型转换/Float To String", Description = "浮点数转字符串")]
     public class FloatToStringConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -116,7 +112,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         private StringParameterEdgePort _output = new StringParameterEdgePort { IsOut = true, Name = "String" };
 
-        public override string Title => "Float → String";
 
         public override Type InputType => typeof(float);
         public override Type OutputType => typeof(string);
@@ -131,7 +126,7 @@ namespace Shizuku.Graph
     /// Int → String 转换节点
     /// </summary>
     [Serializable]
-    [NodeMenuItem("字符串/Int → String", NodeCategory.Converter, Description = "整数转字符串")]
+    [NodeMenuItem("类型转换/Int To String", Description = "整数转字符串")]
     public class IntToStringConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -140,7 +135,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         private StringParameterEdgePort _output = new StringParameterEdgePort { IsOut = true, Name = "String" };
 
-        public override string Title => "Int → String";
 
         public override Type InputType => typeof(int);
         public override Type OutputType => typeof(string);
@@ -156,7 +150,7 @@ namespace Shizuku.Graph
     /// 解析失败返回 0
     /// </summary>
     [Serializable]
-    [NodeMenuItem("字符串/String → Int", NodeCategory.Converter, Description = "字符串转整数（失败返回0）")]
+    [NodeMenuItem("类型转换/String To Int", Description = "字符串转整数（失败返回0）")]
     public class StringToIntConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -165,7 +159,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         private IntParameterEdgePort _output = new IntParameterEdgePort { IsOut = true, Name = "Int" };
 
-        public override string Title => "String → Int";
 
         public override Type InputType => typeof(string);
         public override Type OutputType => typeof(int);
@@ -188,7 +181,7 @@ namespace Shizuku.Graph
     /// 解析失败返回 0.0f
     /// </summary>
     [Serializable]
-    [NodeMenuItem("字符串/String → Float", NodeCategory.Converter, Description = "字符串转浮点数（失败返回0）")]
+    [NodeMenuItem("类型转换/String To Float", Description = "字符串转浮点数（失败返回0）")]
     public class StringToFloatConverter : TypeConverterNode
     {
         [SerializeReference]
@@ -197,7 +190,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         private FloatParameterEdgePort _output = new FloatParameterEdgePort { IsOut = true, Name = "Float" };
 
-        public override string Title => "String → Float";
 
         public override Type InputType => typeof(string);
         public override Type OutputType => typeof(float);

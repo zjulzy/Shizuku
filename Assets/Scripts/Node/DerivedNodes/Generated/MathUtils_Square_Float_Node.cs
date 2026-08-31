@@ -7,11 +7,9 @@ using UnityEngine;
 using Shizuku.Core;
 using Shizuku.Graph;
 
-[NodeMenuItem("数学/基础/平方", NodeCategory.Function, Description = "")]
+[NodeMenuItem("数学/Square", Description = "")]
 public class MathUtils_Square_Float_Node : ShizukuRunnableNode
 {
-    public override string Title => "平方";
-
     public override Color TitleBarColor => new Color(0.6f, 0.4f, 0.8f, 1f);
 
     [SerializeReference]

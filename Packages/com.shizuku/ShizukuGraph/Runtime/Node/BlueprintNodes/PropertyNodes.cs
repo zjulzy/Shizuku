@@ -82,7 +82,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("获取属性/Float", NodeCategory.Blueprint, Description = "获取 Float 类型属性")]
+    [NodeMenuItem("蓝图/Get Float Property", Description = "获取 Float 类型属性")]
     public class GetPropertyNode_Float : PropertyGetNode<FloatParameterEdgePort>
     {
         protected override string TypeName => "Float";
@@ -99,7 +99,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("设置属性/Float", NodeCategory.Blueprint, Description = "设置 Float 类型属性")]
+    [NodeMenuItem("蓝图/Set Float Property", Description = "设置 Float 类型属性")]
     public class SetPropertyNode_Float : PropertySetNode<FloatParameterEdgePort>
     {
         protected override string TypeName => "Float";
@@ -115,7 +115,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("获取属性/Int", NodeCategory.Blueprint, Description = "获取 Int 类型属性")]
+    [NodeMenuItem("蓝图/Get Int Property", Description = "获取 Int 类型属性")]
     public class GetPropertyNode_Int : PropertyGetNode<IntParameterEdgePort>
     {
         protected override string TypeName => "Int";
@@ -132,7 +132,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("设置属性/Int", NodeCategory.Blueprint, Description = "设置 Int 类型属性")]
+    [NodeMenuItem("蓝图/Set Int Property", Description = "设置 Int 类型属性")]
     public class SetPropertyNode_Int : PropertySetNode<IntParameterEdgePort>
     {
         protected override string TypeName => "Int";
@@ -148,7 +148,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("获取属性/Bool", NodeCategory.Blueprint, Description = "获取 Bool 类型属性")]
+    [NodeMenuItem("蓝图/Get Bool Property", Description = "获取 Bool 类型属性")]
     public class GetPropertyNode_Bool : PropertyGetNode<BoolParameterEdgePort>
     {
         protected override string TypeName => "Bool";
@@ -165,7 +165,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("设置属性/Bool", NodeCategory.Blueprint, Description = "设置 Bool 类型属性")]
+    [NodeMenuItem("蓝图/Set Bool Property", Description = "设置 Bool 类型属性")]
     public class SetPropertyNode_Bool : PropertySetNode<BoolParameterEdgePort>
     {
         protected override string TypeName => "Bool";
@@ -181,7 +181,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("获取属性/String", NodeCategory.Blueprint, Description = "获取 String 类型属性")]
+    [NodeMenuItem("蓝图/Get String Property", Description = "获取 String 类型属性")]
     public class GetPropertyNode_String : PropertyGetNode<StringParameterEdgePort>
     {
         protected override string TypeName => "String";
@@ -198,7 +198,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("设置属性/String", NodeCategory.Blueprint, Description = "设置 String 类型属性")]
+    [NodeMenuItem("蓝图/Set String Property", Description = "设置 String 类型属性")]
     public class SetPropertyNode_String : PropertySetNode<StringParameterEdgePort>
     {
         protected override string TypeName => "String";
@@ -214,7 +214,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("获取属性/Vector2", NodeCategory.Blueprint, Description = "获取 Vector2 类型属性")]
+    [NodeMenuItem("蓝图/Get Vector2 Property", Description = "获取 Vector2 类型属性")]
     public class GetPropertyNode_Vector2 : PropertyGetNode<Vector2ParameterEdgePort>
     {
         protected override string TypeName => "Vector2";
@@ -231,7 +231,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("设置属性/Vector2", NodeCategory.Blueprint, Description = "设置 Vector2 类型属性")]
+    [NodeMenuItem("蓝图/Set Vector2 Property", Description = "设置 Vector2 类型属性")]
     public class SetPropertyNode_Vector2 : PropertySetNode<Vector2ParameterEdgePort>
     {
         protected override string TypeName => "Vector2";
@@ -247,7 +247,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("获取属性/Vector3", NodeCategory.Blueprint, Description = "获取 Vector3 类型属性")]
+    [NodeMenuItem("蓝图/Get Vector3 Property", Description = "获取 Vector3 类型属性")]
     public class GetPropertyNode_Vector3 : PropertyGetNode<Vector3ParameterEdgePort>
     {
         protected override string TypeName => "Vector3";
@@ -264,7 +264,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("设置属性/Vector3", NodeCategory.Blueprint, Description = "设置 Vector3 类型属性")]
+    [NodeMenuItem("蓝图/Set Vector3 Property", Description = "设置 Vector3 类型属性")]
     public class SetPropertyNode_Vector3 : PropertySetNode<Vector3ParameterEdgePort>
     {
         protected override string TypeName => "Vector3";
@@ -280,7 +280,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("获取属性/GameObject", NodeCategory.Blueprint, Description = "获取 GameObject 类型属性")]
+    [NodeMenuItem("蓝图/Get GameObject Property", Description = "获取 GameObject 类型属性")]
     public class GetPropertyNode_GameObject : PropertyGetNode<GameObjectParameterEdgePort>
     {
         protected override string TypeName => "GameObject";
@@ -297,7 +297,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("设置属性/GameObject", NodeCategory.Blueprint, Description = "设置 GameObject 类型属性")]
+    [NodeMenuItem("蓝图/Set GameObject Property", Description = "设置 GameObject 类型属性")]
     public class SetPropertyNode_GameObject : PropertySetNode<GameObjectParameterEdgePort>
     {
         protected override string TypeName => "GameObject";
@@ -313,7 +313,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("获取属性/Transform", NodeCategory.Blueprint, Description = "获取 Transform 类型属性")]
+    [NodeMenuItem("蓝图/Get Transform Property", Description = "获取 Transform 类型属性")]
     public class GetPropertyNode_Transform : PropertyGetNode<TransformParameterEdgePort>
     {
         protected override string TypeName => "Transform";
@@ -330,7 +330,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("设置属性/Transform", NodeCategory.Blueprint, Description = "设置 Transform 类型属性")]
+    [NodeMenuItem("蓝图/Set Transform Property", Description = "设置 Transform 类型属性")]
     public class SetPropertyNode_Transform : PropertySetNode<TransformParameterEdgePort>
     {
         protected override string TypeName => "Transform";
@@ -346,7 +346,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("获取属性/Color", NodeCategory.Blueprint, Description = "获取 Color 类型属性")]
+    [NodeMenuItem("蓝图/Get Color Property", Description = "获取 Color 类型属性")]
     public class GetPropertyNode_Color : PropertyGetNode<ColorParameterEdgePort>
     {
         protected override string TypeName => "Color";
@@ -363,7 +363,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("设置属性/Color", NodeCategory.Blueprint, Description = "设置 Color 类型属性")]
+    [NodeMenuItem("蓝图/Set Color Property", Description = "设置 Color 类型属性")]
     public class SetPropertyNode_Color : PropertySetNode<ColorParameterEdgePort>
     {
         protected override string TypeName => "Color";
@@ -392,7 +392,7 @@ namespace Shizuku.Graph
     /// - 强类型版本提供更好的类型安全和编辑器支持
     /// </remarks>
     [Serializable]
-    [NodeMenuItem("获取属性/通用", NodeCategory.Blueprint, Description = "获取 Object 类型属性")]
+    [NodeMenuItem("蓝图/Get Object Property", Description = "获取 Object 类型属性")]
     public class GetPropertyNode : PropertyGetNode<ObjectParameterEdgePort>
     {
         protected override string TypeName => "Object";
@@ -425,7 +425,7 @@ namespace Shizuku.Graph
     /// - 强类型版本提供更好的类型安全和编辑器支持
     /// </remarks>
     [Serializable]
-    [NodeMenuItem("设置属性/通用", NodeCategory.Blueprint, Description = "设置 Object 类型属性")]
+    [NodeMenuItem("蓝图/Set Object Property", Description = "设置 Object 类型属性")]
     public class SetPropertyNode : PropertySetNode<ObjectParameterEdgePort>
     {
         protected override string TypeName => "Object";

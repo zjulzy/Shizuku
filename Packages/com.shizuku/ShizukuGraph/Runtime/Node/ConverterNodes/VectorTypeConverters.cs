@@ -9,7 +9,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
-    [NodeMenuItem("向量/Vector3 → Vector2", NodeCategory.Converter, Description = "三维向量转二维向量（丢弃Z）")]
+    [NodeMenuItem("类型转换/Vector3 To Vector2", Description = "三维向量转二维向量（丢弃Z）")]
     public class Vector3ToVector2Converter : TypeConverterNode
     {
         [SerializeReference]
@@ -18,7 +18,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         private Vector2ParameterEdgePort _output = new Vector2ParameterEdgePort { IsOut = true, Name = "Vector2" };
 
-        public override string Title => "Vector3 → Vector2";
 
         public override Type InputType => typeof(Vector3);
         public override Type OutputType => typeof(Vector2);
@@ -30,7 +29,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("向量/Vector2 → Vector3", NodeCategory.Converter, Description = "二维向量转三维向量（Z=0）")]
+    [NodeMenuItem("类型转换/Vector2 To Vector3", Description = "二维向量转三维向量（Z=0）")]
     public class Vector2ToVector3Converter : TypeConverterNode
     {
         [SerializeReference]
@@ -39,7 +38,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         private Vector3ParameterEdgePort _output = new Vector3ParameterEdgePort { IsOut = true, Name = "Vector3" };
 
-        public override string Title => "Vector2 → Vector3";
 
         public override Type InputType => typeof(Vector2);
         public override Type OutputType => typeof(Vector3);

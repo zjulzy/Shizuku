@@ -9,10 +9,9 @@ namespace Shizuku.Graph
     /// 输出当前索引 Index 供 Body 内节点读取。
     /// </summary>
     [Serializable]
-    [NodeMenuItem("逻辑/For 循环", NodeCategory.Logic, Description = "按索引循环执行")]
+    [NodeMenuItem("逻辑/For Loop", Description = "按索引循环执行")]
     public class ShizukuForNode : ShizukuRunnableNode
     {
-        public override string Title => "For";
         public override Color TitleBarColor => new Color(0.2f, 0.6f, 0.4f, 1f);
 
         [SerializeReference]

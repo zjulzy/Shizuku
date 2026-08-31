@@ -9,7 +9,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
-    [NodeMenuItem("比较/整数相等", NodeCategory.Logic, Description = "比较两个整数是否相等")]
+    [NodeMenuItem("逻辑/Int Equal (==)", Description = "比较两个整数是否相等")]
     public class CompareNode_Int_Equal : ShizukuValueNode
     {
         [SerializeReference]
@@ -21,7 +21,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A == B" };
 
-        public override string Title => "Int Equal (==)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -31,7 +30,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("比较/整数不等", NodeCategory.Logic, Description = "比较两个整数是否不等")]
+    [NodeMenuItem("逻辑/Int Not Equal (!=)", Description = "比较两个整数是否不等")]
     public class CompareNode_Int_NotEqual : ShizukuValueNode
     {
         [SerializeReference]
@@ -43,7 +42,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A != B" };
 
-        public override string Title => "Int Not Equal (!=)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -53,7 +51,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("比较/整数大于", NodeCategory.Logic, Description = "比较A是否大于B")]
+    [NodeMenuItem("逻辑/Int Greater (>)", Description = "比较A是否大于B")]
     public class CompareNode_Int_Greater : ShizukuValueNode
     {
         [SerializeReference]
@@ -65,7 +63,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A > B" };
 
-        public override string Title => "Int Greater (>)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -75,7 +72,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("比较/整数大于等于", NodeCategory.Logic, Description = "比较A是否大于等于B")]
+    [NodeMenuItem("逻辑/Int Greater Or Equal (>=)", Description = "比较A是否大于等于B")]
     public class CompareNode_Int_GreaterOrEqual : ShizukuValueNode
     {
         [SerializeReference]
@@ -87,7 +84,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A >= B" };
 
-        public override string Title => "Int Greater Or Equal (>=)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -97,7 +93,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("比较/整数小于", NodeCategory.Logic, Description = "比较A是否小于B")]
+    [NodeMenuItem("逻辑/Int Less (<)", Description = "比较A是否小于B")]
     public class CompareNode_Int_Less : ShizukuValueNode
     {
         [SerializeReference]
@@ -109,7 +105,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A < B" };
 
-        public override string Title => "Int Less (<)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -119,7 +114,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("比较/整数小于等于", NodeCategory.Logic, Description = "比较A是否小于等于B")]
+    [NodeMenuItem("逻辑/Int Less Or Equal (<=)", Description = "比较A是否小于等于B")]
     public class CompareNode_Int_LessOrEqual : ShizukuValueNode
     {
         [SerializeReference]
@@ -131,7 +126,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A <= B" };
 
-        public override string Title => "Int Less Or Equal (<=)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -145,7 +139,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("比较/浮点数相等", NodeCategory.Logic, Description = "比较两个浮点数是否相等（带容差）")]
+    [NodeMenuItem("逻辑/Float Equal", Description = "比较两个浮点数是否相等（带容差）")]
     public class CompareNode_Float_Equal : ShizukuValueNode
     {
         [SerializeReference]
@@ -160,7 +154,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A ≈ B" };
 
-        public override string Title => "Float Equal (≈)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -170,7 +163,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("比较/浮点数大于", NodeCategory.Logic, Description = "比较A是否大于B")]
+    [NodeMenuItem("逻辑/Float Greater (>)", Description = "比较A是否大于B")]
     public class CompareNode_Float_Greater : ShizukuValueNode
     {
         [SerializeReference]
@@ -182,7 +175,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A > B" };
 
-        public override string Title => "Float Greater (>)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -192,7 +184,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("比较/浮点数大于等于", NodeCategory.Logic, Description = "比较A是否大于等于B")]
+    [NodeMenuItem("逻辑/Float Greater Or Equal (>=)", Description = "比较A是否大于等于B")]
     public class CompareNode_Float_GreaterOrEqual : ShizukuValueNode
     {
         [SerializeReference]
@@ -204,7 +196,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A >= B" };
 
-        public override string Title => "Float Greater Or Equal (>=)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -214,7 +205,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("比较/浮点数小于", NodeCategory.Logic, Description = "比较A是否小于B")]
+    [NodeMenuItem("逻辑/Float Less (<)", Description = "比较A是否小于B")]
     public class CompareNode_Float_Less : ShizukuValueNode
     {
         [SerializeReference]
@@ -226,7 +217,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A < B" };
 
-        public override string Title => "Float Less (<)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -236,7 +226,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("比较/浮点数小于等于", NodeCategory.Logic, Description = "比较A是否小于等于B")]
+    [NodeMenuItem("逻辑/Float Less Or Equal (<=)", Description = "比较A是否小于等于B")]
     public class CompareNode_Float_LessOrEqual : ShizukuValueNode
     {
         [SerializeReference]
@@ -248,7 +238,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A <= B" };
 
-        public override string Title => "Float Less Or Equal (<=)";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -262,7 +251,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("比较/字符串相等", NodeCategory.Logic, Description = "比较两个字符串是否相等")]
+    [NodeMenuItem("逻辑/String Equal", Description = "比较两个字符串是否相等")]
     public class CompareNode_String_Equal : ShizukuValueNode
     {
         [SerializeReference]
@@ -274,7 +263,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A == B" };
 
-        public override string Title => "String Equal";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -284,7 +272,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("比较/字符串不等", NodeCategory.Logic, Description = "比较两个字符串是否不等")]
+    [NodeMenuItem("逻辑/String Not Equal", Description = "比较两个字符串是否不等")]
     public class CompareNode_String_NotEqual : ShizukuValueNode
     {
         [SerializeReference]
@@ -296,7 +284,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A != B" };
 
-        public override string Title => "String Not Equal";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -310,7 +297,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("比较/布尔相等", NodeCategory.Logic, Description = "比较两个布尔值是否相等")]
+    [NodeMenuItem("逻辑/Bool Equal", Description = "比较两个布尔值是否相等")]
     public class CompareNode_Bool_Equal : ShizukuValueNode
     {
         [SerializeReference]
@@ -322,7 +309,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "A == B" };
 
-        public override string Title => "Bool Equal";
         public override Color TitleBarColor => new Color(0.5f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()

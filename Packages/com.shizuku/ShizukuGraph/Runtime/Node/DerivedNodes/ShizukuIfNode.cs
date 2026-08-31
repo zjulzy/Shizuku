@@ -3,10 +3,9 @@
 namespace Shizuku.Graph
 {
     using Shizuku.Core;
-    [NodeMenuItem("条件分支", NodeCategory.Logic, Description = "根据条件执行不同分支")]
+    [NodeMenuItem("逻辑/Branch", Description = "根据条件执行不同分支")]
     public class ShizukuIfNode : ShizukuRunnableNode
     {
-        public override string Title => "If";
         public override Color TitleBarColor => Color.cyan;
 
         [SerializeReference]

@@ -7,11 +7,9 @@ using UnityEngine;
 using Shizuku.Core;
 using Shizuku.Graph;
 
-[NodeMenuItem("数学/向量/向量点乘", NodeCategory.Function, Description = "")]
+[NodeMenuItem("数学/Vector Dot", Description = "")]
 public class MathUtils_VectorDot_Vector3_Vector3_Node : ShizukuRunnableNode
 {
-    public override string Title => "向量点乘";
-
     public override Color TitleBarColor => new Color(0.6f, 0.4f, 0.8f, 1f);
 
     [SerializeReference]

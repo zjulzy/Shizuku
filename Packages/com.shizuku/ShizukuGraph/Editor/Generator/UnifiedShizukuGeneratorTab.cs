@@ -795,16 +795,13 @@ namespace Shizuku.Graph.Editor
 
             // NodeMenuItem 特性
             var menuPath = funcInfo.GetMenuPath();
-            sb.AppendLine($"[NodeMenuItem(\"{menuPath}\", NodeCategory.Function, Description = \"{funcInfo.Description}\")]");
+            EnsureValidGeneratedMenuPath(menuPath);
+            sb.AppendLine($"[NodeMenuItem(\"{menuPath}\", Description = \"{funcInfo.Description}\")]");
 
             // 类定义
             var baseClass = "ShizukuRunnableNode";
             sb.AppendLine($"public class {funcInfo.GetNodeClassName()} : {baseClass}");
             sb.AppendLine("{");
-
-            // Title
-            sb.AppendLine($"    public override string Title => \"{funcInfo.DisplayName}\";");
-            sb.AppendLine();
 
             // TitleBarColor - 函数节点使用紫色
             sb.AppendLine("    public override Color TitleBarColor => new Color(0.6f, 0.4f, 0.8f, 1f);");
@@ -1166,10 +1163,11 @@ namespace Shizuku.Graph.Editor
                 var simpleTypeName = typeInfo.Type.Name;
                 var fullTypeName = typeInfo.Type.FullName ?? simpleTypeName;
                 var portClassName = $"{simpleTypeName}ParameterEdgePort";
-                var menuPath = $"变量/获取/{typeInfo.DisplayName}";
+                var menuPath = $"变量/Get {typeInfo.DisplayName}";
+                EnsureValidGeneratedMenuPath(menuPath);
 
                 sb.AppendLine($"[Serializable]");
-                sb.AppendLine($"[NodeMenuItem(\"{menuPath}\", NodeCategory.Variable, Description = \"获取{typeInfo.DisplayName}变量\")]");
+                sb.AppendLine($"[NodeMenuItem(\"{menuPath}\", Description = \"获取{typeInfo.DisplayName}变量\")]");
                 sb.AppendLine($"public class GetVariableNode_Custom_{simpleTypeName} : ShizukuValueNode, IVariableNode");
                 sb.AppendLine($"{{");
                 sb.AppendLine($"    [SerializeField] public string VariableGUID;");
@@ -1226,10 +1224,11 @@ namespace Shizuku.Graph.Editor
                 var simpleTypeName = typeInfo.Type.Name;
                 var fullTypeName = typeInfo.Type.FullName ?? simpleTypeName;
                 var portClassName = $"{simpleTypeName}ParameterEdgePort";
-                var menuPath = $"变量/设置/{typeInfo.DisplayName}";
+                var menuPath = $"变量/Set {typeInfo.DisplayName}";
+                EnsureValidGeneratedMenuPath(menuPath);
 
                 sb.AppendLine($"[Serializable]");
-                sb.AppendLine($"[NodeMenuItem(\"{menuPath}\", NodeCategory.Variable, Description = \"设置{typeInfo.DisplayName}变量\")]");
+                sb.AppendLine($"[NodeMenuItem(\"{menuPath}\", Description = \"设置{typeInfo.DisplayName}变量\")]");
                 sb.AppendLine($"public class SetVariableNode_Custom_{simpleTypeName} : ShizukuRunnableNode, IVariableNode");
                 sb.AppendLine($"{{");
                 sb.AppendLine($"    [SerializeField] public string VariableGUID;");
@@ -1263,6 +1262,12 @@ namespace Shizuku.Graph.Editor
             var filePath = Path.Combine(VARIABLE_NODE_OUTPUT_PATH, "SetVariableNodes.Custom.Generated.cs");
             File.WriteAllText(filePath, sb.ToString());
             Debug.Log($"[UnifiedShizukuGenerator] Generated: {filePath}");
+        }
+
+        private static void EnsureValidGeneratedMenuPath(string menuPath)
+        {
+            if (!NodeMenuItemAttribute.TryValidateMenuPath(menuPath, out var error))
+                throw new InvalidOperationException($"无法生成节点菜单路径“{menuPath}”：{error}");
         }
 
         /// <summary>

@@ -7,11 +7,9 @@ using UnityEngine;
 using Shizuku.Core;
 using Shizuku.Graph;
 
-[NodeMenuItem("字符串/转换/转大写", NodeCategory.Function, Description = "")]
+[NodeMenuItem("字符串/To Upper", Description = "")]
 public class StringUtils_ToUpper_String_Node : ShizukuRunnableNode
 {
-    public override string Title => "转大写";
-
     public override Color TitleBarColor => new Color(0.6f, 0.4f, 0.8f, 1f);
 
     [SerializeReference]

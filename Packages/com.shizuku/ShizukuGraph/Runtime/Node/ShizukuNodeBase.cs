@@ -16,7 +16,7 @@ namespace Shizuku.Graph
         [SerializeField]
         public float4 PositionAndSize;
 
-        public virtual string Title => "No Title";
+        public virtual string Title => GetDefaultTitle(GetType());
         public virtual Color TitleBarColor => Color.gray;
 
         public virtual bool SupportControlInput => true;
@@ -41,6 +41,20 @@ namespace Shizuku.Graph
 
         // ---- 反射字段缓存（按 Type 共享，避免每次 Init 重复反射） ----
         private static readonly Dictionary<Type, FieldInfo[]> s_paramPortFieldCache = new();
+        private static readonly Dictionary<Type, string> s_defaultTitleCache = new();
+
+        private static string GetDefaultTitle(Type type)
+        {
+            if (s_defaultTitleCache.TryGetValue(type, out var cached)) return cached;
+
+            var menuItem = type.GetCustomAttribute<NodeMenuItemAttribute>();
+            var title = menuItem?.DisplayName;
+            if (string.IsNullOrWhiteSpace(title))
+                title = type.Name;
+
+            s_defaultTitleCache[type] = title;
+            return title;
+        }
 
         private static FieldInfo[] GetCachedParamPortFields(Type type)
         {

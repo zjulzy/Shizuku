@@ -414,14 +414,14 @@ public abstract class SkillNode : ShizukuRunnableNode
     protected SkillContext SkillCtx => (_context as SkillGraph)?.SkillContext;
 }
 
-[NodeMenuItem("施法者", NodeCategory.Skill)]
+[NodeMenuItem("技能/Get Caster")]
 public class GetCasterNode : SkillNode
 {
     [SerializeField] private GameObjectParameterEdgePort _output = new() { IsOut = true, Name = "Caster" };
     protected override void OnExecute() => _output.Value = SkillCtx?.Caster;
 }
 
-[NodeMenuItem("目标", NodeCategory.Skill)]
+[NodeMenuItem("技能/Get Target")]
 public class GetTargetNode : SkillNode
 {
     [SerializeField] private GameObjectParameterEdgePort _output = new() { IsOut = true, Name = "Target" };

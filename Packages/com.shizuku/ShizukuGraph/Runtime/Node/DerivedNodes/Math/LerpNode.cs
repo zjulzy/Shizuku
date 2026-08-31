@@ -9,7 +9,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
-    [NodeMenuItem("线性插值/Float", NodeCategory.Math, Description = "浮点数线性插值")]
+    [NodeMenuItem("数学/Lerp (Float)", Description = "浮点数线性插值")]
     public class LerpNode_Float : ShizukuValueNode
     {
         [SerializeReference]
@@ -24,7 +24,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public FloatParameterEdgePort Output = new FloatParameterEdgePort { IsOut = true, Name = "Result" };
 
-        public override string Title => "Lerp (Float)";
         public override Color TitleBarColor => new Color(0.8f, 0.6f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -34,7 +33,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("线性插值/Vector2", NodeCategory.Math, Description = "Vector2 线性插值")]
+    [NodeMenuItem("数学/Lerp (Vector2)", Description = "Vector2 线性插值")]
     public class LerpNode_Vector2 : ShizukuValueNode
     {
         [SerializeReference]
@@ -49,7 +48,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public Vector2ParameterEdgePort Output = new Vector2ParameterEdgePort { IsOut = true, Name = "Result" };
 
-        public override string Title => "Lerp (Vector2)";
         public override Color TitleBarColor => new Color(0.8f, 0.6f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -59,7 +57,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("线性插值/Vector3", NodeCategory.Math, Description = "Vector3 线性插值")]
+    [NodeMenuItem("数学/Lerp (Vector3)", Description = "Vector3 线性插值")]
     public class LerpNode_Vector3 : ShizukuValueNode
     {
         [SerializeReference]
@@ -74,7 +72,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public Vector3ParameterEdgePort Output = new Vector3ParameterEdgePort { IsOut = true, Name = "Result" };
 
-        public override string Title => "Lerp (Vector3)";
         public override Color TitleBarColor => new Color(0.8f, 0.6f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -84,7 +81,7 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("线性插值/Color", NodeCategory.Math, Description = "颜色线性插值")]
+    [NodeMenuItem("数学/Lerp (Color)", Description = "颜色线性插值")]
     public class LerpNode_Color : ShizukuValueNode
     {
         [SerializeReference]
@@ -99,7 +96,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public ColorParameterEdgePort Output = new ColorParameterEdgePort { IsOut = true, Name = "Result" };
 
-        public override string Title => "Lerp (Color)";
         public override Color TitleBarColor => new Color(0.8f, 0.6f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()

@@ -8,11 +8,9 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
-    [NodeMenuItem("加法/Int", NodeCategory.Math, Description = "整数加法")]
+    [NodeMenuItem("数学/Add (Int)", Description = "整数加法")]
     public class AddNode_Int : ShizukuValueNode
     {
-        public override string Title => "Add (Int)";
-
         [SerializeReference]
         private IntParameterEdgePort _a = new() { IsOut = false, Name = "A" };
 
@@ -32,11 +30,9 @@ namespace Shizuku.Graph
     /// 加法节点 - Float 版本
     /// </summary>
     [Serializable]
-    [NodeMenuItem("加法/Float", NodeCategory.Math, Description = "浮点数加法")]
+    [NodeMenuItem("数学/Add (Float)", Description = "浮点数加法")]
     public class AddNode_Float : ShizukuValueNode
     {
-        public override string Title => "Add (Float)";
-
         [SerializeReference]
         private FloatParameterEdgePort _a = new() { IsOut = false, Name = "A" };
 
@@ -56,11 +52,9 @@ namespace Shizuku.Graph
     /// 加法节点 - Vector2 版本
     /// </summary>
     [Serializable]
-    [NodeMenuItem("加法/Vector2", NodeCategory.Math, Description = "二维向量加法")]
+    [NodeMenuItem("数学/Add (Vector2)", Description = "二维向量加法")]
     public class AddNode_Vector2 : ShizukuValueNode
     {
-        public override string Title => "Add (Vector2)";
-
         [SerializeReference]
         private Vector2ParameterEdgePort _a = new() { IsOut = false, Name = "A" };
 
@@ -80,11 +74,9 @@ namespace Shizuku.Graph
     /// 加法节点 - Vector3 版本
     /// </summary>
     [Serializable]
-    [NodeMenuItem("加法/Vector3", NodeCategory.Math, Description = "三维向量加法")]
+    [NodeMenuItem("数学/Add (Vector3)", Description = "三维向量加法")]
     public class AddNode_Vector3 : ShizukuValueNode
     {
-        public override string Title => "Add (Vector3)";
-
         [SerializeReference]
         private Vector3ParameterEdgePort _a = new() { IsOut = false, Name = "A" };
 

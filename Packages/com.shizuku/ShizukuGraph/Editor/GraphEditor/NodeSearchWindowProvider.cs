@@ -11,7 +11,6 @@ using UnityEngine;
 namespace Shizuku.Graph.Editor
 {
     using Shizuku.Graph;
-    using Shizuku.Core;
     public class NodeSearchWindowProvider : ScriptableObject, ISearchWindowProvider
     {
         private ShizukuGraphView _graphView;
@@ -47,71 +46,67 @@ namespace Shizuku.Graph.Editor
                 new SearchTreeGroupEntry(new GUIContent("创建节点"), 0)
             };
 
-            // 扫描所有节点类型
-            var nodeTypes = ScanAllNodeTypes();
-
-            // 按分类组织节点
-            var categorizedNodes = new Dictionary<NodeCategory, List<NodeInfo>>();
-            foreach (var nodeInfo in nodeTypes)
-            {
-                if (!categorizedNodes.ContainsKey(nodeInfo.Category))
-                {
-                    categorizedNodes[nodeInfo.Category] = new List<NodeInfo>();
-                }
-                categorizedNodes[nodeInfo.Category].Add(nodeInfo);
-            }
-
-            // 按分类添加到树中
-            var addedGroupPaths = new HashSet<string>();
-
-            foreach (var category in Enum.GetValues(typeof(NodeCategory)).Cast<NodeCategory>().OrderBy(c => (int)c))
-            {
-                if (!categorizedNodes.ContainsKey(category))
-                    continue;
-
-                var nodes = categorizedNodes[category].OrderBy(n => n.Order).ThenBy(n => n.MenuPath).ToList();
-                if (nodes.Count == 0)
-                    continue;
-
-                // 添加分类标题
-                tree.Add(new SearchTreeGroupEntry(new GUIContent(GetCategoryDisplayName(category)), 1));
-
-                // 添加节点项
-                foreach (var node in nodes)
-                {
-                    var parts = node.MenuPath.Split('/');
-
-                    // 添加子分组（如果有）
-                    for (int i = 0; i < parts.Length - 1; i++)
-                    {
-                        var groupPath = $"{category}/{string.Join("/", parts.Take(i + 1))}";
-                        var groupName = parts[i];
-
-                        // 检查是否已添加该分组
-                        if (!addedGroupPaths.Contains(groupPath))
-                        {
-                            tree.Add(new SearchTreeGroupEntry(new GUIContent(groupName), 2 + i));
-                            addedGroupPaths.Add(groupPath);
-                        }
-                    }
-
-                    // 添加节点项
-                    var nodeName = parts[parts.Length - 1];
-                    var level = parts.Length + 1;
-                    var content = new GUIContent(nodeName, node.Description);
-
-                    tree.Add(new SearchTreeEntry(content)
-                    {
-                        level = level,
-                        userData = node
-                    });
-                }
-            }
+            var menuRoot = BuildMenuTree(ScanAllNodeTypes());
+            AppendMenuEntries(tree, menuRoot, 1);
 
             // 添加"调用函数"分组
             AddMethodCallEntries(tree);
 
             return tree;
+        }
+
+        private static MenuGroup BuildMenuTree(IEnumerable<NodeInfo> nodes)
+        {
+            var root = new MenuGroup(string.Empty);
+
+            foreach (var node in nodes)
+            {
+                var parts = node.MenuPath
+                    .Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(part => part.Trim())
+                    .Where(part => part.Length > 0)
+                    .ToArray();
+
+                if (parts.Length == 0)
+                    continue;
+
+                node.MenuPath = string.Join("/", parts);
+                node.DisplayName = parts[parts.Length - 1];
+
+                var group = root;
+                group.Order = Math.Min(group.Order, node.Order);
+                for (var i = 0; i < parts.Length - 1; i++)
+                {
+                    group = group.GetOrAddGroup(parts[i]);
+                    group.Order = Math.Min(group.Order, node.Order);
+                }
+
+                group.Nodes.Add(node);
+            }
+
+            return root;
+        }
+
+        private static void AppendMenuEntries(List<SearchTreeEntry> tree, MenuGroup group, int level)
+        {
+            foreach (var childGroup in group.Groups.Values
+                         .OrderBy(item => item.Order)
+                         .ThenBy(item => item.Name, StringComparer.CurrentCulture))
+            {
+                tree.Add(new SearchTreeGroupEntry(new GUIContent(childGroup.Name), level));
+                AppendMenuEntries(tree, childGroup, level + 1);
+            }
+
+            foreach (var node in group.Nodes
+                         .OrderBy(item => item.Order)
+                         .ThenBy(item => item.DisplayName, StringComparer.CurrentCulture))
+            {
+                tree.Add(new SearchTreeEntry(new GUIContent(node.DisplayName, node.Description))
+                {
+                    level = level,
+                    userData = node
+                });
+            }
         }
 
         /// <summary>
@@ -180,41 +175,24 @@ namespace Shizuku.Graph.Editor
                         if (!type.IsClass || type.IsAbstract || !typeof(ShizukuNodeBase).IsAssignableFrom(type))
                             continue;
 
-                        // 跳过某些特殊节点
-                        if (type == typeof(ShizukuRootNode) || 
-                            type == typeof(BlueprintEventNode) ||
-                            type == typeof(MethodEntryNode) ||
-                            type == typeof(MethodReturnNode) ||
-                            type == typeof(InvokeMethodNode) ||
-                            type.Name.Contains("TypeConverterNode"))
+                        // NodeMenuItem 是进入创建菜单的唯一入口；内部结构节点默认不暴露。
+                        var attr = type.GetCustomAttribute<NodeMenuItemAttribute>();
+                        if (attr == null || string.IsNullOrWhiteSpace(attr.MenuPath))
                             continue;
 
-                        // 获取特性
-                        var attr = type.GetCustomAttribute<NodeMenuItemAttribute>();
-                        if (attr != null)
+                        if (!NodeMenuItemAttribute.TryValidateMenuPath(attr.MenuPath, out var pathError))
                         {
-                            nodeInfos.Add(new NodeInfo
-                            {
-                                NodeType = type,
-                                MenuPath = attr.MenuPath,
-                                Category = attr.Category,
-                                Description = attr.Description ?? "",
-                                Order = attr.Order
-                            });
+                            Debug.LogWarning($"节点 {type.FullName} 的菜单路径无效：{pathError}");
+                            continue;
                         }
-                        else
+
+                        nodeInfos.Add(new NodeInfo
                         {
-                            // 如果没有特性，使用默认值
-                            var defaultPath = type.Name.Replace("Node", "");
-                            nodeInfos.Add(new NodeInfo
-                            {
-                                NodeType = type,
-                                MenuPath = defaultPath,
-                                Category = NodeCategory.Basic,
-                                Description = $"创建 {defaultPath} 节点",
-                                Order = 999
-                            });
-                        }
+                            NodeType = type,
+                            MenuPath = attr.MenuPath,
+                            Description = attr.Description ?? string.Empty,
+                            Order = attr.Order
+                        });
                     }
                 }
                 catch (Exception ex)
@@ -227,32 +205,38 @@ namespace Shizuku.Graph.Editor
         }
 
         /// <summary>
-        /// 获取分类显示名称
-        /// </summary>
-        private string GetCategoryDisplayName(NodeCategory category)
-        {
-            return category switch
-            {
-                NodeCategory.Basic => "基础节点",
-                NodeCategory.Blueprint => "蓝图节点",
-                NodeCategory.Math => "数学节点",
-                NodeCategory.Logic => "逻辑节点",
-                NodeCategory.Converter => "类型转换",
-                NodeCategory.Event => "事件节点",
-                _ => category.ToString()
-            };
-        }
-
-        /// <summary>
         /// 节点信息类
         /// </summary>
         private class NodeInfo
         {
             public Type NodeType;
             public string MenuPath;
-            public NodeCategory Category;
+            public string DisplayName;
             public string Description;
             public int Order;
+        }
+
+        private sealed class MenuGroup
+        {
+            public readonly string Name;
+            public readonly Dictionary<string, MenuGroup> Groups = new(StringComparer.Ordinal);
+            public readonly List<NodeInfo> Nodes = new();
+            public int Order = int.MaxValue;
+
+            public MenuGroup(string name)
+            {
+                Name = name;
+            }
+
+            public MenuGroup GetOrAddGroup(string name)
+            {
+                if (Groups.TryGetValue(name, out var group))
+                    return group;
+
+                group = new MenuGroup(name);
+                Groups.Add(name, group);
+                return group;
+            }
         }
     }
 

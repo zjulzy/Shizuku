@@ -46,7 +46,7 @@ namespace Shizuku.Core
         /// </summary>
         public int Order { get; set; }
 
-        public ShizukuClassAttribute(string displayName = null, string category = "Custom")
+        public ShizukuClassAttribute(string displayName = null, string category = "自定义")
         {
             DisplayName = displayName;
             Category = category;

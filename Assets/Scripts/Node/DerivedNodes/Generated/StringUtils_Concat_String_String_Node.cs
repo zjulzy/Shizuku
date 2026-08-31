@@ -7,11 +7,9 @@ using UnityEngine;
 using Shizuku.Core;
 using Shizuku.Graph;
 
-[NodeMenuItem("字符串/操作/拼接字符串", NodeCategory.Function, Description = "")]
+[NodeMenuItem("字符串/Concat", Description = "")]
 public class StringUtils_Concat_String_String_Node : ShizukuRunnableNode
 {
-    public override string Title => "拼接字符串";
-
     public override Color TitleBarColor => new Color(0.6f, 0.4f, 0.8f, 1f);
 
     [SerializeReference]

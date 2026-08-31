@@ -14,7 +14,7 @@ namespace Shizuku.Core
         public int Order { get; set; }
         public Type[] GenericTypes { get; set; }
         public bool ShowInMenu { get; set; }
-        public ShizukuFunctionAttribute(string displayName = null, string category = "Functions")
+        public ShizukuFunctionAttribute(string displayName = null, string category = "函数")
         {
             DisplayName = displayName;
             Category = category;

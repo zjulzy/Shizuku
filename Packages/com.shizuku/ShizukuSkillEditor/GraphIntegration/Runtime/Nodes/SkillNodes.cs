@@ -16,10 +16,9 @@ namespace Shizuku.SkillEditor.GraphIntegration
     // GetCaster — 获取施法者 GameObject
     // ============================================================
     [Serializable]
-    [NodeMenuItem("技能/获取施法者", NodeCategory.Variable, Description = "从技能上下文中获取施法者 GameObject")]
+    [NodeMenuItem("技能/Get Caster", Description = "从技能上下文中获取施法者 GameObject")]
     public class GetCasterNode : SkillValueNode
     {
-        public override string Title => "Caster";
         public override Color TitleBarColor => new Color(0.7f, 0.4f, 0.6f, 1f);
         [SerializeReference]
         private GameObjectParameterEdgePort _output = new() { IsOut = true, Name = "caster" };
@@ -32,10 +31,9 @@ namespace Shizuku.SkillEditor.GraphIntegration
     // GetTarget — 获取目标 GameObject
     // ============================================================
     [Serializable]
-    [NodeMenuItem("技能/获取目标", NodeCategory.Variable, Description = "从技能上下文中获取目标 GameObject")]
+    [NodeMenuItem("技能/Get Target", Description = "从技能上下文中获取目标 GameObject")]
     public class GetTargetNode : SkillValueNode
     {
-        public override string Title => "Target";
         public override Color TitleBarColor => new Color(0.7f, 0.4f, 0.6f, 1f);
         [SerializeReference]
         private GameObjectParameterEdgePort _output = new() { IsOut = true, Name = "target" };
@@ -48,10 +46,9 @@ namespace Shizuku.SkillEditor.GraphIntegration
     // GetCastPosition — 获取施法位置
     // ============================================================
     [Serializable]
-    [NodeMenuItem("技能/获取施法位置", NodeCategory.Variable, Description = "从技能上下文中获取施法位置")]
+    [NodeMenuItem("技能/Get Cast Position", Description = "从技能上下文中获取施法位置")]
     public class GetCastPositionNode : SkillValueNode
     {
-        public override string Title => "Cast Position";
         public override Color TitleBarColor => new Color(0.7f, 0.4f, 0.6f, 1f);
         [SerializeReference]
         private Vector3ParameterEdgePort _output = new() { IsOut = true, Name = "position" };

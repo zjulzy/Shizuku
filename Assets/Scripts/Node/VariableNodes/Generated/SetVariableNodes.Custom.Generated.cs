@@ -12,7 +12,7 @@ using Shizuku.Graph;
 // ============================================================
 
 [Serializable]
-[NodeMenuItem("变量/设置/敌人配置", NodeCategory.Variable, Description = "设置敌人配置变量")]
+[NodeMenuItem("变量/Set Enemy Config", Description = "设置敌人配置变量")]
 public class SetVariableNode_Custom_EnemyConfig : ShizukuRunnableNode, IVariableNode
 {
     [SerializeField] public string VariableGUID;
@@ -42,7 +42,7 @@ public class SetVariableNode_Custom_EnemyConfig : ShizukuRunnableNode, IVariable
 }
 
 [Serializable]
-[NodeMenuItem("变量/设置/技能数据", NodeCategory.Variable, Description = "设置技能数据变量")]
+[NodeMenuItem("变量/Set Skill Data", Description = "设置技能数据变量")]
 public class SetVariableNode_Custom_SkillData : ShizukuRunnableNode, IVariableNode
 {
     [SerializeField] public string VariableGUID;

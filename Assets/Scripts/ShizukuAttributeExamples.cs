@@ -11,31 +11,31 @@ using Shizuku.Graph;
 [ShizukuClass]
 public static class MathUtils
 {
-    [ShizukuFunction("平方", "数学/基础", Pure = true)]
+    [ShizukuFunction("Square", "数学", Pure = true)]
     public static float Square(float value)
     {
         return value * value;
     }
 
-    [ShizukuFunction("平方根", "数学/基础", Pure = true)]
+    [ShizukuFunction("Square Root", "数学", Pure = true)]
     public static float Sqrt(float value)
     {
         return Mathf.Sqrt(value);
     }
 
-    [ShizukuFunction("限制范围", "数学/基础", Pure = true)]
+    [ShizukuFunction("Clamp 01", "数学", Pure = true)]
     public static float Clamp01(float value)
     {
         return Mathf.Clamp01(value);
     }
 
-    [ShizukuFunction("向量距离", "数学/向量", Pure = true)]
+    [ShizukuFunction("Vector Distance", "数学", Pure = true)]
     public static float VectorDistance(Vector3 a, Vector3 b)
     {
         return Vector3.Distance(a, b);
     }
 
-    [ShizukuFunction("向量点乘", "数学/向量", Pure = true)]
+    [ShizukuFunction("Vector Dot", "数学", Pure = true)]
     public static float VectorDot(Vector3 a, Vector3 b)
     {
         return Vector3.Dot(a, b);
@@ -48,25 +48,25 @@ public static class MathUtils
 [ShizukuClass]
 public static class StringUtils
 {
-    [ShizukuFunction("拼接字符串", "字符串/操作", Pure = true)]
+    [ShizukuFunction("Concat", "字符串", Pure = true)]
     public static string Concat(string a, string b)
     {
         return string.Concat(a, b);
     }
 
-    [ShizukuFunction("转大写", "字符串/转换", Pure = true)]
+    [ShizukuFunction("To Upper", "字符串", Pure = true)]
     public static string ToUpper(string str)
     {
         return str?.ToUpper();
     }
 
-    [ShizukuFunction("转小写", "字符串/转换", Pure = true)]
+    [ShizukuFunction("To Lower", "字符串", Pure = true)]
     public static string ToLower(string str)
     {
         return str?.ToLower();
     }
 
-    [ShizukuFunction("包含子串", "字符串/查询", Pure = true)]
+    [ShizukuFunction("Contains", "字符串", Pure = true)]
     public static bool Contains(string str, string substring)
     {
         return str?.Contains(substring) ?? false;
@@ -78,7 +78,7 @@ public static class StringUtils
 /// </summary>
 public static class GameObjectUtils
 {
-    [ShizukuFunction("设置激活状态", "GameObject/操作")]
+    [ShizukuFunction("Set Active", "游戏对象")]
     public static void SetActive(GameObject obj, bool active)
     {
         if (obj != null)
@@ -87,13 +87,13 @@ public static class GameObjectUtils
         }
     }
 
-    [ShizukuFunction("查找子物体", "GameObject/查询")]
+    [ShizukuFunction("Find Child", "游戏对象")]
     public static Transform FindChild(Transform parent, string childName)
     {
         return parent?.Find(childName);
     }
 
-    [ShizukuFunction("销毁物体", "GameObject/操作")]
+    [ShizukuFunction("Destroy Object", "游戏对象")]
     public static void DestroyObject(GameObject obj)
     {
         if (obj != null)
@@ -107,7 +107,7 @@ public static class GameObjectUtils
 /// <summary>
 /// 示例 4：自定义类型作为 ShizukuClass
 /// </summary>
-[ShizukuClass("敌人配置", "示例/EnemyConfig")]
+[ShizukuClass("Enemy Config", "示例/Enemy Config")]
 [System.Serializable]
 public class EnemyConfig
 {
@@ -116,7 +116,7 @@ public class EnemyConfig
     public float MoveSpeed = 5f;
     public Color NameColor = Color.red;
     
-    [ShizukuFunction("计算伤害", "示例/EnemyConfig")]
+    [ShizukuFunction("Calculate Damage", "敌人配置")]
     public float CalculateDamage(float baseDamage)
     {        
         return baseDamage * (1 + AttackPower / 100f);
@@ -126,7 +126,7 @@ public class EnemyConfig
 /// <summary>
 /// 示例 5：技能数据
 /// </summary>
-[ShizukuClass("技能数据", "示例/SkillData")]
+[ShizukuClass("Skill Data", "示例/Skill Data")]
 [System.Serializable]
 public class SkillData
 {

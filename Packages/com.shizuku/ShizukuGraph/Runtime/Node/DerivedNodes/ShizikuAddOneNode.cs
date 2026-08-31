@@ -3,11 +3,9 @@
 namespace Shizuku.Graph
 {
     using Shizuku.Core;
-    [NodeMenuItem("加一", NodeCategory.Basic, Description = "将整数加一")]
+    [NodeMenuItem("基础/Increment Integer", Description = "将整数加一")]
     public class ShizikuAddOneNode : ShizukuRunnableNode
     {
-        public override string Title => "Add One Node";
-
         [SerializeReference]
         private IntParameterEdgePort _parameter = new() { IsOut = false, Name = "parameter" };
 

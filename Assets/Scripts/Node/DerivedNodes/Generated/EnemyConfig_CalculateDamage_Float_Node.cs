@@ -7,11 +7,9 @@ using UnityEngine;
 using Shizuku.Core;
 using Shizuku.Graph;
 
-[NodeMenuItem("示例/EnemyConfig/计算伤害", NodeCategory.Function, Description = "")]
+[NodeMenuItem("敌人配置/Calculate Damage", Description = "")]
 public class EnemyConfig_CalculateDamage_Float_Node : ShizukuRunnableNode
 {
-    public override string Title => "计算伤害";
-
     public override Color TitleBarColor => new Color(0.6f, 0.4f, 0.8f, 1f);
 
     [SerializeReference]

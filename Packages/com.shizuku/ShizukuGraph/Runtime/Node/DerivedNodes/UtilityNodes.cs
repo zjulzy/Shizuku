@@ -8,10 +8,9 @@ namespace Shizuku.Graph
     // SetActive — 设置 GameObject 的激活状态
     // ============================================================
     [Serializable]
-    [NodeMenuItem("工具/SetActive", NodeCategory.Logic, Description = "设置 GameObject 激活状态")]
+    [NodeMenuItem("场景/Set Active", Description = "设置 GameObject 激活状态")]
     public class SetActiveNode : ShizukuRunnableNode
     {
-        public override string Title => "SetActive";
         public override Color TitleBarColor => new Color(0.3f, 0.7f, 0.5f, 1f);
 
         [SerializeReference]
@@ -40,10 +39,9 @@ namespace Shizuku.Graph
     // FindGameObject — 按名称查找场景中的 GameObject
     // ============================================================
     [Serializable]
-    [NodeMenuItem("工具/FindGameObject", NodeCategory.Logic, Description = "按名称查找 GameObject")]
+    [NodeMenuItem("场景/Find GameObject", Description = "按名称查找 GameObject")]
     public class FindGameObjectNode : ShizukuValueNode
     {
-        public override string Title => "Find GameObject";
         public override Color TitleBarColor => new Color(0.3f, 0.7f, 0.5f, 1f);
 
         [SerializeReference]
@@ -62,10 +60,9 @@ namespace Shizuku.Graph
     // GetComponent — 从 GameObject 上获取组件（输出为 GameObject 自身，用于链式操作）
     // ============================================================
     [Serializable]
-    [NodeMenuItem("工具/GetComponent", NodeCategory.Logic, Description = "检查 GameObject 是否拥有指定组件")]
+    [NodeMenuItem("场景/Has Component", Description = "检查 GameObject 是否拥有指定组件")]
     public class HasComponentNode : ShizukuValueNode
     {
-        public override string Title => "Has Component";
         public override Color TitleBarColor => new Color(0.3f, 0.7f, 0.5f, 1f);
 
         [SerializeReference]
@@ -94,10 +91,9 @@ namespace Shizuku.Graph
     // GetTransform — 获取 GameObject 的 Transform
     // ============================================================
     [Serializable]
-    [NodeMenuItem("工具/GetTransform", NodeCategory.Logic, Description = "获取 GameObject 的 Transform")]
+    [NodeMenuItem("场景/Get Transform", Description = "获取 GameObject 的 Transform")]
     public class GetTransformNode : ShizukuValueNode
     {
-        public override string Title => "Get Transform";
         public override Color TitleBarColor => new Color(0.3f, 0.7f, 0.5f, 1f);
 
         [SerializeReference]
@@ -116,10 +112,9 @@ namespace Shizuku.Graph
     // GetPosition / SetPosition — Transform 位置读写
     // ============================================================
     [Serializable]
-    [NodeMenuItem("工具/GetPosition", NodeCategory.Logic, Description = "获取 Transform 的世界坐标")]
+    [NodeMenuItem("场景/Get World Position", Description = "获取 Transform 的世界坐标")]
     public class GetPositionNode : ShizukuValueNode
     {
-        public override string Title => "Get Position";
         public override Color TitleBarColor => new Color(0.3f, 0.7f, 0.5f, 1f);
 
         [SerializeReference]
@@ -135,10 +130,9 @@ namespace Shizuku.Graph
     }
 
     [Serializable]
-    [NodeMenuItem("工具/SetPosition", NodeCategory.Logic, Description = "设置 Transform 的世界坐标")]
+    [NodeMenuItem("场景/Set World Position", Description = "设置 Transform 的世界坐标")]
     public class SetPositionNode : ShizukuRunnableNode
     {
-        public override string Title => "Set Position";
         public override Color TitleBarColor => new Color(0.3f, 0.7f, 0.5f, 1f);
 
         [SerializeReference]

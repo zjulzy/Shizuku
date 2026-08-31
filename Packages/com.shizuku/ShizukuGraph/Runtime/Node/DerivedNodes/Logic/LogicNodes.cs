@@ -9,7 +9,7 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
-    [NodeMenuItem("与", NodeCategory.Logic, Description = "逻辑与运算，所有输入为真时返回真")]
+    [NodeMenuItem("逻辑/And", Description = "逻辑与运算，所有输入为真时返回真")]
     public class AndNode : ShizukuValueNode
     {
         [SerializeReference]
@@ -21,7 +21,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "Result" };
 
-        public override string Title => "And (&&)";
         public override Color TitleBarColor => new Color(0.4f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -35,7 +34,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("或", NodeCategory.Logic, Description = "逻辑或运算，任意输入为真时返回真")]
+    [NodeMenuItem("逻辑/Or", Description = "逻辑或运算，任意输入为真时返回真")]
     public class OrNode : ShizukuValueNode
     {
         [SerializeReference]
@@ -47,7 +46,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "Result" };
 
-        public override string Title => "Or (||)";
         public override Color TitleBarColor => new Color(0.4f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -61,7 +59,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("非", NodeCategory.Logic, Description = "逻辑非运算，反转布尔值")]
+    [NodeMenuItem("逻辑/Not", Description = "逻辑非运算，反转布尔值")]
     public class NotNode : ShizukuValueNode
     {
         [SerializeReference]
@@ -70,7 +68,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "Result" };
 
-        public override string Title => "Not (!)";
         public override Color TitleBarColor => new Color(0.4f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()
@@ -84,7 +81,7 @@ namespace Shizuku.Graph
     // ============================================================
 
     [Serializable]
-    [NodeMenuItem("异或", NodeCategory.Logic, Description = "逻辑异或运算，两个输入不同时返回真")]
+    [NodeMenuItem("逻辑/Xor", Description = "逻辑异或运算，两个输入不同时返回真")]
     public class XorNode : ShizukuValueNode
     {
         [SerializeReference]
@@ -96,7 +93,6 @@ namespace Shizuku.Graph
         [SerializeReference]
         public BoolParameterEdgePort Output = new BoolParameterEdgePort { IsOut = true, Name = "Result" };
 
-        public override string Title => "Xor (^)";
         public override Color TitleBarColor => new Color(0.4f, 0.7f, 0.9f, 1f);
 
         protected override void OnComputeOutputValues()

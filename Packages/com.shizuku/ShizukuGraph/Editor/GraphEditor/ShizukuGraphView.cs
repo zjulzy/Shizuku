@@ -118,41 +118,20 @@ namespace Shizuku.Graph.Editor
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            // 保留默认菜单项(可选)
+            // GraphView 默认的“创建节点”入口统一打开 NodeSearchWindowProvider。
             base.BuildContextualMenu(evt);
 
-            // 添加带分隔符的菜单项
+            // 根节点和蓝图事件是结构节点，只能通过受控入口创建。
             evt.menu.AppendSeparator();
-
-            // 添加子菜单
-            evt.menu.AppendAction("创建节点/根节点", (a) => CreateNode<ShizukuRootNode>(_localMousePosition));
-            evt.menu.AppendAction("创建节点/+1节点", (a) => CreateNode<ShizikuAddOneNode>(_localMousePosition));
-            evt.menu.AppendAction("创建节点/打印节点", (a) => CreateNode<ShizukuLogNode>(_localMousePosition));
-            evt.menu.AppendAction("创建节点/条件节点", (a) => CreateNode<ShizukuIfNode>(_localMousePosition));
-
-            // 蓝图节点
-            evt.menu.AppendSeparator();
+            if (!IsEditingMethod && _runtimeGraph != null && string.IsNullOrEmpty(_runtimeGraph.RootNodeGUID))
+                evt.menu.AppendAction("创建根节点", _ => CreateNode<ShizukuRootNode>(_localMousePosition));
             BuildBlueprintEventMenu(evt);
-            evt.menu.AppendAction("蓝图节点/获取属性/Float", (a) => CreateNode<GetPropertyNode_Float>(_localMousePosition));
-            evt.menu.AppendAction("蓝图节点/获取属性/Int", (a) => CreateNode<GetPropertyNode_Int>(_localMousePosition));
-            evt.menu.AppendAction("蓝图节点/获取属性/Bool", (a) => CreateNode<GetPropertyNode_Bool>(_localMousePosition));
-            evt.menu.AppendAction("蓝图节点/获取属性/String", (a) => CreateNode<GetPropertyNode_String>(_localMousePosition));
-            evt.menu.AppendAction("蓝图节点/获取属性/Generic", (a) => CreateNode<GetPropertyNode>(_localMousePosition));
-            evt.menu.AppendAction("蓝图节点/设置属性/Float", (a) => CreateNode<SetPropertyNode_Float>(_localMousePosition));
-            evt.menu.AppendAction("蓝图节点/设置属性/Int", (a) => CreateNode<SetPropertyNode_Int>(_localMousePosition));
-            evt.menu.AppendAction("蓝图节点/设置属性/Bool", (a) => CreateNode<SetPropertyNode_Bool>(_localMousePosition));
-            evt.menu.AppendAction("蓝图节点/设置属性/String", (a) => CreateNode<SetPropertyNode_String>(_localMousePosition));
-            evt.menu.AppendAction("蓝图节点/设置属性/Generic", (a) => CreateNode<SetPropertyNode>(_localMousePosition));
 
             evt.menu.AppendSeparator();
-            evt.menu.AppendAction("创建分组", (a) => CreateGroup(_localMousePosition));
-
-            // 调用函数菜单
-            evt.menu.AppendSeparator();
-            BuildInvokeMethodMenu(evt);
+            evt.menu.AppendAction("创建分组", _ => CreateGroup(_localMousePosition));
 
             evt.menu.AppendSeparator();
-            evt.menu.AppendAction("清空所有节点", (a) => ClearAllNodes());
+            evt.menu.AppendAction("清空所有节点", _ => ClearAllNodes());
 
             // 调试菜单
             BuildDebugContextualMenu(evt);
@@ -162,24 +141,6 @@ namespace Shizuku.Graph.Editor
         {
             // 将鼠标位置转换为内容容器的本地坐标并保存，目前主要给右键菜单定位用
             _localMousePosition = contentViewContainer.WorldToLocal(evt.mousePosition);
-        }
-
-        private void BuildInvokeMethodMenu(ContextualMenuPopulateEvent evt)
-        {
-            if (_runtimeGraph == null || _runtimeGraph.Methods.Count == 0)
-            {
-                evt.menu.AppendAction("调用函数/暂无函数", null, DropdownMenuAction.Status.Disabled);
-                return;
-            }
-
-            foreach (var method in _runtimeGraph.Methods)
-            {
-                // 不允许在函数自身内部递归调用自身（可选，也可以允许）
-                // if (IsEditingMethod && _currentMethod.GUID == method.GUID) continue;
-
-                var capturedMethod = method;
-                evt.menu.AppendAction($"调用函数/{method.Name}", (a) => CreateInvokeMethodNode(capturedMethod, _localMousePosition));
-            }
         }
 
         /// <summary>

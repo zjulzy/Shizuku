@@ -74,7 +74,7 @@ namespace Shizuku.Core
             {
                 return $"{Category}/{DisplayName}";
             }
-            return $"{DeclaringType.Name}/{DisplayName}";
+            return $"函数/{DisplayName}";
         }
 
         private string GetSimpleTypeName(Type type)

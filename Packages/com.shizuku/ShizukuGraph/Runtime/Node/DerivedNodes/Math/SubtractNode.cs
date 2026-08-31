@@ -8,11 +8,9 @@ namespace Shizuku.Graph
 {
     using Shizuku.Core;
     [Serializable]
-    [NodeMenuItem("减法/Int", NodeCategory.Math, Description = "整数减法")]
+    [NodeMenuItem("数学/Subtract (Int)", Description = "整数减法")]
     public class SubtractNode_Int : ShizukuValueNode
     {
-        public override string Title => "Subtract (Int)";
-
         [SerializeReference]
         private IntParameterEdgePort _a = new() { IsOut = false, Name = "A" };
 
@@ -32,11 +30,9 @@ namespace Shizuku.Graph
     /// 减法节点 - Float 版本
     /// </summary>
     [Serializable]
-    [NodeMenuItem("减法/Float", NodeCategory.Math, Description = "浮点数减法")]
+    [NodeMenuItem("数学/Subtract (Float)", Description = "浮点数减法")]
     public class SubtractNode_Float : ShizukuValueNode
     {
-        public override string Title => "Subtract (Float)";
-
         [SerializeReference]
         private FloatParameterEdgePort _a = new() { IsOut = false, Name = "A" };
 
@@ -56,11 +52,9 @@ namespace Shizuku.Graph
     /// 减法节点 - Vector2 版本
     /// </summary>
     [Serializable]
-    [NodeMenuItem("减法/Vector2", NodeCategory.Math, Description = "二维向量减法")]
+    [NodeMenuItem("数学/Subtract (Vector2)", Description = "二维向量减法")]
     public class SubtractNode_Vector2 : ShizukuValueNode
     {
-        public override string Title => "Subtract (Vector2)";
-
         [SerializeReference]
         private Vector2ParameterEdgePort _a = new() { IsOut = false, Name = "A" };
 
@@ -80,11 +74,9 @@ namespace Shizuku.Graph
     /// 减法节点 - Vector3 版本
     /// </summary>
     [Serializable]
-    [NodeMenuItem("减法/Vector3", NodeCategory.Math, Description = "三维向量减法")]
+    [NodeMenuItem("数学/Subtract (Vector3)", Description = "三维向量减法")]
     public class SubtractNode_Vector3 : ShizukuValueNode
     {
-        public override string Title => "Subtract (Vector3)";
-
         [SerializeReference]
         private Vector3ParameterEdgePort _a = new() { IsOut = false, Name = "A" };
 

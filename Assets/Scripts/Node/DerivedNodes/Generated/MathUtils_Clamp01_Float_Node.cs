@@ -7,11 +7,9 @@ using UnityEngine;
 using Shizuku.Core;
 using Shizuku.Graph;
 
-[NodeMenuItem("数学/基础/限制范围", NodeCategory.Function, Description = "")]
+[NodeMenuItem("数学/Clamp 01", Description = "")]
 public class MathUtils_Clamp01_Float_Node : ShizukuRunnableNode
 {
-    public override string Title => "限制范围";
-
     public override Color TitleBarColor => new Color(0.6f, 0.4f, 0.8f, 1f);
 
     [SerializeReference]

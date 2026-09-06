@@ -177,6 +177,7 @@ namespace Shizuku.Graph.Editor
             node.PositionAndSize = new float4(position.x, position.y, width, height);
 
             CurrentNodes.Add(node);
+            InitializeNodeForCurrentContext(node);
 
             var nodeView = new ShizukuNodeView(node, _runtimeGraph);
             nodeView.InitPort();

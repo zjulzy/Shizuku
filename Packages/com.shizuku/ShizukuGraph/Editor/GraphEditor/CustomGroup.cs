@@ -58,9 +58,19 @@ namespace Shizuku.Graph.Editor
             if (Data != null)
             {
                 var pos = GetPosition();
-                Data.PositionAndSize = new Unity.Mathematics.float4(pos.x, pos.y, pos.width, pos.height);
+                var previous = Data.PositionAndSize;
+                Data.PositionAndSize = new Unity.Mathematics.float4(
+                    IsFinite(pos.x) ? pos.x : previous.x,
+                    IsFinite(pos.y) ? pos.y : previous.y,
+                    IsFinite(pos.width) ? pos.width : previous.z,
+                    IsFinite(pos.height) ? pos.height : previous.w);
                 Data.Title = title;
             }
+        }
+
+        private static bool IsFinite(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
         }
     }
 

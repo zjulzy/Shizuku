@@ -49,6 +49,19 @@ namespace Shizuku.Graph
         /// </summary>
         public ShizukuGraphBase RootGraph => this;
 
+        [NonSerialized]
+        private GameObject _runtimeOwner;
+        public GameObject RuntimeOwner => _runtimeOwner;
+
+        [NonSerialized]
+        private bool _runtimeInitialized;
+
+        [NonSerialized]
+        private GameObject _pendingRuntimeOwner;
+
+        [NonSerialized]
+        private bool _hasPendingRuntimeOwner;
+
         // 运行时变量存储
         [NonSerialized] private RuntimeVariableStore _variableStore;
         public RuntimeVariableStore VariableStore => _variableStore;
@@ -69,8 +82,29 @@ namespace Shizuku.Graph
             _edges.Add(edge);
         }
 
+        /// <summary>
+        /// 使用指定宿主初始化运行时图。保留无参虚方法作为兼容入口，
+        /// 这样现有派生图对 Init() 的覆写仍会正常执行。
+        /// </summary>
+        public void Init(GameObject runtimeOwner)
+        {
+            _pendingRuntimeOwner = runtimeOwner;
+            _hasPendingRuntimeOwner = true;
+            Init();
+        }
+
         public virtual void Init()
         {
+            var runtimeOwner = _hasPendingRuntimeOwner ? _pendingRuntimeOwner : null;
+            _pendingRuntimeOwner = null;
+            _hasPendingRuntimeOwner = false;
+
+            if (_runtimeInitialized)
+                DisposeRuntime();
+
+            _runtimeOwner = runtimeOwner;
+            _runtimeInitialized = true;
+
             // 清理反序列化失败的 null 节点/边（[SerializeReference] 类型变更后会出现）
             int removedNodes = _nodes.RemoveAll(n => n == null);
             int removedEdges = _edges.RemoveAll(e => e == null);
@@ -103,6 +137,57 @@ namespace Shizuku.Graph
 
             // 初始化变量
             InitVariables();
+        }
+
+        /// <summary>
+        /// 释放当前运行时图实例及函数子图中所有节点持有的持续性状态。
+        /// 此方法可重复调用，运行入口必须在销毁克隆资产前调用。
+        /// </summary>
+        public virtual void DisposeRuntime()
+        {
+            if (!_runtimeInitialized)
+                return;
+
+            foreach (var method in _methods)
+            {
+                if (method == null)
+                    continue;
+
+                try
+                {
+                    method.DisposeRuntime();
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception);
+                }
+            }
+
+            foreach (var node in _nodes)
+            {
+                if (node == null)
+                    continue;
+
+                try
+                {
+                    node.DisposeRuntime();
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception);
+                }
+            }
+
+            _guid2NodeMap.Clear();
+            _guid2EdgeMap.Clear();
+            _variableStore = null;
+            _runtimeOwner = null;
+            _runtimeInitialized = false;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            DisposeRuntime();
         }
 
         public void Update()

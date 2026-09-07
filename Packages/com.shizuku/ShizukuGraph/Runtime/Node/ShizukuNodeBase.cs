@@ -30,6 +30,12 @@ namespace Shizuku.Graph
         /// </summary>
         protected ShizukuGraphBase RootGraph => _context?.RootGraph;
 
+        /// <summary>
+        /// 当前运行时图实例的宿主。需要创建持续性运行时对象的节点应将对象挂在该宿主下，
+        /// 并在 <see cref="DisposeRuntime"/> 中主动释放。
+        /// </summary>
+        protected GameObject RuntimeOwner => _context?.RuntimeOwner;
+
         [NonSerialized]
         public readonly List<ParameterEdgePort> SelfOutputPorts = new List<ParameterEdgePort>();
 
@@ -75,6 +81,7 @@ namespace Shizuku.Graph
             _context = context;
             var fields = GetCachedParamPortFields(GetType());
 
+            DependentNodes.Clear();
             SelfOutputPorts.Clear();
             SelfInputPorts.Clear();
 
@@ -82,9 +89,35 @@ namespace Shizuku.Graph
             {
                 var port = fields[i].GetValue(this) as ParameterEdgePort;
                 if (port == null) continue;
+                port.SameTypeConnectedPort = null;
+                port.DifferentTypeConnectedPort = null;
                 if (port.IsOut) SelfOutputPorts.Add(port);
                 else SelfInputPorts.Add(port);
             }
+        }
+
+        /// <summary>
+        /// 释放节点在本次运行时图实例中创建的状态或 Unity 对象。
+        /// 实现必须可重复调用；派生类清理完成后应调用 base。
+        /// </summary>
+        public virtual void DisposeRuntime()
+        {
+            foreach (var port in SelfInputPorts)
+            {
+                port.SameTypeConnectedPort = null;
+                port.DifferentTypeConnectedPort = null;
+            }
+
+            foreach (var port in SelfOutputPorts)
+            {
+                port.SameTypeConnectedPort = null;
+                port.DifferentTypeConnectedPort = null;
+            }
+
+            DependentNodes.Clear();
+            SelfInputPorts.Clear();
+            SelfOutputPorts.Clear();
+            _context = null;
         }
 
         protected void GetInputValues()

@@ -1,25 +1,18 @@
 {
-    "name": "Shizuku.EditMode.Tests",
-    "rootNamespace": "Shizuku.Tests.EditMode",
+    "name": "Shizuku.PlayMode.Tests",
+    "rootNamespace": "Shizuku.Tests.PlayMode",
     "references": [
-        "ShizukuCore.Runtime",
         "ShizukuGraph.Runtime",
-        "ShizukuGraph.Editor",
-        "ShizukuTag.Runtime",
-        "Unity.Mathematics",
         "Unity.Timeline"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": false,
     "defineConstraints": [
-        "UNITY_INCLUDE_TESTS",
-        "SHIZUKU_TAG"
+        "UNITY_INCLUDE_TESTS"
     ],
     "versionDefines": [],
     "noEngineReferences": false,

@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// 断点时刻的快照数据
@@ -166,6 +167,7 @@ namespace Shizuku.Graph
         /// </summary>
         public static void Pause(ShizukuGraphBase graph, string pausedAtNodeGuid)
         {
+            ReleaseCurrentSnapshot();
             IsPaused = true;
             PausedGraph = graph;
             PendingResumeNodeGuid = pausedAtNodeGuid;
@@ -211,7 +213,7 @@ namespace Shizuku.Graph
             IsPaused = false;
             _stepping = step;
             _resumingFromNodeGuid = resumeGuid;
-            _currentSnapshot = null;
+            ReleaseCurrentSnapshot();
             PausedGraph = null;
             PendingResumeNodeGuid = null;
 
@@ -233,11 +235,26 @@ namespace Shizuku.Graph
             IsPaused = false;
             _stepping = false;
             _resumingFromNodeGuid = null;
-            _currentSnapshot = null;
+            ReleaseCurrentSnapshot();
             PausedGraph = null;
             PendingResumeNodeGuid = null;
             _executedNodesThisFrame.Clear();
             _executedNodesLastFrame.Clear();
+        }
+
+        private static void ReleaseCurrentSnapshot()
+        {
+            var graphClone = _currentSnapshot?.GraphClone;
+            _currentSnapshot = null;
+
+            if (graphClone == null)
+                return;
+
+            graphClone.DisposeRuntime();
+            if (Application.isPlaying)
+                Object.Destroy(graphClone);
+            else
+                Object.DestroyImmediate(graphClone);
         }
     }
     #endif

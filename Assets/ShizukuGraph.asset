@@ -13,12 +13,102 @@ MonoBehaviour:
   m_Name: ShizukuGraph
   m_EditorClassIdentifier: ShizukuGraph.Runtime::Shizuku.Graph.ShizukuGraphBase
   GUID: 
-  _nodes: []
-  _edges: []
+  _nodes:
+  - rid: 1960830704717398435
+  - rid: 1960830704717398436
+  - rid: 1960830704717398442
+  _edges:
+  - rid: 1960830704717398444
   _groups: []
-  RootNodeGUID: 
-  _variables: []
+  RootNodeGUID: dfd26734-2649-4751-bae0-0953b8c20505
+  _variables:
+  - GUID: 64234cf8-4ce3-40d1-b0be-ca3708a5ad42
+    Name: Cube
+    Type: 6
+    CustomTypeName: 
+    IntValue: 0
+    FloatValue: 0
+    BoolValue: 0
+    StringValue: 
+    Vector2Value: {x: 0, y: 0}
+    Vector3Value: {x: 0, y: 0, z: 0}
+    GameObjectValue: {fileID: 0}
+    TransformValue: {fileID: 0}
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    CustomValue:
+      rid: -2
   _methods: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1960830704717398435
+      type: {class: ShizukuRootNode, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        GUID: dfd26734-2649-4751-bae0-0953b8c20505
+        PositionAndSize:
+          x: -710.8572
+          y: 144.00012
+          z: 200
+          w: 100
+        _nextPort:
+          NextNodeGuid: 85e48b37-2ea7-4f97-991f-c95c470fe1e1
+          Name: next
+    - rid: 1960830704717398436
+      type: {class: PlayTimelineNode, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        GUID: 85e48b37-2ea7-4f97-991f-c95c470fe1e1
+        PositionAndSize:
+          x: -394.94278
+          y: 201.08571
+          z: 200
+          w: 100
+        Timeline: {fileID: 11400000, guid: cb745bf8127c1f34282e21c0eaff43fe, type: 2}
+        WrapMode: 2
+        _bindingPorts:
+        - _track: {fileID: -5496540101417286875, guid: cb745bf8127c1f34282e21c0eaff43fe, type: 2}
+          _trackName: Activation Track
+          _targetTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          _port:
+            rid: 1960830704717398437
+        _nextPort:
+          NextNodeGuid: 
+          Name: next
+    - rid: 1960830704717398437
+      type: {class: GameObjectParameterEdgePort, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        Name: 'Activation Track [GameObject]'
+        InputEdgeGUID: 
+        IsOut: 0
+        Value: {fileID: 0}
+        DefaultValue: {fileID: 0}
+    - rid: 1960830704717398442
+      type: {class: GetVariableNode_GameObject, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        GUID: 06b304ac-d61d-4e31-9074-3041f4992d33
+        PositionAndSize:
+          x: -632.5714
+          y: 356.57147
+          z: 200
+          w: 100
+        VariableGUID: 64234cf8-4ce3-40d1-b0be-ca3708a5ad42
+        Output:
+          rid: 1960830704717398443
+    - rid: 1960830704717398443
+      type: {class: GameObjectParameterEdgePort, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        Name: Value
+        InputEdgeGUID: 
+        IsOut: 1
+        Value: {fileID: 0}
+        DefaultValue: {fileID: 0}
+    - rid: 1960830704717398444
+      type: {class: ParameterEdge, ns: Shizuku.Graph, asm: ShizukuGraph.Runtime}
+      data:
+        GUID: a9d43ace-26cd-4c67-a244-f322e582ee7c
+        OutputNodeGuid: 06b304ac-d61d-4e31-9074-3041f4992d33
+        OutputPortName: Value
+        InputNodeGuid: 85e48b37-2ea7-4f97-991f-c95c470fe1e1
+        InputPortName: 'Activation Track [GameObject]'

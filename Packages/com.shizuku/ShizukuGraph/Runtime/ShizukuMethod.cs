@@ -101,6 +101,7 @@ namespace Shizuku.Graph
         [NonSerialized]
         private ShizukuGraphBase _rootGraph;
         public ShizukuGraphBase RootGraph => _rootGraph;
+        public GameObject RuntimeOwner => _rootGraph != null ? _rootGraph.RuntimeOwner : null;
 
         #region 构造
 
@@ -145,6 +146,31 @@ namespace Shizuku.Graph
                 _guid2EdgeMap[edge.GUID] = edge;
                 ConnectEdge(edge);
             }
+        }
+
+        /// <summary>
+        /// 释放函数子图中所有节点的运行时状态。
+        /// </summary>
+        public void DisposeRuntime()
+        {
+            foreach (var node in _nodes)
+            {
+                if (node == null)
+                    continue;
+
+                try
+                {
+                    node.DisposeRuntime();
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception);
+                }
+            }
+
+            _guid2NodeMap.Clear();
+            _guid2EdgeMap.Clear();
+            _rootGraph = null;
         }
 
         /// <summary>

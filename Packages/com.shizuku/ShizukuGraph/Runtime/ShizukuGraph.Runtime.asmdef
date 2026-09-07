@@ -3,7 +3,8 @@
     "rootNamespace": "Shizuku.Graph",
     "references": [
         "ShizukuCore.Runtime",
-        "Unity.Mathematics"
+        "Unity.Mathematics",
+        "Unity.Timeline"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

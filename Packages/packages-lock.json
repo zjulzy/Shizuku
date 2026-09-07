@@ -30,7 +30,9 @@
       "version": "file:com.shizuku",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {}
+      "dependencies": {
+        "com.unity.timeline": "1.8.9"
+      }
     },
     "com.unity.ai.navigation": {
       "version": "2.0.9",

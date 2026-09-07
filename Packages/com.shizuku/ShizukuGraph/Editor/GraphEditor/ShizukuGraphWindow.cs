@@ -77,7 +77,11 @@ namespace Shizuku.Graph.Editor
             Button saveButton = new Button(() => { _graphView?.SaveToAsset(); });
             saveButton.text = "保存";
 
-            Button refreshButton = new Button(() => { RefreshExtension(); });
+            Button refreshButton = new Button(() =>
+            {
+                _graphView?.RefreshCurrentView();
+                RefreshExtension();
+            });
             refreshButton.text = "刷新";
 
             toolbar.Add(saveButton);

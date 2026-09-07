@@ -667,6 +667,9 @@ namespace Shizuku.Graph.Editor
                 if (!isSerializable)
                     continue;
 
+                if (field.GetCustomAttributes(typeof(HideInInspector), true).Length > 0)
+                    continue;
+
                 // 跳过端口字段（这些已经在节点上显示了）
                 if (typeof(ParameterEdgePort).IsAssignableFrom(field.FieldType) || 
                     typeof(ChainPort).IsAssignableFrom(field.FieldType))
@@ -779,6 +782,13 @@ namespace Shizuku.Graph.Editor
                 {
                     field.SetValue(node, evt.newValue);
                     if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
+
+                    if (node is PlayTimelineNode timelineNode && _graphView?.CurrentNodeContext != null)
+                    {
+                        timelineNode.SyncBindingPorts(_graphView.CurrentNodeContext);
+                        _graphView.RefreshCurrentView();
+                        RefreshNodeInspector();
+                    }
                 });
                 return objectField;
             }

@@ -19,6 +19,9 @@
     },
     "documentationUrl": "https://github.com/zjulzy/Shizuku/blob/main/README.md",
     "changelogUrl": "https://github.com/zjulzy/Shizuku/blob/main/CHANGELOG.md",
-    "licensesUrl": "https://github.com/zjulzy/Shizuku/blob/main/LICENSE"
+    "licensesUrl": "https://github.com/zjulzy/Shizuku/blob/main/LICENSE",
+    "dependencies": {
+        "com.unity.timeline": "1.8.9"
+    }
 }
 

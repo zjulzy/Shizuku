@@ -367,6 +367,26 @@ namespace Shizuku.Graph.Editor
                 }
             }
 
+            // Unity Timeline 节点的动态轨道绑定端口
+            else if (_node is PlayTimelineNode timelineNode)
+            {
+                foreach (var bindingPort in timelineNode.BindingPorts)
+                {
+                    if (bindingPort?.Port == null)
+                        continue;
+
+                    var inputPort = InstantiatePort(
+                        Orientation.Horizontal,
+                        Direction.Input,
+                        Port.Capacity.Single,
+                        bindingPort.Port.GetType());
+                    inputPort.portName = bindingPort.Port.Name;
+                    inputPort.tooltip = $"{bindingPort.TrackName} → {GetShortTypeName(bindingPort.TargetTypeName)}";
+                    inputPort.AddToClassList("parameter-port");
+                    inputContainer.Add(inputPort);
+                }
+            }
+
             foreach (var field in fields)
             {
                 if (typeof(ParameterEdgePort).IsAssignableFrom(field.FieldType))
@@ -421,6 +441,15 @@ namespace Shizuku.Graph.Editor
 
             RefreshExpandedState();
             RefreshPorts();
+        }
+
+        private static string GetShortTypeName(string assemblyQualifiedTypeName)
+        {
+            if (string.IsNullOrEmpty(assemblyQualifiedTypeName))
+                return "Unknown";
+
+            var type = Type.GetType(assemblyQualifiedTypeName);
+            return type != null ? type.Name : assemblyQualifiedTypeName;
         }
 
 

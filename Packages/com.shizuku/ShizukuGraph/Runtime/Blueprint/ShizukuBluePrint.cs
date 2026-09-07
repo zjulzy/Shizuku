@@ -44,7 +44,7 @@ namespace Shizuku.Graph
         /// </summary>
         public virtual void InitializeBehavior(T behavior)
         {
-            Init();
+            Init(behavior != null ? behavior.gameObject : null);
             _behavior = behavior;
 
             // 注册蓝图事件

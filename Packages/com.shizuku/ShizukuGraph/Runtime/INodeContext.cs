@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Shizuku.Graph
 {
@@ -24,6 +25,12 @@ namespace Shizuku.Graph
         /// 图自身返回 this，方法返回所属的父图。
         /// </summary>
         ShizukuGraphBase RootGraph { get; }
+
+        /// <summary>
+        /// 当前运行时图实例所属的 GameObject。
+        /// 编辑器预览或纯数据测试没有宿主时可以为 null。
+        /// </summary>
+        GameObject RuntimeOwner { get; }
     }
 }
 

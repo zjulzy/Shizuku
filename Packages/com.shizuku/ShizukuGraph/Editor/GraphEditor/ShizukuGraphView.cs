@@ -33,6 +33,7 @@ namespace Shizuku.Graph.Editor
         private List<ParameterEdge> CurrentEdges => IsEditingMethod ? _currentMethod.Edges : _runtimeGraph.Edges;
         private List<GroupData> CurrentGroups => IsEditingMethod ? _currentMethod.Groups : _runtimeGraph.Groups;
         private INodeContext CurrentContext => IsEditingMethod ? (INodeContext)_currentMethod : _runtimeGraph;
+        public INodeContext CurrentNodeContext => CurrentContext;
 
         private Dictionary<string, ShizukuNodeView> _guidToNodeViewMap = new Dictionary<string, ShizukuNodeView>();
         private bool _isRebuildingView;
@@ -939,6 +940,10 @@ namespace Shizuku.Graph.Editor
         {
             _runtimeGraph = graphAsset;
             _currentMethod = null; // 加载资产时重置为主图
+
+            if (SynchronizeAllTimelineNodes(graphAsset))
+                EditorUtility.SetDirty(graphAsset);
+
             _runtimeGraph.Init();
 
             LoadCurrentContext();
@@ -1047,6 +1052,9 @@ namespace Shizuku.Graph.Editor
             _isRebuildingView = true;
             try
             {
+                if (SynchronizeTimelineNodes(CurrentNodes, CurrentContext))
+                    EditorUtility.SetDirty(_runtimeGraph);
+
                 // 这里只是在重建编辑器视图，不能让 GraphView 的删除回调修改资产数据。
                 DeleteElements(graphElements.ToList());
                 _guidToNodeViewMap.Clear();
@@ -1131,6 +1139,29 @@ namespace Shizuku.Graph.Editor
             }
         }
 
+        private static bool SynchronizeAllTimelineNodes(ShizukuGraphBase graph)
+        {
+            if (graph == null)
+                return false;
+
+            var changed = SynchronizeTimelineNodes(graph.Nodes, graph);
+            foreach (var method in graph.Methods)
+                changed |= SynchronizeTimelineNodes(method.Nodes, method);
+
+            return changed;
+        }
+
+        private static bool SynchronizeTimelineNodes(
+            IEnumerable<ShizukuNodeBase> nodes,
+            INodeContext context)
+        {
+            var changed = false;
+            foreach (var timelineNode in nodes.OfType<PlayTimelineNode>())
+                changed |= timelineNode.SyncBindingPorts(context);
+
+            return changed;
+        }
+
         public void SaveToAsset()
         {
             // 在保存前更新所有Group的位置和标题数据
@@ -1165,6 +1196,9 @@ namespace Shizuku.Graph.Editor
         /// </summary>
         public void RefreshCurrentView()
         {
+            if (_runtimeGraph == null)
+                return;
+
             LoadCurrentContext();
         }
 

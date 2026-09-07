@@ -40,7 +40,7 @@ namespace Shizuku.SkillEditor.GraphIntegration
             // 克隆资产，避免运行时污染原 ScriptableObject
             _instance = UnityEngine.Object.Instantiate(clip.GraphAsset);
             _instance.SkillContext = ctx;
-            _instance.Init();
+            _instance.Init(ctx?.Player != null ? ctx.Player.gameObject : ctx?.Caster);
 
             // 触发一次根节点（Enter 时执行链）
             TryRunRoot(_instance);
@@ -56,6 +56,7 @@ namespace Shizuku.SkillEditor.GraphIntegration
         {
             if (_instance != null)
             {
+                _instance.DisposeRuntime();
                 UnityEngine.Object.Destroy(_instance);
                 _instance = null;
             }

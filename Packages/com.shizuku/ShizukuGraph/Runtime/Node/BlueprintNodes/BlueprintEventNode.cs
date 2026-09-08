@@ -44,29 +44,7 @@ namespace Shizuku.Graph
 
             foreach (var param in EventParameters)
             {
-                if (param.OutputPort != null && param.Value != null)
-                {
-                    SetPortValue(param.OutputPort, param.Value);
-                }
-            }
-        }
-
-        private void SetPortValue(ParameterEdgePort port, object value)
-        {
-            var portType = port.GetType();
-            var valueField = portType.GetField("Value");
-
-            if (valueField != null)
-            {
-                try
-                {
-                    var convertedValue = Convert.ChangeType(value, valueField.FieldType);
-                    valueField.SetValue(port, convertedValue);
-                }
-                catch
-                {
-                    Debug.LogWarning($"Failed to set value for event parameter in GetOutputValues");
-                }
+                param.OutputPort?.SetSelfValue(param.Value);
             }
         }
 

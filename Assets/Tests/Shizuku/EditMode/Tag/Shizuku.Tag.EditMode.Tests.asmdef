@@ -1,0 +1,24 @@
+{
+    "name": "Shizuku.Tag.EditMode.Tests",
+    "rootNamespace": "Shizuku.Tests.EditMode",
+    "references": [
+        "ShizukuTag.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS",
+        "SHIZUKU_TAG"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}

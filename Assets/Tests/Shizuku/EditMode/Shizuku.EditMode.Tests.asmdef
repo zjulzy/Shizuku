@@ -5,7 +5,6 @@
         "ShizukuCore.Runtime",
         "ShizukuGraph.Runtime",
         "ShizukuGraph.Editor",
-        "ShizukuTag.Runtime",
         "Unity.Mathematics",
         "Unity.Timeline"
     ],
@@ -18,8 +17,7 @@
     "precompiledReferences": [],
     "autoReferenced": false,
     "defineConstraints": [
-        "UNITY_INCLUDE_TESTS",
-        "SHIZUKU_TAG"
+        "UNITY_INCLUDE_TESTS"
     ],
     "versionDefines": [],
     "noEngineReferences": false,

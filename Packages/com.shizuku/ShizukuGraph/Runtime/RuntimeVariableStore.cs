@@ -142,6 +142,25 @@ namespace Shizuku.Graph
 
             return clone;
         }
+
+        public void Remove(string guid)
+        {
+            if (string.IsNullOrEmpty(guid))
+                return;
+
+            Ints.Remove(guid);
+            Floats.Remove(guid);
+            Bools.Remove(guid);
+            Strings.Remove(guid);
+            Vector2s.Remove(guid);
+            Vector3s.Remove(guid);
+            GameObjects.Remove(guid);
+            Transforms.Remove(guid);
+            Colors.Remove(guid);
+
+            foreach (var dictionary in _customDicts.Values)
+                dictionary.Remove(guid);
+        }
     }
 
 }

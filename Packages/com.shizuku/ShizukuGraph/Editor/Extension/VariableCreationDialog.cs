@@ -122,23 +122,29 @@ namespace Shizuku.Graph.Editor
 
         private void OnCreateClicked()
         {
+            var normalizedName = _variableName?.Trim();
+
             // 验证名称
-            if (string.IsNullOrWhiteSpace(_variableName))
+            if (string.IsNullOrWhiteSpace(normalizedName))
             {
                 EditorUtility.DisplayDialog("错误", "变量名称不能为空", "确定");
                 return;
             }
 
             // 检查是否重名
-            if (_targetGraph.GetVariableByName(_variableName) != null)
+            if (!_targetGraph.IsVariableNameAvailable(normalizedName))
             {
-                EditorUtility.DisplayDialog("错误", $"变量名称 '{_variableName}' 已存在", "确定");
+                EditorUtility.DisplayDialog("错误", $"变量名称 '{normalizedName}' 已存在", "确定");
                 return;
             }
 
             // 创建变量
-            var newVariable = new GraphVariable(_variableName, _variableType);
-            _targetGraph.AddVariable(newVariable);
+            var newVariable = new GraphVariable(normalizedName, _variableType);
+            if (!_targetGraph.AddVariable(newVariable))
+            {
+                EditorUtility.DisplayDialog("错误", "变量创建失败，请检查名称或 GUID。", "确定");
+                return;
+            }
 
             // 先关闭窗口
             Close();

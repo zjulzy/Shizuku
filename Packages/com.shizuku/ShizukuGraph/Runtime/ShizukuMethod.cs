@@ -222,6 +222,21 @@ namespace Shizuku.Graph
             _edges.RemoveAll(e => e.OutputNodeGuid == guid || e.InputNodeGuid == guid);
         }
 
+        internal int CountVariableReferences(string variableGuid)
+        {
+            return GraphVariableReferenceUtility.CountReferences(_nodes, variableGuid);
+        }
+
+        internal int RemoveVariableReferences(string variableGuid)
+        {
+            return GraphVariableReferenceUtility.RemoveReferences(
+                _nodes,
+                _edges,
+                _guid2NodeMap,
+                _guid2EdgeMap,
+                variableGuid);
+        }
+
         public ShizukuNodeBase GetNodeByGUID(string guid)
         {
             return _nodes.Find(n => n.GUID == guid);

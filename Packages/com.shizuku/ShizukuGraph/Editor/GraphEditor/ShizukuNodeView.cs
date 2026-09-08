@@ -571,7 +571,8 @@ namespace Shizuku.Graph.Editor
                     var objectField = new ObjectField()
                     {
                         objectType = typeof(GameObject),
-                        value = gameObjectPort.DefaultValue
+                        value = gameObjectPort.DefaultValue,
+                        allowSceneObjects = false
                     };
                     objectField.style.minWidth = 80;
                     objectField.RegisterValueChangedCallback(evt =>
@@ -590,7 +591,8 @@ namespace Shizuku.Graph.Editor
                     var objectField = new ObjectField()
                     {
                         objectType = typeof(Transform),
-                        value = transformPort.DefaultValue
+                        value = transformPort.DefaultValue,
+                        allowSceneObjects = false
                     };
                     objectField.style.minWidth = 80;
                     objectField.RegisterValueChangedCallback(evt =>

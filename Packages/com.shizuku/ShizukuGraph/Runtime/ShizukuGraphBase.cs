@@ -223,25 +223,45 @@ namespace Shizuku.Graph
         }
 
         // 零装箱的变量访问方法（委托给 RuntimeVariableStore）
-        public bool TryGetVariableInt(string guid, out int value) => _variableStore.Ints.TryGetValue(guid, out value);
-        public bool TryGetVariableFloat(string guid, out float value) => _variableStore.Floats.TryGetValue(guid, out value);
-        public bool TryGetVariableBool(string guid, out bool value) => _variableStore.Bools.TryGetValue(guid, out value);
-        public bool TryGetVariableString(string guid, out string value) => _variableStore.Strings.TryGetValue(guid, out value);
-        public bool TryGetVariableVector2(string guid, out Vector2 value) => _variableStore.Vector2s.TryGetValue(guid, out value);
-        public bool TryGetVariableVector3(string guid, out Vector3 value) => _variableStore.Vector3s.TryGetValue(guid, out value);
-        public bool TryGetVariableGameObject(string guid, out GameObject value) => _variableStore.GameObjects.TryGetValue(guid, out value);
-        public bool TryGetVariableTransform(string guid, out Transform value) => _variableStore.Transforms.TryGetValue(guid, out value);
-        public bool TryGetVariableColor(string guid, out Color value) => _variableStore.Colors.TryGetValue(guid, out value);
+        public bool TryGetVariableInt(string guid, out int value) => TryGetVariable(_variableStore?.Ints, guid, out value);
+        public bool TryGetVariableFloat(string guid, out float value) => TryGetVariable(_variableStore?.Floats, guid, out value);
+        public bool TryGetVariableBool(string guid, out bool value) => TryGetVariable(_variableStore?.Bools, guid, out value);
+        public bool TryGetVariableString(string guid, out string value) => TryGetVariable(_variableStore?.Strings, guid, out value);
+        public bool TryGetVariableVector2(string guid, out Vector2 value) => TryGetVariable(_variableStore?.Vector2s, guid, out value);
+        public bool TryGetVariableVector3(string guid, out Vector3 value) => TryGetVariable(_variableStore?.Vector3s, guid, out value);
+        public bool TryGetVariableGameObject(string guid, out GameObject value) => TryGetVariable(_variableStore?.GameObjects, guid, out value);
+        public bool TryGetVariableTransform(string guid, out Transform value) => TryGetVariable(_variableStore?.Transforms, guid, out value);
+        public bool TryGetVariableColor(string guid, out Color value) => TryGetVariable(_variableStore?.Colors, guid, out value);
 
-        public void SetVariableInt(string guid, int value) => _variableStore.Ints[guid] = value;
-        public void SetVariableFloat(string guid, float value) => _variableStore.Floats[guid] = value;
-        public void SetVariableBool(string guid, bool value) => _variableStore.Bools[guid] = value;
-        public void SetVariableString(string guid, string value) => _variableStore.Strings[guid] = value;
-        public void SetVariableVector2(string guid, Vector2 value) => _variableStore.Vector2s[guid] = value;
-        public void SetVariableVector3(string guid, Vector3 value) => _variableStore.Vector3s[guid] = value;
-        public void SetVariableGameObject(string guid, GameObject value) => _variableStore.GameObjects[guid] = value;
-        public void SetVariableTransform(string guid, Transform value) => _variableStore.Transforms[guid] = value;
-        public void SetVariableColor(string guid, Color value) => _variableStore.Colors[guid] = value;
+        public void SetVariableInt(string guid, int value) => SetExistingVariable(_variableStore?.Ints, guid, value, VariableType.Int);
+        public void SetVariableFloat(string guid, float value) => SetExistingVariable(_variableStore?.Floats, guid, value, VariableType.Float);
+        public void SetVariableBool(string guid, bool value) => SetExistingVariable(_variableStore?.Bools, guid, value, VariableType.Bool);
+        public void SetVariableString(string guid, string value) => SetExistingVariable(_variableStore?.Strings, guid, value, VariableType.String);
+        public void SetVariableVector2(string guid, Vector2 value) => SetExistingVariable(_variableStore?.Vector2s, guid, value, VariableType.Vector2);
+        public void SetVariableVector3(string guid, Vector3 value) => SetExistingVariable(_variableStore?.Vector3s, guid, value, VariableType.Vector3);
+        public void SetVariableGameObject(string guid, GameObject value) => SetExistingVariable(_variableStore?.GameObjects, guid, value, VariableType.GameObject);
+        public void SetVariableTransform(string guid, Transform value) => SetExistingVariable(_variableStore?.Transforms, guid, value, VariableType.Transform);
+        public void SetVariableColor(string guid, Color value) => SetExistingVariable(_variableStore?.Colors, guid, value, VariableType.Color);
+
+        private static bool TryGetVariable<T>(Dictionary<string, T> values, string guid, out T value)
+        {
+            if (values != null && !string.IsNullOrEmpty(guid))
+                return values.TryGetValue(guid, out value);
+
+            value = default;
+            return false;
+        }
+
+        private static void SetExistingVariable<T>(Dictionary<string, T> values, string guid, T value, VariableType type)
+        {
+            if (values != null && !string.IsNullOrEmpty(guid) && values.ContainsKey(guid))
+            {
+                values[guid] = value;
+                return;
+            }
+
+            Debug.LogError($"[ShizukuGraph] 无法设置 {type} 变量：GUID '{guid ?? "<null>"}' 不存在、类型不匹配或图尚未初始化。");
+        }
 
         // 自定义类型通用访问（零装箱，泛型走类型化字典）
         public bool TryGetCustomVariable<T>(string guid, out T value)
@@ -259,33 +279,87 @@ namespace Shizuku.Graph
         // 编辑器辅助方法
         public GraphVariable GetVariableByGUID(string guid)
         {
-            return _variables.Find(v => v.GUID == guid);
+            return _variables.Find(v => v != null && v.GUID == guid);
         }
 
         public GraphVariable GetVariableByName(string name)
         {
-            return _variables.Find(v => v.Name == name);
+            if (string.IsNullOrWhiteSpace(name))
+                return null;
+
+            var normalizedName = name.Trim();
+            return _variables.Find(v =>
+                v != null && string.Equals(v.Name, normalizedName, StringComparison.OrdinalIgnoreCase));
         }
 
-        public void AddVariable(GraphVariable variable)
+        public bool AddVariable(GraphVariable variable)
         {
+            if (variable == null ||
+                string.IsNullOrWhiteSpace(variable.Name) ||
+                string.IsNullOrEmpty(variable.GUID) ||
+                GetVariableByGUID(variable.GUID) != null ||
+                !IsVariableNameAvailable(variable.Name))
+            {
+                return false;
+            }
+
+            variable.Name = variable.Name.Trim();
             _variables.Add(variable);
+            return true;
         }
 
-        public void RemoveVariable(string guid)
+        public int CountVariableReferences(string guid)
         {
-            _variables.RemoveAll(v => v.GUID == guid);
+            var count = GraphVariableReferenceUtility.CountReferences(_nodes, guid);
+            foreach (var method in _methods)
+            {
+                if (method != null)
+                    count += method.CountVariableReferences(guid);
+            }
+
+            return count;
+        }
+
+        public int RemoveVariable(string guid)
+        {
+            var removedReferenceCount = GraphVariableReferenceUtility.RemoveReferences(
+                _nodes,
+                _edges,
+                _guid2NodeMap,
+                _guid2EdgeMap,
+                guid);
+
+            foreach (var method in _methods)
+            {
+                if (method != null)
+                    removedReferenceCount += method.RemoveVariableReferences(guid);
+            }
+
+            _variables.RemoveAll(v => v != null && v.GUID == guid);
+            _variableStore?.Remove(guid);
+            return removedReferenceCount;
+        }
+
+        public bool IsVariableNameAvailable(string name, string ignoredGuid = null)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            var normalizedName = name.Trim();
+            return !_variables.Exists(v =>
+                v != null &&
+                v.GUID != ignoredGuid &&
+                string.Equals(v.Name, normalizedName, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool RenameVariable(string guid, string newName)
         {
             var variable = GetVariableByGUID(guid);
-            if (variable != null)
-            {
-                variable.Name = newName;
-                return true;
-            }
-            return false;
+            if (variable == null || !IsVariableNameAvailable(newName, guid))
+                return false;
+
+            variable.Name = newName.Trim();
+            return true;
         }
 
         #endregion

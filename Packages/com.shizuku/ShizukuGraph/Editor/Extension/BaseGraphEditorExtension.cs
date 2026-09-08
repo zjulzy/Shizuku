@@ -352,6 +352,7 @@ namespace Shizuku.Graph.Editor
             var nameField = new TextField
             {
                 value = variable.Name,
+                isDelayed = true,
                 style =
                 {
                     flexGrow = 1,
@@ -360,30 +361,36 @@ namespace Shizuku.Graph.Editor
             };
             nameField.RegisterValueChangedCallback(evt =>
             {
-                if (!string.IsNullOrWhiteSpace(evt.newValue))
+                var previousName = variable.Name;
+                if (_currentGraph.RenameVariable(variable.GUID, evt.newValue))
                 {
-                    variable.Name = evt.newValue;
                     EditorUtility.SetDirty(_currentGraph);
+                    nameField.SetValueWithoutNotify(variable.Name);
+                    _graphView?.RefreshCurrentView();
+                    return;
                 }
+
+                nameField.SetValueWithoutNotify(previousName);
+                EditorUtility.DisplayDialog(
+                    "变量重命名失败",
+                    "变量名称不能为空，也不能与现有变量重名（忽略大小写）。",
+                    "确定");
             });
             headerRow.Add(nameField);
 
-            // 类型下拉框
-            var typeField = new EnumField(variable.Type)
+            // 变量节点的端口类型在创建时确定，后续修改会破坏已有引用，因此只读显示。
+            var typeLabel = new Label(variable.Type.ToString())
             {
+                tooltip = "变量类型创建后不可修改",
                 style =
                 {
                     width = 100,
-                    marginRight = 5
+                    marginRight = 5,
+                    unityTextAlign = TextAnchor.MiddleLeft,
+                    color = new Color(0.7f, 0.7f, 0.7f)
                 }
             };
-            typeField.RegisterValueChangedCallback(evt =>
-            {
-                variable.Type = (VariableType)evt.newValue;
-                EditorUtility.SetDirty(_currentGraph);
-                RefreshVariablesPanel(); // 重新刷新以显示对应类型的值编辑器
-            });
-            headerRow.Add(typeField);
+            headerRow.Add(typeLabel);
 
             // 删除按钮
             var deleteButton = new Button(() => OnDeleteVariable(variable))
@@ -503,7 +510,8 @@ namespace Shizuku.Graph.Editor
                     var gameObjectField = new ObjectField("默认值")
                     {
                         objectType = typeof(GameObject),
-                        value = variable.GameObjectValue
+                        value = variable.GameObjectValue,
+                        allowSceneObjects = false
                     };
                     gameObjectField.RegisterValueChangedCallback(evt =>
                     {
@@ -517,7 +525,8 @@ namespace Shizuku.Graph.Editor
                     var transformField = new ObjectField("默认值")
                     {
                         objectType = typeof(Transform),
-                        value = variable.TransformValue
+                        value = variable.TransformValue,
+                        allowSceneObjects = false
                     };
                     transformField.RegisterValueChangedCallback(evt =>
                     {
@@ -546,14 +555,22 @@ namespace Shizuku.Graph.Editor
 
         private void OnDeleteVariable(GraphVariable variable)
         {
+            var referenceCount = _currentGraph.CountVariableReferences(variable.GUID);
+            var referenceMessage = referenceCount > 0
+                ? $"\n\n将同时删除主图和函数图中的 {referenceCount} 个 Get/Set 节点及其连接。"
+                : string.Empty;
+
             if (EditorUtility.DisplayDialog("删除变量", 
-                $"确定要删除变量 '{variable.Name}' 吗？\n\n" +
-                "注意：所有引用该变量的节点将失效。", 
+                $"确定要删除变量 '{variable.Name}' 吗？{referenceMessage}",
                 "删除", "取消"))
             {
+                Undo.RecordObject(_currentGraph, "删除图变量");
                 _currentGraph.RemoveVariable(variable.GUID);
                 EditorUtility.SetDirty(_currentGraph);
+                _selectedNode = null;
+                _graphView?.RefreshCurrentView();
                 RefreshVariablesPanel();
+                RefreshNodeInspector();
             }
         }
 
@@ -776,6 +793,7 @@ namespace Shizuku.Graph.Editor
                 {
                     objectType = fieldType,
                     value = fieldValue as UnityEngine.Object,
+                    allowSceneObjects = false,
                     style = { marginBottom = 5 }
                 };
                 objectField.RegisterValueChangedCallback(evt =>

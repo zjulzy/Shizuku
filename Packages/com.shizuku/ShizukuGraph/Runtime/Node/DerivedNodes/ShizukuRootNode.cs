@@ -45,6 +45,29 @@ namespace Shizuku.Graph
                     ChainPorts[port.Name] = port;
             }
         }
+
+        internal int ClearControlFlowReferencesTo(ISet<string> removedNodeGuids)
+        {
+            if (removedNodeGuids == null || removedNodeGuids.Count == 0)
+                return 0;
+
+            var clearedCount = 0;
+            var fields = GetCachedChainPortFields(GetType());
+            for (int i = 0; i < fields.Length; i++)
+            {
+                if (fields[i].GetValue(this) is not ChainPort port ||
+                    string.IsNullOrEmpty(port.NextNodeGuid) ||
+                    !removedNodeGuids.Contains(port.NextNodeGuid))
+                {
+                    continue;
+                }
+
+                port.NextNodeGuid = null;
+                clearedCount++;
+            }
+
+            return clearedCount;
+        }
     }
 
     public class ShizukuRootNode : ShizukuNormalNode

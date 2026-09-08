@@ -655,6 +655,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: ShizukuGraph.Runtime::Shizuku.Graph.GraphRunner
   GraphAsset: {fileID: 11400000, guid: bc0eb92206d03e440ab566a3577ab741, type: 2}
+  _sceneVariableBindings:
+  - _variableGuid: 64234cf8-4ce3-40d1-b0be-ca3708a5ad42
+    _value: {fileID: 961083628}
   _runtimeGraph: {fileID: 0}
 --- !u!1 &1763723795
 GameObject:

@@ -7,6 +7,27 @@
 
 ---
 
+## 📦 安装
+
+### 环境要求
+
+- Unity 6000.2 或更高版本
+- Odin Inspector（请先安装；Tag 模块依赖 Odin Attributes）
+
+### 通过 Git URL 安装
+
+1. 在 Unity 中打开 `Window > Package Management > Package Manager`
+2. 点击 `+`，选择 `Install package from git URL...`
+3. 输入以下地址：
+
+```text
+https://github.com/zjulzy/Shizuku.git?path=/Packages/com.shizuku#v0.4.0
+```
+
+Shizuku 以完整包发布，包含 Core、Graph、DebugKit、SkillEditor、SkillEditorGraph 和 Tag 模块。Tag 模块默认由 `SHIZUKU_TAG` 宏控制，可在 `Edit > Project Settings > Shizuku > Enable Tag Module` 中开关。
+
+---
+
 ## 📚 文档导航
 
 - 📖 [快速参考](Assets/Docs/QUICK_REFERENCE.md) - 5分钟上手，常用代码速查
@@ -866,7 +887,8 @@ public class CallMethodNode : ShizukuNodeBase
 
 ### 开发环境要求
 
-- Unity 6000.2.14.f1 或更高版本
+- Unity 6000.2 或更高版本
+- Odin Inspector
 - Visual Studio 2022 或 JetBrains Rider
 
 ### 代码规范
@@ -910,10 +932,9 @@ public class CallMethodNode : ShizukuNodeBase
 
 ## 📮 联系方式
 
-- 项目地址：[GitHub Repository URL]
-- 问题反馈：[Issues URL]
-- 邮箱：[Your Email]
+- 项目地址：[GitHub](https://github.com/zjulzy/Shizuku)
+- 问题反馈：[GitHub Issues](https://github.com/zjulzy/Shizuku/issues)
 
 ---
 
-**最后更新日期**：2026-01-25
+**最后更新日期**：2026-09-09

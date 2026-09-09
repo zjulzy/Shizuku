@@ -234,12 +234,6 @@ namespace Shizuku.SkillEditor.Editor
                 fontSize = 9
             };
 
-            // 计算帧标签步进：缩放很小时不是每帧都显示帧号
-            int frameLabelStep = 1;
-            if (ppf < 4f) frameLabelStep = 0; // 太密就不显示帧号
-            else if (ppf < 8f) frameLabelStep = 10;
-            else if (ppf < 16f) frameLabelStep = 5;
-
             int halfSecFrames = Mathf.RoundToInt(FrameRate / 2f); // 15
 
             for (int f = startFrame; f <= endFrame; f++)

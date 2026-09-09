@@ -1,9 +1,9 @@
 {
     "name": "com.shizuku",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "displayName": "Shizuku",
     "description": "A visual blueprint/graph system for Unity gameplay programming.",
-    "unity": "6000.1",
+    "unity": "6000.2",
     "author": {
         "name": "Shizuku"
     },
@@ -17,10 +17,11 @@
         "type": "git",
         "url": "https://github.com/zjulzy/Shizuku.git"
     },
-    "documentationUrl": "https://github.com/zjulzy/Shizuku/blob/main/README.md",
-    "changelogUrl": "https://github.com/zjulzy/Shizuku/blob/main/CHANGELOG.md",
-    "licensesUrl": "https://github.com/zjulzy/Shizuku/blob/main/LICENSE",
+    "documentationUrl": "https://github.com/zjulzy/Shizuku/blob/main/Packages/com.shizuku/README.md",
+    "changelogUrl": "https://github.com/zjulzy/Shizuku/blob/main/Packages/com.shizuku/CHANGELOG.md",
+    "licensesUrl": "https://github.com/zjulzy/Shizuku/blob/main/Packages/com.shizuku/LICENSE",
     "dependencies": {
+        "com.unity.mathematics": "1.3.2",
         "com.unity.timeline": "1.8.9"
     }
 }

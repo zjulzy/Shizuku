@@ -76,6 +76,7 @@ public static class StringUtils
 /// <summary>
 /// 示例 3：GameObject 工具类
 /// </summary>
+[ShizukuClass]
 public static class GameObjectUtils
 {
     [ShizukuFunction("Set Active", "游戏对象")]

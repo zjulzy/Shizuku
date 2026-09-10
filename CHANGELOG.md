@@ -6,6 +6,29 @@
 
 ---
 
+## [0.5.0] - 2026-09-10
+
+### ✨ 新增
+
+- 新增 `ShizukuLatentNode` 跨帧执行模型，支持普通 Graph 与无返回值 Blueprint Event 延迟恢复控制流
+- Timeline 节点新增立即执行的 `Started`、播放结束的 `Completed` 和异常结束的 `Failed` 出口
+- Generator Window 支持按项目配置 Blueprint、函数节点、变量节点和自定义端口的输出路径
+
+### 🔧 改进
+
+- Timeline 改为由节点完整维护生命周期的 Latent 操作；播放中重入会报错，但不会中断或重播原 Timeline
+- `ShizukuMethod` 与带返回值 Blueprint Event 明确禁止 Latent 节点
+- Graph 销毁或重新初始化时统一取消活跃 Latent，且不误触发完成或失败出口
+
+### 🐛 修复
+
+- 修复普通 Graph 等待跨帧节点时每帧从 Root 重入的问题
+- 修复 Blueprint Event 因 Latent 重入被拒绝时覆盖旧事件参数的问题
+- 修复蓝图代码生成器遗漏业务类型命名空间，导致生成脚本无法编译的问题
+- 修复断点恢复后启动的 Latent 丢失 Root 阻塞语义的问题
+
+---
+
 ## [0.4.0] - 2026-09-09
 
 ### ✨ 新增
@@ -14,7 +37,6 @@
 - 新增由节点独立维护的 Timeline 播放节点，按 Track 动态生成绑定端口
 - 新增场景对象变量引用与 Inspector 场景对象绑定
 - 新增 `Project Settings > Shizuku` 配置页，可通过复选框管理 `SHIZUKU_TAG`
-- Generator Window 支持按项目配置 Blueprint、函数节点、变量节点和自定义端口的输出路径
 
 ### 🔧 改进
 
@@ -28,7 +50,6 @@
 - 修复图资产保存后边连接丢失，以及退出 Play Mode 后编辑器图内容清空的问题
 - 修复 Timeline 节点重复执行、销毁和停止时的生命周期处理
 - 修复蓝图事件无参数时残留旧参数的问题
-- 修复蓝图代码生成器遗漏业务类型命名空间，导致生成脚本无法编译的问题
 - 修复首次安装时 DebugKit 宏与程序集互相等待，导致模块无法自动启用的问题
 
 ---

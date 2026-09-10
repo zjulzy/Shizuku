@@ -23,6 +23,7 @@ https://github.com/zjulzy/Shizuku.git?path=/Packages/com.shizuku#v0.4.0
 - 双击图资产进入编辑器
 - 使用 `GraphRunner` 运行普通图
 - 继承 `BlueprintBehavior` 与 `ShizukuBluePrint<T>` 创建可覆写的组件蓝图
+- 在 `Shizuku > Generator Window` 中配置 Blueprint、函数节点、变量节点和自定义端口的项目级输出路径
 
 更完整的使用方式、节点扩展和架构说明见 [项目文档](https://github.com/zjulzy/Shizuku#readme)。
 

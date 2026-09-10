@@ -17,10 +17,6 @@ namespace Shizuku.Graph.Editor
     /// </summary>
     public class UnifiedShizukuGeneratorTab
     {
-        private const string FUNCTION_NODE_PATH = "Assets/Scripts/Node/DerivedNodes/Generated";
-        private const string VARIABLE_NODE_OUTPUT_PATH = "Assets/Scripts/Node/VariableNodes/Generated";
-        private const string PORT_TYPE_OUTPUT_PATH = "Assets/Scripts/Node/Generated";
-
         private List<ShizukuClassEntry> _classEntries = new List<ShizukuClassEntry>();
         private ScrollView _scrollView;
         private VisualElement _contentContainer;
@@ -94,6 +90,10 @@ namespace Shizuku.Graph.Editor
             titleBar.Add(titleLabel);
             titleBar.Add(buttonContainer);
             parent.Add(titleBar);
+            parent.Add(ShizukuGeneratorPathPanel.Create(
+                GeneratorOutputPathKind.FunctionNode,
+                GeneratorOutputPathKind.VariableNode,
+                GeneratorOutputPathKind.PortType));
 
 
             // 状态栏
@@ -726,16 +726,7 @@ namespace Shizuku.Graph.Editor
         /// </summary>
         private string FindGeneratedFilePath(string className)
         {
-            var guids = AssetDatabase.FindAssets($"{className} t:Script");
-            foreach (var guid in guids)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                if (path.Contains(className))
-                {
-                    return path;
-                }
-            }
-            return null;
+            return ShizukuGeneratorPathUtility.FindExistingGeneratedFilePath(className + ".cs");
         }
 
         /// <summary>
@@ -747,15 +738,10 @@ namespace Shizuku.Graph.Editor
             {
                 var code = GenerateFunctionCode(funcEntry.FunctionInfo);
                 var fileName = $"{funcEntry.NodeClassName}.cs";
-                var path = FUNCTION_NODE_PATH;
-
-                // 确保目录存在
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-
-                var filePath = Path.Combine(path, fileName);
+                var outputPath = ShizukuGeneratorSettings.instance.GetOutputPath(
+                    GeneratorOutputPathKind.FunctionNode);
+                var filePath = ShizukuGeneratorPathUtility.ResolveOutputFilePath(fileName, outputPath);
+                ShizukuGeneratorPathUtility.EnsureOutputDirectoryExists(filePath);
                 File.WriteAllText(filePath, code);
 
                 Debug.Log($"[UnifiedShizukuGenerator] Generated: {filePath}");
@@ -1078,12 +1064,6 @@ namespace Shizuku.Graph.Editor
         /// </summary>
         private void GenerateCustomParameterEdgePorts(List<ShizukuClassInfo> customTypes)
         {
-            // 确保输出目录存在
-            if (!Directory.Exists(PORT_TYPE_OUTPUT_PATH))
-            {
-                Directory.CreateDirectory(PORT_TYPE_OUTPUT_PATH);
-            }
-
             var sb = new StringBuilder();
 
             // 文件头
@@ -1113,7 +1093,11 @@ namespace Shizuku.Graph.Editor
                 sb.AppendLine();
             }
 
-            var filePath = Path.Combine(PORT_TYPE_OUTPUT_PATH, "CustomParameterEdgePorts.Generated.cs");
+            const string fileName = "CustomParameterEdgePorts.Generated.cs";
+            var outputPath = ShizukuGeneratorSettings.instance.GetOutputPath(
+                GeneratorOutputPathKind.PortType);
+            var filePath = ShizukuGeneratorPathUtility.ResolveOutputFilePath(fileName, outputPath);
+            ShizukuGeneratorPathUtility.EnsureOutputDirectoryExists(filePath);
             File.WriteAllText(filePath, sb.ToString());
             Debug.Log($"[UnifiedShizukuGenerator] Generated: {filePath}");
         }
@@ -1123,12 +1107,6 @@ namespace Shizuku.Graph.Editor
         /// </summary>
         private void GenerateCustomVariableNodes(List<ShizukuClassInfo> customTypes)
         {
-            // 确保输出目录存在
-            if (!Directory.Exists(VARIABLE_NODE_OUTPUT_PATH))
-            {
-                Directory.CreateDirectory(VARIABLE_NODE_OUTPUT_PATH);
-            }
-
             // 生成 Get 节点文件
             GenerateCustomGetVariableNodes(customTypes);
 
@@ -1192,7 +1170,11 @@ namespace Shizuku.Graph.Editor
                 sb.AppendLine();
             }
 
-            var filePath = Path.Combine(VARIABLE_NODE_OUTPUT_PATH, "GetVariableNodes.Custom.Generated.cs");
+            const string fileName = "GetVariableNodes.Custom.Generated.cs";
+            var outputPath = ShizukuGeneratorSettings.instance.GetOutputPath(
+                GeneratorOutputPathKind.VariableNode);
+            var filePath = ShizukuGeneratorPathUtility.ResolveOutputFilePath(fileName, outputPath);
+            ShizukuGeneratorPathUtility.EnsureOutputDirectoryExists(filePath);
             File.WriteAllText(filePath, sb.ToString());
             Debug.Log($"[UnifiedShizukuGenerator] Generated: {filePath}");
         }
@@ -1259,7 +1241,11 @@ namespace Shizuku.Graph.Editor
                 sb.AppendLine();
             }
 
-            var filePath = Path.Combine(VARIABLE_NODE_OUTPUT_PATH, "SetVariableNodes.Custom.Generated.cs");
+            const string fileName = "SetVariableNodes.Custom.Generated.cs";
+            var outputPath = ShizukuGeneratorSettings.instance.GetOutputPath(
+                GeneratorOutputPathKind.VariableNode);
+            var filePath = ShizukuGeneratorPathUtility.ResolveOutputFilePath(fileName, outputPath);
+            ShizukuGeneratorPathUtility.EnsureOutputDirectoryExists(filePath);
             File.WriteAllText(filePath, sb.ToString());
             Debug.Log($"[UnifiedShizukuGenerator] Generated: {filePath}");
         }

@@ -70,6 +70,11 @@ namespace Shizuku.Graph
         private static string _resumingFromNodeGuid;
 
         /// <summary>
+        /// 暂停点是否属于普通 Graph 的 Root 执行。恢复后新启动的 Latent 节点需要继承该语义。
+        /// </summary>
+        private static bool _pendingResumeBlocksRoot;
+
+        /// <summary>
         /// 最近一次断点的快照（私有，外部通过只读访问器获取具体数据）
         /// </summary>
         private static DebugSnapshot _currentSnapshot;
@@ -165,12 +170,16 @@ namespace Shizuku.Graph
         /// 节点触发暂停（断点命中或单步完成）。
         /// 由 Debugger 拍摄快照、记录恢复信息，然后调用 Debug.Break() 让 Unity 在帧尾暂停。
         /// </summary>
-        public static void Pause(ShizukuGraphBase graph, string pausedAtNodeGuid)
+        public static void Pause(
+            ShizukuGraphBase graph,
+            string pausedAtNodeGuid,
+            bool blocksRootExecution = false)
         {
             ReleaseCurrentSnapshot();
             IsPaused = true;
             PausedGraph = graph;
             PendingResumeNodeGuid = pausedAtNodeGuid;
+            _pendingResumeBlocksRoot = blocksRootExecution;
             _currentSnapshot = graph.CaptureSnapshot(pausedAtNodeGuid);
             UnityEngine.Debug.Break();
         }
@@ -208,6 +217,8 @@ namespace Shizuku.Graph
             PausedGraph.RestoreVariablesFromSnapshot();
 
             var resumeGuid = PendingResumeNodeGuid;
+            var resumeGraph = PausedGraph;
+            var blocksRootExecution = _pendingResumeBlocksRoot;
 
             // 清除暂停状态，设置跳过恢复点的标记
             IsPaused = false;
@@ -216,8 +227,13 @@ namespace Shizuku.Graph
             ReleaseCurrentSnapshot();
             PausedGraph = null;
             PendingResumeNodeGuid = null;
+            _pendingResumeBlocksRoot = false;
 
-            var result = runnable.Execute();
+            ExecuteResult result;
+            using (resumeGraph.EnterExecutionScope(blocksRootExecution))
+            {
+                result = runnable.Execute();
+            }
 
             // 链自然结束（最后一个节点没有后续），清理残留的单步标志
             if (step && result == ExecuteResult.Continue)
@@ -235,6 +251,7 @@ namespace Shizuku.Graph
             IsPaused = false;
             _stepping = false;
             _resumingFromNodeGuid = null;
+            _pendingResumeBlocksRoot = false;
             ReleaseCurrentSnapshot();
             PausedGraph = null;
             PendingResumeNodeGuid = null;

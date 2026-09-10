@@ -21,10 +21,18 @@ namespace Shizuku.Graph
             if (ShizukuDebugger.IsPaused)
                 return;
 
+            var rootWasBlocked = TickLatentExecutions();
+            if (string.IsNullOrEmpty(RootNodeGUID) ||
+                rootWasBlocked ||
+                HasBlockingRootExecution())
+            {
+                return;
+            }
+
             // 新的一帧，从 Root 开始执行（可能碰到断点）
             if (_guid2NodeMap.TryGetValue(RootNodeGUID, out var rootNode) && rootNode is ShizukuRootNode root)
             {
-                root.StartExcute();
+                ExecuteRoot(root);
             }
         }
 

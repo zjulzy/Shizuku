@@ -84,7 +84,7 @@ namespace Shizuku.Tests.EditMode
         }
 
         [Test]
-        public void Execute_BindsRequiredComponentAndDoesNotRestartWhilePlaying()
+        public void Execute_BindsRequiredComponentAndRejectsReentryWhilePlaying()
         {
             var graph = ScriptableObject.CreateInstance<ShizukuGraphBase>();
             var timeline = ScriptableObject.CreateInstance<TimelineAsset>();
@@ -115,11 +115,12 @@ namespace Shizuku.Tests.EditMode
                 Assert.That(node.IsPlaying, Is.True);
 
                 director.time = 1.25d;
+                LogAssert.Expect(LogType.Error, new Regex("Latent 节点不允许重入"));
                 node.Execute();
 
                 Assert.That(GetRuntimeDirector(node), Is.SameAs(director));
                 Assert.That(director.time, Is.EqualTo(1.25d).Within(0.001d),
-                    "播放中的重复执行必须静默忽略，不能把时间重置到 0");
+                    "播放中的重入必须报错，但不能抢占原播放或把时间重置到 0");
 
                 var directorObject = director.gameObject;
                 graph.DisposeRuntime();
@@ -147,19 +148,47 @@ namespace Shizuku.Tests.EditMode
             {
                 timeline.CreateTrack<AnimationTrack>(null, "Actor");
                 var node = new PlayTimelineNode { Timeline = timeline };
+                var failed = new LatentControlFlowProbeNode();
                 graph.AddNode(node);
+                graph.AddNode(failed);
                 graph.Init();
+                node.ChainPorts["Failed"].NextNodeGuid = failed.GUID;
 
                 LogAssert.Expect(LogType.Error, new Regex("轨道 'Actor' 未绑定 GameObject"));
                 node.Execute();
 
                 Assert.That(GetRuntimeDirector(node), Is.Null);
+                Assert.That(node.IsLatentActive, Is.False);
+                Assert.That(graph.ActiveLatentNodeCount, Is.Zero);
+                Assert.That(failed.ExecuteCount, Is.EqualTo(1));
             }
             finally
             {
                 graph.DisposeRuntime();
                 UnityEngine.Object.DestroyImmediate(graph);
                 UnityEngine.Object.DestroyImmediate(timeline);
+            }
+        }
+
+        [Test]
+        public void Init_ExposesStartedCompletedAndFailedControlPorts()
+        {
+            var graph = ScriptableObject.CreateInstance<ShizukuGraphBase>();
+
+            try
+            {
+                var node = new PlayTimelineNode();
+                graph.AddNode(node);
+                graph.Init();
+
+                Assert.That(
+                    node.ChainPorts.Keys,
+                    Is.EquivalentTo(new[] { "Started", "Completed", "Failed" }));
+            }
+            finally
+            {
+                graph.DisposeRuntime();
+                UnityEngine.Object.DestroyImmediate(graph);
             }
         }
 

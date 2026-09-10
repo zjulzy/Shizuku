@@ -416,6 +416,15 @@ namespace Shizuku.Graph.Editor
                 return;
             }
 
+            if (IsEditingMethod && typeof(ShizukuLatentNode).IsAssignableFrom(nodeType))
+            {
+                EditorUtility.DisplayDialog(
+                    "无法创建 Latent 节点",
+                    "ShizukuMethod 暂不支持 Latent 节点。请在普通 Graph 或无返回值的 Blueprint Event 中使用。",
+                    "确定");
+                return;
+            }
+
             try
             {
                 var node = Activator.CreateInstance(nodeType) as ShizukuNodeBase;

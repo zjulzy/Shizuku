@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 using UnityEngine.Timeline;
 
 namespace Shizuku.Graph
@@ -92,7 +93,7 @@ namespace Shizuku.Graph
     /// </summary>
     [Serializable]
     [NodeMenuItem("时间轴/Play Timeline", Description = "播放 Timeline，并根据输出轨道动态生成绑定端口")]
-    public sealed class PlayTimelineNode : ShizukuRunnableNode
+    public sealed class PlayTimelineNode : ShizukuLatentNode
     {
         [SerializeField]
         public TimelineAsset Timeline;
@@ -103,8 +104,14 @@ namespace Shizuku.Graph
         [SerializeField, HideInInspector]
         private List<TimelineBindingPort> _bindingPorts = new();
 
+        [SerializeField, FormerlySerializedAs("_nextPort")]
+        private ChainPort _startedPort = new() { Name = "Started" };
+
         [SerializeField]
-        private ChainPort _nextPort = new() { Name = "next" };
+        private ChainPort _completedPort = new() { Name = "Completed" };
+
+        [SerializeField]
+        private ChainPort _failedPort = new() { Name = "Failed" };
 
         [NonSerialized]
         private GameObject _directorObject;
@@ -115,13 +122,22 @@ namespace Shizuku.Graph
         [NonSerialized]
         private List<UnityEngine.Object> _boundTracks = new();
 
+        [NonSerialized]
+        private bool _directorStopped;
+
         public IReadOnlyList<TimelineBindingPort> BindingPorts => _bindingPorts;
         public bool IsPlaying => _director != null && _director.state == PlayState.Playing;
+
+        protected override ChainPort StartedPort => _startedPort;
+        protected override ChainPort CompletedPort => _completedPort;
+        protected override ChainPort FailedPort => _failedPort;
 
         public override Color TitleBarColor => new(0.55f, 0.35f, 0.75f, 1f);
 
         public override void Init(INodeContext context)
         {
+            EnsureControlPortNames();
+
             // Timeline 可能在图上次保存后被修改，运行前也要保证端口描述与资产一致。
             SyncBindingPorts(context);
 
@@ -229,20 +245,16 @@ namespace Shizuku.Graph
             return changed;
         }
 
-        protected override void OnExecute()
+        protected override bool OnLatentStart()
         {
-            // 非抢占：同一节点上一次仍在播放时，本次静默跳过。
-            if (IsPlaying)
-                return;
-
             if (Timeline == null)
             {
                 ShizukuErrorReporter.LogError("Play Timeline 未指定 Timeline Asset", this);
-                return;
+                return false;
             }
 
             if (!TryResolveBindings(out var bindings))
-                return;
+                return false;
 
             EnsureDirector();
 
@@ -250,6 +262,7 @@ namespace Shizuku.Graph
 
             // 只有非播放状态才会走到这里；清掉上一轮状态后从头播放。
             _director.Stop();
+            _directorStopped = false;
             foreach (var track in _boundTracks)
             {
                 if (track != null)
@@ -270,23 +283,71 @@ namespace Shizuku.Graph
 
             _director.time = 0d;
             _director.Play();
+            return true;
         }
 
-        protected override bool OnSelectNextNode(out string nextNodeGUID)
+        protected override ShizukuLatentTickResult OnLatentTick()
         {
-            nextNodeGUID = _nextPort.NextNodeGuid;
-            return !string.IsNullOrEmpty(nextNodeGUID);
+            if (_director == null || Timeline == null)
+            {
+                ShizukuErrorReporter.LogError("Play Timeline 的运行时 Director 已丢失", this);
+                return ShizukuLatentTickResult.Failed;
+            }
+
+            if (WrapMode == DirectorWrapMode.Loop)
+            {
+                if (_directorStopped || _director.state != PlayState.Playing)
+                {
+                    ShizukuErrorReporter.LogError("循环 Timeline 在完成前意外停止", this);
+                    return ShizukuLatentTickResult.Failed;
+                }
+
+                return ShizukuLatentTickResult.Running;
+            }
+
+            var duration = Timeline.duration;
+            if (_directorStopped ||
+                (!double.IsNaN(duration) && !double.IsInfinity(duration) &&
+                 _director.time >= Math.Max(0d, duration) - 0.0001d))
+            {
+                return ShizukuLatentTickResult.Completed;
+            }
+
+            if (_director.state != PlayState.Playing)
+            {
+                ShizukuErrorReporter.LogError("Timeline 在到达结尾前意外停止", this);
+                return ShizukuLatentTickResult.Failed;
+            }
+
+            return ShizukuLatentTickResult.Running;
+        }
+
+        protected override void OnLatentCancel()
+        {
+            if (_director != null)
+                _director.Stop();
+        }
+
+        protected override void OnLatentFinished(ShizukuLatentTickResult result)
+        {
+            if (result == ShizukuLatentTickResult.Failed && _director != null)
+                _director.Stop();
         }
 
         public override void DisposeRuntime()
         {
             try
             {
-                if (_director != null)
-                    _director.Stop();
+                base.DisposeRuntime();
             }
             finally
             {
+                if (_director != null)
+                {
+                    _director.stopped -= OnDirectorStopped;
+                    _director.Stop();
+                }
+
                 if (_directorObject != null)
                 {
                     if (Application.isPlaying)
@@ -297,9 +358,19 @@ namespace Shizuku.Graph
 
                 _director = null;
                 _directorObject = null;
+                _directorStopped = false;
                 _boundTracks?.Clear();
-                base.DisposeRuntime();
             }
+        }
+
+        private void EnsureControlPortNames()
+        {
+            _startedPort ??= new ChainPort();
+            _completedPort ??= new ChainPort();
+            _failedPort ??= new ChainPort();
+            _startedPort.Name = "Started";
+            _completedPort.Name = "Completed";
+            _failedPort.Name = "Failed";
         }
 
         private List<BindingDescriptor> BuildBindingDescriptors()
@@ -411,8 +482,15 @@ namespace Shizuku.Graph
                 _directorObject.transform.SetParent(RuntimeOwner.transform, false);
 
             _director = _directorObject.AddComponent<PlayableDirector>();
+            _director.stopped += OnDirectorStopped;
             _director.playOnAwake = false;
             _director.timeUpdateMode = DirectorUpdateMode.GameTime;
+        }
+
+        private void OnDirectorStopped(PlayableDirector director)
+        {
+            if (ReferenceEquals(director, _director) && IsLatentActive)
+                _directorStopped = true;
         }
 
         private static List<ParameterEdge> ResolveEdges(INodeContext context)

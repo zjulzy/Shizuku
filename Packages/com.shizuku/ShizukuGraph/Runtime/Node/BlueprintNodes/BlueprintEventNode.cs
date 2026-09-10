@@ -50,6 +50,9 @@ namespace Shizuku.Graph
 
         public void TriggerEvent(params object[] args)
         {
+            if (RejectActiveLatentReentry())
+                return;
+
             if (EventParameters.Count != args.Length)
             {
                 Debug.LogWarning($"Event '{EventName}' parameter count mismatch. Expected {EventParameters.Count}, got {args.Length}");
@@ -60,7 +63,7 @@ namespace Shizuku.Graph
                 EventParameters[i].SetValue(args[i]);
             }
 
-            StartExcute();
+            StartEventExecution();
         }
 
         /// <summary>
@@ -68,6 +71,9 @@ namespace Shizuku.Graph
         /// </summary>
         public object TriggerEventWithReturn(params object[] args)
         {
+            if (RejectActiveLatentReentry())
+                return null;
+
             if (EventParameters.Count != args.Length)
             {
                 Debug.LogWarning($"Event '{EventName}' parameter count mismatch. Expected {EventParameters.Count}, got {args.Length}");
@@ -78,7 +84,7 @@ namespace Shizuku.Graph
                 EventParameters[i].SetValue(args[i]);
             }
 
-            StartExcute();
+            StartEventExecution();
 
             // 从返回节点收集返回值
             if (!string.IsNullOrEmpty(ReturnNodeGUID) && _context.Guid2NodeMap.TryGetValue(ReturnNodeGUID, out var node))
@@ -115,6 +121,9 @@ namespace Shizuku.Graph
                 }
             }
 
+            if (methodInfo.ReturnType != typeof(void) && TryFindReachableLatentNode(out _))
+                return false;
+
             return true;
         }
 
@@ -142,7 +151,90 @@ namespace Shizuku.Graph
                 }
             }
 
+            if (methodInfo.ReturnType != typeof(void) && TryFindReachableLatentNode(out var latentNode))
+            {
+                return $"带返回值事件不支持 Latent 节点：{latentNode.Title}";
+            }
+
             return "有效";
+        }
+
+        private bool RequiresSynchronousReturn()
+        {
+            var methodInfo = FindMatchingMethod();
+            return methodInfo != null
+                ? methodInfo.ReturnType != typeof(void)
+                : !string.IsNullOrEmpty(ReturnNodeGUID);
+        }
+
+        private void StartEventExecution()
+        {
+            if (!RequiresSynchronousReturn())
+            {
+                StartExcute();
+                return;
+            }
+
+            using (RootGraph.DisallowLatentExecution(
+                       $"带返回值的 Blueprint Event '{EventName}' 不支持 Latent 节点"))
+            {
+                StartExcute();
+            }
+        }
+
+        private bool RejectActiveLatentReentry()
+        {
+            if (!TryFindReachableLatentNode(out var latentNode, activeOnly: true))
+                return false;
+
+            ShizukuErrorReporter.LogError(
+                $"Blueprint Event '{EventName}' 触发了正在运行的 Latent 节点，重入已拒绝: " +
+                $"{latentNode.Title} ({latentNode.GUID})",
+                latentNode);
+            return true;
+        }
+
+        private bool TryFindReachableLatentNode(
+            out ShizukuLatentNode latentNode,
+            bool activeOnly = false)
+        {
+            latentNode = null;
+            if (_context == null || string.IsNullOrEmpty(_nextPort?.NextNodeGuid))
+                return false;
+
+            var pending = new Stack<string>();
+            var visited = new HashSet<string>(StringComparer.Ordinal);
+            pending.Push(_nextPort.NextNodeGuid);
+
+            while (pending.Count > 0)
+            {
+                var nodeGuid = pending.Pop();
+                if (string.IsNullOrEmpty(nodeGuid) || !visited.Add(nodeGuid))
+                    continue;
+
+                if (!_context.Guid2NodeMap.TryGetValue(nodeGuid, out var node) || node == null)
+                    continue;
+
+                if (node is ShizukuLatentNode found)
+                {
+                    if (!activeOnly || found.IsLatentActive)
+                    {
+                        latentNode = found;
+                        return true;
+                    }
+                }
+
+                if (node is not ShizukuNormalNode normalNode)
+                    continue;
+
+                foreach (var port in normalNode.ChainPorts.Values)
+                {
+                    if (port != null && !string.IsNullOrEmpty(port.NextNodeGuid))
+                        pending.Push(port.NextNodeGuid);
+                }
+            }
+
+            return false;
         }
 
         private MethodInfo FindMatchingMethod()

@@ -144,7 +144,11 @@ namespace Shizuku.Graph
             ctx?.PushMethodFrame(method.Name);
             try
             {
-                entryNode.StartExcute();
+                using (RootGraph.DisallowLatentExecution(
+                           $"ShizukuMethod '{method.Name}' 暂不支持 Latent 节点"))
+                {
+                    entryNode.StartExcute();
+                }
             }
             finally
             {

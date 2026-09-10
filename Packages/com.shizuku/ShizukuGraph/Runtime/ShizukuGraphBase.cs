@@ -148,6 +148,8 @@ namespace Shizuku.Graph
             if (!_runtimeInitialized)
                 return;
 
+            CancelActiveLatentExecutions();
+
             foreach (var method in _methods)
             {
                 if (method == null)
@@ -182,6 +184,9 @@ namespace Shizuku.Graph
             _guid2EdgeMap.Clear();
             _variableStore = null;
             _runtimeOwner = null;
+            _rootExecutionDepth = 0;
+            _latentRestrictionDepth = 0;
+            _latentRestrictionReason = null;
             _runtimeInitialized = false;
         }
 
@@ -192,9 +197,6 @@ namespace Shizuku.Graph
 
         public void Update()
         {
-            if (string.IsNullOrEmpty(RootNodeGUID))
-                return;
-
     #if UNITY_EDITOR
             if (ShizukuDebugger.Enabled)
             {
@@ -203,10 +205,18 @@ namespace Shizuku.Graph
             }
     #endif
 
-            // ---- 正常模式：递归一帧跑完 ----
+            var rootWasBlocked = TickLatentExecutions();
+            if (string.IsNullOrEmpty(RootNodeGUID) ||
+                rootWasBlocked ||
+                HasBlockingRootExecution())
+            {
+                return;
+            }
+
+            // ---- 正常模式：同步链一帧跑完；Latent 链在完成前阻止 Root 重入 ----
             if (_guid2NodeMap.TryGetValue(RootNodeGUID, out var rootNode) && rootNode is ShizukuRootNode root)
             {
-                root.StartExcute();
+                ExecuteRoot(root);
             }
         }
 

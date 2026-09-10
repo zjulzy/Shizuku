@@ -154,7 +154,10 @@ namespace Shizuku.Graph
         {
             if (_runtimeGraph != null)
             {
-                _runtimeGraph.Update();
+                using (ShizukuExecutionContext.Begin(_runtimeGraph, gameObject))
+                {
+                    _runtimeGraph.Update();
+                }
             }
         }
 

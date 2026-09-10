@@ -20,7 +20,10 @@ namespace Shizuku.Graph
             {
                 if (ShizukuDebugger.HasBreakpoint(GUID) || ShizukuDebugger.ShouldPauseAfterStep())
                 {
-                    ShizukuDebugger.Pause(RootGraph, GUID);
+                    ShizukuDebugger.Pause(
+                        RootGraph,
+                        GUID,
+                        RootGraph != null && RootGraph.IsExecutingRootChain);
                     return ExecuteResult.Halted;
                 }
             }

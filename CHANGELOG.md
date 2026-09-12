@@ -6,6 +6,21 @@
 
 ---
 
+## [0.6.0] - 2026-09-12
+
+### ✨ 新增
+
+- 新增 `IDynamicParameterPortProvider` 与 `DynamicParameterPortDescriptor`，允许消费项目节点通用提供动态输入/输出端口
+- 新增 `INodeSerializedFieldChangeHandler`，节点可在 Inspector 字段完成写回后同步派生结构并请求刷新视图
+
+### 🔧 改进
+
+- Graph Editor 在主图、函数子图的载入与刷新以及运行时初始化阶段统一同步动态端口
+- AssetReference 和其他可编辑字段共用字段变更通知，并延迟合并视图重建，避免 PropertyField 事件期间重入
+- 原生 `PlayTimelineNode` 迁移到通用扩展契约，同时保留 Track 重命名边迁移与失效边删除语义
+
+---
+
 ## [0.5.1] - 2026-09-12
 
 ### ✨ 新增

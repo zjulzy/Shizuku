@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.0] - 2026-09-12
+
+### Added
+
+- Public `IDynamicParameterPortProvider` and `DynamicParameterPortDescriptor` contracts for custom nodes with collection-backed input or output ports
+- Public `INodeSerializedFieldChangeHandler` callback for synchronizing derived node structure after Inspector field writeback
+
+### Changed
+
+- Dynamic ports are synchronized generically for root graphs, method graphs, view refreshes, and runtime initialization
+- AssetReference and other editable node fields share the same change notification and coalesced delayed view refresh path
+- `PlayTimelineNode` now uses the generic extension contracts while preserving Track edge migration and removal behavior
+
 ## [0.5.1] - 2026-09-12
 
 ### Added

@@ -810,6 +810,12 @@ namespace Shizuku.Graph.Editor
                 });
                 return objectField;
             }
+            else if (AssetReferenceFieldEditorUtility.IsAssetReferenceType(fieldType))
+            {
+                var assetReferenceEditor = CreateAssetReferenceFieldEditor(field, node);
+                if (assetReferenceEditor != null)
+                    return assetReferenceEditor;
+            }
 
             // 其他类型显示只读标签
             var label = new Label($"{ObjectNames.NicifyVariableName(fieldName)}: {fieldValue?.ToString() ?? "null"}")
@@ -822,6 +828,45 @@ namespace Shizuku.Graph.Editor
                 }
             };
             return label;
+        }
+
+        /// <summary>
+        /// 使用 Unity 的 SerializedProperty 绘制 Addressables AssetReference 字段。
+        /// Shizuku 不直接依赖 Addressables；当消费项目安装 Addressables 后，
+        /// PropertyField 会自动复用其 CustomPropertyDrawer，提供拖拽、选择和类型校验。
+        /// </summary>
+        private VisualElement CreateAssetReferenceFieldEditor(FieldInfo field, ShizukuNodeBase node)
+        {
+            if (_currentGraph == null)
+                return null;
+
+            var serializedGraph = new SerializedObject(_currentGraph);
+            serializedGraph.UpdateIfRequiredOrScript();
+            var serializedField = AssetReferenceFieldEditorUtility.FindNodeFieldProperty(
+                serializedGraph,
+                node,
+                field);
+            if (serializedField == null)
+                return null;
+
+            var propertyField = new PropertyField(
+                serializedField,
+                ObjectNames.NicifyVariableName(field.Name))
+            {
+                style = { marginBottom = 5 },
+                // SerializedProperty 的有效期依赖 SerializedObject；由控件共同持有。
+                userData = serializedGraph
+            };
+
+            propertyField.BindProperty(serializedField);
+            var graph = _currentGraph;
+            propertyField.RegisterValueChangeCallback(_ =>
+            {
+                serializedGraph.ApplyModifiedProperties();
+                if (graph != null)
+                    EditorUtility.SetDirty(graph);
+            });
+            return propertyField;
         }
 
         /// <summary>

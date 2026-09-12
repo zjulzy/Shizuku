@@ -5,6 +5,7 @@
         "ShizukuCore.Runtime",
         "ShizukuGraph.Runtime",
         "ShizukuGraph.Editor",
+        "Unity.Addressables",
         "Unity.Mathematics",
         "Unity.Timeline"
     ],

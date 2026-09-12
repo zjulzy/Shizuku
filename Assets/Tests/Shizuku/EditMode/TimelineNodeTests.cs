@@ -341,6 +341,52 @@ namespace Shizuku.Tests.EditMode
         }
 
         [Test]
+        public void GraphView_StacksMultipleControlOutputsButKeepsSingleOutputInline()
+        {
+            var graph = ScriptableObject.CreateInstance<ShizukuGraphBase>();
+
+            try
+            {
+                var timelineNode = new PlayTimelineNode();
+                var logNode = new ShizukuLogNode();
+                graph.AddNode(timelineNode);
+                graph.AddNode(logNode);
+
+                var graphView = new ShizukuGraphView();
+                graphView.LoadFromAsset(graph);
+
+                var timelineView = graphView.nodes.OfType<ShizukuNodeView>()
+                    .Single(view => ReferenceEquals(view.RuntimeNode, timelineNode));
+                Assert.That(timelineView.ControlFlowContainer.RightContainer.childCount, Is.EqualTo(3));
+                Assert.That(
+                    timelineView.ControlFlowContainer.ClassListContains(
+                        ControlFlowPortContainer.StackedOutputClassName),
+                    Is.True);
+                Assert.That(
+                    timelineView.ControlFlowContainer.RightContainer.ClassListContains(
+                        ControlFlowPortContainer.StackedOutputClassName),
+                    Is.True);
+
+                var logView = graphView.nodes.OfType<ShizukuNodeView>()
+                    .Single(view => ReferenceEquals(view.RuntimeNode, logNode));
+                Assert.That(logView.ControlFlowContainer.RightContainer.childCount, Is.EqualTo(1));
+                Assert.That(
+                    logView.ControlFlowContainer.ClassListContains(
+                        ControlFlowPortContainer.StackedOutputClassName),
+                    Is.False);
+                Assert.That(
+                    logView.ControlFlowContainer.RightContainer.ClassListContains(
+                        ControlFlowPortContainer.StackedOutputClassName),
+                    Is.False);
+            }
+            finally
+            {
+                graph.DisposeRuntime();
+                UnityEngine.Object.DestroyImmediate(graph);
+            }
+        }
+
+        [Test]
         public void DebuggerStop_DestroysCurrentGraphSnapshotClone()
         {
             var graph = ScriptableObject.CreateInstance<ShizukuGraphBase>();

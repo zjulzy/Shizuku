@@ -19,4 +19,14 @@
     justify-content: flex-end;
 }
 
+/* 多出口节点改为右侧纵向排列，避免把所有控制流出口挤在同一横行。 */
+.control-flow-container.stacked-output {
+    align-items: flex-start;
+}
+
+.port-right-container.stacked-output {
+    flex-direction: column;
+    align-items: flex-end;
+}
+
 

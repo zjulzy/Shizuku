@@ -11,6 +11,8 @@ namespace Shizuku.Graph.Editor
     using Shizuku.Core;
     public class ControlFlowPortContainer : VisualElement
     {
+        internal const string StackedOutputClassName = "stacked-output";
+
         private static StyleSheet s_StyleSheet;
 
         static ControlFlowPortContainer()
@@ -69,6 +71,10 @@ namespace Shizuku.Graph.Editor
         public void AddNextPort(Port port)
         {
             RightContainer.Add(port);
+
+            var shouldStackOutputs = RightContainer.childCount > 1;
+            EnableInClassList(StackedOutputClassName, shouldStackOutputs);
+            RightContainer.EnableInClassList(StackedOutputClassName, shouldStackOutputs);
         }
     }
 

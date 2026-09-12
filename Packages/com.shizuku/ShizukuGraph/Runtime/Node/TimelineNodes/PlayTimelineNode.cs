@@ -93,7 +93,9 @@ namespace Shizuku.Graph
     /// </summary>
     [Serializable]
     [NodeMenuItem("时间轴/Play Timeline", Description = "播放 Timeline，并根据输出轨道动态生成绑定端口")]
-    public sealed class PlayTimelineNode : ShizukuLatentNode
+    public sealed class PlayTimelineNode : ShizukuLatentNode,
+        IDynamicParameterPortProvider,
+        INodeSerializedFieldChangeHandler
     {
         [SerializeField]
         public TimelineAsset Timeline;
@@ -128,6 +130,28 @@ namespace Shizuku.Graph
         public IReadOnlyList<TimelineBindingPort> BindingPorts => _bindingPorts;
         public bool IsPlaying => _director != null && _director.state == PlayState.Playing;
 
+        public IEnumerable<DynamicParameterPortDescriptor> DynamicParameterPorts
+        {
+            get
+            {
+                if (_bindingPorts == null)
+                    yield break;
+
+                foreach (var bindingPort in _bindingPorts)
+                {
+                    if (bindingPort?.Port == null)
+                        continue;
+
+                    var targetTypeName = bindingPort.ResolveTargetType()?.Name ??
+                                         bindingPort.TargetTypeName ??
+                                         "Unknown";
+                    yield return new DynamicParameterPortDescriptor(
+                        bindingPort.Port,
+                        $"{bindingPort.TrackName} → {targetTypeName}");
+                }
+            }
+        }
+
         protected override ChainPort StartedPort => _startedPort;
         protected override ChainPort CompletedPort => _completedPort;
         protected override ChainPort FailedPort => _failedPort;
@@ -137,21 +161,18 @@ namespace Shizuku.Graph
         public override void Init(INodeContext context)
         {
             EnsureControlPortNames();
-
-            // Timeline 可能在图上次保存后被修改，运行前也要保证端口描述与资产一致。
-            SyncBindingPorts(context);
-
             base.Init(context);
-            foreach (var bindingPort in _bindingPorts)
-            {
-                var port = bindingPort?.Port;
-                if (port == null)
-                    continue;
+        }
 
-                port.SameTypeConnectedPort = null;
-                port.DifferentTypeConnectedPort = null;
-                SelfInputPorts.Add(port);
-            }
+        public bool SynchronizeDynamicParameterPorts(INodeContext context)
+        {
+            return SyncBindingPorts(context);
+        }
+
+        public bool OnSerializedFieldChanged(string fieldName, INodeContext context)
+        {
+            return string.Equals(fieldName, nameof(Timeline), StringComparison.Ordinal) &&
+                   SyncBindingPorts(context);
         }
 
         /// <summary>

@@ -79,21 +79,44 @@ namespace Shizuku.Graph
         public virtual void Init(INodeContext context)
         {
             _context = context;
-            var fields = GetCachedParamPortFields(GetType());
 
             DependentNodes.Clear();
             SelfOutputPorts.Clear();
             SelfInputPorts.Clear();
 
+            if (this is IDynamicParameterPortProvider dynamicPortProvider)
+                dynamicPortProvider.SynchronizeDynamicParameterPorts(context);
+
+            var fields = GetCachedParamPortFields(GetType());
+
             for (int i = 0; i < fields.Length; i++)
             {
                 var port = fields[i].GetValue(this) as ParameterEdgePort;
-                if (port == null) continue;
-                port.SameTypeConnectedPort = null;
-                port.DifferentTypeConnectedPort = null;
-                if (port.IsOut) SelfOutputPorts.Add(port);
-                else SelfInputPorts.Add(port);
+                RegisterParameterPort(port);
             }
+
+            if (this is IDynamicParameterPortProvider provider)
+            {
+                var descriptors = provider.DynamicParameterPorts;
+                if (descriptors != null)
+                {
+                    foreach (var descriptor in descriptors)
+                        RegisterParameterPort(descriptor.Port);
+                }
+            }
+        }
+
+        private void RegisterParameterPort(ParameterEdgePort port)
+        {
+            if (port == null)
+                return;
+
+            port.SameTypeConnectedPort = null;
+            port.DifferentTypeConnectedPort = null;
+
+            var ports = port.IsOut ? SelfOutputPorts : SelfInputPorts;
+            if (!ports.Contains(port))
+                ports.Add(port);
         }
 
         /// <summary>

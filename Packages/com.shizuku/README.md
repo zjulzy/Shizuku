@@ -26,6 +26,12 @@ https://github.com/zjulzy/Shizuku.git?path=/Packages/com.shizuku#v0.5.1
 - 在 `Shizuku > Generator Window` 中配置 Blueprint、函数节点、变量节点和自定义端口的项目级输出路径
 - 使用 `ShizukuLatentNode` 编写跨帧节点；普通 Graph 与无返回值 Blueprint Event 支持延迟恢复控制流
 
+## 外部节点的动态参数端口
+
+自定义节点可实现 `IDynamicParameterPortProvider`，通过 `DynamicParameterPorts` 提供保存在集合中的动态输入/输出端口，并在 `SynchronizeDynamicParameterPorts` 中根据资产字段同步端口。Graph Editor 会在载入、刷新以及运行时初始化时调用该同步入口；端口稳定身份、重命名后的边迁移和删除失效边仍由节点实现负责。
+
+若端口结构依赖 Inspector 中的序列化字段，再实现 `INodeSerializedFieldChangeHandler`。字段写回后会收到字段名和当前 `INodeContext`；返回 `true` 即可请求安全地重建当前图视图与节点 Inspector。该机制同样适用于通过 Addressables 原生 PropertyDrawer 编辑的 `AssetReference` 派生字段，框架不依赖具体资产类型。
+
 更完整的使用方式、节点扩展和架构说明见 [项目文档](https://github.com/zjulzy/Shizuku#readme)。
 
 ## 许可证

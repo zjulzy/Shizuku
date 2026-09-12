@@ -950,7 +950,7 @@ namespace Shizuku.Graph.Editor
             _runtimeGraph = graphAsset;
             _currentMethod = null; // 加载资产时重置为主图
 
-            if (SynchronizeAllTimelineNodes(graphAsset))
+            if (SynchronizeAllDynamicParameterPortNodes(graphAsset))
                 EditorUtility.SetDirty(graphAsset);
 
             _runtimeGraph.Init();
@@ -1061,7 +1061,7 @@ namespace Shizuku.Graph.Editor
             _isRebuildingView = true;
             try
             {
-                if (SynchronizeTimelineNodes(CurrentNodes, CurrentContext))
+                if (SynchronizeDynamicParameterPortNodes(CurrentNodes, CurrentContext))
                     EditorUtility.SetDirty(_runtimeGraph);
 
                 // 这里只是在重建编辑器视图，不能让 GraphView 的删除回调修改资产数据。
@@ -1148,25 +1148,31 @@ namespace Shizuku.Graph.Editor
             }
         }
 
-        private static bool SynchronizeAllTimelineNodes(ShizukuGraphBase graph)
+        private static bool SynchronizeAllDynamicParameterPortNodes(ShizukuGraphBase graph)
         {
             if (graph == null)
                 return false;
 
-            var changed = SynchronizeTimelineNodes(graph.Nodes, graph);
+            var changed = SynchronizeDynamicParameterPortNodes(graph.Nodes, graph);
             foreach (var method in graph.Methods)
-                changed |= SynchronizeTimelineNodes(method.Nodes, method);
+            {
+                if (method != null)
+                    changed |= SynchronizeDynamicParameterPortNodes(method.Nodes, method);
+            }
 
             return changed;
         }
 
-        private static bool SynchronizeTimelineNodes(
+        private static bool SynchronizeDynamicParameterPortNodes(
             IEnumerable<ShizukuNodeBase> nodes,
             INodeContext context)
         {
+            if (nodes == null || context == null)
+                return false;
+
             var changed = false;
-            foreach (var timelineNode in nodes.OfType<PlayTimelineNode>())
-                changed |= timelineNode.SyncBindingPorts(context);
+            foreach (var dynamicPortProvider in nodes.OfType<IDynamicParameterPortProvider>())
+                changed |= dynamicPortProvider.SynchronizeDynamicParameterPorts(context);
 
             return changed;
         }

@@ -367,23 +367,39 @@ namespace Shizuku.Graph.Editor
                 }
             }
 
-            // Unity Timeline 节点的动态轨道绑定端口
-            else if (_node is PlayTimelineNode timelineNode)
+            // 由节点提供的通用动态参数端口。它们保存在集合中，无法通过字段反射发现。
+            var dynamicPorts = new HashSet<ParameterEdgePort>();
+            if (_node is IDynamicParameterPortProvider dynamicPortProvider)
             {
-                foreach (var bindingPort in timelineNode.BindingPorts)
+                var descriptors = dynamicPortProvider.DynamicParameterPorts;
+                if (descriptors != null)
                 {
-                    if (bindingPort?.Port == null)
-                        continue;
+                    foreach (var descriptor in descriptors)
+                    {
+                        var port = descriptor.Port;
+                        if (port == null || !dynamicPorts.Add(port))
+                            continue;
 
-                    var inputPort = InstantiatePort(
-                        Orientation.Horizontal,
-                        Direction.Input,
-                        Port.Capacity.Single,
-                        bindingPort.Port.GetType());
-                    inputPort.portName = bindingPort.Port.Name;
-                    inputPort.tooltip = $"{bindingPort.TrackName} → {GetShortTypeName(bindingPort.TargetTypeName)}";
-                    inputPort.AddToClassList("parameter-port");
-                    inputContainer.Add(inputPort);
+                        var direction = port.IsOut ? Direction.Output : Direction.Input;
+                        var capacity = port.IsOut ? Port.Capacity.Multi : Port.Capacity.Single;
+                        var visualPort = InstantiatePort(
+                            Orientation.Horizontal,
+                            direction,
+                            capacity,
+                            port.GetType());
+                        visualPort.portName = port.Name;
+                        visualPort.AddToClassList("parameter-port");
+
+                        if (string.IsNullOrWhiteSpace(descriptor.Tooltip))
+                            SetPortTooltip(visualPort, port.GetType());
+                        else
+                            visualPort.tooltip = descriptor.Tooltip;
+
+                        if (port.IsOut)
+                            outputContainer.Add(visualPort);
+                        else
+                            inputContainer.Add(visualPort);
+                    }
                 }
             }
 
@@ -394,6 +410,9 @@ namespace Shizuku.Graph.Editor
                     var port = field.GetValue(_node) as ParameterEdgePort;
                     if (port != null)
                     {
+                        if (dynamicPorts.Contains(port))
+                            continue;
+
                         if (port.IsOut)
                         {
                             var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, field.FieldType);
@@ -442,16 +461,6 @@ namespace Shizuku.Graph.Editor
             RefreshExpandedState();
             RefreshPorts();
         }
-
-        private static string GetShortTypeName(string assemblyQualifiedTypeName)
-        {
-            if (string.IsNullOrEmpty(assemblyQualifiedTypeName))
-                return "Unknown";
-
-            var type = Type.GetType(assemblyQualifiedTypeName);
-            return type != null ? type.Name : assemblyQualifiedTypeName;
-        }
-
 
         private VisualElement CreateInputFieldForPort(ParameterEdgePort port)
         {

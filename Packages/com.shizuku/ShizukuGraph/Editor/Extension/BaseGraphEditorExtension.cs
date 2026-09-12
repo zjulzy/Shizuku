@@ -24,6 +24,7 @@ namespace Shizuku.Graph.Editor
         private ScrollView _functionsPanel;
         private VisualElement _horizontalResizer;
         private ShizukuNodeBase _selectedNode;
+        private EditorApplication.CallbackFunction _pendingNodeRefresh;
 
         public bool CanHandle(ShizukuGraphBase graph)
         {
@@ -48,6 +49,12 @@ namespace Shizuku.Graph.Editor
 
         public void OnDisable()
         {
+            if (_pendingNodeRefresh != null)
+            {
+                EditorApplication.delayCall -= _pendingNodeRefresh;
+                _pendingNodeRefresh = null;
+            }
+
             // 取消监听节点选择事件
             if (_graphView != null)
             {
@@ -728,7 +735,7 @@ namespace Shizuku.Graph.Editor
                 textField.RegisterValueChangedCallback(evt =>
                 {
                     field.SetValue(node, evt.newValue);
-                    if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
+                    NotifyNodeSerializedFieldChanged(field, node);
                 });
                 return textField;
             }
@@ -742,7 +749,7 @@ namespace Shizuku.Graph.Editor
                 intField.RegisterValueChangedCallback(evt =>
                 {
                     field.SetValue(node, evt.newValue);
-                    if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
+                    NotifyNodeSerializedFieldChanged(field, node);
                 });
                 return intField;
             }
@@ -756,7 +763,7 @@ namespace Shizuku.Graph.Editor
                 floatField.RegisterValueChangedCallback(evt =>
                 {
                     field.SetValue(node, evt.newValue);
-                    if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
+                    NotifyNodeSerializedFieldChanged(field, node);
                 });
                 return floatField;
             }
@@ -770,7 +777,7 @@ namespace Shizuku.Graph.Editor
                 boolField.RegisterValueChangedCallback(evt =>
                 {
                     field.SetValue(node, evt.newValue);
-                    if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
+                    NotifyNodeSerializedFieldChanged(field, node);
                 });
                 return boolField;
             }
@@ -783,7 +790,7 @@ namespace Shizuku.Graph.Editor
                 enumField.RegisterValueChangedCallback(evt =>
                 {
                     field.SetValue(node, evt.newValue);
-                    if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
+                    NotifyNodeSerializedFieldChanged(field, node);
                 });
                 return enumField;
             }
@@ -799,14 +806,7 @@ namespace Shizuku.Graph.Editor
                 objectField.RegisterValueChangedCallback(evt =>
                 {
                     field.SetValue(node, evt.newValue);
-                    if (_currentGraph != null) EditorUtility.SetDirty(_currentGraph);
-
-                    if (node is PlayTimelineNode timelineNode && _graphView?.CurrentNodeContext != null)
-                    {
-                        timelineNode.SyncBindingPorts(_graphView.CurrentNodeContext);
-                        _graphView.RefreshCurrentView();
-                        RefreshNodeInspector();
-                    }
+                    NotifyNodeSerializedFieldChanged(field, node);
                 });
                 return objectField;
             }
@@ -859,14 +859,59 @@ namespace Shizuku.Graph.Editor
             };
 
             propertyField.BindProperty(serializedField);
-            var graph = _currentGraph;
             propertyField.RegisterValueChangeCallback(_ =>
             {
                 serializedGraph.ApplyModifiedProperties();
-                if (graph != null)
-                    EditorUtility.SetDirty(graph);
+                NotifyNodeSerializedFieldChanged(field, node);
             });
             return propertyField;
+        }
+
+        private void NotifyNodeSerializedFieldChanged(FieldInfo field, ShizukuNodeBase node)
+        {
+            if (_currentGraph == null || field == null || node == null)
+                return;
+
+            var shouldRefresh = false;
+            try
+            {
+                if (node is INodeSerializedFieldChangeHandler handler)
+                {
+                    var context = _graphView?.CurrentNodeContext ?? _currentGraph;
+                    shouldRefresh = handler.OnSerializedFieldChanged(field.Name, context);
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+            }
+            finally
+            {
+                // 回调可能同步动态端口并迁移或删除边，因此必须在回调之后标脏。
+                EditorUtility.SetDirty(_currentGraph);
+            }
+
+            if (shouldRefresh)
+                ScheduleNodeStructureRefresh();
+        }
+
+        private void ScheduleNodeStructureRefresh()
+        {
+            if (_pendingNodeRefresh != null)
+                return;
+
+            var graph = _currentGraph;
+            _pendingNodeRefresh = () =>
+            {
+                _pendingNodeRefresh = null;
+                if (_currentGraph != graph)
+                    return;
+
+                _graphView?.RefreshCurrentView();
+                if (_nodeInspectorPanel != null)
+                    RefreshNodeInspector();
+            };
+            EditorApplication.delayCall += _pendingNodeRefresh;
         }
 
         /// <summary>
@@ -940,11 +985,7 @@ namespace Shizuku.Graph.Editor
                     _graphView.RefreshNodeTitle(node);
                 }
 
-                // 标记为脏
-                if (_currentGraph != null)
-                {
-                    EditorUtility.SetDirty(_currentGraph);
-                }
+                NotifyNodeSerializedFieldChanged(field, node);
             });
 
             container.Add(popupField);

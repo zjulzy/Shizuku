@@ -12,7 +12,7 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 系统，�
 在 Unity Package Manager 中选择 `Install package from git URL...`，输入：
 
 ```text
-https://github.com/zjulzy/Shizuku.git?path=/Packages/com.shizuku#v0.5.0
+https://github.com/zjulzy/Shizuku.git?path=/Packages/com.shizuku#v0.5.1
 ```
 
 若需要 Tag 模块，在 `Edit > Project Settings > Shizuku` 中勾选 `Enable Tag Module`。该选项会为当前 Build Target 管理 `SHIZUKU_TAG` 宏；关闭后 Tag 程序集不会参与编译。

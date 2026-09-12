@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.5.1] - 2026-09-12
+
+### Added
+
+- Generic node Inspector editing for Addressables `AssetReference` subclasses through the native Addressables property drawer
+
+### Changed
+
+- AssetReference values now write through the graph asset's serialized property and mark the graph dirty without adding an Addressables dependency to the distributed package
+
 ## [0.5.0] - 2026-09-10
 
 ### Added

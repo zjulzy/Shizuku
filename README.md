@@ -21,7 +21,7 @@
 3. 输入以下地址：
 
 ```text
-https://github.com/zjulzy/Shizuku.git?path=/Packages/com.shizuku#v0.5.0
+https://github.com/zjulzy/Shizuku.git?path=/Packages/com.shizuku#v0.5.1
 ```
 
 Shizuku 以完整包发布，包含 Core、Graph、DebugKit、SkillEditor、SkillEditorGraph 和 Tag 模块。Tag 模块默认由 `SHIZUKU_TAG` 宏控制，可在 `Edit > Project Settings > Shizuku > Enable Tag Module` 中开关。

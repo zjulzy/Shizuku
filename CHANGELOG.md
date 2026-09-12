@@ -6,6 +6,19 @@
 
 ---
 
+## [0.5.1] - 2026-09-12
+
+### ✨ 新增
+
+- 节点 Inspector 通用支持 Addressables `AssetReference` 派生字段，可直接拖拽或选择匹配类型的 Addressable 资产
+
+### 🔧 改进
+
+- 复用 Addressables 原生 `PropertyDrawer`，不让 Shizuku 发布包建立 Addressables 强依赖
+- AssetReference 修改通过图资产的 `SerializedProperty` 写回并标脏，保证保存重载后 GUID 不丢失
+
+---
+
 ## [0.5.0] - 2026-09-10
 
 ### ✨ 新增

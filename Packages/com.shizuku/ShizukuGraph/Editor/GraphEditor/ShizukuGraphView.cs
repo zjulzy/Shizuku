@@ -99,8 +99,6 @@ namespace Shizuku.Graph.Editor
 
             styleSheets.Add(Resources.Load<StyleSheet>("ShizukuGraphView"));
 
-            // 创建 AI 助手窗口
-            CreateAIAssistantWindow();
         }
 
         /// <summary>

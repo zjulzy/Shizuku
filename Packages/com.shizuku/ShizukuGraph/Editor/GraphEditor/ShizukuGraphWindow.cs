@@ -44,6 +44,22 @@ namespace Shizuku.Graph.Editor
             window.titleContent = new GUIContent("Shizuku Graph");
         }
 
+        internal static void RefreshOpenGraph(ShizukuGraphBase graph)
+        {
+            if (graph == null)
+                return;
+
+            foreach (var window in Resources.FindObjectsOfTypeAll<ShizukuGraphWindow>())
+            {
+                if (window == null || window._currentGraph != graph)
+                    continue;
+
+                window._graphView?.RefreshCurrentView();
+                window.RefreshExtensions();
+                window.Repaint();
+            }
+        }
+
         private void OnEnable()
         {
             RegisterExtensions();

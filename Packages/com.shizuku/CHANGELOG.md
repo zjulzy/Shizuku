@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Project-scoped stdio MCP server backed by the official Model Context Protocol C# SDK
+- Loopback-only Unity Editor bridge with rotating project-local authentication tokens
+- Semantic graph list, node catalog, read, validate and transactional apply MCP tools
+- Project Settings workflow for building the server and configuring Codex, Claude Code and Cursor
+
+### Changed
+
+- Removed the hard-coded AI assistant mock UI from the Graph Editor
+
 ## [0.7.0] - 2026-09-13
 
 ### Added

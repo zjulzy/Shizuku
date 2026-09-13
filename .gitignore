@@ -31,6 +31,12 @@
 # Jetbrains Rider personal-layer settings
 *.DotSettings.user
 /.idea/
+/.cursor/mcp.json
+/.cursor/mcp.json.bak.*
+
+# Local build artifacts for the packaged Shizuku MCP server source
+/Packages/com.shizuku/Tools~/Shizuku.Mcp.Server/bin/
+/Packages/com.shizuku/Tools~/Shizuku.Mcp.Server/obj/
 
 # Visual Studio cache directory
 .vs/

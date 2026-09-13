@@ -6,6 +6,22 @@
 
 ---
 
+## [0.8.0] - 2026-09-13
+
+### ✨ 新增
+
+- 新增基于官方 Model Context Protocol C# SDK 的项目级 stdio MCP Server
+- 新增仅监听本机回环地址、使用项目级轮换令牌认证的 Unity Editor Bridge
+- 新增图资产列表、节点目录、读取、校验与事务式修改 MCP 工具
+- 新增 Project Settings 工作流，可构建 Server 可执行文件并配置 Codex、Claude Code 与 Cursor
+
+### 🔧 改进
+
+- 移除 Graph Editor 中写死的 AI 助手模拟界面，改由外部 Agent 通过语义图工具操作
+- 发布包仅携带 MCP Server 源码，排除本地 `bin` 与 `obj` 构建产物
+
+---
+
 ## [0.7.0] - 2026-09-13
 
 ### ✨ 新增

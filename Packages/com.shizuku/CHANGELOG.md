@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.7.0] - 2026-09-13
+
+### Added
+
+- Public `ShizukuGraphRuntime<TGraph>` owner for cloning, initializing, executing, ticking and disposing runtime graph instances
+- Graph Editor toolbar actions for creating nodes and framing the complete graph
+
+### Changed
+
+- `GraphRunner`, `BlueprintBehavior` and Timeline `GraphClipHandler` now share the unified runtime graph lifecycle
+- Graph nodes, ports, selection states and canvas styling use a clearer compact visual system
+- Initial graph framing waits for stable UI Toolkit layout while ordinary refreshes preserve the current viewport
+
+### Fixed
+
+- Multi-output control-flow port alignment
+- Parameter and control-flow edges remaining visible or serialized after deleting their connected node
+- Duplicate Blueprint editor extensions and side panels after repeatedly opening a Blueprint graph
+- Timeline graph execution bypassing root and latent scheduling semantics
+
 ## [0.6.0] - 2026-09-12
 
 ### Added

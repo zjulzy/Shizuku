@@ -13,7 +13,7 @@ namespace Shizuku.Graph.Editor
     public class ShizukuGraphWindow : EditorWindow
     {
         private ShizukuGraphView _graphView;
-        private IGraphEditorExtension _currentExtension;
+        private readonly List<IGraphEditorExtension> _activeExtensions = new();
 
         // 使用 SerializeField 保存当前图的引用，在 Play 模式切换时不会丢失
         [SerializeField]
@@ -53,7 +53,7 @@ namespace Shizuku.Graph.Editor
             if (_currentGraph != null)
             {
                 _graphView.LoadFromAsset(_currentGraph);
-                LoadExtension(_currentGraph);
+                LoadExtensions(_currentGraph);
             }
 
             // 注册编辑器更新回调，用于刷新调试可视化
@@ -76,16 +76,31 @@ namespace Shizuku.Graph.Editor
             Toolbar toolbar = new Toolbar();
             Button saveButton = new Button(() => { _graphView?.SaveToAsset(); });
             saveButton.text = "保存";
+            saveButton.tooltip = "保存当前图资产";
+
+            Button createNodeButton = new Button(() =>
+            {
+                _graphView?.OpenNodeSearchAtViewCenter(position.center);
+            });
+            createNodeButton.text = "＋ 节点";
+            createNodeButton.tooltip = "在当前视野中心创建节点";
 
             Button refreshButton = new Button(() =>
             {
                 _graphView?.RefreshCurrentView();
-                RefreshExtension();
+                RefreshExtensions();
             });
             refreshButton.text = "刷新";
+            refreshButton.tooltip = "从当前图数据重建视图";
+
+            Button frameAllButton = new Button(() => _graphView?.FrameAllNodes());
+            frameAllButton.text = "定位全部";
+            frameAllButton.tooltip = "显示全部节点（Home）";
 
             toolbar.Add(saveButton);
+            toolbar.Add(createNodeButton);
             toolbar.Add(refreshButton);
+            toolbar.Add(frameAllButton);
             rootVisualElement.Add(toolbar);
 
             // 调试工具栏
@@ -109,6 +124,7 @@ namespace Shizuku.Graph.Editor
             _graphView = new ShizukuGraphView();
             _graphView.style.flexGrow = 1;
             _graphView.OnEditingContextChanged += OnEditingContextChanged;
+            _graphView.OnGraphChanged += OnGraphChanged;
             _contentContainer.Add(_graphView);
 
             // 调试信息面板（右侧，默认隐藏）
@@ -177,6 +193,7 @@ namespace Shizuku.Graph.Editor
         private void OnEditingContextChanged(ShizukuMethod method)
         {
             UpdateBreadcrumb(method);
+            _graphView?.FrameAllWhenReady();
         }
 
         private void UpdateBreadcrumb(ShizukuMethod method)
@@ -712,44 +729,49 @@ namespace Shizuku.Graph.Editor
             EditorApplication.update -= OnEditorUpdate;
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
 
-            UnloadExtension();
+            UnloadExtensions();
+            if (_graphView != null)
+                _graphView.OnGraphChanged -= OnGraphChanged;
             rootVisualElement.Clear();
             _graphView = null;
             // 不清空 _currentGraph，让它被 Unity 序列化保存，以便在 Play 模式切换后恢复
         }
 
-        private void LoadExtension(ShizukuGraphBase graph)
+        private void LoadExtensions(ShizukuGraphBase graph)
         {
-            UnloadExtension();
+            UnloadExtensions();
 
             foreach (var extension in _availableExtensions)
             {
                 if (extension.CanHandle(graph))
                 {
-                    _currentExtension = extension;
-                    _currentExtension.OnEnable(this, _graphView, _contentContainer);
-                    _currentExtension.OnGraphLoaded(graph);
-
-                    _graphView.OnGraphChanged += () => _currentExtension?.OnGraphLoaded(graph);
+                    extension.OnEnable(this, _graphView, _contentContainer);
+                    extension.OnGraphLoaded(graph);
+                    _activeExtensions.Add(extension);
                 }
             }
         }
 
-        private void UnloadExtension()
+        private void UnloadExtensions()
         {
-            if (_currentExtension != null)
-            {
-                _currentExtension.OnDisable();
-                _currentExtension = null;
-            }
+            foreach (var extension in _activeExtensions)
+                extension.OnDisable();
+
+            _activeExtensions.Clear();
         }
 
-        private void RefreshExtension()
+        private void RefreshExtensions()
         {
-            if (_currentGraph != null && _currentExtension != null)
-            {
-                _currentExtension.OnGraphLoaded(_currentGraph);
-            }
+            if (_currentGraph == null)
+                return;
+
+            foreach (var extension in _activeExtensions)
+                extension.OnGraphLoaded(_currentGraph);
+        }
+
+        private void OnGraphChanged()
+        {
+            RefreshExtensions();
         }
 
         [OnOpenAsset]
@@ -763,7 +785,7 @@ namespace Shizuku.Graph.Editor
 
                 window._currentGraph = graphAsset;
                 window._graphView.LoadFromAsset(graphAsset);
-                window.LoadExtension(graphAsset);
+                window.LoadExtensions(graphAsset);
                 window.Show();
                 return true;
             }

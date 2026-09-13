@@ -1,13 +1,16 @@
 /* 自定义控制流端口样式 */
 .control-flow-port {
-    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 2px;
+    margin-right: 2px;
     padding: 0;
-    min-height: 20px;
+    min-height: 22px;
 }
 
 /* 端口名称标签样式 */
 .control-flow-port > #type {
-    color: rgb(255, 220, 150);
+    color: rgb(242, 199, 115);
     font-size: 11px;
     padding-left: 4px;
     padding-right: 4px;
@@ -15,7 +18,7 @@
 
 /* 其他标签样式 */
 .control-flow-port > Label {
-    color: rgb(255, 220, 150);
+    color: rgb(242, 199, 115);
     font-size: 11px;
     padding-left: 4px;
     padding-right: 4px;

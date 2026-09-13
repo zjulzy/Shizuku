@@ -1,26 +1,145 @@
+.shizuku-node {
+    min-width: 190px;
+}
+
+.shizuku-node #node-border {
+    background-color: rgb(31, 35, 42);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(70, 76, 88);
+    border-right-color: rgb(70, 76, 88);
+    border-top-color: rgb(70, 76, 88);
+    border-bottom-color: rgb(70, 76, 88);
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+.shizuku-node:hover #node-border {
+    border-left-color: rgb(105, 113, 130);
+    border-right-color: rgb(105, 113, 130);
+    border-top-color: rgb(105, 113, 130);
+    border-bottom-color: rgb(105, 113, 130);
+}
+
+.shizuku-node:selected #node-border {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(100, 166, 255);
+    border-right-color: rgb(100, 166, 255);
+    border-top-color: rgb(100, 166, 255);
+    border-bottom-color: rgb(100, 166, 255);
+}
+
+.shizuku-node #title {
+    min-height: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.10);
+}
+
 #title-label {
     -unity-text-align: middle-center;
     -unity-font-style: bold;
-    font-size: 15px;
+    font-size: 13px;
     width: 100%;
     color: rgba(255, 255, 255, 1);
-    letter-spacing: 0.5px;
+    letter-spacing: 0.25px;
     text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.shizuku-node #contents {
+    background-color: rgb(31, 35, 42);
+    padding-top: 4px;
+    padding-bottom: 5px;
+}
+
+.shizuku-node #input,
+.shizuku-node #output {
     padding-top: 2px;
     padding-bottom: 2px;
 }
 
+.parameter-port {
+    min-height: 24px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
 
-/* 参数端口 - 圆形样式 */
+.parameter-port > #type,
+.parameter-port > Label {
+    color: rgb(205, 210, 220);
+    font-size: 11px;
+}
+
 .parameter-port > #connector {
-    background-color: rgba(100, 150, 255, 1) !important;
-    border-color: rgba(80, 120, 220, 1) !important;
-    border-width: 1px !important;
+    width: 10px !important;
+    height: 10px !important;
+    border-width: 2px !important;
     border-radius: 50% !important;
 }
 
+.port-default-value {
+    flex-grow: 1;
+    max-width: 140px;
+    min-height: 20px;
+    margin-left: 6px;
+    margin-right: 2px;
+}
+
+/* 参数端口按值类型着色，连接方向仍由左右位置表达。 */
+.parameter-port.port-type-int > #connector {
+    background-color: rgb(54, 92, 135) !important;
+    border-color: rgb(90, 169, 255) !important;
+}
+
+.parameter-port.port-type-float > #connector {
+    background-color: rgb(47, 101, 111) !important;
+    border-color: rgb(88, 199, 217) !important;
+}
+
+.parameter-port.port-type-bool > #connector {
+    background-color: rgb(126, 67, 51) !important;
+    border-color: rgb(244, 143, 104) !important;
+}
+
+.parameter-port.port-type-string > #connector {
+    background-color: rgb(112, 96, 43) !important;
+    border-color: rgb(227, 198, 107) !important;
+}
+
+.parameter-port.port-type-vector > #connector {
+    background-color: rgb(88, 65, 124) !important;
+    border-color: rgb(182, 140, 255) !important;
+}
+
+.parameter-port.port-type-color > #connector {
+    background-color: rgb(122, 55, 104) !important;
+    border-color: rgb(244, 126, 208) !important;
+}
+
+.parameter-port.port-type-object > #connector {
+    background-color: rgb(54, 104, 65) !important;
+    border-color: rgb(125, 201, 138) !important;
+}
+
+.parameter-port.port-type-default > #connector {
+    background-color: rgb(75, 80, 91) !important;
+    border-color: rgb(170, 178, 192) !important;
+}
+
 .parameter-port > #connector:hover {
-    background-color: rgba(120, 170, 255, 1) !important;
+    opacity: 0.78;
 }
 
 /* 确保输出端口容器始终靠右对齐 */

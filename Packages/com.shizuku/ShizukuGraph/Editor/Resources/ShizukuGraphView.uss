@@ -1,7 +1,7 @@
 VisualElement {}
 
 :root {
-    --shizuku-graph-background: #f0f0f0;
+    --shizuku-graph-background: #181b20;
     --custom-group-bg: rgba(50, 100, 200, 0.15);
     --custom-group-border: rgba(100, 150, 255, 0.6);
     --custom-group-title-bg: rgba(50, 100, 200, 0.5);
@@ -10,8 +10,8 @@ VisualElement {}
 /* GraphView背景样式 */
 GridBackground {
     --background-color: var(--shizuku-graph-background);
-    --line-color: rgba(19, 196, 50, 0.1);
-    --thick-line-color: rgba(193, 196, 192, 0.3);
+    --line-color: rgba(107, 117, 135, 0.12);
+    --thick-line-color: rgba(130, 143, 165, 0.24);
     --spacing: 20;
 }
 

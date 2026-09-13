@@ -123,6 +123,105 @@ namespace Shizuku.Tests.EditMode
         }
 
         [Test]
+        public void DeletingNode_RemovesConnectedParameterEdgeFromDataAndView()
+        {
+            var graph = CreateGraphWithParameterEdge();
+            SaveGraph(graph);
+
+            var graphView = new ShizukuGraphView();
+            graphView.LoadFromAsset(graph);
+            var target = graph.Nodes[1];
+
+            graphView.DeleteElements(new GraphElement[] { FindNodeView(graphView, target) });
+
+            Assert.That(graph.Nodes, Has.Count.EqualTo(1));
+            Assert.That(graph.Edges, Is.Empty);
+            Assert.That(graphView.nodes.Count(), Is.EqualTo(1));
+            Assert.That(graphView.edges.Count(), Is.Zero, "删除节点不能留下参数幽灵线");
+        }
+
+        [Test]
+        public void DeletingNode_RemovesConnectedControlFlowEdgeFromDataAndView()
+        {
+            var graph = CreateGraphAsset();
+            var graphView = new ShizukuGraphView();
+            graphView.LoadFromAsset(graph);
+
+            graphView.CreateNodeFromType(typeof(ShizukuRootNode), new Vector2(10f, 20f));
+            graphView.CreateNodeFromType(typeof(ShizukuLogNode), new Vector2(350f, 20f));
+
+            var root = graph.Nodes.OfType<ShizukuRootNode>().Single();
+            var log = graph.Nodes.OfType<ShizukuLogNode>().Single();
+            var rootView = FindNodeView(graphView, root);
+            var logView = FindNodeView(graphView, log);
+            var output = FindPort(rootView, Direction.Output, "next", controlFlow: true);
+            var input = FindPort(logView, Direction.Input, "Previous", controlFlow: true);
+            var edge = output.ConnectTo(input);
+            graphView.graphViewChanged(new GraphViewChange
+            {
+                edgesToCreate = new List<Edge> { edge }
+            });
+            graphView.AddElement(edge);
+
+            Assert.That(output.ClassListContains("connected"), Is.True,
+                "控制流端口应由连接事件立即切换为已连接样式");
+
+            graphView.DeleteElements(new GraphElement[] { logView });
+
+            Assert.That(graph.Nodes, Has.Count.EqualTo(1));
+            Assert.That(root.ChainPorts["next"].NextNodeGuid, Is.Null);
+            Assert.That(graphView.nodes.Count(), Is.EqualTo(1));
+            Assert.That(graphView.edges.Count(), Is.Zero, "删除节点不能留下控制流幽灵线");
+            Assert.That(output.ClassListContains("connected"), Is.False,
+                "删除连线后保留节点的控制流端口应恢复未连接样式");
+        }
+
+        [Test]
+        public void LoadingBlueprintExtensionsRepeatedly_DoesNotDuplicatePanels()
+        {
+            var window = ScriptableObject.CreateInstance<ShizukuGraphWindow>();
+            var graph = ScriptableObject.CreateInstance<BlueprintBehaviorTestGraph>();
+
+            try
+            {
+                window.ShowUtility();
+
+                var windowType = typeof(ShizukuGraphWindow);
+                var loadExtensions = windowType.GetMethod(
+                    "LoadExtensions",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                var contentField = windowType.GetField(
+                    "_contentContainer",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                var activeExtensionsField = windowType.GetField(
+                    "_activeExtensions",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+                Assert.That(loadExtensions, Is.Not.Null);
+                Assert.That(contentField, Is.Not.Null);
+                Assert.That(activeExtensionsField, Is.Not.Null);
+
+                loadExtensions.Invoke(window, new object[] { graph });
+                var content = (VisualElement)contentField.GetValue(window);
+                var firstChildCount = content.childCount;
+
+                loadExtensions.Invoke(window, new object[] { graph });
+                var activeExtensions = (System.Collections.ICollection)activeExtensionsField.GetValue(window);
+
+                Assert.That(activeExtensions.Count, Is.EqualTo(2),
+                    "Blueprint 应同时启用专用面板与通用检查面板");
+                Assert.That(content.childCount, Is.EqualTo(firstChildCount),
+                    "重复加载 Blueprint 不应不断叠加侧栏");
+            }
+            finally
+            {
+                if (window != null)
+                    window.Close();
+                Object.DestroyImmediate(graph);
+            }
+        }
+
+        [Test]
         public void MovingNodeAndGroup_UpdatesDataAndMarksAssetDirty()
         {
             var graph = CreateGraphAsset();

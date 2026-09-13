@@ -14,6 +14,7 @@ namespace Shizuku.Graph.Editor
     public class ControlFlowPort : Port
     {
         private static StyleSheet s_StyleSheet;
+        private VisualElement _connector;
 
         static ControlFlowPort()
         {
@@ -92,6 +93,10 @@ namespace Shizuku.Graph.Editor
             var connector = port.Q("connector");
             if (connector != null)
             {
+                var controlFlowPort = port as ControlFlowPort;
+                if (controlFlowPort != null)
+                    controlFlowPort._connector = connector;
+
                 bool isInput = port.direction == Direction.Input;
 
                 // 设置为横向胶囊形状（椭圆）- 增大尺寸
@@ -131,9 +136,6 @@ namespace Shizuku.Graph.Editor
                 connector.style.borderTopColor = borderColor;
                 connector.style.borderBottomColor = borderColor;
 
-                // 初始背景（未连接）
-                connector.style.backgroundColor = Color.clear;
-
                 // 移除旋转
                 connector.style.rotate = new Rotate(new Angle(0, AngleUnit.Degree));
 
@@ -144,29 +146,19 @@ namespace Shizuku.Graph.Editor
                     cap.style.display = DisplayStyle.None;
                 }
 
-                // 监听连接状态变化
-                SetupConnectionStateListener(port, connector);
+                controlFlowPort?.SetConnectedVisual(port.connected);
             }
         }
 
-        /// <summary>
-        /// 设置连接状态监听，根据是否连接改变填充状态
-        /// </summary>
-        private static void SetupConnectionStateListener(Port port, VisualElement connector)
+        public void SetConnectedVisual(bool isConnected)
         {
-            // 定期检查连接状态并更新样式
-            port.schedule.Execute(() =>
+            EnableInClassList("connected", isConnected);
+            if (_connector != null)
             {
-                bool isConnected = port.connected;
-
-                // 未连接：空心（透明背景 + 边框）
-                // 已连接：实心（填充背景 + 边框）
-                Color fillColor = isConnected 
-                    ? new Color(1f, 0.5f, 0.2f, 1f)      // 实心 - 深橙色填充（更醒目）
-                    : Color.clear;                        // 空心 - 透明
-
-                connector.style.backgroundColor = fillColor;
-            }).Every(100); // 每100ms检查一次
+                _connector.style.backgroundColor = isConnected
+                    ? new Color(1f, 0.5f, 0.2f, 1f)
+                    : Color.clear;
+            }
         }
 
         // 保留protected构造函数以防需要继承

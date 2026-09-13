@@ -37,6 +37,9 @@ namespace Shizuku.Graph.Editor
 
         private Dictionary<string, ShizukuNodeView> _guidToNodeViewMap = new Dictionary<string, ShizukuNodeView>();
         private bool _isRebuildingView;
+        private int _frameAllAttemptsRemaining;
+        private Vector2 _lastFrameLayoutSize;
+        private int _stableFrameLayoutTicks;
 
         public System.Action OnGraphChanged;
         public System.Action<ShizukuNodeBase> OnNodeSelected;
@@ -62,6 +65,8 @@ namespace Shizuku.Graph.Editor
 
             // 注册鼠标事件以捕获正确的位置
             RegisterCallback<MouseDownEvent>(OnMouseDown);
+            RegisterCallback<KeyDownEvent>(OnKeyDown);
+            RegisterCallback<DetachFromPanelEvent>(_ => CancelPendingFrameAll());
 
             // 注册 graphViewChanged 委托来检测环
             graphViewChanged += OnGraphViewChanged;
@@ -110,9 +115,150 @@ namespace Shizuku.Graph.Editor
             );
             var graphMousePosition = contentViewContainer.WorldToLocal(windowMousePosition);
 
+            return CreateNodeSearchWindowProviderAt(graphMousePosition);
+        }
+
+        private NodeSearchWindowProvider CreateNodeSearchWindowProviderAt(Vector2 graphPosition)
+        {
             var provider = ScriptableObject.CreateInstance<NodeSearchWindowProvider>();
-            provider.Initialize(this, graphMousePosition, _runtimeGraph);
+            provider.Initialize(this, graphPosition, _runtimeGraph);
             return provider;
+        }
+
+        public void OpenNodeSearchAtViewCenter(Vector2 screenPosition)
+        {
+            if (_runtimeGraph == null)
+                return;
+
+            var graphPosition = contentViewContainer.WorldToLocal(worldBound.center);
+            SearchWindow.Open(
+                new SearchWindowContext(screenPosition),
+                CreateNodeSearchWindowProviderAt(graphPosition));
+        }
+
+        public void FrameAllNodes()
+        {
+            var nodeViews = nodes.OfType<ShizukuNodeView>().ToList();
+            if (nodeViews.Count == 0)
+                return;
+
+            var viewportSize = layout.size;
+            if (!IsFinitePositive(viewportSize.x) || !IsFinitePositive(viewportSize.y))
+            {
+                FrameAll();
+                return;
+            }
+
+            var hasBounds = false;
+            var contentBounds = new Rect();
+            foreach (var nodeView in nodeViews)
+            {
+                var nodeRect = nodeView.GetPosition();
+                if (!IsFinitePositive(nodeRect.width) || !IsFinitePositive(nodeRect.height))
+                {
+                    var serializedRect = nodeView.RuntimeNode.PositionAndSize;
+                    nodeRect = new Rect(serializedRect.x, serializedRect.y,
+                        Mathf.Max(serializedRect.z, 190f), Mathf.Max(serializedRect.w, 100f));
+                }
+
+                contentBounds = hasBounds ? Union(contentBounds, nodeRect) : nodeRect;
+                hasBounds = true;
+            }
+
+            if (!hasBounds)
+                return;
+
+            const float padding = 80f;
+            var availableWidth = Mathf.Max(1f, viewportSize.x - padding * 2f);
+            var availableHeight = Mathf.Max(1f, viewportSize.y - padding * 2f);
+            var scale = Mathf.Min(
+                availableWidth / Mathf.Max(1f, contentBounds.width),
+                availableHeight / Mathf.Max(1f, contentBounds.height));
+            scale = Mathf.Clamp(scale, ContentZoomer.DefaultMinScale, 1f);
+
+            var viewportCenter = viewportSize * 0.5f;
+            var translation = viewportCenter - contentBounds.center * scale;
+            UpdateViewTransform(
+                new Vector3(translation.x, translation.y, 0f),
+                new Vector3(scale, scale, 1f));
+        }
+
+        private static bool IsFinitePositive(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value) && value > 0f;
+        }
+
+        private static Rect Union(Rect first, Rect second)
+        {
+            var xMin = Mathf.Min(first.xMin, second.xMin);
+            var yMin = Mathf.Min(first.yMin, second.yMin);
+            var xMax = Mathf.Max(first.xMax, second.xMax);
+            var yMax = Mathf.Max(first.yMax, second.yMax);
+            return Rect.MinMaxRect(xMin, yMin, xMax, yMax);
+        }
+
+        public void FrameAllWhenReady()
+        {
+            // UI Toolkit 的元素调度器在窗口尚未显示时不会运行。使用 Editor 更新回调
+            // 等待窗口扩展（例如 Blueprint 左侧属性面板）完成布局，再计算可视区域。
+            _frameAllAttemptsRemaining = 120;
+            _lastFrameLayoutSize = new Vector2(float.NaN, float.NaN);
+            _stableFrameLayoutTicks = 0;
+            EditorApplication.update -= TryFrameAllWhenReady;
+            EditorApplication.update += TryFrameAllWhenReady;
+        }
+
+        private void TryFrameAllWhenReady()
+        {
+            _frameAllAttemptsRemaining--;
+            var currentSize = layout.size;
+            var hasValidLayout = panel != null
+                                 && IsFinitePositive(currentSize.x)
+                                 && IsFinitePositive(currentSize.y)
+                                 && nodes.Any();
+
+            if (hasValidLayout)
+            {
+                if (Approximately(currentSize, _lastFrameLayoutSize))
+                    _stableFrameLayoutTicks++;
+                else
+                {
+                    _lastFrameLayoutSize = currentSize;
+                    _stableFrameLayoutTicks = 0;
+                }
+
+                // 连续三帧尺寸稳定，确保 Blueprint/自定义扩展的侧栏已经完成布局。
+                if (_stableFrameLayoutTicks >= 2)
+                {
+                    FrameAllNodes();
+                    CancelPendingFrameAll();
+                    return;
+                }
+            }
+
+            if (_frameAllAttemptsRemaining <= 0)
+                CancelPendingFrameAll();
+        }
+
+        private void CancelPendingFrameAll()
+        {
+            _frameAllAttemptsRemaining = 0;
+            EditorApplication.update -= TryFrameAllWhenReady;
+        }
+
+        private static bool Approximately(Vector2 first, Vector2 second)
+        {
+            return Mathf.Abs(first.x - second.x) < 0.1f
+                   && Mathf.Abs(first.y - second.y) < 0.1f;
+        }
+
+        private void OnKeyDown(KeyDownEvent evt)
+        {
+            if (evt.keyCode != KeyCode.Home)
+                return;
+
+            FrameAllNodes();
+            evt.StopImmediatePropagation();
         }
 
         #endregion
@@ -769,6 +915,8 @@ namespace Shizuku.Graph.Editor
 
                     if (edge.input is ControlFlowPort)
                     {
+                        SetControlFlowEdgeVisualState(edge, true);
+
                         var sourceNormalNode = sourceNode as ShizukuNormalNode;
                         if (sourceNormalNode?.ChainPorts != null &&
                             sourceNormalNode.ChainPorts.TryGetValue(edge.output.portName, out var chainPort))
@@ -808,6 +956,9 @@ namespace Shizuku.Graph.Editor
 
             if (graphViewChange.elementsToRemove != null)
             {
+                graphViewChange.elementsToRemove = ExpandRemovalWithConnectedEdges(
+                    graphViewChange.elementsToRemove);
+
                 foreach (var element in graphViewChange.elementsToRemove)
                 {
                     Debug.Log($"  ❌ 删除元素: {element.GetType().Name}");
@@ -822,6 +973,8 @@ namespace Shizuku.Graph.Editor
                         {
                             if (edge.input is ControlFlowPort)
                             {
+                                SetControlFlowEdgeVisualState(edge, false);
+
                                 var sourceNormalNode = sourceNode as ShizukuNormalNode;
                                 if (sourceNormalNode?.ChainPorts != null &&
                                     sourceNormalNode.ChainPorts.TryGetValue(edge.output.portName, out var chainPort) &&
@@ -939,6 +1092,33 @@ namespace Shizuku.Graph.Editor
                 OnGraphChanged?.Invoke();
 
             return graphViewChange;
+        }
+
+        private List<GraphElement> ExpandRemovalWithConnectedEdges(
+            IEnumerable<GraphElement> requestedElements)
+        {
+            var requested = requestedElements.Where(element => element != null).ToList();
+            var nodesToRemove = requested.OfType<ShizukuNodeView>().ToHashSet();
+            if (nodesToRemove.Count == 0)
+                return requested;
+
+            // GraphView 删除节点时不会保证把相连的 Edge 一并放进回调。
+            // 先处理可视边，既能清理序列化数据，也能避免画面留下幽灵线。
+            var connectedEdges = edges
+                .Where(edge => nodesToRemove.Contains(edge.input?.node as ShizukuNodeView)
+                               || nodesToRemove.Contains(edge.output?.node as ShizukuNodeView))
+                .Cast<GraphElement>();
+
+            return connectedEdges
+                .Concat(requested)
+                .Distinct()
+                .ToList();
+        }
+
+        private static void SetControlFlowEdgeVisualState(Edge edge, bool connected)
+        {
+            (edge?.input as ControlFlowPort)?.SetConnectedVisual(connected);
+            (edge?.output as ControlFlowPort)?.SetConnectedVisual(connected);
         }
 
         #endregion
@@ -1103,6 +1283,7 @@ namespace Shizuku.Graph.Editor
                                     {
                                         var edge = outputPort.ConnectTo(inputPort);
                                         AddElement(edge);
+                                        SetControlFlowEdgeVisualState(edge, true);
                                     }
                                 }
                             }

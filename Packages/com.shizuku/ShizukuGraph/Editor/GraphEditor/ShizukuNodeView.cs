@@ -57,6 +57,7 @@ namespace Shizuku.Graph.Editor
             _node = node;
             _graphAsset = graphAsset;
             title = node.Title;
+            AddToClassList("shizuku-node");
 
             // Root、事件入口/返回、函数入口/返回等结构节点具有唯一或配对语义，不能复制。
             if (!ShizukuGraphView.IsClipboardCopyableNode(node))
@@ -76,7 +77,7 @@ namespace Shizuku.Graph.Editor
                 var titleElement = this.Q("title");
                 if (titleElement != null)
                 {
-                    titleElement.style.backgroundColor = node.TitleBarColor;
+                    titleElement.style.backgroundColor = GetEditorTitleColor(node.TitleBarColor);
                 }
             }).ExecuteLater(0);
 
@@ -389,6 +390,7 @@ namespace Shizuku.Graph.Editor
                             port.GetType());
                         visualPort.portName = port.Name;
                         visualPort.AddToClassList("parameter-port");
+                        ApplyParameterPortTypeClass(visualPort, port.GetType());
 
                         if (string.IsNullOrWhiteSpace(descriptor.Tooltip))
                             SetPortTooltip(visualPort, port.GetType());
@@ -436,6 +438,8 @@ namespace Shizuku.Graph.Editor
                             var inputField = CreateInputFieldForPort(port);
                             if (inputField != null)
                             {
+                                inputField.AddToClassList("port-default-value");
+
                                 // 将输入字段存储在 userData 中，方便后续隐藏/显示
                                 inputPort.userData = inputField;
 
@@ -676,6 +680,8 @@ namespace Shizuku.Graph.Editor
             if (port == null || portType == null)
                 return;
 
+            ApplyParameterPortTypeClass(port, portType);
+
             // 获取实际的值类型
             string typeName = GetPortValueTypeName(portType);
             string tooltipText = $"类型: {typeName}";
@@ -731,6 +737,43 @@ namespace Shizuku.Graph.Editor
 
             // 7. 递归为所有子元素设置 tooltip，扩大触发范围
             SetTooltipRecursive(port, tooltipText);
+        }
+
+        private static Color GetEditorTitleColor(Color source)
+        {
+            var darkSurface = new Color(0.14f, 0.15f, 0.18f, 1f);
+            var result = Color.Lerp(darkSurface, source, 0.72f);
+            result.a = 1f;
+            return result;
+        }
+
+        private static void ApplyParameterPortTypeClass(Port port, Type portType)
+        {
+            if (port == null || portType == null)
+                return;
+
+            string className;
+            if (typeof(IntParameterEdgePort).IsAssignableFrom(portType))
+                className = "port-type-int";
+            else if (typeof(FloatParameterEdgePort).IsAssignableFrom(portType))
+                className = "port-type-float";
+            else if (typeof(BoolParameterEdgePort).IsAssignableFrom(portType))
+                className = "port-type-bool";
+            else if (typeof(StringParameterEdgePort).IsAssignableFrom(portType))
+                className = "port-type-string";
+            else if (typeof(Vector2ParameterEdgePort).IsAssignableFrom(portType)
+                     || typeof(Vector3ParameterEdgePort).IsAssignableFrom(portType))
+                className = "port-type-vector";
+            else if (typeof(ColorParameterEdgePort).IsAssignableFrom(portType))
+                className = "port-type-color";
+            else if (typeof(GameObjectParameterEdgePort).IsAssignableFrom(portType)
+                     || typeof(TransformParameterEdgePort).IsAssignableFrom(portType)
+                     || typeof(ObjectParameterEdgePort).IsAssignableFrom(portType))
+                className = "port-type-object";
+            else
+                className = "port-type-default";
+
+            port.AddToClassList(className);
         }
 
         /// <summary>

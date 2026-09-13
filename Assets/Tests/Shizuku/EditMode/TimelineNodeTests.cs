@@ -425,10 +425,7 @@ namespace Shizuku.Tests.EditMode
 
         private static ShizukuGraphBase GetRuntimeGraph(GraphRunner runner)
         {
-            var field = typeof(GraphRunner).GetField(
-                "_runtimeGraph",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            return field?.GetValue(runner) as ShizukuGraphBase;
+            return runner.RuntimeGraph;
         }
 
         private static void InvokePrivate(object target, string methodName)

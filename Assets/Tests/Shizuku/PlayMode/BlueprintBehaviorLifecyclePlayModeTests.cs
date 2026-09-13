@@ -10,6 +10,10 @@ namespace Shizuku.Tests.PlayMode
 {
     public class BlueprintLifecycleTestBehavior : BlueprintBehavior<BlueprintLifecycleTestBehavior>
     {
+        public void TriggerContextProbe()
+        {
+            TryExecuteBlueprintOverride(nameof(TriggerContextProbe));
+        }
     }
 
     [Serializable]
@@ -24,8 +28,70 @@ namespace Shizuku.Tests.PlayMode
         }
     }
 
+    [Serializable]
+    public sealed class BlueprintExecutionContextProbeNode : ShizukuRunnableNode
+    {
+        public ShizukuGraphBase CapturedGraph;
+
+        protected override void OnExecute()
+        {
+            CapturedGraph = ShizukuExecutionContext.Current?.GraphAsset;
+        }
+
+        protected override bool OnSelectNextNode(out string nextNodeGUID)
+        {
+            nextNodeGUID = null;
+            return false;
+        }
+    }
+
     public sealed class BlueprintBehaviorLifecyclePlayModeTests
     {
+        [UnityTest]
+        public IEnumerator BlueprintEvent_UsesRuntimeCloneInExecutionContext()
+        {
+            var source = ScriptableObject.CreateInstance<BlueprintLifecycleTestGraph>();
+            var host = new GameObject("BlueprintContextHost");
+            var previousContextState = ShizukuExecutionContext.Enabled;
+
+            try
+            {
+                ShizukuExecutionContext.Enabled = true;
+                var eventNode = new BlueprintEventNode
+                {
+                    EventName = nameof(BlueprintLifecycleTestBehavior.TriggerContextProbe)
+                };
+                var probe = new BlueprintExecutionContextProbeNode();
+                source.AddNode(eventNode);
+                source.AddNode(probe);
+                source.Init();
+                eventNode.ChainPorts["next"].NextNodeGuid = probe.GUID;
+                source.DisposeRuntime();
+
+                var behavior = host.AddComponent<BlueprintLifecycleTestBehavior>();
+                SetSourceBlueprint(behavior, source);
+                yield return null;
+
+                var runtime = (BlueprintLifecycleTestGraph)behavior.Blueprint;
+                var runtimeProbe = (BlueprintExecutionContextProbeNode)runtime.Guid2NodeMap[probe.GUID];
+                behavior.TriggerContextProbe();
+
+                Assert.That(runtime, Is.Not.SameAs(source));
+                Assert.That(runtime.InitializeBehaviorCount, Is.EqualTo(1));
+                Assert.That(source.InitializeBehaviorCount, Is.Zero,
+                    "Blueprint custom initialization must run on the runtime clone only.");
+                Assert.That(runtimeProbe.CapturedGraph, Is.SameAs(runtime));
+            }
+            finally
+            {
+                ShizukuExecutionContext.Enabled = previousContextState;
+                if (host != null)
+                    UnityEngine.Object.Destroy(host);
+                if (source != null)
+                    UnityEngine.Object.Destroy(source);
+            }
+        }
+
         [UnityTest]
         public IEnumerator TwoBehaviors_CloneSharedAssetAndDisposeRuntimeGraphsIndependently()
         {

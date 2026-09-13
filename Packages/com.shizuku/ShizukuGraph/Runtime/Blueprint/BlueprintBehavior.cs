@@ -28,10 +28,12 @@ namespace Shizuku.Graph
         [SerializeField]
         private ShizukuBluePrint<T> _blueprint;
 
-        [SerializeField, HideInInspector]
-        private ShizukuBluePrint<T> _runtimeBlueprint;
+        [NonSerialized]
+        private ShizukuGraphRuntime<ShizukuBluePrint<T>> _runtimeBlueprint;
 
-        public ShizukuBluePrint<T> Blueprint => _runtimeBlueprint != null ? _runtimeBlueprint : _blueprint;
+        public ShizukuBluePrint<T> Blueprint => _runtimeBlueprint?.Instance != null
+            ? _runtimeBlueprint.Instance
+            : _blueprint;
 
         #region 蓝图事件系统
 
@@ -72,10 +74,7 @@ namespace Shizuku.Graph
         {
             if (_blueprintEvents != null && _blueprintEvents.TryGetValue(methodName, out var handler))
             {
-                using (ShizukuExecutionContext.Begin(_blueprint, gameObject, typeof(T).Name))
-                {
-                    handler(args);
-                }
+                InvokeBlueprintHandler(handler, args);
                 return true;
             }
             return false;
@@ -90,11 +89,7 @@ namespace Shizuku.Graph
             result = default;
             if (_blueprintEvents != null && _blueprintEvents.TryGetValue(methodName, out var handler))
             {
-                object rawResult;
-                using (ShizukuExecutionContext.Begin(_blueprint, gameObject, typeof(T).Name))
-                {
-                    rawResult = handler(args);
-                }
+                var rawResult = InvokeBlueprintHandler(handler, args);
                 if (rawResult is TReturn typed)
                 {
                     result = typed;
@@ -102,6 +97,18 @@ namespace Shizuku.Graph
                 return true;
             }
             return false;
+        }
+
+        private object InvokeBlueprintHandler(Func<object[], object> handler, object[] args)
+        {
+            if (_runtimeBlueprint != null)
+                return _runtimeBlueprint.Invoke(_ => handler(args));
+
+            // 保留直接调用 InitializeBehavior 的兼容路径（主要用于自定义启动流程与测试）。
+            using (ShizukuExecutionContext.Begin(Blueprint, gameObject, typeof(T).Name))
+            {
+                return handler(args);
+            }
         }
 
         /// <summary>
@@ -154,12 +161,21 @@ namespace Shizuku.Graph
             // 初始化蓝图（蓝图会主动绑定到this）
             if (_blueprint != null)
             {
-                // 运行时克隆 SO，避免多个 Behavior 引用同一份蓝图资产导致状态共享
-                _runtimeBlueprint = Instantiate(_blueprint);
-                _runtimeBlueprint.name = $"{_blueprint.name}_{GetInstanceID()}";
-
-                // 强制转换：this 在运行时实际上是 T 类型（如 EnemyBehavior）
-                _runtimeBlueprint.InitializeBehavior((T)this);
+                try
+                {
+                    _runtimeBlueprint = ShizukuGraphRuntime<ShizukuBluePrint<T>>.Create(
+                        _blueprint,
+                        gameObject,
+                        initializeRuntime: graph => graph.InitializeBehavior((T)this),
+                        executionContextName: typeof(T).Name);
+                }
+                catch
+                {
+                    _blueprintEvents?.Clear();
+                    _propertyGetters?.Clear();
+                    _propertySetters?.Clear();
+                    throw;
+                }
             }
         }
 
@@ -168,13 +184,7 @@ namespace Shizuku.Graph
             // 每帧更新蓝图图表（执行 Root Node）
             // 设计理念：Root Node 可以包含每帧执行的逻辑
             // 事件驱动的逻辑使用 BlueprintEventNode
-            if (_runtimeBlueprint == null) return;
-
-            // 建立结构化错误上下文：Owner / Behavior / Asset，节点执行链由 ShizukuRunnableNode 自动 push/pop
-            using (ShizukuExecutionContext.Begin(_runtimeBlueprint, gameObject, typeof(T).Name))
-            {
-                _runtimeBlueprint.Update();
-            }
+            _runtimeBlueprint?.Tick();
         }
 
         protected virtual void OnDestroy()
@@ -185,15 +195,8 @@ namespace Shizuku.Graph
             _propertySetters?.Clear();
 
             // 销毁运行时克隆的蓝图 SO 实例
-            if (_runtimeBlueprint != null)
-            {
-                _runtimeBlueprint.DisposeRuntime();
-                if (Application.isPlaying)
-                    Destroy(_runtimeBlueprint);
-                else
-                    DestroyImmediate(_runtimeBlueprint);
-                _runtimeBlueprint = null;
-            }
+            _runtimeBlueprint?.Dispose();
+            _runtimeBlueprint = null;
         }
     }
 }

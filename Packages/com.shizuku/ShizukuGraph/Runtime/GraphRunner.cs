@@ -35,10 +35,11 @@ namespace Shizuku.Graph
         [SerializeField, HideInInspector]
         private System.Collections.Generic.List<GraphSceneVariableBinding> _sceneVariableBindings = new();
 
-        [SerializeField, HideInInspector]
-        private ShizukuGraphBase _runtimeGraph;
+        [System.NonSerialized]
+        private ShizukuGraphRuntime<ShizukuGraphBase> _runtime;
 
         public System.Collections.Generic.IReadOnlyList<GraphSceneVariableBinding> SceneVariableBindings => _sceneVariableBindings;
+        public ShizukuGraphBase RuntimeGraph => _runtime?.Instance;
 
         public bool TryGetSceneVariableBinding(string variableGuid, out UnityEngine.Object value)
         {
@@ -93,27 +94,26 @@ namespace Shizuku.Graph
 
         void Start()
         {
-            if (_runtimeGraph != null)
+            if (_runtime != null)
                 return;
 
             if (GraphAsset != null)
             {
-                // 运行时克隆 SO，避免多个 GraphRunner 引用同一份图资产导致状态共享
-                _runtimeGraph = Instantiate(GraphAsset);
-                _runtimeGraph.name = $"{GraphAsset.name}_{GetInstanceID()}";
-                _runtimeGraph.Init(gameObject);
-                ApplySceneVariableBindings();
+                _runtime = ShizukuGraphRuntime<ShizukuGraphBase>.Create(
+                    GraphAsset,
+                    gameObject,
+                    afterInitialize: ApplySceneVariableBindings);
             }
         }
 
-        private void ApplySceneVariableBindings()
+        private void ApplySceneVariableBindings(ShizukuGraphBase runtimeGraph)
         {
             foreach (var binding in _sceneVariableBindings)
             {
                 if (binding == null || binding.Value == null)
                     continue;
 
-                var variable = _runtimeGraph.GetVariableByGUID(binding.VariableGuid);
+                var variable = runtimeGraph.GetVariableByGUID(binding.VariableGuid);
                 if (variable == null)
                 {
                     Debug.LogWarning($"[GraphRunner] 场景变量绑定指向不存在的 GUID '{binding.VariableGuid}'。", this);
@@ -123,10 +123,10 @@ namespace Shizuku.Graph
                 switch (variable.Type)
                 {
                     case VariableType.GameObject when binding.Value is GameObject gameObjectValue:
-                        _runtimeGraph.SetVariableGameObject(variable.GUID, gameObjectValue);
+                        runtimeGraph.SetVariableGameObject(variable.GUID, gameObjectValue);
                         break;
                     case VariableType.Transform when binding.Value is Transform transformValue:
-                        _runtimeGraph.SetVariableTransform(variable.GUID, transformValue);
+                        runtimeGraph.SetVariableTransform(variable.GUID, transformValue);
                         break;
                     default:
                         Debug.LogWarning(
@@ -152,26 +152,13 @@ namespace Shizuku.Graph
 
         void Update()
         {
-            if (_runtimeGraph != null)
-            {
-                using (ShizukuExecutionContext.Begin(_runtimeGraph, gameObject))
-                {
-                    _runtimeGraph.Update();
-                }
-            }
+            _runtime?.Tick();
         }
 
         void OnDestroy()
         {
-            if (_runtimeGraph != null)
-            {
-                _runtimeGraph.DisposeRuntime();
-                if (Application.isPlaying)
-                    Destroy(_runtimeGraph);
-                else
-                    DestroyImmediate(_runtimeGraph);
-                _runtimeGraph = null;
-            }
+            _runtime?.Dispose();
+            _runtime = null;
         }
     }
 

@@ -197,16 +197,26 @@ namespace Shizuku.Graph
 
         public void Update()
         {
+            AdvanceRuntime(executeRoot: true);
+        }
+
+        /// <summary>
+        /// 推进运行时图一帧。Latent 节点始终会被推进，调用方可以独立控制本帧是否允许 Root 再次执行。
+        /// 该入口由 <see cref="ShizukuGraphRuntime{TGraph}"/> 统一驱动。
+        /// </summary>
+        internal void AdvanceRuntime(bool executeRoot)
+        {
     #if UNITY_EDITOR
             if (ShizukuDebugger.Enabled)
             {
-                DebugUpdate();
+                DebugUpdate(executeRoot);
                 return;
             }
     #endif
 
             var rootWasBlocked = TickLatentExecutions();
-            if (string.IsNullOrEmpty(RootNodeGUID) ||
+            if (!executeRoot ||
+                string.IsNullOrEmpty(RootNodeGUID) ||
                 rootWasBlocked ||
                 HasBlockingRootExecution())
             {

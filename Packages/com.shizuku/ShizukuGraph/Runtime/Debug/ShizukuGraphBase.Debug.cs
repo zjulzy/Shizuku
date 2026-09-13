@@ -13,7 +13,7 @@ namespace Shizuku.Graph
         /// <summary>
         /// Debug 模式下的每帧更新（由 Update 调用）
         /// </summary>
-        private void DebugUpdate()
+        private void DebugUpdate(bool executeRoot)
         {
             ShizukuDebugger.BeginFrame();
 
@@ -22,7 +22,8 @@ namespace Shizuku.Graph
                 return;
 
             var rootWasBlocked = TickLatentExecutions();
-            if (string.IsNullOrEmpty(RootNodeGUID) ||
+            if (!executeRoot ||
+                string.IsNullOrEmpty(RootNodeGUID) ||
                 rootWasBlocked ||
                 HasBlockingRootExecution())
             {

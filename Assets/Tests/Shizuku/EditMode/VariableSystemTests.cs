@@ -166,7 +166,7 @@ namespace Shizuku.Tests.EditMode
                     Is.False);
 
                 InvokePrivate(runner, "Start");
-                var runtimeGraph = GetPrivateField<ShizukuGraphBase>(runner, "_runtimeGraph");
+                var runtimeGraph = runner.RuntimeGraph;
 
                 Assert.That(runtimeGraph, Is.Not.Null);
                 Assert.That(

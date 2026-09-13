@@ -120,6 +120,20 @@ namespace Shizuku.Graph
             }
         }
 
+        /// <summary>
+        /// 只尝试执行一次 Root，不推进已有 Latent。运行入口用于 Enter/事件式触发时调用。
+        /// </summary>
+        internal ExecuteResult ExecuteRootOnce()
+        {
+            if (string.IsNullOrEmpty(RootNodeGUID) || HasBlockingRootExecution())
+                return ExecuteResult.Continue;
+
+            return _guid2NodeMap.TryGetValue(RootNodeGUID, out var rootNode) &&
+                   rootNode is ShizukuRootNode root
+                ? ExecuteRoot(root)
+                : ExecuteResult.Continue;
+        }
+
         private void CancelActiveLatentExecutions()
         {
             if (_activeLatentExecutions == null || _activeLatentExecutions.Count == 0)

@@ -60,7 +60,7 @@ namespace Shizuku.Tests.PlayMode
 
                 yield return null;
 
-                var runtimeGraph = GetPrivateField<ShizukuGraphBase>(runner, "_runtimeGraph");
+                var runtimeGraph = runner.RuntimeGraph;
                 Assert.That(runtimeGraph, Is.Not.Null);
                 var runtimeNode = (PlayTimelineNode)runtimeGraph.Guid2NodeMap[timelineNode.GUID];
                 var director = GetPrivateField<PlayableDirector>(runtimeNode, "_director");
@@ -140,7 +140,7 @@ namespace Shizuku.Tests.PlayMode
 
                 yield return null;
 
-                var runtimeGraph = GetPrivateField<ShizukuGraphBase>(runner, "_runtimeGraph");
+                var runtimeGraph = runner.RuntimeGraph;
                 var runtimeTimeline = (PlayTimelineNode)runtimeGraph.Guid2NodeMap[timelineNode.GUID];
                 var runtimeStarted = (TimelineControlFlowProbeNode)runtimeGraph.Guid2NodeMap[started.GUID];
                 var runtimeCompleted = (TimelineControlFlowProbeNode)runtimeGraph.Guid2NodeMap[completed.GUID];

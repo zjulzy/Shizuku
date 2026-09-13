@@ -164,6 +164,7 @@ namespace Shizuku.Tests.EditMode
 
             // Graph Editor 延迟到当前 SerializedProperty 事件结束后再安全地重建视图。
             yield return null;
+            FlushPendingNodeStructureRefresh(extension);
 
             Assert.That(EditorUtility.IsDirty(graph), Is.True,
                 "AssetReference 变化后必须将图资产标记为 dirty");
@@ -215,6 +216,23 @@ namespace Shizuku.Tests.EditMode
                 BindingFlags.Instance | BindingFlags.NonPublic);
             Assert.That(method, Is.Not.Null);
             method.Invoke(extension, new object[] { field, node });
+        }
+
+        private static void FlushPendingNodeStructureRefresh(BaseGraphEditorExtension extension)
+        {
+            var field = typeof(BaseGraphEditorExtension).GetField(
+                "_pendingNodeRefresh",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(field, Is.Not.Null);
+
+            var pendingRefresh = field.GetValue(extension) as EditorApplication.CallbackFunction;
+            if (pendingRefresh == null)
+                return;
+
+            // MCP 的 EditMode 测试运行器不保证在协程继续前派发 delayCall。
+            // 测试显式清空已排队的回调，既避免重复执行，也让视图断言保持确定性。
+            EditorApplication.delayCall -= pendingRefresh;
+            pendingRefresh.Invoke();
         }
 
         private static void SetPrivateField(object target, string fieldName, object value)

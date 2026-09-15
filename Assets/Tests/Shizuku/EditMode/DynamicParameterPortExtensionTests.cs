@@ -76,7 +76,7 @@ namespace Shizuku.Tests.EditMode
                     BindingFlags.Instance | BindingFlags.NonPublic);
                 Assert.That(createFieldEditor, Is.Not.Null);
 
-                var editor = createFieldEditor.Invoke(extension, new object[] { field, node }) as IntegerField;
+                var editor = createFieldEditor.Invoke(extension, new object[] { field, node }) as PropertyField;
                 Assert.That(editor, Is.Not.Null);
                 field.SetValue(node, 42);
                 InvokeNodeFieldChange(extension, field, node);

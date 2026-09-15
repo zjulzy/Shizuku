@@ -36,6 +36,9 @@ namespace Shizuku.Graph
         /// </summary>
         public string Description { get; set; }
 
+        /// <summary>Search aliases, without changing the menu path or serialized node identity.</summary>
+        public string Keywords { get; set; }
+
         /// <summary>
         /// 排序顺序
         /// </summary>

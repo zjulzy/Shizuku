@@ -10,16 +10,16 @@ namespace Shizuku.Graph
     [Serializable]
     public class BlueprintEventNode : ShizukuRootNode
     {
-        [SerializeField]
+        [SerializeField, HideInInspector]
         public string EventName = "OnEvent";
 
         /// <summary>
         /// 关联的返回节点 GUID（可选，有返回值的事件需要设置）
         /// </summary>
-        [SerializeField]
+        [SerializeField, HideInInspector]
         public string ReturnNodeGUID;
 
-        [SerializeField]
+        [SerializeField, HideInInspector]
         public List<EventParameter> EventParameters = new List<EventParameter>();
 
         public override string Title => $"Event: {EventName}";

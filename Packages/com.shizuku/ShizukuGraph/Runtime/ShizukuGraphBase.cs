@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Shizuku.Graph
@@ -8,6 +9,16 @@ namespace Shizuku.Graph
     [CreateAssetMenu(fileName = "ShizukuGraph", menuName = "Shizuku/Graph", order = 1)]
     public partial class ShizukuGraphBase : ScriptableObject, INodeContext
     {
+        /// <summary>
+        /// 当前 Shizuku 图资产序列化结构版本。
+        /// 该版本只在图容器格式发生不兼容变化时递增，与 Package 版本无关。
+        /// </summary>
+        public const int CurrentSchemaVersion = 1;
+
+        [SerializeField, HideInInspector]
+        private int _schemaVersion;
+        public int SchemaVersion => _schemaVersion;
+
         [SerializeField]
         public string GUID;
 
@@ -105,18 +116,24 @@ namespace Shizuku.Graph
             _runtimeOwner = runtimeOwner;
             _runtimeInitialized = true;
 
-            // 清理反序列化失败的 null 节点/边（[SerializeReference] 类型变更后会出现）
-            int removedNodes = _nodes.RemoveAll(n => n == null);
-            int removedEdges = _edges.RemoveAll(e => e == null);
-            if (removedNodes > 0 || removedEdges > 0)
+            // 缺失的 SerializeReference 类型会以 null 暴露，但 Unity 仍保留其原始序列化数据。
+            // 这里绝不能从列表中删除 null，否则资产之后保存时将失去恢复缺失类型的机会。
+            int missingNodes = _nodes.Count(node => node == null);
+            int missingEdges = _edges.Count(edge => edge == null);
+            if (missingNodes > 0 || missingEdges > 0)
             {
-                Debug.LogWarning($"[ShizukuGraph] 检测到 {removedNodes} 个无效节点和 {removedEdges} 条无效边已被清理（可能是类型变更导致反序列化失败）");
+                Debug.LogError(
+                    $"[ShizukuGraph] 检测到 {missingNodes} 个无法反序列化的节点和 {missingEdges} 条无法反序列化的边。" +
+                    "数据已保留；请恢复缺失类型或在编辑器中执行显式迁移。");
             }
 
             // 初始化主图节点
             _guid2NodeMap.Clear();
             foreach (var node in _nodes)
             {
+                if (node == null)
+                    continue;
+
                 _guid2NodeMap[node.GUID] = node;
                 node.Init(this);
             }
@@ -125,6 +142,9 @@ namespace Shizuku.Graph
             _guid2EdgeMap.Clear();
             foreach (var edge in _edges)
             {
+                if (edge == null)
+                    continue;
+
                 _guid2EdgeMap[edge.GUID] = edge;
                 edge.ConnectPorts(this);
             }
@@ -132,6 +152,9 @@ namespace Shizuku.Graph
             // 初始化函数子图
             foreach (var method in _methods)
             {
+                if (method == null)
+                    continue;
+
                 method.Init(this);
             }
 

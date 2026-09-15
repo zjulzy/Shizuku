@@ -39,6 +39,7 @@ namespace Shizuku.Graph.Editor
             _rootElement = rootElement;
 
             BuildUI();
+            Undo.undoRedoPerformed += RefreshAuthoringPanels;
 
             // 监听节点选择事件
             if (_graphView != null)
@@ -49,6 +50,7 @@ namespace Shizuku.Graph.Editor
 
         public void OnDisable()
         {
+            Undo.undoRedoPerformed -= RefreshAuthoringPanels;
             if (_pendingNodeRefresh != null)
             {
                 EditorApplication.delayCall -= _pendingNodeRefresh;
@@ -276,6 +278,13 @@ namespace Shizuku.Graph.Editor
             _rootElement.Add(_rightPanel);
         }
 
+        private void RefreshAuthoringPanels()
+        {
+            if (!_currentGraph) return;
+            RefreshVariablesPanel();
+            RefreshFunctionsPanel();
+        }
+
         private void RefreshVariablesPanel()
         {
             _variablesPanel.Clear();
@@ -368,6 +377,7 @@ namespace Shizuku.Graph.Editor
             };
             nameField.RegisterValueChangedCallback(evt =>
             {
+                Undo.RegisterCompleteObjectUndo(_currentGraph, "重命名变量");
                 var previousName = variable.Name;
                 if (_currentGraph.RenameVariable(variable.GUID, evt.newValue))
                 {
@@ -441,6 +451,7 @@ namespace Shizuku.Graph.Editor
                     };
                     intField.RegisterValueChangedCallback(evt =>
                     {
+                        Undo.RegisterCompleteObjectUndo(_currentGraph, "修改变量");
                         variable.IntValue = evt.newValue;
                         EditorUtility.SetDirty(_currentGraph);
                     });
@@ -454,6 +465,7 @@ namespace Shizuku.Graph.Editor
                     };
                     floatField.RegisterValueChangedCallback(evt =>
                     {
+                        Undo.RegisterCompleteObjectUndo(_currentGraph, "修改变量");
                         variable.FloatValue = evt.newValue;
                         EditorUtility.SetDirty(_currentGraph);
                     });
@@ -467,6 +479,7 @@ namespace Shizuku.Graph.Editor
                     };
                     boolField.RegisterValueChangedCallback(evt =>
                     {
+                        Undo.RegisterCompleteObjectUndo(_currentGraph, "修改变量");
                         variable.BoolValue = evt.newValue;
                         EditorUtility.SetDirty(_currentGraph);
                     });
@@ -481,6 +494,7 @@ namespace Shizuku.Graph.Editor
                     };
                     stringField.RegisterValueChangedCallback(evt =>
                     {
+                        Undo.RegisterCompleteObjectUndo(_currentGraph, "修改变量");
                         variable.StringValue = evt.newValue;
                         EditorUtility.SetDirty(_currentGraph);
                     });
@@ -494,6 +508,7 @@ namespace Shizuku.Graph.Editor
                     };
                     vector2Field.RegisterValueChangedCallback(evt =>
                     {
+                        Undo.RegisterCompleteObjectUndo(_currentGraph, "修改变量");
                         variable.Vector2Value = evt.newValue;
                         EditorUtility.SetDirty(_currentGraph);
                     });
@@ -507,6 +522,7 @@ namespace Shizuku.Graph.Editor
                     };
                     vector3Field.RegisterValueChangedCallback(evt =>
                     {
+                        Undo.RegisterCompleteObjectUndo(_currentGraph, "修改变量");
                         variable.Vector3Value = evt.newValue;
                         EditorUtility.SetDirty(_currentGraph);
                     });
@@ -522,6 +538,7 @@ namespace Shizuku.Graph.Editor
                     };
                     gameObjectField.RegisterValueChangedCallback(evt =>
                     {
+                        Undo.RegisterCompleteObjectUndo(_currentGraph, "修改变量");
                         variable.GameObjectValue = evt.newValue as GameObject;
                         EditorUtility.SetDirty(_currentGraph);
                     });
@@ -537,6 +554,7 @@ namespace Shizuku.Graph.Editor
                     };
                     transformField.RegisterValueChangedCallback(evt =>
                     {
+                        Undo.RegisterCompleteObjectUndo(_currentGraph, "修改变量");
                         variable.TransformValue = evt.newValue as Transform;
                         EditorUtility.SetDirty(_currentGraph);
                     });
@@ -550,6 +568,7 @@ namespace Shizuku.Graph.Editor
                     };
                     colorField.RegisterValueChangedCallback(evt =>
                     {
+                        Undo.RegisterCompleteObjectUndo(_currentGraph, "修改变量");
                         variable.ColorValue = evt.newValue;
                         EditorUtility.SetDirty(_currentGraph);
                     });
@@ -638,48 +657,16 @@ namespace Shizuku.Graph.Editor
             };
             container.Add(titleLabel);
 
-            // 节点类型
-            var typeLabel = new Label($"类型: {_selectedNode.GetType().Name}")
-            {
-                style =
-                {
-                    fontSize = 11,
-                    marginBottom = 5,
-                    color = new Color(0.7f, 0.7f, 0.7f)
-                }
-            };
-            container.Add(typeLabel);
-
-            // GUID
-            var guidLabel = new Label($"GUID: {_selectedNode.GUID}")
-            {
-                style =
-                {
-                    fontSize = 10,
-                    marginBottom = 10,
-                    color = new Color(0.6f, 0.6f, 0.6f)
-                }
-            };
-            container.Add(guidLabel);
-
-            // 分隔线
-            var separator = new VisualElement
-            {
-                style =
-                {
-                    height = 1,
-                    backgroundColor = new Color(0.3f, 0.3f, 0.3f),
-                    marginTop = 5,
-                    marginBottom = 10
-                }
-            };
-            container.Add(separator);
+            var debug = new Foldout { text = "调试信息", value = false };
+            debug.Add(new Label("类型: " + _selectedNode.GetType().Name));
+            debug.Add(new Label("GUID: " + _selectedNode.GUID));
+            container.Add(debug);
+            var description = _selectedNode.GetType().GetCustomAttribute<NodeMenuItemAttribute>()?.Description;
+            if (!string.IsNullOrEmpty(description)) container.Add(new HelpBox(description, HelpBoxMessageType.Info));
 
             // 使用反射显示所有序列化字段
             var nodeType = _selectedNode.GetType();
-            var fields = nodeType.GetFields(System.Reflection.BindingFlags.Public | 
-                                           System.Reflection.BindingFlags.NonPublic | 
-                                           System.Reflection.BindingFlags.Instance);
+            var fields = NodeAuthoringUtility.Fields(nodeType);
 
             foreach (var field in fields)
             {
@@ -714,157 +701,10 @@ namespace Shizuku.Graph.Editor
         /// </summary>
         private VisualElement CreateFieldEditor(System.Reflection.FieldInfo field, ShizukuNodeBase node)
         {
-            var fieldType = field.FieldType;
-            var fieldName = field.Name;
-            var fieldValue = field.GetValue(node);
-
-            // 特殊处理：如果是变量节点的 VariableGUID 字段，有一说一这里有点硬
-            if (fieldName == "VariableGUID" && fieldType == typeof(string))
-            {
+            if (field.Name == "VariableGUID" && field.FieldType == typeof(string))
                 return CreateVariableGUIDSelector(field, node);
-            }
-
-            // 处理常见类型
-            if (fieldType == typeof(string))
-            {
-                var textField = new TextField(ObjectNames.NicifyVariableName(fieldName))
-                {
-                    value = fieldValue as string ?? "",
-                    style = { marginBottom = 5 }
-                };
-                textField.RegisterValueChangedCallback(evt =>
-                {
-                    field.SetValue(node, evt.newValue);
-                    NotifyNodeSerializedFieldChanged(field, node);
-                });
-                return textField;
-            }
-            else if (fieldType == typeof(int))
-            {
-                var intField = new IntegerField(ObjectNames.NicifyVariableName(fieldName))
-                {
-                    value = (int)fieldValue,
-                    style = { marginBottom = 5 }
-                };
-                intField.RegisterValueChangedCallback(evt =>
-                {
-                    field.SetValue(node, evt.newValue);
-                    NotifyNodeSerializedFieldChanged(field, node);
-                });
-                return intField;
-            }
-            else if (fieldType == typeof(float))
-            {
-                var floatField = new FloatField(ObjectNames.NicifyVariableName(fieldName))
-                {
-                    value = (float)fieldValue,
-                    style = { marginBottom = 5 }
-                };
-                floatField.RegisterValueChangedCallback(evt =>
-                {
-                    field.SetValue(node, evt.newValue);
-                    NotifyNodeSerializedFieldChanged(field, node);
-                });
-                return floatField;
-            }
-            else if (fieldType == typeof(bool))
-            {
-                var boolField = new Toggle(ObjectNames.NicifyVariableName(fieldName))
-                {
-                    value = (bool)fieldValue,
-                    style = { marginBottom = 5 }
-                };
-                boolField.RegisterValueChangedCallback(evt =>
-                {
-                    field.SetValue(node, evt.newValue);
-                    NotifyNodeSerializedFieldChanged(field, node);
-                });
-                return boolField;
-            }
-            else if (fieldType.IsEnum)
-            {
-                var enumField = new EnumField(ObjectNames.NicifyVariableName(fieldName), (System.Enum)fieldValue)
-                {
-                    style = { marginBottom = 5 }
-                };
-                enumField.RegisterValueChangedCallback(evt =>
-                {
-                    field.SetValue(node, evt.newValue);
-                    NotifyNodeSerializedFieldChanged(field, node);
-                });
-                return enumField;
-            }
-            else if (typeof(UnityEngine.Object).IsAssignableFrom(fieldType))
-            {
-                var objectField = new ObjectField(ObjectNames.NicifyVariableName(fieldName))
-                {
-                    objectType = fieldType,
-                    value = fieldValue as UnityEngine.Object,
-                    allowSceneObjects = false,
-                    style = { marginBottom = 5 }
-                };
-                objectField.RegisterValueChangedCallback(evt =>
-                {
-                    field.SetValue(node, evt.newValue);
-                    NotifyNodeSerializedFieldChanged(field, node);
-                });
-                return objectField;
-            }
-            else if (AssetReferenceFieldEditorUtility.IsAssetReferenceType(fieldType))
-            {
-                var assetReferenceEditor = CreateAssetReferenceFieldEditor(field, node);
-                if (assetReferenceEditor != null)
-                    return assetReferenceEditor;
-            }
-
-            // 其他类型显示只读标签
-            var label = new Label($"{ObjectNames.NicifyVariableName(fieldName)}: {fieldValue?.ToString() ?? "null"}")
-            {
-                style =
-                {
-                    fontSize = 11,
-                    marginBottom = 5,
-                    color = new Color(0.7f, 0.7f, 0.7f)
-                }
-            };
-            return label;
-        }
-
-        /// <summary>
-        /// 使用 Unity 的 SerializedProperty 绘制 Addressables AssetReference 字段。
-        /// Shizuku 不直接依赖 Addressables；当消费项目安装 Addressables 后，
-        /// PropertyField 会自动复用其 CustomPropertyDrawer，提供拖拽、选择和类型校验。
-        /// </summary>
-        private VisualElement CreateAssetReferenceFieldEditor(FieldInfo field, ShizukuNodeBase node)
-        {
-            if (_currentGraph == null)
-                return null;
-
-            var serializedGraph = new SerializedObject(_currentGraph);
-            serializedGraph.UpdateIfRequiredOrScript();
-            var serializedField = AssetReferenceFieldEditorUtility.FindNodeFieldProperty(
-                serializedGraph,
-                node,
-                field);
-            if (serializedField == null)
-                return null;
-
-            var propertyField = new PropertyField(
-                serializedField,
-                ObjectNames.NicifyVariableName(field.Name))
-            {
-                style = { marginBottom = 5 },
-                // SerializedProperty 的有效期依赖 SerializedObject；由控件共同持有。
-                userData = serializedGraph
-            };
-
-            propertyField.BindProperty(serializedField);
-            propertyField.RegisterValueChangeCallback(_ =>
-            {
-                serializedGraph.ApplyModifiedProperties();
-                NotifyNodeSerializedFieldChanged(field, node);
-            });
-            return propertyField;
+            return NodeAuthoringUtility.CreateField(_currentGraph, node, field,
+                () => NotifyNodeSerializedFieldChanged(field, node));
         }
 
         private void NotifyNodeSerializedFieldChanged(FieldInfo field, ShizukuNodeBase node)
@@ -891,8 +731,8 @@ namespace Shizuku.Graph.Editor
                 EditorUtility.SetDirty(_currentGraph);
             }
 
-            if (shouldRefresh)
-                ScheduleNodeStructureRefresh();
+            if (shouldRefresh) ScheduleNodeStructureRefresh();
+            else _graphView?.RefreshAuthoringSummaries();
         }
 
         private void ScheduleNodeStructureRefresh()
@@ -970,6 +810,7 @@ namespace Shizuku.Graph.Editor
                 formatListItemCallback: choice => choice);
             popupField.RegisterValueChangedCallback(evt =>
             {
+                Undo.RegisterCompleteObjectUndo(_currentGraph, "选择变量");
                 if (evt.newValue == "<未选择>")
                 {
                     field.SetValue(node, "");
@@ -1042,6 +883,7 @@ namespace Shizuku.Graph.Editor
             method.AddNode(entryNode);
             method.EntryNodeGUID = entryNode.GUID;
 
+            Undo.RegisterCompleteObjectUndo(_currentGraph, "创建函数");
             _currentGraph.AddMethod(method);
             EditorUtility.SetDirty(_currentGraph);
 
@@ -1200,6 +1042,7 @@ namespace Shizuku.Graph.Editor
             var nameField = new TextField { value = method.Name, style = { flexGrow = 1 } };
             nameField.RegisterValueChangedCallback(evt =>
             {
+                Undo.RegisterCompleteObjectUndo(_currentGraph, "重命名函数");
                 if (!string.IsNullOrWhiteSpace(evt.newValue) && _currentGraph.RenameMethod(method.GUID, evt.newValue))
                 {
                     nameLabel.text = $"ƒ  {evt.newValue}";
@@ -1285,6 +1128,7 @@ namespace Shizuku.Graph.Editor
 
             var addBtn = new Button(() =>
             {
+                Undo.RegisterCompleteObjectUndo(_currentGraph, "修改函数");
                 parameters.Add(new MethodParameter($"param{parameters.Count}", VariableType.Float));
                 EditorUtility.SetDirty(_currentGraph);
                 OnMethodParametersChanged(method);
@@ -1346,6 +1190,7 @@ namespace Shizuku.Graph.Editor
             {
                 if (!string.IsNullOrWhiteSpace(evt.newValue))
                 {
+                    Undo.RegisterCompleteObjectUndo(_currentGraph, "修改函数");
                     param.Name = evt.newValue;
                     EditorUtility.SetDirty(_currentGraph);
                     OnMethodParametersChanged(method);
@@ -1358,6 +1203,7 @@ namespace Shizuku.Graph.Editor
             };
             typeField.RegisterValueChangedCallback(evt =>
             {
+                Undo.RegisterCompleteObjectUndo(_currentGraph, "修改函数");
                 param.Type = (VariableType)evt.newValue;
                 EditorUtility.SetDirty(_currentGraph);
                 OnMethodParametersChanged(method);
@@ -1365,6 +1211,7 @@ namespace Shizuku.Graph.Editor
 
             var deleteBtn = new Button(() =>
             {
+                Undo.RegisterCompleteObjectUndo(_currentGraph, "修改函数");
                 parameters.RemoveAt(index);
                 EditorUtility.SetDirty(_currentGraph);
                 OnMethodParametersChanged(method);
@@ -1472,6 +1319,7 @@ namespace Shizuku.Graph.Editor
                 $"确定要删除函数 \"{method.Name}\" 吗？\n函数内的所有节点和边都将被删除。",
                 "删除", "取消"))
             {
+                Undo.RegisterCompleteObjectUndo(_currentGraph, "修改函数");
                 _currentGraph.RemoveMethod(method.GUID);
                 EditorUtility.SetDirty(_currentGraph);
                 RefreshFunctionsPanel();

@@ -15,6 +15,8 @@ namespace Shizuku.Graph.Editor
     using Shizuku.Core;
     public class ShizukuNodeView : Node
     {
+        private Rect _authoringPosition;
+        internal Rect AuthoringPosition => _authoringPosition;
         private ShizukuNodeBase _node;
         private ShizukuGraphBase _graphAsset;
 
@@ -52,11 +54,19 @@ namespace Shizuku.Graph.Editor
 
         public ShizukuNodeBase RuntimeNode => _node;
 
+        public override Port InstantiatePort(Orientation orientation, Direction direction, Port.Capacity capacity, System.Type type) =>
+            new AuthoringPort(orientation, direction, capacity, type);
+
         public ShizukuNodeView(ShizukuNodeBase node, ShizukuGraphBase graphAsset = null)
         {
             _node = node;
             _graphAsset = graphAsset;
             title = node.Title;
+            RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                foreach (var port in inputContainer.Children().OfType<Port>()) UpdateInputSource(port);
+                RefreshAuthoringSummary();
+            });
             AddToClassList("shizuku-node");
 
             // Root、事件入口/返回、函数入口/返回等结构节点具有唯一或配对语义，不能复制。
@@ -423,6 +433,7 @@ namespace Shizuku.Graph.Editor
 
                             // 添加数据类型 tooltip
                             SetPortTooltip(outputPort, field.FieldType);
+                            ApplyFieldPresentation(outputPort, field);
 
                             outputContainer.Add(outputPort);
                         }
@@ -434,6 +445,7 @@ namespace Shizuku.Graph.Editor
 
                             // 添加数据类型 tooltip
                             SetPortTooltip(inputPort, field.FieldType);
+                            ApplyFieldPresentation(inputPort, field);
 
                             var inputField = CreateInputFieldForPort(port);
                             if (inputField != null)
@@ -462,189 +474,31 @@ namespace Shizuku.Graph.Editor
             #endregion
 
 
+            foreach (var port in inputContainer.Children().OfType<Port>().Concat(outputContainer.Children().OfType<Port>()))
+            {
+                var captured = port;
+                port.AddManipulator(new ContextualMenuManipulator(evt =>
+                {
+                    var mousePosition = evt.mousePosition;
+                    evt.menu.AppendAction("创建并连接节点", _ =>
+                    {
+                        var view = GetFirstAncestorOfType<ShizukuGraphView>();
+                        view?.OpenAuthoringSearch(_node.PositionAndSize.xy + new Unity.Mathematics.float2(300, 0),
+                            view.PanelToScreen(mousePosition), captured);
+                    });
+                }));
+                if (port.direction == Direction.Input) UpdateInputSource(port);
+            }
+            RefreshAuthoringSummary();
             RefreshExpandedState();
             RefreshPorts();
         }
 
         private VisualElement CreateInputFieldForPort(ParameterEdgePort port)
         {
-            // 根据端口类型创建对应的输入控件
-            switch (port)
-            {
-                case IntParameterEdgePort intPort:
-                {
-                    var intField = new IntegerField()
-                    {
-                        value = intPort.DefaultValue
-                    };
-                    intField.style.minWidth = 30;
-                    intField.RegisterValueChangedCallback(evt =>
-                    {
-                        intPort.DefaultValue = evt.newValue;
-                        if (_graphAsset != null)
-                        {
-                            EditorUtility.SetDirty(_graphAsset);
-                        }
-                    });
-                    return intField;
-                }
-
-                case FloatParameterEdgePort floatPort:
-                {
-                    var floatField = new FloatField()
-                    {
-                        value = floatPort.DefaultValue
-                    };
-                    floatField.style.minWidth = 30;
-                    floatField.RegisterValueChangedCallback(evt =>
-                    {
-                        floatPort.DefaultValue = evt.newValue;
-                        if (_graphAsset != null)
-                        {
-                            EditorUtility.SetDirty(_graphAsset);
-                        }
-                    });
-                    return floatField;
-                }
-
-                case BoolParameterEdgePort boolPort:
-                {
-                    var boolField = new Toggle()
-                    {
-                        value = boolPort.DefaultValue
-                    };
-                    boolField.style.minWidth = 10;
-                    boolField.RegisterValueChangedCallback(evt =>
-                    {
-                        boolPort.DefaultValue = evt.newValue;
-                        if (_graphAsset != null)
-                        {
-                            EditorUtility.SetDirty(_graphAsset);
-                        }
-                    });
-                    return boolField;
-                }
-
-                case StringParameterEdgePort stringPort:
-                {
-                    var stringField = new TextField()
-                    {
-                        value = stringPort.DefaultValue
-                    };
-                    stringField.style.minWidth = 30;
-                    stringField.RegisterValueChangedCallback(evt =>
-                    {
-                        stringPort.DefaultValue = evt.newValue;
-                        if (_graphAsset != null)
-                        {
-                            EditorUtility.SetDirty(_graphAsset);
-                        }
-                    });
-                    return stringField;
-                }
-
-                case Vector2ParameterEdgePort vector2Port:
-                {
-                    var vector2Field = new Vector2Field()
-                    {
-                        value = vector2Port.DefaultValue
-                    };
-                    vector2Field.style.minWidth = 80;
-                    vector2Field.RegisterValueChangedCallback(evt =>
-                    {
-                        vector2Port.DefaultValue = evt.newValue;
-                        if (_graphAsset != null)
-                        {
-                            EditorUtility.SetDirty(_graphAsset);
-                        }
-                    });
-                    return vector2Field;
-                }
-
-                case Vector3ParameterEdgePort vector3Port:
-                {
-                    var vector3Field = new Vector3Field()
-                    {
-                        value = vector3Port.DefaultValue
-                    };
-                    vector3Field.style.minWidth = 100;
-                    vector3Field.RegisterValueChangedCallback(evt =>
-                    {
-                        vector3Port.DefaultValue = evt.newValue;
-                        if (_graphAsset != null)
-                        {
-                            EditorUtility.SetDirty(_graphAsset);
-                        }
-                    });
-                    return vector3Field;
-                }
-
-                case GameObjectParameterEdgePort gameObjectPort:
-                {
-                    var objectField = new ObjectField()
-                    {
-                        objectType = typeof(GameObject),
-                        value = gameObjectPort.DefaultValue,
-                        allowSceneObjects = false
-                    };
-                    objectField.style.minWidth = 80;
-                    objectField.RegisterValueChangedCallback(evt =>
-                    {
-                        gameObjectPort.DefaultValue = evt.newValue as GameObject;
-                        if (_graphAsset != null)
-                        {
-                            EditorUtility.SetDirty(_graphAsset);
-                        }
-                    });
-                    return objectField;
-                }
-
-                case TransformParameterEdgePort transformPort:
-                {
-                    var objectField = new ObjectField()
-                    {
-                        objectType = typeof(Transform),
-                        value = transformPort.DefaultValue,
-                        allowSceneObjects = false
-                    };
-                    objectField.style.minWidth = 80;
-                    objectField.RegisterValueChangedCallback(evt =>
-                    {
-                        transformPort.DefaultValue = evt.newValue as Transform;
-                        if (_graphAsset != null)
-                        {
-                            EditorUtility.SetDirty(_graphAsset);
-                        }
-                    });
-                    return objectField;
-                }
-
-                case ColorParameterEdgePort colorPort:
-                {
-                    var colorField = new ColorField()
-                    {
-                        value = colorPort.DefaultValue
-                    };
-                    colorField.style.minWidth = 50;
-                    colorField.RegisterValueChangedCallback(evt =>
-                    {
-                        colorPort.DefaultValue = evt.newValue;
-                        if (_graphAsset != null)
-                        {
-                            EditorUtility.SetDirty(_graphAsset);
-                        }
-                    });
-                    return colorField;
-                }
-
-                default:
-                    return null;
-            }
+            return NodeAuthoringUtility.CreateDefaultValue(_graphAsset, port, RefreshAuthoringSummary);
         }
 
-        /// <summary>
-        /// 更新输入字段的可见性（根据端口是否有连接）
-        /// </summary>
         private void UpdateInputFieldVisibility(Port inputPort, bool isConnected)
         {
             if (inputPort == null || inputPort.userData == null)
@@ -668,6 +522,8 @@ namespace Shizuku.Graph.Editor
             if (port != null && port.direction == Direction.Input)
             {
                 UpdateInputFieldVisibility(port, isConnected);
+                UpdateInputSource(port);
+                RefreshAuthoringSummary();
             }
         }
 
@@ -853,10 +709,75 @@ namespace Shizuku.Graph.Editor
             return type.Name;
         }
 
+        private void UpdateInputSource(Port port)
+        {
+            port.Q<Button>("input-source")?.RemoveFromHierarchy();
+            var view = GetFirstAncestorOfType<ShizukuGraphView>();
+            var edges = view?.AuthoringEdges ?? _graphAsset?.Edges;
+            var edge = edges?.FirstOrDefault(e => e.InputNodeGuid == _node.GUID && e.InputPortName == port.portName);
+            if (edge == null) return;
+            var context = view?.CurrentNodeContext;
+            var source = context?.Guid2NodeMap.TryGetValue(edge.OutputNodeGuid, out var found) == true ? found :
+                _graphAsset?.Nodes.FirstOrDefault(n => n.GUID == edge.OutputNodeGuid);
+            var button = new Button(() => GetFirstAncestorOfType<ShizukuGraphView>()?.FocusAuthoringNode(edge.OutputNodeGuid))
+            {
+                name = "input-source", text = "← " + (source?.Title ?? "来源节点") + "." + edge.OutputPortName,
+                tooltip = "点击定位输入来源；断开连接后恢复默认值"
+            };
+            button.style.fontSize = 10;
+            port.contentContainer.Add(button);
+        }
+
+        private Label _authoringSummary;
+        private Label _authoringWarnings;
+        private void ApplyFieldPresentation(Port port, FieldInfo field)
+        {
+            // portName remains the stable serialized key; labels are presentation only.
+            var metadata = field.GetCustomAttribute<NodeFieldAttribute>();
+            if (metadata != null)
+            {
+                var label = port.Q<Label>("type") ?? port.Q<Label>("connector-text");
+                if (label != null)
+                {
+                    // Unity Port.portName reads this label, so never overwrite its text.
+                    var caption = new Label(NodeAuthoringUtility.Label(field)) { name = "authoring-port-label", pickingMode = PickingMode.Ignore };
+                    caption.style.marginLeft = caption.style.marginRight = 4;
+                    var parent = label.parent;
+                    parent.Insert(parent.IndexOf(label), caption);
+                    label.style.display = DisplayStyle.None;
+                }
+            }
+            var help = NodeAuthoringUtility.Tooltip(field);
+            if (!string.IsNullOrEmpty(help)) SetTooltipRecursive(port, port.tooltip + "\n" + help);
+        }
+
+        internal void RefreshAuthoringSummary()
+        {
+            if (_authoringSummary == null)
+            {
+                _authoringSummary = new Label { name = "node-summary" };
+                _authoringSummary.style.whiteSpace = WhiteSpace.Normal;
+                _authoringSummary.style.maxWidth = 280;
+                _authoringSummary.style.marginLeft = 8;
+                _authoringSummary.style.marginRight = 8;
+                extensionContainer.Add(_authoringSummary);
+                _authoringWarnings = new Label { name = "node-warnings" };
+                _authoringWarnings.style.whiteSpace = WhiteSpace.Normal;
+                _authoringWarnings.style.maxWidth = 280;
+                _authoringWarnings.style.color = new Color(1f, .72f, .3f);
+                extensionContainer.Add(_authoringWarnings);
+            }
+            _authoringSummary.text = NodeAuthoringUtility.Summary(_node);
+            _authoringSummary.style.display = string.IsNullOrEmpty(_authoringSummary.text) ? DisplayStyle.None : DisplayStyle.Flex;
+            var edges = GetFirstAncestorOfType<ShizukuGraphView>()?.AuthoringEdges ?? _graphAsset?.Edges;
+            _authoringWarnings.text = string.Join("\n", NodeAuthoringUtility.Validate(_node, edges ?? new List<ParameterEdge>()));
+            _authoringWarnings.style.display = string.IsNullOrEmpty(_authoringWarnings.text) ? DisplayStyle.None : DisplayStyle.Flex;
+        }
+
         public override void SetPosition(Rect newPos)
         {
+            _authoringPosition = newPos;
             base.SetPosition(newPos);
-            _node.PositionAndSize = new float4(newPos.x, newPos.y, newPos.width, newPos.height);
         }
     }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Shizuku.Graph
@@ -129,13 +130,23 @@ namespace Shizuku.Graph
         {
             _rootGraph = parentGraph;
 
-            // 清理反序列化失败的 null 节点/边
-            _nodes.RemoveAll(n => n == null);
-            _edges.RemoveAll(e => e == null);
+            // 不删除缺失 SerializeReference 类型留下的 null。
+            // Unity 会保留其原始序列化数据，恢复类型后仍可重新反序列化。
+            int missingNodes = _nodes.Count(node => node == null);
+            int missingEdges = _edges.Count(edge => edge == null);
+            if (missingNodes > 0 || missingEdges > 0)
+            {
+                Debug.LogError(
+                    $"[ShizukuGraph] 方法 '{Name}' 包含 {missingNodes} 个无法反序列化的节点和 " +
+                    $"{missingEdges} 条无法反序列化的边。数据已保留。");
+            }
 
             _guid2NodeMap.Clear();
             foreach (var node in _nodes)
             {
+                if (node == null)
+                    continue;
+
                 _guid2NodeMap[node.GUID] = node;
                 node.Init(this); // 传方法自身作为上下文
             }
@@ -143,6 +154,9 @@ namespace Shizuku.Graph
             _guid2EdgeMap.Clear();
             foreach (var edge in _edges)
             {
+                if (edge == null)
+                    continue;
+
                 _guid2EdgeMap[edge.GUID] = edge;
                 ConnectEdge(edge);
             }

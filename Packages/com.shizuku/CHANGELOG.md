@@ -2,6 +2,26 @@
 
 ## Unreleased
 
+### Added
+
+- Purpose/keyword search with recent nodes and compatible-port filtering, including create-and-connect from an empty-space port drop
+- `NodeField` metadata for labels, units, summaries and required-field checks; node descriptions and field tooltips in the Inspector
+- Input-source navigation, inline configuration warnings and a current-graph configuration check action
+- Graph asset schema versioning, ordered automatic migration and detailed missing managed-reference diagnostics
+
+### Changed
+
+- Serialized node fields and input defaults use native Unity property editors, including inherited private fields and custom drawers
+- Graph Editor and MCP graph mutations share a stateless operation layer; Unity Undo remains the only edit-history stack
+- Undo/Redo covers node configuration, dynamic-port callback side effects, graph edits, variables and methods; open views refresh after restoration
+- Generated identifiers and structural port collections are hidden from normal configuration; node identity remains available in read-only debug information
+- Menu paths, serialized field names and port connection keys remain stable
+- Unversioned v0.3.0-v0.8.0 graph assets migrate to schema version 1 when opened, then save and reimport automatically
+
+### Fixed
+
+- Runtime initialization no longer removes unresolved `SerializeReference` entries, preserving their serialized data for type recovery or explicit migration
+
 ## [0.8.0] - 2026-09-13
 
 ### Added

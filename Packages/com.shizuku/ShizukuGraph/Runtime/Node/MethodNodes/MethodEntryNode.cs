@@ -15,13 +15,13 @@ namespace Shizuku.Graph
         /// <summary>
         /// 所属函数的 GUID
         /// </summary>
-        [SerializeField] public string MethodGUID;
+        [SerializeField, HideInInspector] public string MethodGUID;
 
         /// <summary>
         /// 动态输出端口列表（对应函数的输入参数）
         /// 调用者传入的值通过这些端口流出给函数内部节点使用
         /// </summary>
-        [SerializeField]
+        [SerializeField, HideInInspector]
         public List<MethodPort> OutputPorts = new List<MethodPort>();
 
         public override string Title => "▶ 函数入口";

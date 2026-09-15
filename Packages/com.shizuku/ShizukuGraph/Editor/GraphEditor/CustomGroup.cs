@@ -17,6 +17,8 @@ namespace Shizuku.Graph.Editor
 
         // 关联的数据对象，用于序列化
         public GroupData Data { get; private set; }
+        private Rect _authoringPosition;
+        internal Rect AuthoringPosition => _authoringPosition;
 
         static CustomGroup()
         {
@@ -49,6 +51,7 @@ namespace Shizuku.Graph.Editor
 
             // 设置标题
             title = data.Title;
+            RegisterCallback<FocusOutEvent>(_ => schedule.Execute(UpdateData));
 
         }
 
@@ -57,15 +60,23 @@ namespace Shizuku.Graph.Editor
         {
             if (Data != null)
             {
-                var pos = GetPosition();
+                var pos = AuthoringPosition;
                 var previous = Data.PositionAndSize;
-                Data.PositionAndSize = new Unity.Mathematics.float4(
+                var nextPosition = new Unity.Mathematics.float4(
                     IsFinite(pos.x) ? pos.x : previous.x,
                     IsFinite(pos.y) ? pos.y : previous.y,
                     IsFinite(pos.width) ? pos.width : previous.z,
                     IsFinite(pos.height) ? pos.height : previous.w);
-                Data.Title = title;
+                if (nextPosition.Equals(previous) && Data.Title == title) return;
+                this.GetFirstAncestorOfType<ShizukuGraphView>()
+                    ?.UpdateAuthoringGroup(Data, title, nextPosition);
             }
+        }
+
+        public override void SetPosition(Rect newPos)
+        {
+            _authoringPosition = newPos;
+            base.SetPosition(newPos);
         }
 
         private static bool IsFinite(float value)

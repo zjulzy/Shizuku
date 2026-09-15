@@ -21,6 +21,9 @@ namespace Shizuku.Graph.Editor
 
         private VisualElement _contentContainer;
         private List<IGraphEditorExtension> _availableExtensions = new List<IGraphEditorExtension>();
+        private VisualElement _compatibilityPanel;
+        private Label _compatibilityDetailsLabel;
+        private string _compatibilityDetails = string.Empty;
 
         // ---- 面包屑导航 ----
         private VisualElement _breadcrumbBar;
@@ -54,8 +57,16 @@ namespace Shizuku.Graph.Editor
                 if (window == null || window._currentGraph != graph)
                     continue;
 
-                window._graphView?.RefreshCurrentView();
-                window.RefreshExtensions();
+                if (window._graphView?.RuntimeGraph == graph)
+                {
+                    window._graphView.RefreshCurrentView();
+                    window.RefreshExtensions();
+                }
+                else
+                {
+                    window.TryLoadGraph(graph);
+                }
+
                 window.Repaint();
             }
         }
@@ -68,8 +79,7 @@ namespace Shizuku.Graph.Editor
             // 如果之前有打开的图（例如从 Play 模式返回时），重新加载它
             if (_currentGraph != null)
             {
-                _graphView.LoadFromAsset(_currentGraph);
-                LoadExtensions(_currentGraph);
+                TryLoadGraph(_currentGraph);
             }
 
             // 注册编辑器更新回调，用于刷新调试可视化
@@ -117,6 +127,7 @@ namespace Shizuku.Graph.Editor
             toolbar.Add(createNodeButton);
             toolbar.Add(refreshButton);
             toolbar.Add(frameAllButton);
+            toolbar.Add(new Button(() => _graphView?.ValidateAuthoringGraph()) { text = "检查配置", tooltip = "检查当前图的必填参数、数值范围和失效连线" });
             rootVisualElement.Add(toolbar);
 
             // 调试工具栏
@@ -143,11 +154,126 @@ namespace Shizuku.Graph.Editor
             _graphView.OnGraphChanged += OnGraphChanged;
             _contentContainer.Add(_graphView);
 
+            BuildCompatibilityPanel();
+
             // 调试信息面板（右侧，默认隐藏）
             BuildDebugInfoPanel();
 
             // 初始化调试 UI 状态
             RefreshDebugUIState();
+        }
+
+        private void BuildCompatibilityPanel()
+        {
+            _compatibilityPanel = new VisualElement
+            {
+                style =
+                {
+                    display = DisplayStyle.None,
+                    flexGrow = 1,
+                    paddingLeft = 24,
+                    paddingRight = 24,
+                    paddingTop = 20,
+                    paddingBottom = 20,
+                    backgroundColor = new Color(0.12f, 0.12f, 0.14f, 1f)
+                }
+            };
+
+            _compatibilityPanel.Add(new Label("无法安全打开图资产")
+            {
+                style =
+                {
+                    fontSize = 18,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    color = new Color(1f, 0.55f, 0.35f),
+                    marginBottom = 10
+                }
+            });
+
+            var scrollView = new ScrollView
+            {
+                style =
+                {
+                    flexGrow = 1,
+                    marginBottom = 12
+                }
+            };
+            _compatibilityDetailsLabel = new Label
+            {
+                selection = { isSelectable = true },
+                style =
+                {
+                    whiteSpace = WhiteSpace.Normal,
+                    color = new Color(0.88f, 0.88f, 0.9f),
+                    fontSize = 12
+                }
+            };
+            scrollView.Add(_compatibilityDetailsLabel);
+            _compatibilityPanel.Add(scrollView);
+
+            var actions = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row
+                }
+            };
+            actions.Add(new Button(() =>
+            {
+                if (_currentGraph != null)
+                    TryLoadGraph(_currentGraph);
+            })
+            {
+                text = "重新检查并打开"
+            });
+            actions.Add(new Button(() => GUIUtility.systemCopyBuffer = _compatibilityDetails)
+            {
+                text = "复制诊断"
+            });
+            _compatibilityPanel.Add(actions);
+            _contentContainer.Add(_compatibilityPanel);
+        }
+
+        private bool TryLoadGraph(ShizukuGraphBase graph)
+        {
+            if (graph == null || _graphView == null)
+                return false;
+
+            UnloadExtensions();
+            try
+            {
+                var compatibility = _graphView.LoadFromAsset(graph);
+                _currentGraph = compatibility.Graph;
+                HideCompatibilityIssue();
+                LoadExtensions(_currentGraph);
+                return true;
+            }
+            catch (GraphAssetCompatibilityException exception)
+            {
+                _currentGraph = graph;
+                ShowCompatibilityIssue(exception.Report);
+                return false;
+            }
+        }
+
+        private void ShowCompatibilityIssue(GraphAssetCompatibilityReport report)
+        {
+            _compatibilityDetails = report?.BuildDetailedMessage() ?? "未知的图资产兼容性错误。";
+            if (_compatibilityDetailsLabel != null)
+                _compatibilityDetailsLabel.text = _compatibilityDetails;
+            if (_compatibilityPanel != null)
+                _compatibilityPanel.style.display = DisplayStyle.Flex;
+            if (_graphView != null)
+                _graphView.style.display = DisplayStyle.None;
+        }
+
+        private void HideCompatibilityIssue()
+        {
+            _compatibilityDetails = string.Empty;
+            if (_compatibilityPanel != null)
+                _compatibilityPanel.style.display = DisplayStyle.None;
+            if (_graphView != null)
+                _graphView.style.display = DisplayStyle.Flex;
         }
 
         #region 面包屑导航
@@ -800,8 +926,7 @@ namespace Shizuku.Graph.Editor
                 window.titleContent = new GUIContent($"Shizuku Graph - {graphAsset.name}");
 
                 window._currentGraph = graphAsset;
-                window._graphView.LoadFromAsset(graphAsset);
-                window.LoadExtensions(graphAsset);
+                window.TryLoadGraph(graphAsset);
                 window.Show();
                 return true;
             }

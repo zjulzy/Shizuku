@@ -17,25 +17,25 @@ namespace Shizuku.Graph
         /// <summary>
         /// 目标函数的 GUID
         /// </summary>
-        [SerializeField] public string TargetMethodGUID;
+        [SerializeField, HideInInspector] public string TargetMethodGUID;
 
         /// <summary>
         /// 缓存的函数名称（用于显示 Title，避免每帧查找）
         /// </summary>
-        [SerializeField] public string TargetMethodName;
+        [SerializeField, HideInInspector] public string TargetMethodName;
 
         /// <summary>
         /// 动态输入端口列表（对应函数的输入参数）
         /// 调用者通过这些端口传入参数值
         /// </summary>
-        [SerializeField]
+        [SerializeField, HideInInspector]
         public List<MethodPort> DynamicInputPorts = new List<MethodPort>();
 
         /// <summary>
         /// 动态输出端口列表（对应函数的输出参数/返回值）
         /// 函数执行后的返回值从这些端口流出
         /// </summary>
-        [SerializeField]
+        [SerializeField, HideInInspector]
         public List<MethodPort> DynamicOutputPorts = new List<MethodPort>();
 
         [SerializeField]

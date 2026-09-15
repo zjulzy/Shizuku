@@ -143,18 +143,31 @@ namespace Shizuku.Graph.Editor
                 var pasteOrigin = GetPasteOrigin(operationName, data, sourceOrigin);
 
                 ClearSelection();
+                var pastedNodes = new List<(ShizukuNodeBase Node, Rect Rect)>();
+                var operations = new List<GraphEditOperation>();
 
                 foreach (var node in nodes)
                 {
                     var relativePosition = new Vector2(
                         node.PositionAndSize.x - sourceOrigin.x,
                         node.PositionAndSize.y - sourceOrigin.y);
-                    AddPastedNode(node, pasteOrigin + relativePosition);
+                    var position = pasteOrigin + relativePosition;
+                    node.GUID = Guid.NewGuid().ToString();
+                    ClearNodeConnections(node);
+
+                    var width = node.PositionAndSize.z > 0f ? node.PositionAndSize.z : 200f;
+                    var height = node.PositionAndSize.w > 0f ? node.PositionAndSize.w : 100f;
+                    var rect = new Rect(position, new Vector2(width, height));
+                    operations.Add(new CreateNodeOperation(node, ToFloat4(rect), assignRootIfEmpty: false));
+                    pastedNodes.Add((node, rect));
                 }
+
+                ExecuteGraphEdits("粘贴节点", operations);
+                foreach (var pasted in pastedNodes)
+                    AddNodeView(pasted.Node, pasted.Rect, select: true);
 
                 // 节点现已由图数据持有，避免临时容器继续保留它们。
                 container.Nodes.Clear();
-                EditorUtility.SetDirty(_runtimeGraph);
                 OnGraphChanged?.Invoke();
             }
             catch (Exception exception)
@@ -165,26 +178,6 @@ namespace Shizuku.Graph.Editor
             {
                 UnityEngine.Object.DestroyImmediate(container);
             }
-        }
-
-        private void AddPastedNode(ShizukuNodeBase node, Vector2 position)
-        {
-            node.GUID = Guid.NewGuid().ToString();
-            ClearNodeConnections(node);
-
-            var width = node.PositionAndSize.z > 0f ? node.PositionAndSize.z : 200f;
-            var height = node.PositionAndSize.w > 0f ? node.PositionAndSize.w : 100f;
-            node.PositionAndSize = new float4(position.x, position.y, width, height);
-
-            CurrentNodes.Add(node);
-            InitializeNodeForCurrentContext(node);
-
-            var nodeView = new ShizukuNodeView(node, _runtimeGraph);
-            nodeView.InitPort();
-            nodeView.SetPosition(new Rect(position, new Vector2(width, height)));
-            _guidToNodeViewMap[node.GUID] = nodeView;
-            AddElement(nodeView);
-            AddToSelection(nodeView);
         }
 
         private Vector2 GetPasteOrigin(string operationName, string data, Vector2 sourceOrigin)

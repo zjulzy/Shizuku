@@ -140,6 +140,7 @@ namespace Shizuku.Graph.Editor
 
             // 创建变量
             var newVariable = new GraphVariable(normalizedName, _variableType);
+            Undo.RegisterCompleteObjectUndo(_targetGraph, "创建变量");
             if (!_targetGraph.AddVariable(newVariable))
             {
                 EditorUtility.DisplayDialog("错误", "变量创建失败，请检查名称或 GUID。", "确定");

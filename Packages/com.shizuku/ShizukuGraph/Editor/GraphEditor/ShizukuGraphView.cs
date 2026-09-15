@@ -16,6 +16,7 @@ namespace Shizuku.Graph.Editor
     {
         private Vector2 _localMousePosition;
         private ShizukuGraphBase _runtimeGraph;
+        internal ShizukuGraphBase RuntimeGraph => _runtimeGraph;
 
         /// <summary>
         /// 当前正在编辑的函数（null 表示编辑主图）
@@ -79,11 +80,13 @@ namespace Shizuku.Graph.Editor
 
             // GraphView 只提供复制粘贴的命令管线，自定义节点的数据复制由这里接入。
             ConfigureClipboard();
+            SetupAuthoring();
 
             // 注册节点创建请求，使用 SearchWindow
             nodeCreationRequest = context =>
             {
-                SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), CreateNodeSearchWindowProvider(context.screenMousePosition));
+                var panelPosition = context.screenMousePosition - PanelToScreen(Vector2.zero);
+                OpenAuthoringSearch(contentViewContainer.WorldToLocal(panelPosition), context.screenMousePosition);
             };
 
             // 监听选择变化事件
@@ -129,9 +132,7 @@ namespace Shizuku.Graph.Editor
                 return;
 
             var graphPosition = contentViewContainer.WorldToLocal(worldBound.center);
-            SearchWindow.Open(
-                new SearchWindowContext(screenPosition),
-                CreateNodeSearchWindowProviderAt(graphPosition));
+            OpenAuthoringSearch(graphPosition, screenPosition);
         }
 
         public void FrameAllNodes()
@@ -273,6 +274,30 @@ namespace Shizuku.Graph.Editor
             node.Init(context);
         }
 
+        private string CurrentMethodGuid => _currentMethod?.GUID ?? string.Empty;
+
+        private void ExecuteGraphEdits(string undoName, IEnumerable<GraphEditOperation> operations)
+        {
+            UnityGraphEditExecutor.Execute(
+                _runtimeGraph,
+                CurrentMethodGuid,
+                operations,
+                undoName,
+                new GraphEditExecutionOptions());
+        }
+
+        private ShizukuNodeView AddNodeView(ShizukuNodeBase node, Rect position, bool select = false)
+        {
+            var nodeView = new ShizukuNodeView(node, _runtimeGraph);
+            nodeView.InitPort();
+            nodeView.SetPosition(position);
+            _guidToNodeViewMap[node.GUID] = nodeView;
+            AddElement(nodeView);
+            if (select)
+                AddToSelection(nodeView);
+            return nodeView;
+        }
+
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             // GraphView 默认的“创建节点”入口统一打开 NodeSearchWindowProvider。
@@ -288,6 +313,7 @@ namespace Shizuku.Graph.Editor
             evt.menu.AppendAction("创建分组", _ => CreateGroup(_localMousePosition));
 
             evt.menu.AppendSeparator();
+            evt.menu.AppendAction("检查当前图配置", _ => ValidateAuthoringGraph());
             evt.menu.AppendAction("清空所有节点", _ => ClearAllNodes());
 
             // 调试菜单
@@ -312,20 +338,11 @@ namespace Shizuku.Graph.Editor
             };
             node.SyncPortsFromMethod(method);
 
-            var nodeView = new ShizukuNodeView(node, _runtimeGraph);
-            nodeView.InitPort();
-            nodeView.SetPosition(new Rect(mousePosition, new Vector2(200, 100)));
-
-            // 根据编辑上下文添加节点到对应容器
-            if (IsEditingMethod)
-                _currentMethod.AddNode(node);
-            else
-                _runtimeGraph.AddNode(node);
-            InitializeNodeForCurrentContext(node);
-
-            _guidToNodeViewMap[node.GUID] = nodeView;
-            AddElement(nodeView);
-            EditorUtility.SetDirty(_runtimeGraph);
+            var rect = new Rect(mousePosition, new Vector2(200, 100));
+            ExecuteGraphEdits(
+                "创建节点",
+                new[] { new CreateNodeOperation(node, ToFloat4(rect)) });
+            AddNodeView(node, rect);
 
             OnGraphChanged?.Invoke();
         }
@@ -402,35 +419,24 @@ namespace Shizuku.Graph.Editor
                 node.ReturnNodeGUID = returnNode.GUID;
             }
 
-            var nodeView = new ShizukuNodeView(node, _runtimeGraph);
-            nodeView.InitPort();
-            nodeView.SetPosition(new Rect(mousePosition, new Vector2(200, 100)));
+            var eventRect = new Rect(mousePosition, new Vector2(200, 100));
+            var operations = new List<GraphEditOperation>
+            {
+                new CreateNodeOperation(node, ToFloat4(eventRect))
+            };
+            Rect returnRect = default;
+            if (returnNode != null)
+            {
+                returnRect = new Rect(mousePosition + new Vector2(400, 0), new Vector2(200, 100));
+                operations.Add(new CreateNodeOperation(returnNode, ToFloat4(returnRect)));
+            }
 
-            if (IsEditingMethod)
-                _currentMethod.AddNode(node);
-            else
-                _runtimeGraph.AddNode(node);
-            InitializeNodeForCurrentContext(node);
-            _guidToNodeViewMap[node.GUID] = nodeView;
-            AddElement(nodeView);
+            ExecuteGraphEdits("创建蓝图事件", operations);
+            AddNodeView(node, eventRect);
 
             // 添加返回节点（放在事件节点右侧）
             if (returnNode != null)
-            {
-                var returnNodeView = new ShizukuNodeView(returnNode, _runtimeGraph);
-                returnNodeView.InitPort();
-                returnNodeView.SetPosition(new Rect(mousePosition + new Vector2(400, 0), new Vector2(200, 100)));
-
-                if (IsEditingMethod)
-                    _currentMethod.AddNode(returnNode);
-                else
-                    _runtimeGraph.AddNode(returnNode);
-                InitializeNodeForCurrentContext(returnNode);
-                _guidToNodeViewMap[returnNode.GUID] = returnNodeView;
-                AddElement(returnNodeView);
-            }
-
-            EditorUtility.SetDirty(_runtimeGraph);
+                AddNodeView(returnNode, returnRect);
 
             OnGraphChanged?.Invoke();
         }
@@ -578,26 +584,11 @@ namespace Shizuku.Graph.Editor
                     return;
                 }
 
-                var nodeView = new ShizukuNodeView(node, _runtimeGraph);
-                nodeView.InitPort();
-                nodeView.SetPosition(new Rect(mousePosition, new Vector2(200, 100)));
-
-                // 根据编辑上下文添加节点到对应容器
-                if (IsEditingMethod)
-                    _currentMethod.AddNode(node);
-                else
-                    _runtimeGraph.AddNode(node);
-                InitializeNodeForCurrentContext(node);
-
-                _guidToNodeViewMap[node.GUID] = nodeView;
-                AddElement(nodeView);
-                EditorUtility.SetDirty(_runtimeGraph);
-
-                // 只有在主图中且精确的 ShizukuRootNode（非子类如 BlueprintEventNode）才能作为根节点
-                if (!IsEditingMethod && node.GetType() == typeof(ShizukuRootNode) && string.IsNullOrEmpty(_runtimeGraph.RootNodeGUID))
-                {
-                    _runtimeGraph.RootNodeGUID = node.GUID;
-                }
+                var rect = new Rect(mousePosition, new Vector2(200, 100));
+                ExecuteGraphEdits(
+                    "创建节点",
+                    new[] { new CreateNodeOperation(node, ToFloat4(rect)) });
+                AddNodeView(node, rect);
 
                 OnGraphChanged?.Invoke();
             }
@@ -610,20 +601,15 @@ namespace Shizuku.Graph.Editor
         private void CreateGroup(Vector2 mousePosition)
         {
             var groupData = new GroupData("新建分组", new float4(mousePosition.x, mousePosition.y, 300, 200));
+            ExecuteGraphEdits("创建分组", new[] { new AddGroupOperation(groupData) });
             var group = new CustomGroup(groupData)
             {
                 title = "新建分组"
             };
             group.SetPosition(new Rect(mousePosition, new Vector2(300, 200)));
 
-            // 添加到当前上下文（主图或函数子图）
-            if (_runtimeGraph != null)
-            {
-                CurrentGroups.Add(groupData);
-                EditorUtility.SetDirty(_runtimeGraph);
-            }
-
             AddElement(group);
+            OnGraphChanged?.Invoke();
         }
 
         /// <summary>
@@ -632,25 +618,17 @@ namespace Shizuku.Graph.Editor
         private void ClearAllNodes()
         {
             var contextName = IsEditingMethod ? $"函数 \"{_currentMethod.Name}\"" : "主图";
-            if (EditorUtility.DisplayDialog("确认清空", $"确定要清空{contextName}中所有节点、边和分组吗？此操作无法撤销！", "确定", "取消"))
+            if (EditorUtility.DisplayDialog("确认清空", $"确定要清空{contextName}中所有节点、边和分组吗？可使用撤销恢复。", "确定", "取消"))
             {
-                // 清空所有GraphView元素
-                DeleteElements(graphElements.ToList());
-
-                // 清空当前上下文的数据
-                if (_runtimeGraph != null)
-                {
-                    CurrentNodes.Clear();
-                    CurrentEdges.Clear();
-                    CurrentGroups.Clear();
-                    if (!IsEditingMethod)
-                        _runtimeGraph.RootNodeGUID = null;
-                    EditorUtility.SetDirty(_runtimeGraph);
-                }
-
-                // 清空内部引用
-                _guidToNodeViewMap.Clear();
+                ExecuteGraphEdits("清空图", new GraphEditOperation[] { new ClearGraphContextOperation() });
+                LoadCurrentContext();
+                OnGraphChanged?.Invoke();
             }
+        }
+
+        private static float4 ToFloat4(Rect rect)
+        {
+            return new float4(rect.x, rect.y, rect.width, rect.height);
         }
 
         #endregion
@@ -686,7 +664,8 @@ namespace Shizuku.Graph.Editor
                                 compatiblePorts.Add(port);
                             }
                             // 可转换类型：也兼容，会自动插入转换节点
-                            else if (ConverterNodeRegistry.CanConvert(startValueType, endValueType))
+                            else if (ConverterNodeRegistry.CanConvert(startPort.direction == Direction.Output ? startValueType : endValueType,
+                                startPort.direction == Direction.Output ? endValueType : startValueType))
                             {
                                 // 设置端口颜色为蓝色，表示需要转换
                                 port.portColor = new Color(0.5f, 0.7f, 1f);
@@ -747,7 +726,11 @@ namespace Shizuku.Graph.Editor
         /// 插入类型转换节点
         /// </summary>
         /// <returns>返回两条新的边：输出节点 → 转换节点、转换节点 → 输入节点</returns>
-        private List<Edge> InsertConverterNode(Edge originalEdge, Type fromType, Type toType)
+        private List<Edge> InsertConverterNode(
+            Edge originalEdge,
+            Type fromType,
+            Type toType,
+            ICollection<GraphEditOperation> operations)
         {
             try
             {
@@ -761,19 +744,15 @@ namespace Shizuku.Graph.Editor
 
                 Debug.Log($"  ✅ 创建转换节点: {converterNode.Title}");
 
-                // 2. 添加到当前上下文的图数据中
-                if (IsEditingMethod)
-                    _currentMethod.AddNode(converterNode);
-                else
-                    _runtimeGraph.AddNode(converterNode);
+                // 2. 初始化临时节点，实际写入与两条新边一起由当前事务完成。
                 InitializeNodeForCurrentContext(converterNode);
 
                 // 3. 计算转换节点位置（在两个节点中间）
                 var outputNodeView = originalEdge.output.node as ShizukuNodeView;
                 var inputNodeView = originalEdge.input.node as ShizukuNodeView;
 
-                var outputPos = outputNodeView.GetPosition().position;
-                var inputPos = inputNodeView.GetPosition().position;
+                var outputPos = outputNodeView.AuthoringPosition.position;
+                var inputPos = inputNodeView.AuthoringPosition.position;
                 var midPosition = (outputPos + inputPos) / 2f;
 
                 converterNode.PositionAndSize = new float4(midPosition.x, midPosition.y, 150, 80);
@@ -811,11 +790,15 @@ namespace Shizuku.Graph.Editor
                 {
                     Debug.LogError("  ❌ 转换节点端口未找到");
                     RemoveElement(converterNodeView);
-                    CurrentNodes.Remove(converterNode);
                     CurrentContext.Guid2NodeMap.Remove(converterNode.GUID);
                     _guidToNodeViewMap.Remove(converterNode.GUID);
                     return null;
                 }
+
+                operations.Add(new CreateNodeOperation(
+                    converterNode,
+                    converterNode.PositionAndSize,
+                    assignRootIfEmpty: false));
 
                 // 6. 创建新的边
                 var edge1 = originalEdge.output.ConnectTo(converterInputPort);
@@ -824,9 +807,6 @@ namespace Shizuku.Graph.Editor
                 // 7. 添加边到视图
                 AddElement(edge1);
                 AddElement(edge2);
-
-                // 8. 标记图已修改
-                EditorUtility.SetDirty(_runtimeGraph);
 
                 Debug.Log($"  ✅ 已插入转换节点: {outputNodeView.RuntimeNode.Title} → {converterNode.Title} → {inputNodeView.RuntimeNode.Title}");
 
@@ -844,7 +824,7 @@ namespace Shizuku.Graph.Editor
             if (_isRebuildingView || _runtimeGraph == null)
                 return graphViewChange;
 
-            var graphDataChanged = false;
+            var operations = new List<GraphEditOperation>();
             var graphStructureChanged = false;
 
             // 检查新添加的边是否会形成环，以及是否需要插入转换节点
@@ -858,7 +838,7 @@ namespace Shizuku.Graph.Editor
                     // 检查这条边是否会形成环
                     if (this.WouldCreateCycle(edge))
                     {
-                        Debug.LogWarning($"  ⚠️ 边会形成环，取消创建");
+                        ShowAuthoringFeedback("这条线会形成循环，未创建连线。");
                         edgesToRemove.Add(edge);
                         continue;
                     }
@@ -874,10 +854,10 @@ namespace Shizuku.Graph.Editor
                             outputType != inputType && 
                             ConverterNodeRegistry.CanConvert(outputType, inputType))
                         {
-                            Debug.Log($"  🔄 检测到类型转换需求: {outputType.Name} → {inputType.Name}");
+                            ShowAuthoringFeedback($"已自动插入类型转换：{outputType.Name} → {inputType.Name}");
 
                             // 插入转换节点
-                            var newEdges = InsertConverterNode(edge, outputType, inputType);
+                            var newEdges = InsertConverterNode(edge, outputType, inputType, operations);
                             if (newEdges != null && newEdges.Count == 2)
                             {
                                 // 移除原始边，添加新的边
@@ -901,7 +881,7 @@ namespace Shizuku.Graph.Editor
                 }
             }
 
-            // 通知图和节点进行相应的更新
+            // 将所有新增连线转换为数据操作。
             if (graphViewChange.edgesToCreate != null)
             {
                 foreach (var edge in graphViewChange.edgesToCreate)
@@ -913,157 +893,87 @@ namespace Shizuku.Graph.Editor
 
                     if (edge.input is ControlFlowPort)
                     {
-                        SetControlFlowEdgeVisualState(edge, true);
-
-                        var sourceNormalNode = sourceNode as ShizukuNormalNode;
-                        if (sourceNormalNode?.ChainPorts != null &&
-                            sourceNormalNode.ChainPorts.TryGetValue(edge.output.portName, out var chainPort))
-                        {
-                            if (chainPort.NextNodeGuid != targetNode.GUID)
-                            {
-                                chainPort.NextNodeGuid = targetNode.GUID;
-                                graphDataChanged = true;
-                                graphStructureChanged = true;
-                            }
-                            Debug.Log($"  📌 设置控制流: {sourceNormalNode.Title} -> {targetNode.Title}");
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[ShizukuGraph] 未找到控制流端口: {sourceNode.Title}.{edge.output.portName}");
-                        }
+                        operations.Add(new ConnectControlOperation(
+                            sourceNode.GUID,
+                            edge.output.portName,
+                            targetNode.GUID));
+                        graphStructureChanged = true;
                     }
                     else
                     {
-                        // 根据编辑上下文添加参数边
-                        if (IsEditingMethod)
-                            _currentMethod.AddParameterEdge(sourceNode, edge.output.portName, targetNode, edge.input.portName);
-                        else
-                            _runtimeGraph.AddParameterEdge(sourceNode, edge.output.portName, targetNode, edge.input.portName);
-
-                        graphDataChanged = true;
+                        operations.Add(new ConnectParameterOperation(
+                            sourceNode.GUID,
+                            edge.output.portName,
+                            targetNode.GUID,
+                            edge.input.portName));
                         graphStructureChanged = true;
-
-                        Debug.Log($"  📌 添加参数边: {sourceNode.Title}.{edge.output.portName} -> {targetNode.Title}.{edge.input.portName}");
-
-                        // 通知输入节点更新输入字段的可见性（边已连接，传递 true）
-                        var targetNodeView = edge.input.node as ShizukuNodeView;
-                        targetNodeView?.OnPortConnectionChanged(edge.input, true);
                     }
                 }
             }
 
+            var removedNodeGuids = new HashSet<string>(StringComparer.Ordinal);
             if (graphViewChange.elementsToRemove != null)
             {
                 graphViewChange.elementsToRemove = ExpandRemovalWithConnectedEdges(
                     graphViewChange.elementsToRemove);
 
+                foreach (var nodeView in graphViewChange.elementsToRemove.OfType<ShizukuNodeView>())
+                    removedNodeGuids.Add(nodeView.RuntimeNode.GUID);
+
                 foreach (var element in graphViewChange.elementsToRemove)
                 {
-                    Debug.Log($"  ❌ 删除元素: {element.GetType().Name}");
-
-                    // 处理边的移除
                     if (element is Edge edge)
                     {
-                        var sourceNode = (edge.output.node as ShizukuNodeView)?.RuntimeNode;
-                        var targetNode = (edge.input.node as ShizukuNodeView)?.RuntimeNode;
+                        var sourceNode = (edge.output?.node as ShizukuNodeView)?.RuntimeNode;
+                        var targetNode = (edge.input?.node as ShizukuNodeView)?.RuntimeNode;
 
-                        if (sourceNode != null && targetNode != null)
+                        if (sourceNode == null || targetNode == null ||
+                            removedNodeGuids.Contains(sourceNode.GUID) ||
+                            removedNodeGuids.Contains(targetNode.GUID))
+                            continue;
+
+                        if (edge.input is ControlFlowPort)
                         {
-                            if (edge.input is ControlFlowPort)
-                            {
-                                SetControlFlowEdgeVisualState(edge, false);
-
-                                var sourceNormalNode = sourceNode as ShizukuNormalNode;
-                                if (sourceNormalNode?.ChainPorts != null &&
-                                    sourceNormalNode.ChainPorts.TryGetValue(edge.output.portName, out var chainPort) &&
-                                    chainPort.NextNodeGuid == targetNode.GUID)
-                                {
-                                    chainPort.NextNodeGuid = null;
-                                    graphDataChanged = true;
-                                    graphStructureChanged = true;
-                                }
-                            }
-                            else
-                            {
-                                // 从当前上下文中移除对应的参数边
-                                var edgeToRemove = CurrentEdges.FirstOrDefault(e =>
-                                    e.OutputNodeGuid == sourceNode.GUID &&
-                                    e.OutputPortName == edge.output.portName &&
-                                    e.InputNodeGuid == targetNode.GUID &&
-                                    e.InputPortName == edge.input.portName
-                                );
-
-                                if (edgeToRemove != null)
-                                {
-                                    CurrentEdges.Remove(edgeToRemove);
-                                    CurrentContext.Guid2EdgeMap.Remove(edgeToRemove.GUID);
-                                    graphDataChanged = true;
-                                    graphStructureChanged = true;
-                                }
-                            }
-
-                            // 通知输入节点更新输入字段的可见性（边已删除，传递 false）
-                            var targetNodeView = edge.input.node as ShizukuNodeView;
-                            targetNodeView?.OnPortConnectionChanged(edge.input, false);
-                        }
-                    }
-                    // 处理节点的移除
-                    else if (element is ShizukuNodeView nodeView)
-                    {
-                        var removedNodeGuid = nodeView.RuntimeNode.GUID;
-
-                        // 如果在主图中删除的恰好是当前根节点，清空引用
-                        if (!IsEditingMethod && removedNodeGuid == _runtimeGraph.RootNodeGUID)
-                        {
-                            _runtimeGraph.RootNodeGUID = null;
-                            graphDataChanged = true;
-                        }
-
-                        if (CurrentNodes.Remove(nodeView.RuntimeNode))
-                        {
-                            graphDataChanged = true;
+                            operations.Add(new DisconnectControlOperation(
+                                sourceNode.GUID,
+                                edge.output.portName,
+                                targetNode.GUID));
                             graphStructureChanged = true;
                         }
-                        CurrentContext.Guid2NodeMap.Remove(removedNodeGuid);
-                        _guidToNodeViewMap.Remove(removedNodeGuid);
-
-                        // 同时移除所有与该节点相关的边
-                        var removedEdges = CurrentEdges
-                            .Where(e => e.OutputNodeGuid == removedNodeGuid || e.InputNodeGuid == removedNodeGuid)
-                            .ToList();
-                        foreach (var removedEdge in removedEdges)
+                        else
                         {
-                            CurrentEdges.Remove(removedEdge);
-                            CurrentContext.Guid2EdgeMap.Remove(removedEdge.GUID);
-                        }
-                        if (removedEdges.Count > 0)
-                            graphDataChanged = true;
-
-                        // 控制流边不在 Edges 列表中，删除目标节点时也要清掉其入边引用。
-                        foreach (var normalNode in CurrentNodes.OfType<ShizukuNormalNode>())
-                        {
-                            foreach (var chainPort in normalNode.ChainPorts.Values)
-                            {
-                                if (chainPort.NextNodeGuid != removedNodeGuid)
-                                    continue;
-
-                                chainPort.NextNodeGuid = null;
-                                graphDataChanged = true;
-                            }
+                            var edgeToRemove = CurrentEdges.FirstOrDefault(candidate =>
+                                candidate.OutputNodeGuid == sourceNode.GUID &&
+                                candidate.OutputPortName == edge.output.portName &&
+                                candidate.InputNodeGuid == targetNode.GUID &&
+                                candidate.InputPortName == edge.input.portName);
+                            operations.Add(edgeToRemove != null
+                                ? new DisconnectParameterOperation(edgeGuid: edgeToRemove.GUID)
+                                : new DisconnectParameterOperation(
+                                    sourceGuid: sourceNode.GUID,
+                                    outputPortName: edge.output.portName,
+                                    targetGuid: targetNode.GUID,
+                                    inputPortName: edge.input.portName));
+                            graphStructureChanged = true;
                         }
                     }
-                    // 处理分组的移除
-                    else if (element is CustomGroup customGroup)
-                    {
-                        if (_runtimeGraph != null && customGroup.Data != null)
-                        {
-                            if (CurrentGroups.Remove(customGroup.Data))
-                            {
-                                graphDataChanged = true;
-                                graphStructureChanged = true;
-                            }
-                        }
-                    }
+                }
+
+                if (removedNodeGuids.Count > 0)
+                {
+                    operations.Add(new DeleteNodesOperation(removedNodeGuids));
+                    graphStructureChanged = true;
+                }
+
+                var removedGroupGuids = graphViewChange.elementsToRemove
+                    .OfType<CustomGroup>()
+                    .Where(group => group.Data != null)
+                    .Select(group => group.Data.GUID)
+                    .ToArray();
+                if (removedGroupGuids.Length > 0)
+                {
+                    operations.Add(new DeleteGroupsOperation(removedGroupGuids));
+                    graphStructureChanged = true;
                 }
             }
 
@@ -1073,23 +983,75 @@ namespace Shizuku.Graph.Editor
                 {
                     if (element is CustomGroup customGroup)
                     {
-                        customGroup.UpdateData();
-                        graphDataChanged = true;
+                        var rect = customGroup.AuthoringPosition;
+                        operations.Add(new UpdateGroupOperation(
+                            customGroup.Data.GUID,
+                            customGroup.title,
+                            ToFloat4(rect)));
                     }
-                    else if (element is ShizukuNodeView)
+                    else if (element is ShizukuNodeView nodeView)
                     {
-                        // ShizukuNodeView.SetPosition 已同步 PositionAndSize；这里负责持久化标记。
-                        graphDataChanged = true;
+                        operations.Add(new MoveNodeOperation(
+                            nodeView.RuntimeNode.GUID,
+                            ToFloat4(nodeView.AuthoringPosition)));
                     }
                 }
             }
 
-            if (graphDataChanged)
-                EditorUtility.SetDirty(_runtimeGraph);
+            if (operations.Count == 0)
+                return graphViewChange;
+
+            try
+            {
+                ExecuteGraphEdits(GetUndoName(graphViewChange), operations);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError($"[ShizukuGraph] 图编辑失败，已回滚: {exception.Message}");
+                LoadCurrentContext();
+                graphViewChange.edgesToCreate?.Clear();
+                graphViewChange.elementsToRemove?.Clear();
+                graphViewChange.movedElements?.Clear();
+                return graphViewChange;
+            }
+
+            foreach (var edge in (IEnumerable<Edge>)graphViewChange.edgesToCreate ?? Enumerable.Empty<Edge>())
+            {
+                if (edge.input is ControlFlowPort)
+                    SetControlFlowEdgeVisualState(edge, true);
+                else
+                    (edge.input?.node as ShizukuNodeView)?.OnPortConnectionChanged(edge.input, true);
+            }
+
+            foreach (var edge in graphViewChange.elementsToRemove?.OfType<Edge>() ?? Enumerable.Empty<Edge>())
+            {
+                if (edge.input is ControlFlowPort)
+                    SetControlFlowEdgeVisualState(edge, false);
+                else
+                    (edge.input?.node as ShizukuNodeView)?.OnPortConnectionChanged(edge.input, false);
+            }
+
+            foreach (var guid in removedNodeGuids)
+                _guidToNodeViewMap.Remove(guid);
+
             if (graphStructureChanged)
                 OnGraphChanged?.Invoke();
 
             return graphViewChange;
+        }
+
+        private static string GetUndoName(GraphViewChange change)
+        {
+            var hasCreatedEdges = change.edgesToCreate?.Count > 0;
+            var hasRemovedElements = change.elementsToRemove?.Count > 0;
+            var hasMovedElements = change.movedElements?.Count > 0;
+            if (hasCreatedEdges && !hasRemovedElements && !hasMovedElements)
+                return "连接节点";
+            if (hasRemovedElements && !hasCreatedEdges && !hasMovedElements)
+                return "删除图元素";
+            if (hasMovedElements && !hasCreatedEdges && !hasRemovedElements)
+                return "移动图元素";
+            return "修改图结构";
         }
 
         private List<GraphElement> ExpandRemovalWithConnectedEdges(
@@ -1123,17 +1085,43 @@ namespace Shizuku.Graph.Editor
 
         #region 资产保存及读取
 
-        public void LoadFromAsset(ShizukuGraphBase graphAsset)
+        public GraphAssetCompatibilityReport LoadFromAsset(ShizukuGraphBase graphAsset)
         {
-            _runtimeGraph = graphAsset;
+            var compatibility = ShizukuGraphMigrationService.EnsureCurrent(graphAsset);
+            if (!compatibility.CanOpen)
+            {
+                UnloadAsset();
+                throw new GraphAssetCompatibilityException(compatibility);
+            }
+
+            _runtimeGraph = compatibility.Graph;
             _currentMethod = null; // 加载资产时重置为主图
 
-            if (SynchronizeAllDynamicParameterPortNodes(graphAsset))
-                EditorUtility.SetDirty(graphAsset);
+            if (SynchronizeAllDynamicParameterPortNodes(_runtimeGraph))
+                EditorUtility.SetDirty(_runtimeGraph);
 
             _runtimeGraph.Init();
 
             LoadCurrentContext();
+
+            OnEditingContextChanged?.Invoke(null);
+            return compatibility;
+        }
+
+        internal void UnloadAsset()
+        {
+            _isRebuildingView = true;
+            try
+            {
+                DeleteElements(graphElements.ToList());
+                _guidToNodeViewMap.Clear();
+                _runtimeGraph = null;
+                _currentMethod = null;
+            }
+            finally
+            {
+                _isRebuildingView = false;
+            }
 
             OnEditingContextChanged?.Invoke(null);
         }
@@ -1358,6 +1346,9 @@ namespace Shizuku.Graph.Editor
 
         public void SaveToAsset()
         {
+            if (_runtimeGraph == null)
+                return;
+
             // 在保存前更新所有Group的位置和标题数据
             foreach (var element in graphElements)
             {

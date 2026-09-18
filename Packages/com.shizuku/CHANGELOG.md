@@ -17,6 +17,8 @@
 - Generated identifiers and structural port collections are hidden from normal configuration; node identity remains available in read-only debug information
 - Menu paths, serialized field names and port connection keys remain stable
 - Unversioned v0.3.0-v0.8.0 graph assets migrate to schema version 1 when opened, then save and reimport automatically
+- Renamed directional Tag cancellation rules to exclusion rules in the runtime API and TagConfig Inspector
+- `TagCollection.TryAdd` is now the single rule-aware add path and applies blocking and directional exclusion atomically
 
 ### Fixed
 

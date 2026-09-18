@@ -19,7 +19,7 @@ namespace Shizuku.Tests.EditMode
                 var stunned = config.AddTag("State.Stunned", state);
                 var collection = new TagCollection();
 
-                collection.Add(stunned);
+                Assert.That(collection.TryAdd(stunned, config), Is.True);
 
                 Assert.That(state, Is.EqualTo(0x01000000u));
                 Assert.That(idle, Is.EqualTo(0x01010000u));
@@ -37,7 +37,7 @@ namespace Shizuku.Tests.EditMode
         }
 
         [Test]
-        public void TagConfig_BlockAndCancelRules_UseCurrentExactTags()
+        public void TagCollection_TryAdd_RejectsUnknownDuplicateAndBlockedTagsWithoutMutation()
         {
             var config = ScriptableObject.CreateInstance<TagConfig>();
             try
@@ -47,19 +47,54 @@ namespace Shizuku.Tests.EditMode
                 var action = config.AddTag("Action");
                 var casting = config.AddTag("Action.Casting", action);
                 var collection = new TagCollection();
-                var cancelled = new List<uint>();
 
                 config.SetBlockRule("Action.Casting", new List<string> { "State.Stunned" });
-                config.SetCancelRule("State.Stunned", new List<string> { "Action.Casting" });
+                config.SetExclusionRule("Action.Casting", new List<string> { "State.Stunned" });
 
-                collection.Add(stunned);
-                Assert.That(config.IsBlocked(casting, collection), Is.True);
+                Assert.That(collection.TryAdd(0xFFFFFFFFu, config), Is.False);
+                Assert.That(collection.Count, Is.Zero);
+
+                Assert.That(collection.TryAdd(stunned, config), Is.True);
+                Assert.That(collection.TryAdd(stunned, config), Is.False);
+                Assert.That(collection.TryAdd(casting, config), Is.False);
+
+                Assert.That(collection.HasExact(stunned), Is.True);
+                Assert.That(collection.HasExact(casting), Is.False);
+                Assert.That(collection.Count, Is.EqualTo(1));
+            }
+            finally
+            {
+                Object.DestroyImmediate(config);
+            }
+        }
+
+        [Test]
+        public void TagCollection_TryAdd_AppliesExclusionInConfiguredDirectionOnly()
+        {
+            var config = ScriptableObject.CreateInstance<TagConfig>();
+            try
+            {
+                var state = config.AddTag("State");
+                var stunned = config.AddTag("State.Stunned", state);
+                var action = config.AddTag("Action");
+                var casting = config.AddTag("Action.Casting", action);
+                var collection = new TagCollection();
+
+                config.SetExclusionRule("State.Stunned", new List<string> { "Action.Casting" });
+
+                Assert.That(collection.TryAdd(casting, config), Is.True);
+                Assert.That(collection.TryAdd(stunned, config), Is.True);
+                Assert.That(collection.HasExact(stunned), Is.True);
+                Assert.That(collection.HasExact(casting), Is.False);
 
                 collection.Clear();
-                collection.Add(casting);
-                config.GetCancelledTags(stunned, collection, cancelled);
 
-                Assert.That(cancelled, Is.EqualTo(new[] { casting }));
+                Assert.That(collection.TryAdd(stunned, config), Is.True);
+                Assert.That(collection.TryAdd(casting, config), Is.True);
+
+                Assert.That(collection.HasExact(stunned), Is.True);
+                Assert.That(collection.HasExact(casting), Is.True,
+                    "A 排除 B 不应隐式创建 B 排除 A 的反向规则");
             }
             finally
             {

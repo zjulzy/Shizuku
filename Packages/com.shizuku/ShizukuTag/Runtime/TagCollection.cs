@@ -11,12 +11,29 @@ namespace Shizuku.Tag
     public class TagCollection
     {
         private readonly HashSet<uint> _tags = new HashSet<uint>();
+        private readonly List<uint> _excludedTags = new List<uint>();
 
         /// <summary> 当前持有的 Tag 数量 </summary>
         public int Count => _tags.Count;
 
-        /// <summary> 添加一个 Tag，返回是否新增成功 </summary>
-        public bool Add(uint tag) => _tags.Add(tag);
+        /// <summary>
+        /// 按 TagConfig 规则尝试添加一个 Tag。
+        /// 未注册、重复或被阻挡时返回 false，且集合保持不变；成功时先移除被该 Tag 排除的标签，再添加自身。
+        /// </summary>
+        public bool TryAdd(uint tag, TagConfig config)
+        {
+            if (config == null || !config.Contains(tag) || _tags.Contains(tag))
+                return false;
+
+            if (config.IsBlocked(tag, this))
+                return false;
+
+            config.GetExcludedTags(tag, this, _excludedTags);
+            foreach (uint excludedTag in _excludedTags)
+                _tags.Remove(excludedTag);
+
+            return _tags.Add(tag);
+        }
 
         /// <summary> 移除一个 Tag，返回是否存在并移除 </summary>
         public bool Remove(uint tag) => _tags.Remove(tag);

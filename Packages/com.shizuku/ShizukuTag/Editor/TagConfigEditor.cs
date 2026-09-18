@@ -23,10 +23,10 @@ namespace Shizuku.Tag.Editor
         private static readonly Dictionary<int, string> NewTagInputs = new Dictionary<int, string>();
         private static readonly Dictionary<int, int> RemoveSelections = new Dictionary<int, int>();
 
-        // 阻挡 / 互斥编辑器状态
+        // 阻挡 / 排除编辑器状态
         private static int _selectedRuleTagIndex;
         private static int _blockAddIndex;
-        private static int _cancelAddIndex;
+        private static int _exclusionAddIndex;
         private static bool _ruleFoldout = true;
 
         public override void OnInspectorGUI()
@@ -244,11 +244,11 @@ namespace Shizuku.Tag.Editor
             AssetDatabase.SaveAssets();
         }
 
-        // ────────── 阻挡 / 互斥 规则 UI ──────────
+        // ────────── 阻挡 / 排除 规则 UI ──────────
 
         private static void DrawRulesSection(TagConfig collection)
         {
-            _ruleFoldout = EditorGUILayout.Foldout(_ruleFoldout, "阻挡 / 互斥 规则", true, EditorStyles.foldoutHeader);
+            _ruleFoldout = EditorGUILayout.Foldout(_ruleFoldout, "阻挡 / 排除规则", true, EditorStyles.foldoutHeader);
             if (!_ruleFoldout) return;
 
             string[] tagNames = collection.Tags
@@ -267,9 +267,9 @@ namespace Shizuku.Tag.Editor
             _selectedRuleTagIndex = EditorGUILayout.Popup("选择 Tag", _selectedRuleTagIndex, tagNames);
             string selectedTag = tagNames[_selectedRuleTagIndex];
 
-            // 查找当前 tag 对应的 block / cancel 规则
+            // 查找当前 tag 对应的阻挡 / 排除规则
             List<string> blockTargets = GetTargets(collection.BlockRules, selectedTag);
-            List<string> cancelTargets = GetTargets(collection.CancelRules, selectedTag);
+            List<string> exclusionTargets = GetTargets(collection.ExclusionRules, selectedTag);
 
             EditorGUILayout.Space(4f);
 
@@ -283,12 +283,12 @@ namespace Shizuku.Tag.Editor
 
             EditorGUILayout.Space(4f);
 
-            // ── 互斥集 ──
+            // ── 排除集 ──
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            EditorGUILayout.LabelField("互斥集（该 Tag 添加后，以下 Tag 被移除）", EditorStyles.boldLabel);
-            DrawTagSet(collection, selectedTag, cancelTargets, ref _cancelAddIndex, tagNames,
-                (targets) => { collection.SetCancelRule(selectedTag, targets); MarkDirty(collection); },
-                () => { collection.RemoveCancelRule(selectedTag); MarkDirty(collection); });
+            EditorGUILayout.LabelField("排除集（添加该 Tag 时，移除以下 Tag）", EditorStyles.boldLabel);
+            DrawTagSet(collection, selectedTag, exclusionTargets, ref _exclusionAddIndex, tagNames,
+                (targets) => { collection.SetExclusionRule(selectedTag, targets); MarkDirty(collection); },
+                () => { collection.RemoveExclusionRule(selectedTag); MarkDirty(collection); });
             EditorGUILayout.EndVertical();
         }
 

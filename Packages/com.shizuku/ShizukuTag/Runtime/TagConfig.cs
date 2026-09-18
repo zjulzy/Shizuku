@@ -51,7 +51,7 @@ namespace Shizuku.Tag
         /// <summary> 所有 Tag 定义（只读） </summary>
         public IReadOnlyList<TagDefinition> Tags => _tags;
 
-        // ────────── 阻挡 & 互斥规则 ──────────
+        // ────────── 阻挡 & 排除规则 ──────────
 
         /// <summary>
         /// 阻挡规则：SourceTag 想添加到实体上时，如果实体已拥有 TargetTags 中任一 Tag，则添加被阻止。
@@ -60,15 +60,16 @@ namespace Shizuku.Tag
         private List<TagRelationEntry> _blockRules = new List<TagRelationEntry>();
 
         /// <summary>
-        /// 互斥规则：SourceTag 被添加到实体上后，TargetTags 中的 Tag 会被立即移除。
+        /// 排除规则：SourceTag 被添加到实体上后，TargetTags 中的 Tag 会被立即移除。
+        /// 规则是单向的；A 排除 B 不代表 B 排除 A。
         /// </summary>
         [SerializeField, HideInInspector]
-        private List<TagRelationEntry> _cancelRules = new List<TagRelationEntry>();
+        private List<TagRelationEntry> _exclusionRules = new List<TagRelationEntry>();
 
         public IReadOnlyList<TagRelationEntry> BlockRules => _blockRules;
-        public IReadOnlyList<TagRelationEntry> CancelRules => _cancelRules;
+        public IReadOnlyList<TagRelationEntry> ExclusionRules => _exclusionRules;
 
-        // ────────── 阻挡 & 互斥 编辑 API ──────────
+        // ────────── 阻挡 & 排除 编辑 API ──────────
 
         /// <summary> 设置某个 Tag 的阻挡列表（按名称），覆盖旧值 </summary>
         public void SetBlockRule(string sourceTag, List<string> targets)
@@ -84,21 +85,21 @@ namespace Shizuku.Tag
             _blockRules.RemoveAll(e => e.SourceTag == sourceTag);
         }
 
-        /// <summary> 设置某个 Tag 的互斥列表（按名称），覆盖旧值 </summary>
-        public void SetCancelRule(string sourceTag, List<string> targets)
+        /// <summary> 设置某个 Tag 的单向排除列表（按名称），覆盖旧值 </summary>
+        public void SetExclusionRule(string sourceTag, List<string> targets)
         {
-            RemoveCancelRule(sourceTag);
+            RemoveExclusionRule(sourceTag);
             if (targets != null && targets.Count > 0)
-                _cancelRules.Add(new TagRelationEntry { SourceTag = sourceTag, TargetTags = new List<string>(targets) });
+                _exclusionRules.Add(new TagRelationEntry { SourceTag = sourceTag, TargetTags = new List<string>(targets) });
         }
 
-        /// <summary> 移除某个 Tag 的互斥规则 </summary>
-        public void RemoveCancelRule(string sourceTag)
+        /// <summary> 移除某个 Tag 的排除规则 </summary>
+        public void RemoveExclusionRule(string sourceTag)
         {
-            _cancelRules.RemoveAll(e => e.SourceTag == sourceTag);
+            _exclusionRules.RemoveAll(e => e.SourceTag == sourceTag);
         }
 
-        // ────────── 阻挡 & 互斥 运行时查询 ──────────
+        // ────────── 阻挡 & 排除 运行时查询 ──────────
 
         /// <summary>
         /// 检查 tag 是否被 container 中已有的标签阻挡。
@@ -122,15 +123,15 @@ namespace Shizuku.Tag
         }
 
         /// <summary>
-        /// 获取 tag 添加后需要被移除的标签集合。
+        /// 获取 tag 添加后需要被排除（移除）的标签集合。
         /// </summary>
-        public void GetCancelledTags(uint tag, TagCollection container, List<uint> result)
+        public void GetExcludedTags(uint tag, TagCollection container, List<uint> result)
         {
             result.Clear();
             string name = GetNameByTag(tag);
             if (name == null) return;
 
-            foreach (var rule in _cancelRules)
+            foreach (var rule in _exclusionRules)
             {
                 if (rule.SourceTag != name) continue;
                 foreach (var target in rule.TargetTags)
@@ -157,7 +158,7 @@ namespace Shizuku.Tag
             return value;
         }
 
-        /// <summary> 移除指定名称的 Tag（同时清理关联的阻挡/互斥规则） </summary>
+        /// <summary> 移除指定名称的 Tag（同时清理关联的阻挡/排除规则） </summary>
         public bool RemoveTag(string tagName)
         {
             bool removed = _tags.RemoveAll(t => t.Name == tagName) > 0;
@@ -165,15 +166,15 @@ namespace Shizuku.Tag
             {
                 // 移除作为 source 的规则
                 _blockRules.RemoveAll(e => e.SourceTag == tagName);
-                _cancelRules.RemoveAll(e => e.SourceTag == tagName);
+                _exclusionRules.RemoveAll(e => e.SourceTag == tagName);
                 // 从其他规则的 target 列表中移除
                 foreach (var rule in _blockRules)
                     rule.TargetTags.Remove(tagName);
-                foreach (var rule in _cancelRules)
+                foreach (var rule in _exclusionRules)
                     rule.TargetTags.Remove(tagName);
                 // 清理空规则
                 _blockRules.RemoveAll(e => e.TargetTags.Count == 0);
-                _cancelRules.RemoveAll(e => e.TargetTags.Count == 0);
+                _exclusionRules.RemoveAll(e => e.TargetTags.Count == 0);
             }
             return removed;
         }

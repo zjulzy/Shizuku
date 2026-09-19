@@ -48,6 +48,7 @@
 ExportedObj/
 .consulo/
 *.csproj
+!/Packages/com.shizuku/Tools~/Shizuku.Mcp.Server/Shizuku.Mcp.Server.csproj
 *.unityproj
 *.sln
 *.suo

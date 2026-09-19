@@ -70,6 +70,13 @@ namespace Shizuku.Graph.Editor.Mcp
             {
                 if (string.IsNullOrEmpty(source) || !Directory.Exists(source))
                     return BuildResult.Fail("MCP server source was not found in the Shizuku package.");
+                var sourceProjectFile = Path.Combine(source, "Shizuku.Mcp.Server.csproj");
+                if (!File.Exists(sourceProjectFile))
+                {
+                    return BuildResult.Fail(
+                        "MCP server project file was not found in the Shizuku package. " +
+                        "The package installation is incomplete; update or reinstall Shizuku, then retry.");
+                }
                 if (FindCommand("dotnet") == null)
                     return BuildResult.Fail(".NET SDK was not found on PATH. Install .NET 8 SDK or newer, then retry.");
 
@@ -78,6 +85,8 @@ namespace Shizuku.Graph.Editor.Mcp
                 RecreateDirectory(output);
 
                 var projectFile = Path.Combine(staging, "Shizuku.Mcp.Server.csproj");
+                if (!File.Exists(projectFile))
+                    return BuildResult.Fail("Failed to stage the MCP server project file: " + projectFile);
                 var arguments = new[]
                 {
                     "publish", projectFile,

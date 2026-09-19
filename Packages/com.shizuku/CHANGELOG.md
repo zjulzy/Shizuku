@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.9.0] - 2026-09-19
+
 ### Added
 
 - Purpose/keyword search with recent nodes and compatible-port filtering, including create-and-connect from an empty-space port drop

@@ -1,8 +1,8 @@
 # Shizuku 开发路线图
 
-**当前发布版本**：v0.8.0
+**当前发布版本**：v0.9.0
 
-**最后更新**：2026-09-15
+**最后更新**：2026-09-19
 
 本文档只记录当前能力边界、近期工作和发布门槛。历史版本的具体改动以根目录和 UPM 包内的 `CHANGELOG.md` 为准。
 
@@ -21,7 +21,7 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 
 ---
 
-## v0.8.0 已交付基线
+## v0.9.0 已交付基线
 
 ### Graph / Blueprint 运行时
 
@@ -48,6 +48,17 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 - [x] 通用序列化字段变更回调与延迟合并刷新
 - [x] Addressables `AssetReference` 字段编辑与保存重载
 - [x] Blueprint / 节点生成文件的项目级输出路径
+- [x] 按用途、关键词和端口兼容性搜索节点，并支持空白处拖线后创建并连接
+- [x] `NodeField` 标签、单位、摘要、必填校验与输入来源导航
+- [x] Graph Editor 与 MCP 共用无状态操作层，Unity Undo 作为唯一编辑历史栈
+- [x] 节点、边、变量、方法和动态端口的 Undo / Redo
+- [x] 图资产 Schema 版本、有序自动迁移和缺失类型诊断
+
+### Tag
+
+- [x] 最多四级的层级 Tag 定义、精确查询与前缀查询
+- [x] 单向阻挡和单向排除规则
+- [x] `TagCollection.TryAdd` 统一执行校验、阻挡、排除与添加
 
 ### SkillEditor
 
@@ -67,9 +78,9 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 - [x] 未知 Agent 的通用 stdio 配置
 - [x] 发布包排除 MCP Server 的 `bin` / `obj` 生成物
 
-### v0.8.0 发布验证
+### v0.9.0 发布验证
 
-- [x] Shizuku EditMode：78 / 78
+- [x] Shizuku EditMode：108 / 108
 - [x] Shizuku PlayMode：4 / 4
 - [x] 独立 MCP Server 构建与真实 stdio 握手
 - [x] MCP 工具目录与真实图资产读取
@@ -77,13 +88,13 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 
 ---
 
-## v0.8.x：消费项目验证与稳定性加固
+## v0.9.x：消费项目验证与稳定性加固
 
 这一阶段不主动扩大功能面，优先处理真实项目暴露的问题。
 
 ### P0：发布后验收
 
-- [ ] 在独立消费项目中通过 Git Tag 全新安装 v0.8.0
+- [ ] 在独立消费项目中通过 Git Tag 全新安装 v0.9.0
 - [ ] 验证 Odin 已安装、Shizuku 后安装时的首次编译流程
 - [ ] 验证 `.NET 8 SDK` 首次构建 MCP Server 和重复配置流程
 - [ ] 在 Project-Shiori 验证自定义 `AssetReference` Timeline 节点及动态 Track 端口
@@ -104,7 +115,7 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 
 ---
 
-## v0.9.0：Graph / Blueprint 生产化
+## v0.10.0：Graph / Blueprint 生产化
 
 ### P1：运行时边界
 
@@ -116,8 +127,6 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 
 ### P1：序列化与编辑可靠性
 
-- [x] 覆盖节点、边、变量、方法、动态端口的 Undo / Redo
-- [x] 增加旧版本图资产迁移测试和缺失节点类型的诊断
 - [ ] 增加复制粘贴、删除节点、保存重载和 Play Mode 往返回归测试
 - [ ] 为大图建立加载、初始化和执行基准，性能优化以数据为依据
 

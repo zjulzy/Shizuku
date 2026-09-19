@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## [0.9.1] - 2026-09-20
+
+### Fixed
+
+- Git-installed packages now include the MCP Server project file required by the one-time build
+- MCP Server setup now reports an incomplete package before invoking `dotnet publish`
+
 ## [0.9.0] - 2026-09-19
 
 ### Added

@@ -64,7 +64,6 @@ namespace Shizuku.Graph.Editor
             title = node.Title;
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
-                foreach (var port in inputContainer.Children().OfType<Port>()) UpdateInputSource(port);
                 RefreshAuthoringSummary();
             });
             AddToClassList("shizuku-node");
@@ -487,7 +486,6 @@ namespace Shizuku.Graph.Editor
                             view.PanelToScreen(mousePosition), captured);
                     });
                 }));
-                if (port.direction == Direction.Input) UpdateInputSource(port);
             }
             RefreshAuthoringSummary();
             RefreshExpandedState();
@@ -522,7 +520,6 @@ namespace Shizuku.Graph.Editor
             if (port != null && port.direction == Direction.Input)
             {
                 UpdateInputFieldVisibility(port, isConnected);
-                UpdateInputSource(port);
                 RefreshAuthoringSummary();
             }
         }
@@ -707,25 +704,6 @@ namespace Shizuku.Graph.Editor
 
             // 默认返回类型名称
             return type.Name;
-        }
-
-        private void UpdateInputSource(Port port)
-        {
-            port.Q<Button>("input-source")?.RemoveFromHierarchy();
-            var view = GetFirstAncestorOfType<ShizukuGraphView>();
-            var edges = view?.AuthoringEdges ?? _graphAsset?.Edges;
-            var edge = edges?.FirstOrDefault(e => e.InputNodeGuid == _node.GUID && e.InputPortName == port.portName);
-            if (edge == null) return;
-            var context = view?.CurrentNodeContext;
-            var source = context?.Guid2NodeMap.TryGetValue(edge.OutputNodeGuid, out var found) == true ? found :
-                _graphAsset?.Nodes.FirstOrDefault(n => n.GUID == edge.OutputNodeGuid);
-            var button = new Button(() => GetFirstAncestorOfType<ShizukuGraphView>()?.FocusAuthoringNode(edge.OutputNodeGuid))
-            {
-                name = "input-source", text = "← " + (source?.Title ?? "来源节点") + "." + edge.OutputPortName,
-                tooltip = "点击定位输入来源；断开连接后恢复默认值"
-            };
-            button.style.fontSize = 10;
-            port.contentContainer.Add(button);
         }
 
         private Label _authoringSummary;

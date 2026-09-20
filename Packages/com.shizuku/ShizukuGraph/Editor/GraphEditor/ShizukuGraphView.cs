@@ -82,11 +82,12 @@ namespace Shizuku.Graph.Editor
             ConfigureClipboard();
             SetupAuthoring();
 
-            // 注册节点创建请求，使用 SearchWindow
+            // 普通节点创建使用 Unity 原生分组搜索树。
             nodeCreationRequest = context =>
             {
-                var panelPosition = context.screenMousePosition - PanelToScreen(Vector2.zero);
-                OpenAuthoringSearch(contentViewContainer.WorldToLocal(panelPosition), context.screenMousePosition);
+                SearchWindow.Open(
+                    new SearchWindowContext(context.screenMousePosition),
+                    CreateNodeSearchWindowProvider(context.screenMousePosition));
             };
 
             // 监听选择变化事件
@@ -132,7 +133,9 @@ namespace Shizuku.Graph.Editor
                 return;
 
             var graphPosition = contentViewContainer.WorldToLocal(worldBound.center);
-            OpenAuthoringSearch(graphPosition, screenPosition);
+            SearchWindow.Open(
+                new SearchWindowContext(screenPosition),
+                CreateNodeSearchWindowProviderAt(graphPosition));
         }
 
         public void FrameAllNodes()

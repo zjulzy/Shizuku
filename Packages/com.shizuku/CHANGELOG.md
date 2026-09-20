@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## [0.9.2] - 2026-09-21
+
+### Fixed
+
+- Restored Unity's native grouped search tree for ordinary node creation
+- Removed input-source navigation buttons from connected parameter ports
+
 ## [0.9.1] - 2026-09-20
 
 ### Fixed

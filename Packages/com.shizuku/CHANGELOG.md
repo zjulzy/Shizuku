@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.9.4] - 2026-09-22
+
+### Fixed
+
+- Input-port default editors now stay beside their labels instead of being pushed to the far edge of wide nodes
+
 ## [0.9.3] - 2026-09-22
 
 ### Fixed

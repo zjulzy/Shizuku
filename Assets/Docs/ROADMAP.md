@@ -1,6 +1,6 @@
 # Shizuku 开发路线图
 
-**当前发布版本**：v0.9.3
+**当前发布版本**：v0.9.4
 
 **最后更新**：2026-09-22
 
@@ -21,7 +21,7 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 
 ---
 
-## v0.9.3 已交付基线
+## v0.9.4 已交付基线
 
 ### Graph / Blueprint 运行时
 
@@ -80,7 +80,7 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 
 ### v0.9.0 发布验证
 
-- [x] Shizuku EditMode：109 / 109
+- [x] Shizuku EditMode：110 / 110
 - [x] Shizuku PlayMode：4 / 4
 - [x] 从 Git 已追踪文件归档构建独立 MCP Server，并完成真实 stdio 握手
 - [x] MCP 工具目录与真实图资产读取
@@ -94,7 +94,7 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 
 ### P0：发布后验收
 
-- [ ] 在独立消费项目中通过 Git Tag 全新安装 v0.9.3
+- [ ] 在独立消费项目中通过 Git Tag 全新安装 v0.9.4
 - [ ] 验证 Odin 已安装、Shizuku 后安装时的首次编译流程
 - [ ] 验证 `.NET 8 SDK` 首次构建 MCP Server 和重复配置流程
 - [ ] 在 Project-Shiori 验证自定义 `AssetReference` Timeline 节点及动态 Track 端口

@@ -1,6 +1,6 @@
 {
     "name": "com.shizuku",
-    "version": "0.9.3",
+    "version": "0.9.4",
     "displayName": "Shizuku",
     "description": "A visual blueprint/graph system for Unity gameplay programming.",
     "unity": "6000.2",

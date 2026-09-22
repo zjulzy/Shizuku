@@ -40,6 +40,13 @@ namespace Shizuku.Tests.EditMode
             [SerializeReference] public TransformParameterEdgePort transform = new() { Name = "transform" };
         }
 
+        [Serializable]
+        private sealed class PortLayoutProbe : ShizukuNodeBase
+        {
+            [SerializeReference] public BoolParameterEdgePort failed = new() { Name = "failed" };
+            [SerializeReference] public StringParameterEdgePort message = new() { Name = "message" };
+        }
+
         private ShizukuGraphBase _graph;
         private const string Folder = "Assets/__NodeAuthoringTests";
         [SetUp]
@@ -190,6 +197,42 @@ namespace Shizuku.Tests.EditMode
 
             Assert.That(NodeAuthoringUtility.CreateDefaultValue(_graph, node.gameObject, null), Is.Null);
             Assert.That(NodeAuthoringUtility.CreateDefaultValue(_graph, node.transform, null), Is.Null);
+        }
+
+        [UnityTest]
+        public IEnumerator InputPortDefaultEditorsStayNextToTheirNames()
+        {
+            _graph.AddNode(new PortLayoutProbe());
+            var window = ScriptableObject.CreateInstance<EditorWindow>();
+            try
+            {
+                var view = new ShizukuGraphView { style = { flexGrow = 1 } };
+                window.ShowUtility();
+                window.rootVisualElement.Add(view);
+                view.LoadFromAsset(_graph);
+                var nodeView = view.nodes.OfType<ShizukuNodeView>().Single();
+                nodeView.style.width = 300;
+                for (var i = 0; i < 3; i++) yield return null;
+
+                foreach (var port in nodeView.inputContainer.Children().OfType<Port>())
+                {
+                    var editor = port.Q<PropertyField>(className: "port-default-value");
+                    Assert.That(editor, Is.Not.Null);
+                    var portLabel = port.Q<Label>("type") ?? port.Q<Label>("connector-text");
+                    Assert.That(portLabel, Is.Not.Null);
+                    var gap = editor.worldBound.xMin - portLabel.worldBound.xMax;
+                    Assert.That(gap, Is.LessThanOrEqualTo(12f),
+                        $"port={port.portName}, classes={string.Join(",", port.GetClasses())}, " +
+                        $"portRect={port.worldBound}, labelRect={portLabel.worldBound}, editorRect={editor.worldBound}, gap={gap}");
+                    Assert.That(editor.worldBound.xMin - port.worldBound.xMin, Is.LessThanOrEqualTo(100f),
+                        $"The default editor for '{port.portName}' was pushed to the far edge of the port: " +
+                        $"portRect={port.worldBound}, labelRect={portLabel.worldBound}, editorRect={editor.worldBound}");
+                }
+            }
+            finally
+            {
+                window.Close();
+            }
         }
 
         [Test]

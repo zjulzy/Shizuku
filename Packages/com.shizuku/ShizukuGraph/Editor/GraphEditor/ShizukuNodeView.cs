@@ -449,6 +449,10 @@ namespace Shizuku.Graph.Editor
                             var inputField = CreateInputFieldForPort(port);
                             if (inputField != null)
                             {
+                                inputPort.AddToClassList("has-default-value");
+                                var portLabel = inputPort.Q<Label>("type") ?? inputPort.Q<Label>("connector-text");
+                                if (portLabel != null)
+                                    portLabel.style.flexGrow = 0;
                                 inputField.AddToClassList("port-default-value");
 
                                 // 将输入字段存储在 userData 中，方便后续隐藏/显示

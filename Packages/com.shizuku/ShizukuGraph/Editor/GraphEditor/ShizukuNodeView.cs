@@ -19,6 +19,7 @@ namespace Shizuku.Graph.Editor
         internal Rect AuthoringPosition => _authoringPosition;
         private ShizukuNodeBase _node;
         private ShizukuGraphBase _graphAsset;
+        private readonly GraphSerializedPropertyIndex _serializedProperties;
 
         public ControlFlowPortContainer ControlFlowContainer = null;
 
@@ -58,9 +59,16 @@ namespace Shizuku.Graph.Editor
             new AuthoringPort(orientation, direction, capacity, type);
 
         public ShizukuNodeView(ShizukuNodeBase node, ShizukuGraphBase graphAsset = null)
+            : this(node, graphAsset, null)
+        {
+        }
+
+        internal ShizukuNodeView(ShizukuNodeBase node, ShizukuGraphBase graphAsset,
+            GraphSerializedPropertyIndex serializedProperties)
         {
             _node = node;
             _graphAsset = graphAsset;
+            _serializedProperties = serializedProperties;
             title = node.Title;
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
@@ -498,7 +506,10 @@ namespace Shizuku.Graph.Editor
 
         private VisualElement CreateInputFieldForPort(ParameterEdgePort port)
         {
-            return NodeAuthoringUtility.CreateDefaultValue(_graphAsset, port, RefreshAuthoringSummary);
+            return _serializedProperties != null
+                ? NodeAuthoringUtility.CreateDefaultValue(
+                    _serializedProperties, _graphAsset, port, RefreshAuthoringSummary)
+                : NodeAuthoringUtility.CreateDefaultValue(_graphAsset, port, RefreshAuthoringSummary);
         }
 
         private void UpdateInputFieldVisibility(Port inputPort, bool isConnected)

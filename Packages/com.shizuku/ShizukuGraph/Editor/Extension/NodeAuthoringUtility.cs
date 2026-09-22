@@ -35,8 +35,15 @@ namespace Shizuku.Graph.Editor
         internal static PropertyField CreateField(ShizukuGraphBase graph, ShizukuNodeBase node, FieldInfo field, Action changed)
         {
             if (!graph) return null;
-            var serialized = new SerializedObject(graph);
-            var property = AssetReferenceFieldEditorUtility.FindNodeFieldProperty(serialized, node, field);
+            return CreateField(new GraphSerializedPropertyIndex(graph), graph, node, field, changed);
+        }
+
+        internal static PropertyField CreateField(GraphSerializedPropertyIndex index, ShizukuGraphBase graph,
+            ShizukuNodeBase node, FieldInfo field, Action changed)
+        {
+            if (index == null || !graph) return null;
+            var serialized = index.SerializedGraph;
+            var property = index.FindNodeField(node, field);
             if (property == null) return null;
             return Bind(serialized, property, Label(field), Tooltip(field), graph, changed);
         }
@@ -44,20 +51,21 @@ namespace Shizuku.Graph.Editor
         internal static PropertyField CreateDefaultValue(ShizukuGraphBase graph, ParameterEdgePort port, Action changed)
         {
             if (!graph) return null;
+            return CreateDefaultValue(new GraphSerializedPropertyIndex(graph), graph, port, changed);
+        }
+
+        internal static PropertyField CreateDefaultValue(GraphSerializedPropertyIndex index, ShizukuGraphBase graph,
+            ParameterEdgePort port, Action changed)
+        {
+            if (index == null || !graph) return null;
             // Scene-object ports must be supplied through an edge. Showing an ObjectField here suggests
             // that a Hierarchy object can be persisted safely in the graph asset, which is not true.
             if (port is GameObjectParameterEdgePort || port is TransformParameterEdgePort)
                 return null;
 
-            var serialized = new SerializedObject(graph);
-            var iterator = serialized.GetIterator();
-            while (iterator.Next(true))
-            {
-                if (iterator.propertyType != SerializedPropertyType.ManagedReference || !ReferenceEquals(iterator.managedReferenceValue, port)) continue;
-                var value = iterator.FindPropertyRelative("DefaultValue");
-                if (value != null) return Bind(serialized, value.Copy(), "", "未连线时使用此默认值", graph, changed);
-            }
-            return null;
+            var serialized = index.SerializedGraph;
+            var value = index.FindRelative(port, "DefaultValue");
+            return value == null ? null : Bind(serialized, value, "", "未连线时使用此默认值", graph, changed);
         }
 
         private static PropertyField Bind(SerializedObject serialized, SerializedProperty property, string label,

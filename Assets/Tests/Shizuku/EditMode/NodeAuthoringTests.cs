@@ -47,6 +47,20 @@ namespace Shizuku.Tests.EditMode
             [SerializeReference] public StringParameterEdgePort message = new() { Name = "message" };
         }
 
+        [Serializable]
+        private sealed class DynamicSyncProbe : ShizukuNodeBase, IDynamicParameterPortProvider
+        {
+            [NonSerialized] public int SynchronizeCount;
+            public IEnumerable<DynamicParameterPortDescriptor> DynamicParameterPorts =>
+                Array.Empty<DynamicParameterPortDescriptor>();
+
+            public bool SynchronizeDynamicParameterPorts(INodeContext context)
+            {
+                SynchronizeCount++;
+                return SynchronizeCount == 1;
+            }
+        }
+
         private ShizukuGraphBase _graph;
         private const string Folder = "Assets/__NodeAuthoringTests";
         [SetUp]
@@ -197,6 +211,40 @@ namespace Shizuku.Tests.EditMode
 
             Assert.That(NodeAuthoringUtility.CreateDefaultValue(_graph, node.gameObject, null), Is.Null);
             Assert.That(NodeAuthoringUtility.CreateDefaultValue(_graph, node.transform, null), Is.Null);
+        }
+
+        [Test]
+        public void GraphLoadSynchronizesDynamicPortsOnlyOnceAndPreservesDirtySignal()
+        {
+            var node = new DynamicSyncProbe();
+            _graph.AddNode(node);
+            EditorUtility.ClearDirty(_graph);
+
+            var view = new ShizukuGraphView();
+            view.LoadFromAsset(_graph);
+
+            Assert.That(node.SynchronizeCount, Is.EqualTo(1));
+            Assert.That(EditorUtility.IsDirty(_graph), Is.True,
+                "动态端口同步产生序列化变更时仍必须标记图资产为 Dirty");
+        }
+
+        [Test]
+        public void GraphLoadSharesSerializedPropertyLookupAcrossAllPortEditors()
+        {
+            _graph.AddNode(new AddNode_Float());
+            _graph.AddNode(new AddNode_Float());
+
+            var view = new ShizukuGraphView();
+            view.LoadFromAsset(_graph);
+
+            var serializedObjects = view.nodes.OfType<ShizukuNodeView>()
+                .SelectMany(node => node.inputContainer.Query<PropertyField>(className: "port-default-value").ToList())
+                .Select(field => field.userData)
+                .ToArray();
+
+            Assert.That(serializedObjects, Is.Not.Empty);
+            Assert.That(serializedObjects.All(item => ReferenceEquals(item, serializedObjects[0])), Is.True,
+                "一次图视图构建中的端口编辑器应复用同一个 SerializedObject 和属性索引");
         }
 
         [UnityTest]

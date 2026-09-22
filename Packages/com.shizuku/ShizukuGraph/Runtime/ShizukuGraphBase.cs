@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+[assembly: InternalsVisibleTo("ShizukuGraph.Editor")]
+[assembly: InternalsVisibleTo("Shizuku.EditMode.Tests")]
 
 namespace Shizuku.Graph
 {
@@ -73,6 +77,15 @@ namespace Shizuku.Graph
         [NonSerialized]
         private bool _hasPendingRuntimeOwner;
 
+        [NonSerialized]
+        private bool _dynamicPortsChangedDuringInitialization;
+        internal bool DynamicPortsChangedDuringInitialization => _dynamicPortsChangedDuringInitialization;
+
+        internal void NotifyDynamicPortsChangedDuringInitialization()
+        {
+            _dynamicPortsChangedDuringInitialization = true;
+        }
+
         // 运行时变量存储
         [NonSerialized] private RuntimeVariableStore _variableStore;
         public RuntimeVariableStore VariableStore => _variableStore;
@@ -106,6 +119,7 @@ namespace Shizuku.Graph
 
         public virtual void Init()
         {
+            _dynamicPortsChangedDuringInitialization = false;
             var runtimeOwner = _hasPendingRuntimeOwner ? _pendingRuntimeOwner : null;
             _pendingRuntimeOwner = null;
             _hasPendingRuntimeOwner = false;

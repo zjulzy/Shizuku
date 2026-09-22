@@ -1100,12 +1100,11 @@ namespace Shizuku.Graph.Editor
             _runtimeGraph = compatibility.Graph;
             _currentMethod = null; // 加载资产时重置为主图
 
-            if (SynchronizeAllDynamicParameterPortNodes(_runtimeGraph))
+            _runtimeGraph.Init();
+            if (_runtimeGraph.DynamicPortsChangedDuringInitialization)
                 EditorUtility.SetDirty(_runtimeGraph);
 
-            _runtimeGraph.Init();
-
-            LoadCurrentContext();
+            LoadCurrentContext(false);
 
             OnEditingContextChanged?.Invoke(null);
             return compatibility;
@@ -1225,12 +1224,13 @@ namespace Shizuku.Graph.Editor
         /// <summary>
         /// 加载当前编辑上下文的节点/边/分组到视图
         /// </summary>
-        private void LoadCurrentContext()
+        private void LoadCurrentContext(bool synchronizeDynamicPorts = true)
         {
             _isRebuildingView = true;
             try
             {
-                if (SynchronizeDynamicParameterPortNodes(CurrentNodes, CurrentContext))
+                if (synchronizeDynamicPorts &&
+                    SynchronizeDynamicParameterPortNodes(CurrentNodes, CurrentContext))
                     EditorUtility.SetDirty(_runtimeGraph);
 
                 // 这里只是在重建编辑器视图，不能让 GraphView 的删除回调修改资产数据。
@@ -1240,11 +1240,12 @@ namespace Shizuku.Graph.Editor
                 var currentNodes = CurrentNodes;
                 var currentEdges = CurrentEdges;
                 var currentGroups = CurrentGroups;
+                var serializedProperties = new GraphSerializedPropertyIndex(_runtimeGraph);
 
                 // 初始化节点
                 foreach (var nodeData in currentNodes)
                 {
-                    var nodeView = new ShizukuNodeView(nodeData, _runtimeGraph);
+                    var nodeView = new ShizukuNodeView(nodeData, _runtimeGraph, serializedProperties);
                     nodeView.InitPort();
                     nodeView.SetPosition(new Rect(nodeData.PositionAndSize.x, nodeData.PositionAndSize.y,
                         nodeData.PositionAndSize.z, nodeData.PositionAndSize.w));
@@ -1316,21 +1317,6 @@ namespace Shizuku.Graph.Editor
             {
                 _isRebuildingView = false;
             }
-        }
-
-        private static bool SynchronizeAllDynamicParameterPortNodes(ShizukuGraphBase graph)
-        {
-            if (graph == null)
-                return false;
-
-            var changed = SynchronizeDynamicParameterPortNodes(graph.Nodes, graph);
-            foreach (var method in graph.Methods)
-            {
-                if (method != null)
-                    changed |= SynchronizeDynamicParameterPortNodes(method.Nodes, method);
-            }
-
-            return changed;
         }
 
         private static bool SynchronizeDynamicParameterPortNodes(

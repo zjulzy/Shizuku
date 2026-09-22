@@ -84,8 +84,11 @@ namespace Shizuku.Graph
             SelfOutputPorts.Clear();
             SelfInputPorts.Clear();
 
-            if (this is IDynamicParameterPortProvider dynamicPortProvider)
-                dynamicPortProvider.SynchronizeDynamicParameterPorts(context);
+            if (this is IDynamicParameterPortProvider dynamicPortProvider &&
+                dynamicPortProvider.SynchronizeDynamicParameterPorts(context))
+            {
+                context?.RootGraph?.NotifyDynamicPortsChangedDuringInitialization();
+            }
 
             var fields = GetCachedParamPortFields(GetType());
 

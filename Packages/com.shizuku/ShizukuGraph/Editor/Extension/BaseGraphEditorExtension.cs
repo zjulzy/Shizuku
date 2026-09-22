@@ -667,6 +667,7 @@ namespace Shizuku.Graph.Editor
             // 使用反射显示所有序列化字段
             var nodeType = _selectedNode.GetType();
             var fields = NodeAuthoringUtility.Fields(nodeType);
+            var serializedProperties = new GraphSerializedPropertyIndex(_currentGraph);
 
             foreach (var field in fields)
             {
@@ -686,7 +687,7 @@ namespace Shizuku.Graph.Editor
                     typeof(ChainPort).IsAssignableFrom(field.FieldType))
                     continue;
 
-                var fieldElement = CreateFieldEditor(field, _selectedNode);
+                var fieldElement = CreateIndexedFieldEditor(field, _selectedNode, serializedProperties);
                 if (fieldElement != null)
                 {
                     container.Add(fieldElement);
@@ -701,9 +702,17 @@ namespace Shizuku.Graph.Editor
         /// </summary>
         private VisualElement CreateFieldEditor(System.Reflection.FieldInfo field, ShizukuNodeBase node)
         {
+            if (_currentGraph == null)
+                return null;
+            return CreateIndexedFieldEditor(field, node, new GraphSerializedPropertyIndex(_currentGraph));
+        }
+
+        private VisualElement CreateIndexedFieldEditor(FieldInfo field, ShizukuNodeBase node,
+            GraphSerializedPropertyIndex serializedProperties)
+        {
             if (field.Name == "VariableGUID" && field.FieldType == typeof(string))
                 return CreateVariableGUIDSelector(field, node);
-            return NodeAuthoringUtility.CreateField(_currentGraph, node, field,
+            return NodeAuthoringUtility.CreateField(serializedProperties, _currentGraph, node, field,
                 () => NotifyNodeSerializedFieldChanged(field, node));
         }
 

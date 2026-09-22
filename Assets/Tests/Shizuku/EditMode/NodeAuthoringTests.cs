@@ -33,6 +33,13 @@ namespace Shizuku.Tests.EditMode
             [SerializeReference, NodeField("目标", Required = true)] public GameObjectParameterEdgePort target = new() { Name = "target" };
         }
 
+        [Serializable]
+        private sealed class SceneObjectPortProbe : ShizukuNodeBase
+        {
+            [SerializeReference] public GameObjectParameterEdgePort gameObject = new() { Name = "gameObject" };
+            [SerializeReference] public TransformParameterEdgePort transform = new() { Name = "transform" };
+        }
+
         private ShizukuGraphBase _graph;
         private const string Folder = "Assets/__NodeAuthoringTests";
         [SetUp]
@@ -173,6 +180,16 @@ namespace Shizuku.Tests.EditMode
             Assert.That(((FloatParameterEdgePort)_graph.Nodes[0].SelfInputPorts[0]).DefaultValue, Is.EqualTo(0));
             Undo.PerformRedo(); _graph.Init();
             Assert.That(((FloatParameterEdgePort)_graph.Nodes[0].SelfInputPorts[0]).DefaultValue, Is.EqualTo(17));
+        }
+
+        [Test]
+        public void SceneObjectPortsDoNotExposeDefaultValueEditors()
+        {
+            var node = new SceneObjectPortProbe();
+            _graph.AddNode(node);
+
+            Assert.That(NodeAuthoringUtility.CreateDefaultValue(_graph, node.gameObject, null), Is.Null);
+            Assert.That(NodeAuthoringUtility.CreateDefaultValue(_graph, node.transform, null), Is.Null);
         }
 
         [Test]

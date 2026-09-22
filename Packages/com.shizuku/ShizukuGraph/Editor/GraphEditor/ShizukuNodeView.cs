@@ -538,6 +538,12 @@ namespace Shizuku.Graph.Editor
             // 获取实际的值类型
             string typeName = GetPortValueTypeName(portType);
             string tooltipText = $"类型: {typeName}";
+            if (port.direction == Direction.Input &&
+                (typeof(GameObjectParameterEdgePort).IsAssignableFrom(portType) ||
+                 typeof(TransformParameterEdgePort).IsAssignableFrom(portType)))
+            {
+                tooltipText += "\n场景对象不支持端口默认值，请通过连线传入";
+            }
 
             // 1. 设置端口本身的 tooltip
             port.tooltip = tooltipText;

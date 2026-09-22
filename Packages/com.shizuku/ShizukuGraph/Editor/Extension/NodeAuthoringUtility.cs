@@ -44,6 +44,11 @@ namespace Shizuku.Graph.Editor
         internal static PropertyField CreateDefaultValue(ShizukuGraphBase graph, ParameterEdgePort port, Action changed)
         {
             if (!graph) return null;
+            // Scene-object ports must be supplied through an edge. Showing an ObjectField here suggests
+            // that a Hierarchy object can be persisted safely in the graph asset, which is not true.
+            if (port is GameObjectParameterEdgePort || port is TransformParameterEdgePort)
+                return null;
+
             var serialized = new SerializedObject(graph);
             var iterator = serialized.GetIterator();
             while (iterator.Next(true))

@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## [0.9.3] - 2026-09-22
+
+### Fixed
+
+- GameObject and Transform input ports no longer expose misleading asset default-value fields
+- Scene-object input port tooltips now direct authors to supply values through graph connections
+
 ## [0.9.2] - 2026-09-21
 
 ### Fixed

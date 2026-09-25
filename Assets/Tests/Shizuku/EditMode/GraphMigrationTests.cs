@@ -1,9 +1,11 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Shizuku.Graph;
 using Shizuku.Graph.Editor;
+using Shizuku.Graph.Editor.Mcp;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
@@ -132,6 +134,7 @@ namespace Shizuku.Tests.EditMode
                 Is.EqualTo("ShizukuGraph.Runtime"));
 
             var migration = ShizukuGraphMigrationService.EnsureCurrent(brokenGraph);
+            AssertMcpRefusesWithoutChanges(brokenGraph, MissingTypeAssetPath);
             Assert.That(migration.CanOpen, Is.False);
             Assert.That(brokenGraph.SchemaVersion, Is.Zero);
             Assert.That(brokenGraph.Nodes, Has.Count.EqualTo(1));
@@ -169,6 +172,7 @@ namespace Shizuku.Tests.EditMode
                     $"  _schemaVersion: {newerVersion}"));
 
             var newerGraph = Reload(NewerAssetPath);
+            AssertMcpRefusesWithoutChanges(newerGraph, NewerAssetPath);
             var yamlBefore = File.ReadAllText(NewerAssetPath);
             var graphView = new ShizukuGraphView();
 
@@ -185,6 +189,24 @@ namespace Shizuku.Tests.EditMode
         {
             EditorUtility.SetDirty(graph);
             AssetDatabase.SaveAssetIfDirty(graph);
+        }
+
+        private static void AssertMcpRefusesWithoutChanges(ShizukuGraphBase graph, string path)
+        {
+            var json = EditorJsonUtility.ToJson(graph);
+            var bytes = File.ReadAllBytes(path);
+            var dirty = EditorUtility.IsDirty(graph);
+            var payload = new JObject { ["assetPath"] = path, ["expectedRevision"] = "revision", ["operations"] = new JArray() };
+            Assert.Throws<GraphAssetCompatibilityException>(() => ShizukuMcpGraphService.ReadGraph(payload));
+            Assert.Throws<GraphAssetCompatibilityException>(() => ShizukuMcpGraphService.ValidateGraph(payload));
+            foreach (var preview in new[] { true, false })
+            {
+                payload["dryRun"] = preview;
+                Assert.Throws<GraphAssetCompatibilityException>(() => ShizukuMcpGraphService.ApplyGraph(payload));
+            }
+            Assert.That(EditorJsonUtility.ToJson(graph), Is.EqualTo(json));
+            Assert.That(File.ReadAllBytes(path), Is.EqualTo(bytes));
+            Assert.That(EditorUtility.IsDirty(graph), Is.EqualTo(dirty));
         }
 
         private static ShizukuGraphBase Reload(string assetPath)

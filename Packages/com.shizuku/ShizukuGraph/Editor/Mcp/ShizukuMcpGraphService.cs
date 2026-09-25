@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -64,7 +65,7 @@ namespace Shizuku.Graph.Editor.Mcp
                 }
                 else
                 {
-                    graphItem["revision"] = ComputeRevision(BuildGraphDocument(graph, string.Empty));
+                    graphItem["revision"] = ComputeGraphRevision(graph);
                 }
 
                 result.Add(graphItem);
@@ -103,7 +104,7 @@ namespace Shizuku.Graph.Editor.Mcp
             var graph = LoadGraph(payload.Value<string>("assetPath"));
             var methodGuid = payload.Value<string>("methodGuid") ?? string.Empty;
             var document = BuildGraphDocument(graph, methodGuid);
-            document["revision"] = ComputeRevision(document);
+            document["revision"] = ComputeGraphRevision(graph);
             return document;
         }
 
@@ -124,10 +125,12 @@ namespace Shizuku.Graph.Editor.Mcp
                 ?? throw new ArgumentException("graph_apply requires an operations array.");
 
             var graph = LoadGraph(assetPath);
-            var currentDocument = BuildGraphDocument(graph, methodGuid);
-            var currentRevision = ComputeRevision(currentDocument);
-            if (!string.IsNullOrWhiteSpace(expectedRevision) &&
-                !string.Equals(expectedRevision, currentRevision, StringComparison.Ordinal))
+            var currentRevision = ComputeGraphRevision(graph);
+            if (EditorUtility.IsDirty(graph))
+                return Rejected("dirty_graph", "Graph has unsaved editor changes. Save or discard them and read the graph again.", currentRevision);
+            if (string.IsNullOrWhiteSpace(expectedRevision))
+                return Rejected("revision_required", "expectedRevision is required, including for dryRun. Read the graph first.", currentRevision);
+            if (!string.Equals(expectedRevision, currentRevision, StringComparison.Ordinal))
             {
                 return new JObject
                 {
@@ -145,6 +148,7 @@ namespace Shizuku.Graph.Editor.Mcp
             preview.hideFlags = HideFlags.HideAndDontSave;
             try
             {
+                MigrateInMemory(preview);
                 GraphEditService.Apply(preview, methodGuid, ParseOperations(normalizedOperations));
                 var validation = BuildValidationResult(preview, methodGuid);
                 if (!validation.Value<bool>("valid"))
@@ -174,7 +178,10 @@ namespace Shizuku.Graph.Editor.Mcp
                 }
 
                 JObject committedValidation = null;
-                UnityGraphEditExecutor.Execute(
+                // Preview callbacks can run arbitrary node code. Check the source again at the write boundary.
+                if (EditorUtility.IsDirty(graph) || currentRevision != ComputeGraphRevision(graph))
+                    return Rejected("graph_changed", "Graph changed during preview. Save or discard editor changes and read it again.", ComputeGraphRevision(graph));
+                var refreshWarning = UnityGraphEditExecutor.Execute(
                     graph,
                     methodGuid,
                     ParseOperations(normalizedOperations),
@@ -183,6 +190,7 @@ namespace Shizuku.Graph.Editor.Mcp
                     {
                         SaveAsset = true,
                         RefreshOpenGraph = true,
+                        Prepare = MigrateInMemory,
                         Validate = committedGraph =>
                         {
                             committedValidation = BuildValidationResult(committedGraph, methodGuid);
@@ -194,13 +202,13 @@ namespace Shizuku.Graph.Editor.Mcp
                         }
                     });
 
-                var resultDocument = BuildGraphDocument(graph, methodGuid);
                 return new JObject
                 {
                     ["applied"] = true,
                     ["dryRun"] = false,
                     ["baseRevision"] = currentRevision,
-                    ["revision"] = ComputeRevision(resultDocument),
+                    ["revision"] = ComputeGraphRevision(graph),
+                    ["refreshWarning"] = refreshWarning,
                     ["operations"] = normalizedOperations,
                     ["validation"] = committedValidation
                 };
@@ -417,11 +425,10 @@ namespace Shizuku.Graph.Editor.Mcp
             if (HasCycle(adjacency))
                 AddIssue(issues, "error", "cycle", "Graph contains a directed dependency or control-flow cycle.");
 
-            var document = BuildGraphDocument(graph, methodGuid);
             return new JObject
             {
                 ["valid"] = !issues.Any(issue => issue.Value<string>("severity") == "error"),
-                ["revision"] = ComputeRevision(document),
+                ["revision"] = ComputeGraphRevision(graph),
                 ["issues"] = issues
             };
         }
@@ -443,10 +450,33 @@ namespace Shizuku.Graph.Editor.Mcp
 
             var graph = AssetDatabase.LoadAssetAtPath<ShizukuGraphBase>(assetPath)
                 ?? throw new ArgumentException($"Shizuku graph asset does not exist: {assetPath}");
-            var compatibility = ShizukuGraphMigrationService.EnsureCurrent(graph);
-            if (!compatibility.CanOpen)
+            var compatibility = ShizukuGraphMigrationService.Inspect(graph);
+            if (!compatibility.CanOpen && compatibility.Status != GraphAssetCompatibilityStatus.UpgradeRequired)
                 throw new GraphAssetCompatibilityException(compatibility);
             return compatibility.Graph;
+        }
+
+        private static void MigrateInMemory(ShizukuGraphBase graph)
+        {
+            var report = ShizukuGraphMigrationService.EnsureCurrent(graph, persist: false);
+            if (!report.CanOpen) throw new GraphAssetCompatibilityException(report);
+        }
+
+        private static JObject Rejected(string code, string message, string revision) => new()
+        {
+            ["applied"] = false, ["conflict"] = true, ["code"] = code,
+            ["message"] = message, ["revision"] = revision
+        };
+
+        // Cover the entire asset, including other methods and fields omitted from the semantic document.
+        private static string ComputeGraphRevision(ShizukuGraphBase graph)
+        {
+            var path = AssetDatabase.GetAssetPath(graph);
+            return ComputeRevision(new JObject
+            {
+                ["serialized"] = EditorJsonUtility.ToJson(graph),
+                ["disk"] = string.IsNullOrEmpty(path) ? string.Empty : Convert.ToBase64String(File.ReadAllBytes(path))
+            });
         }
 
         private static IEnumerable<ChainPort> GetChainPorts(ShizukuNormalNode node)

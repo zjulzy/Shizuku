@@ -70,6 +70,8 @@ private float seconds = 1;
 
 MCP Server 由 Agent 按需启动，Unity Editor 内的 loopback 桥随项目自动启动。桥只监听 `127.0.0.1`，并使用保存在 `Library/ShizukuMcp` 下、每次启动都会轮换的随机令牌。首批工具支持列出图资产、查询节点目录、读取图、校验图，以及通过 dry-run 与 revision 检查事务式修改图。
 
+读取和校验不会迁移或保存原图。修改前先保存或放弃 Unity 中尚未保存的编辑，再读取 `revision`；预览和正式应用都必须提供 `expectedRevision`。预览只在副本上迁移并执行操作，正式提交使用预览返回的 `baseRevision` 和 `operations`（不要使用 `resultRevision`）。revision 覆盖整张资产及磁盘内容，函数子图之外的修改也会使它失效。正式应用将所需格式迁移、编辑和保存作为同一事务，支持 Unity Undo；保存失败会恢复原文件及内存/dirty 状态。若保存成功但编辑器刷新失败，返回 `applied: true` 和 `refreshWarning`，应手动刷新视图，不要重复应用操作。
+
 更完整的使用方式、节点扩展和架构说明见 [项目文档](https://github.com/zjulzy/Shizuku#readme)。
 
 ## 许可证

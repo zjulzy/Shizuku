@@ -228,6 +228,7 @@ namespace Shizuku.Tests.EditMode
             var committed = (JObject)ShizukuMcpGraphService.Handle("graph_apply", new JObject
             {
                 ["assetPath"] = GraphPath,
+                ["expectedRevision"] = ShizukuMcpGraphService.ReadGraph(new JObject { ["assetPath"] = GraphPath })["revision"],
                 ["dryRun"] = false,
                 ["operations"] = operations
             });

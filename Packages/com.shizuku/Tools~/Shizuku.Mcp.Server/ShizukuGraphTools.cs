@@ -35,12 +35,12 @@ public static class ShizukuGraphTools
         CancellationToken cancellationToken = default) =>
         bridge.SendAsync("graph_validate", new { assetPath, methodGuid }, cancellationToken);
 
-    [McpServerTool, Description("Apply transactional Shizuku graph operations. Use dryRun=true first, then pass the returned revision as expectedRevision when committing.")]
+    [McpServerTool, Description("Apply transactional Shizuku graph operations to a saved graph. Read first, then dryRun=true; commit using baseRevision and the normalized operations returned by the preview. A commit may migrate the asset schema. Unsaved editor changes are rejected.")]
     public static Task<string> shizuku_graph_apply(
         BridgeClient bridge,
         [Description("Unity asset path, for example Assets/MyGraph.asset.")] string assetPath,
         [Description("JSON array of operations: create_node, delete_node, set_node_fields, connect_control, disconnect_control, connect_parameter, disconnect_parameter.")] string operationsJson,
-        [Description("Revision returned by shizuku_graph_read or a prior dry run. Empty disables optimistic concurrency checking.")] string expectedRevision = "",
+        [Description("Required for both preview and commit: revision from graph_read or baseRevision from dryRun. Empty is rejected.")] string expectedRevision,
         [Description("When true, validates the edit on a clone and does not save the asset.")] bool dryRun = true,
         [Description("Optional Shizuku method GUID. Leave empty for the main graph.")] string methodGuid = "",
         CancellationToken cancellationToken = default)

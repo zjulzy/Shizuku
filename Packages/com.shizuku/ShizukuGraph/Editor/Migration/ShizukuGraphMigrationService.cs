@@ -170,7 +170,7 @@ namespace Shizuku.Graph.Editor
                     $"图资产 SchemaVersion {graph.SchemaVersion} 已是当前版本。");
         }
 
-        internal static GraphAssetCompatibilityReport EnsureCurrent(ShizukuGraphBase graph)
+        internal static GraphAssetCompatibilityReport EnsureCurrent(ShizukuGraphBase graph, bool persist = true)
         {
             var inspection = Inspect(graph);
             if (inspection.Status != GraphAssetCompatibilityStatus.UpgradeRequired)
@@ -179,7 +179,8 @@ namespace Shizuku.Graph.Editor
             var sourceVersion = graph.SchemaVersion;
             var backup = EditorJsonUtility.ToJson(graph);
             var wasDirty = EditorUtility.IsDirty(graph);
-            var assetPath = AssetDatabase.GetAssetPath(graph);
+            // MCP transactions migrate in memory and own the eventual save/rollback boundary.
+            var assetPath = persist ? AssetDatabase.GetAssetPath(graph) : string.Empty;
             if (wasDirty && !string.IsNullOrEmpty(assetPath))
             {
                 return new GraphAssetCompatibilityReport(
@@ -236,7 +237,7 @@ namespace Shizuku.Graph.Editor
                     }
                 }
 
-                Debug.Log(
+                if (persist) Debug.Log(
                     $"[ShizukuGraph] 已将图资产 '{graph.name}' 从 SchemaVersion {sourceVersion} " +
                     $"迁移到 {ShizukuGraphBase.CurrentSchemaVersion}。",
                     migratedGraph);
@@ -245,8 +246,9 @@ namespace Shizuku.Graph.Editor
                     migratedGraph,
                     GraphAssetCompatibilityStatus.Migrated,
                     sourceVersion,
-                    $"图资产已从 SchemaVersion {sourceVersion} 自动迁移到 " +
-                    $"{ShizukuGraphBase.CurrentSchemaVersion}，并完成重新导入。");
+                    $"图资产已从 SchemaVersion {sourceVersion} 迁移到 " +
+                    $"{ShizukuGraphBase.CurrentSchemaVersion}。" +
+                    (persist ? "已保存并重新导入。" : "仅修改内存，由调用方负责提交。"));
             }
             catch (Exception exception)
             {

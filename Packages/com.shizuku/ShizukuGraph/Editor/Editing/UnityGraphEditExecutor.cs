@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,6 +12,9 @@ namespace Shizuku.Graph.Editor
         internal bool SaveAsset { get; set; }
         internal bool RefreshOpenGraph { get; set; }
         internal Action<ShizukuGraphBase> Validate { get; set; }
+        internal Action<ShizukuGraphBase> Prepare { get; set; }
+        internal Action<ShizukuGraphBase> Save { get; set; } = AssetDatabase.SaveAssetIfDirty;
+        internal Action<ShizukuGraphBase> Refresh { get; set; } = ShizukuGraphWindow.RefreshOpenGraph;
     }
 
     /// <summary>
@@ -19,7 +23,7 @@ namespace Shizuku.Graph.Editor
     /// </summary>
     internal static class UnityGraphEditExecutor
     {
-        internal static void Execute(
+        internal static string Execute(
             ShizukuGraphBase graph,
             string methodGuid,
             IEnumerable<GraphEditOperation> operations,
@@ -32,8 +36,14 @@ namespace Shizuku.Graph.Editor
             options ??= new GraphEditExecutionOptions();
             var operationList = new List<GraphEditOperation>(
                 operations ?? throw new ArgumentNullException(nameof(operations)));
-            if (operationList.Count == 0)
-                return;
+            if (operationList.Count == 0 && options.Prepare == null)
+                return null;
+
+            var backup = EditorJsonUtility.ToJson(graph);
+            var wasDirty = EditorUtility.IsDirty(graph);
+            var assetPath = options.SaveAsset ? AssetDatabase.GetAssetPath(graph) : string.Empty;
+            var diskBackup = string.IsNullOrEmpty(assetPath) ? null : File.ReadAllBytes(assetPath);
+            var saveAttempted = false;
 
             var shouldRecordUndo = options.RecordUndo && !Application.isPlaying;
             var undoGroup = -1;
@@ -45,22 +55,41 @@ namespace Shizuku.Graph.Editor
                 Undo.RegisterCompleteObjectUndo(graph, undoName);
             }
 
-            var backup = EditorJsonUtility.ToJson(graph);
             try
             {
+                options.Prepare?.Invoke(graph);
                 GraphEditService.Apply(graph, methodGuid, operationList);
                 options.Validate?.Invoke(graph);
                 EditorUtility.SetDirty(graph);
                 if (options.SaveAsset)
-                    AssetDatabase.SaveAssetIfDirty(graph);
-                if (options.RefreshOpenGraph)
-                    ShizukuGraphWindow.RefreshOpenGraph(graph);
+                {
+                    saveAttempted = true;
+                    options.Save(graph);
+                    if (EditorUtility.IsDirty(graph))
+                        throw new IOException("Graph save did not complete; the asset is still dirty.");
+                }
             }
             catch
             {
-                EditorJsonUtility.FromJsonOverwrite(backup, graph);
-                graph.Init();
-                EditorUtility.SetDirty(graph);
+                if (undoGroup >= 0)
+                    Undo.RevertAllDownToGroup(undoGroup);
+                try
+                {
+                    if (saveAttempted && diskBackup != null)
+                        File.WriteAllBytes(assetPath, diskBackup);
+                }
+                finally
+                {
+                    EditorJsonUtility.FromJsonOverwrite(backup, graph);
+                    try { graph.Init(); }
+                    finally
+                    {
+                        // Init may synchronize ports. Preserve the exact serialized pre-transaction state.
+                        EditorJsonUtility.FromJsonOverwrite(backup, graph);
+                        if (wasDirty) EditorUtility.SetDirty(graph);
+                        else EditorUtility.ClearDirty(graph);
+                    }
+                }
                 throw;
             }
             finally
@@ -68,6 +97,17 @@ namespace Shizuku.Graph.Editor
                 if (undoGroup >= 0)
                     Undo.CollapseUndoOperations(undoGroup);
             }
+
+            // The transaction has committed. A view failure must not masquerade as an apply failure.
+            if (options.RefreshOpenGraph)
+            {
+                try { options.Refresh(graph); }
+                catch (Exception exception)
+                {
+                    return "Graph edits committed, but refreshing the editor view failed: " + exception.Message;
+                }
+            }
+            return null;
         }
 
         internal static void RecordSideEffects(ShizukuGraphBase graph, string undoName)

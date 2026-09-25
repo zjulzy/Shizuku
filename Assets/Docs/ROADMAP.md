@@ -1,8 +1,8 @@
 # Shizuku 开发路线图
 
-**当前发布版本**：v0.9.4
+**当前发布版本**：v0.9.5
 
-**最后更新**：2026-09-22
+**最后更新**：2026-09-25
 
 本文档只记录当前能力边界、近期工作和发布门槛。历史版本的具体改动以根目录和 UPM 包内的 `CHANGELOG.md` 为准。
 
@@ -21,7 +21,7 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 
 ---
 
-## v0.9.4 已交付基线
+## v0.9.5 已交付基线
 
 ### Graph / Blueprint 运行时
 
@@ -74,16 +74,19 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 - [x] 仅监听回环地址、使用项目级轮换令牌的 Unity Editor Bridge
 - [x] 图列表、节点目录、读取、校验与事务式修改工具
 - [x] dry-run、revision 冲突保护、Undo、SetDirty 与保存后刷新
+- [x] 只读调用不迁移原资产，dry-run 隔离迁移，写入强制 revision 并拒绝未保存编辑
+- [x] 编辑失败恢复内存、磁盘和 dirty 状态，提交后视图刷新失败独立报告
 - [x] Codex、Claude Code、Cursor 检测和项目级配置
 - [x] 未知 Agent 的通用 stdio 配置
 - [x] 发布包排除 MCP Server 的 `bin` / `obj` 生成物
 
-### v0.9.0 发布验证
+### v0.9.5 发布验证
 
-- [x] Shizuku EditMode：110 / 110
+- [x] Unity EditMode：124 / 124
 - [x] Shizuku PlayMode：4 / 4
 - [x] 从 Git 已追踪文件归档构建独立 MCP Server，并完成真实 stdio 握手
 - [x] MCP 工具目录与真实图资产读取
+- [x] 真实 stdio 调用拒绝 dirty 图，正常 apply 后窗口同步，Undo / Redo 同步恢复
 - [x] UPM 包 `npm pack --dry-run`，不携带 Server 构建产物
 
 ---
@@ -94,7 +97,7 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 
 ### P0：发布后验收
 
-- [ ] 在独立消费项目中通过 Git Tag 全新安装 v0.9.4
+- [ ] 在独立消费项目中通过 Git Tag 全新安装 v0.9.5
 - [ ] 验证 Odin 已安装、Shizuku 后安装时的首次编译流程
 - [ ] 验证 `.NET 8 SDK` 首次构建 MCP Server 和重复配置流程
 - [ ] 在 Project-Shiori 验证自定义 `AssetReference` Timeline 节点及动态 Track 端口

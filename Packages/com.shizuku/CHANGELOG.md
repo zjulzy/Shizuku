@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## [0.9.5] - 2026-09-25
+
+### Fixed
+
+- MCP read and validation no longer migrate or save source assets; dry-run migrates only an isolated copy
+- MCP apply and dry-run require an up-to-date revision and reject graphs with unsaved edits
+- Graph edit failures restore memory, disk and dirty state; post-commit view refresh failures return a warning without reporting the committed edit as failed
+- Existing missing-type and newer-schema protections remain enforced, with regression coverage for migration, transaction failures and Undo / Redo
+
+### Performance
+
+- Reduced first-open Blueprint editor work through cached node metadata and AssetReference field handling
+
 ## [0.9.4] - 2026-09-22
 
 ### Fixed

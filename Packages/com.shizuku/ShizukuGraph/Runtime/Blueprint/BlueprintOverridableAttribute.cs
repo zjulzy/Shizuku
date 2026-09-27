@@ -17,6 +17,9 @@ namespace Shizuku.Graph
         /// </summary>
         public string EventName { get; }
 
+        /// <summary>是否允许事件启动跨帧节点；有返回值的事件始终只允许同步执行。</summary>
+        public bool AllowLatent { get; set; } = true;
+
         /// <summary>
         /// 创建一个可被蓝图重写的方法标记
         /// </summary>

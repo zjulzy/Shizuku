@@ -64,6 +64,18 @@ private float seconds = 1;
 
 `NodeField.Required` 用于必要的资产/对象输入；已连线输入视为已提供来源，但无法静态保证来源运行时非空。`NodeField` 只改变显示，不改变字段名或端口键。生成的 ID、端口结构缓存请标记 `[HideInInspector]`，业务配置集合仍可使用原生序列化编辑器。
 
+## Blueprint 生命周期事件
+
+`BlueprintBehavior<TSelf>` 提供三个可选的蓝图事件，多层派生宿主也可在事件面板或右键菜单中创建，无需重新生成已有蓝图类：
+
+- `OnStart()`：运行时克隆初始化、事件和属性访问器绑定完成后触发一次，允许启动 Latent 延时链。
+- `OnUpdate(float deltaTime)`：每帧同步执行，随后保留原有的一次 Root / Latent Tick；不要在事件中手动推进图。
+- `OnDestroy()`：在事件表清空和运行时释放前同步执行；异常时也会清理并释放运行时。
+
+未配置的事件默认空操作。`OnUpdate`、`OnDestroy` 不允许 Latent 节点，编辑器会提示无效事件，运行时也拒绝启动跨帧节点；普通业务事件仍沿用既有规则（void 默认允许 Latent，有返回值必须同步）。自定义同步业务事件可使用 `[BlueprintOverridable(AllowLatent = false)]`。
+
+派生宿主覆写 Unity `Start` / `OnDestroy` 时仍需调用对应的 `base` 方法；不要自行声明 Unity `Update` 遮蔽基类更新。蓝图 `OnDestroy` 通过独立的 `DispatchBlueprintDestroyEvent` 方法映射，不会回调 Unity `OnDestroy` 造成递归。`OnStart`、`OnUpdate`、`OnDestroy` 为基类生命周期事件名，已有同名业务事件需核对语义。此变更不新增 Awake / Enable / Disable / FixedUpdate / LateUpdate 事件，也不改变图资产 Schema。
+
 ## MCP Agent 集成
 
 在 `Edit > Project Settings > Shizuku > MCP` 中生成项目专用的 stdio MCP Server 可执行文件，并可自动配置当前电脑上检测到的 Codex、Claude Code 和 Cursor。生成操作只编译文件，不会开启常驻服务。Codex 与 Claude Code 使用各自 CLI；Cursor 仅合并项目下 `.cursor/mcp.json` 中带项目哈希的 Shizuku 条目，并在覆盖已有文件前创建备份。其他兼容 stdio MCP 的 Agent 可复制页面提供的通用配置后手动接入。

@@ -31,6 +31,9 @@ namespace Shizuku.Graph
         [NonSerialized]
         private ShizukuGraphRuntime<ShizukuBluePrint<T>> _runtimeBlueprint;
 
+        private bool _started;
+        private bool _destroyed;
+
         public ShizukuBluePrint<T> Blueprint => _runtimeBlueprint?.Instance != null
             ? _runtimeBlueprint.Instance
             : _blueprint;
@@ -158,6 +161,10 @@ namespace Shizuku.Graph
 
         protected virtual void Start()
         {
+            if (_started || _destroyed)
+                return;
+            _started = true;
+
             // 初始化蓝图（蓝图会主动绑定到this）
             if (_blueprint != null)
             {
@@ -177,26 +184,66 @@ namespace Shizuku.Graph
                     throw;
                 }
             }
+            OnStart();
+        }
+
+        /// <summary>初始化和事件绑定完成后触发一次，允许启动 Latent 链。</summary>
+        [BlueprintOverridable]
+        protected virtual void OnStart()
+        {
+            TryExecuteBlueprintOverride(nameof(OnStart));
+        }
+
+        /// <summary>每帧同步派发；不负责推进 Root 或 Latent。</summary>
+        [BlueprintOverridable(AllowLatent = false)]
+        protected virtual void OnUpdate(float deltaTime)
+        {
+            TryExecuteBlueprintOverride(nameof(OnUpdate), deltaTime);
+        }
+
+        // 使用独立方法映射蓝图事件，绝不反射调用 Unity OnDestroy 回调。
+        [BlueprintOverridable("OnDestroy", AllowLatent = false)]
+        protected void DispatchBlueprintDestroyEvent()
+        {
+            TryExecuteBlueprintOverride("OnDestroy");
         }
 
         private void Update()
         {
-            // 每帧更新蓝图图表（执行 Root Node）
-            // 设计理念：Root Node 可以包含每帧执行的逻辑
-            // 事件驱动的逻辑使用 BlueprintEventNode
-            _runtimeBlueprint?.Tick();
+            if (!_started || _destroyed)
+                return;
+            try
+            {
+                using (Blueprint?.DisallowLatentExecution("Blueprint OnUpdate 只允许同步执行"))
+                    OnUpdate(Time.deltaTime);
+            }
+            finally
+            {
+                // 即使同步事件抛异常，仍保留原有每帧一次的 Root / Latent 推进。
+                if (!_destroyed)
+                    _runtimeBlueprint?.Tick();
+            }
         }
 
         protected virtual void OnDestroy()
         {
-            // 清理所有事件和属性访问器，防止内存泄漏
-            _blueprintEvents?.Clear();
-            _propertyGetters?.Clear();
-            _propertySetters?.Clear();
-
-            // 销毁运行时克隆的蓝图 SO 实例
-            _runtimeBlueprint?.Dispose();
-            _runtimeBlueprint = null;
+            if (_destroyed)
+                return;
+            _destroyed = true;
+            try
+            {
+                using (Blueprint?.DisallowLatentExecution("Blueprint OnDestroy 只允许同步执行"))
+                    DispatchBlueprintDestroyEvent();
+            }
+            finally
+            {
+                _blueprintEvents?.Clear();
+                _propertyGetters?.Clear();
+                _propertySetters?.Clear();
+                var runtime = _runtimeBlueprint;
+                _runtimeBlueprint = null;
+                runtime?.Dispose();
+            }
         }
     }
 }

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Added
+
+- Blueprint host lifecycle events: OnStart after initialization/binding, synchronous OnUpdate(deltaTime), and OnDestroy before cleanup with exception-safe disposal
+- BlueprintOverridable.AllowLatent metadata for synchronous-only event validation and runtime enforcement; inherited lifecycle events remain discoverable alongside host business events
+
 ## [0.9.5] - 2026-09-25
 
 ### Fixed

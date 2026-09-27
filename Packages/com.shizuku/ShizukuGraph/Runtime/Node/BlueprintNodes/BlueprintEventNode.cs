@@ -121,7 +121,7 @@ namespace Shizuku.Graph
                 }
             }
 
-            if (methodInfo.ReturnType != typeof(void) && TryFindReachableLatentNode(out _))
+            if (RequiresSynchronousExecution() && TryFindReachableLatentNode(out _))
                 return false;
 
             return true;
@@ -151,32 +151,35 @@ namespace Shizuku.Graph
                 }
             }
 
-            if (methodInfo.ReturnType != typeof(void) && TryFindReachableLatentNode(out var latentNode))
+            if (RequiresSynchronousExecution() && TryFindReachableLatentNode(out var latentNode))
             {
-                return $"带返回值事件不支持 Latent 节点：{latentNode.Title}";
+                return $"同步事件 '{EventName}' 不支持 Latent 节点：{latentNode.Title}";
             }
 
             return "有效";
         }
 
-        private bool RequiresSynchronousReturn()
+        private bool RequiresSynchronousExecution()
         {
             var methodInfo = FindMatchingMethod();
             return methodInfo != null
-                ? methodInfo.ReturnType != typeof(void)
+                ? methodInfo.ReturnType != typeof(void) ||
+                  methodInfo.GetCustomAttribute<BlueprintOverridableAttribute>()?.AllowLatent == false
                 : !string.IsNullOrEmpty(ReturnNodeGUID);
         }
 
         private void StartEventExecution()
         {
-            if (!RequiresSynchronousReturn())
+            if (!RequiresSynchronousExecution())
             {
                 StartExcute();
                 return;
             }
 
             using (RootGraph.DisallowLatentExecution(
-                       $"带返回值的 Blueprint Event '{EventName}' 不支持 Latent 节点"))
+                       FindMatchingMethod()?.ReturnType != typeof(void)
+                           ? $"带返回值的 Blueprint Event '{EventName}' 不支持 Latent 节点"
+                           : $"同步 Blueprint Event '{EventName}' 不支持 Latent 节点"))
             {
                 StartExcute();
             }

@@ -5,7 +5,80 @@ using UnityEngine;
 
 namespace Shizuku.Tests.EditMode
 {
-    public class BlueprintBehaviorTestHost : BlueprintBehavior<BlueprintBehaviorTestHost>
+    public sealed class BlueprintLifecycleContractTests
+    {
+        [Test]
+        public void MultiLevelHost_ExposesLifecycleAndBusinessEventsWithoutDuplicateDestroy()
+        {
+            var methods = typeof(BlueprintBehaviorTestHost).GetMethods(
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public |
+                System.Reflection.BindingFlags.NonPublic);
+            var events = new System.Collections.Generic.Dictionary<string, System.Reflection.MethodInfo>();
+            foreach (var method in methods)
+            {
+                var attr = System.Reflection.CustomAttributeExtensions.GetCustomAttribute<BlueprintOverridableAttribute>(method);
+                if (attr != null) events.Add(attr.EventName ?? method.Name, method);
+            }
+            Assert.That(events.Keys, Does.Contain("OnStart"));
+            Assert.That(events.Keys, Does.Contain("OnUpdate"));
+            Assert.That(events.Keys, Does.Contain("OnDestroy"));
+            Assert.That(events.Keys, Does.Contain("IntermediateBusinessEvent"));
+            Assert.That(events.Keys, Does.Contain("HandleEvent"));
+            Assert.That(events["OnDestroy"].Name, Is.Not.EqualTo("OnDestroy"));
+            Assert.That(events["OnUpdate"].GetParameters()[0].ParameterType, Is.EqualTo(typeof(float)));
+        }
+
+        [TestCase("OnStart", true)]
+        [TestCase("OnUpdate", false)]
+        [TestCase("OnDestroy", false)]
+        public void LifecycleEvent_ValidatesAndEnforcesLatentContract(string eventName, bool allowed)
+        {
+            var graph = ScriptableObject.CreateInstance<BlueprintBehaviorTestGraph>();
+            var host = new GameObject("LifecycleContract");
+            try
+            {
+                var behavior = host.AddComponent<BlueprintBehaviorTestHost>();
+                var entry = new BlueprintEventNode { EventName = eventName };
+                if (eventName == "OnUpdate")
+                    entry.EventParameters.Add(new EventParameter { Name = "deltaTime", TypeName = nameof(Single),
+                        OutputPort = new FloatParameterEdgePort { Name = "deltaTime", IsOut = true } });
+                var latent = new ManualLatentTestNode();
+                graph.AddNode(entry);
+                graph.AddNode(latent);
+                graph.InitializeBehavior(behavior);
+                entry.ChainPorts["next"].NextNodeGuid = latent.GUID;
+                Assert.That(entry.IsValid(), Is.EqualTo(allowed));
+                if (!allowed)
+                {
+                    Assert.That(entry.GetValidationMessage(), Does.Contain("不支持 Latent"));
+                    UnityEngine.TestTools.LogAssert.Expect(LogType.Error,
+                        new System.Text.RegularExpressions.Regex("同步 Blueprint Event '" + eventName + "' 不支持 Latent"));
+                }
+                entry.TriggerEventWithReturn(eventName == "OnUpdate" ? new object[] { 0.25f } : Array.Empty<object>());
+                Assert.That(latent.StartCount, Is.EqualTo(allowed ? 1 : 0));
+                Assert.That(graph.ActiveLatentNodeCount, Is.EqualTo(allowed ? 1 : 0));
+                behavior.UnregisterBlueprintEvent(eventName);
+            }
+            finally
+            {
+                graph.DisposeRuntime();
+                UnityEngine.Object.DestroyImmediate(host);
+                UnityEngine.Object.DestroyImmediate(graph);
+            }
+        }
+    }
+
+    public abstract class BlueprintIntermediateTestHost<T> : BlueprintBehavior<T>
+        where T : BlueprintBehavior<T>
+    {
+        [BlueprintOverridable]
+        protected virtual void IntermediateBusinessEvent() { }
+
+        protected override void Start() { base.Start(); }
+        protected override void OnDestroy() { base.OnDestroy(); }
+    }
+
+    public class BlueprintBehaviorTestHost : BlueprintIntermediateTestHost<BlueprintBehaviorTestHost>
     {
         public int PublicValue = 7;
         protected string ProtectedValue = "initial";

@@ -1,8 +1,8 @@
 # Shizuku 开发路线图
 
-**当前发布版本**：v0.9.5
+**当前发布版本**：v0.10.0
 
-**最后更新**：2026-09-25
+**最后更新**：2026-09-27
 
 本文档只记录当前能力边界、近期工作和发布门槛。历史版本的具体改动以根目录和 UPM 包内的 `CHANGELOG.md` 为准。
 
@@ -21,7 +21,7 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 
 ---
 
-## v0.9.5 已交付基线
+## v0.10.0 已交付基线
 
 ### Graph / Blueprint 运行时
 
@@ -30,6 +30,7 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 - [x] 蓝图变量、默认值、GUID 引用、重命名与重名检查
 - [x] 方法子图、动态参数端口与 `InvokeMethodNode`
 - [x] Blueprint Event 参数传递、返回值路径与生成代码命名空间处理
+- [x] Blueprint 基类 OnStart / OnUpdate(deltaTime) / OnDestroy 生命周期事件、多层继承发现与同步执行约束
 - [x] `ShizukuLatentNode` 跨帧执行、重入保护与生命周期清理
 - [x] `ShizukuGraphRuntime<TGraph>` 统一克隆、初始化、执行、Tick 和 Dispose
 - [x] Timeline 播放节点的 Started / Completed / Failed 分支、动态 Track 绑定与非抢占式重入语义
@@ -80,10 +81,11 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 - [x] 未知 Agent 的通用 stdio 配置
 - [x] 发布包排除 MCP Server 的 `bin` / `obj` 生成物
 
-### v0.9.5 发布验证
+### v0.10.0 发布验证
 
-- [x] Unity EditMode：124 / 124
-- [x] Shizuku PlayMode：4 / 4
+- [x] Unity EditMode：128 / 128
+- [x] Shizuku PlayMode：8 / 8
+- [x] 生命周期初始化顺序、单次启动、Update 参数及单次 Tick、销毁异常清理、继承发现、同步限制与 OnStart 延时恢复
 - [x] 从 Git 已追踪文件归档构建独立 MCP Server，并完成真实 stdio 握手
 - [x] MCP 工具目录与真实图资产读取
 - [x] 真实 stdio 调用拒绝 dirty 图，正常 apply 后窗口同步，Undo / Redo 同步恢复
@@ -97,7 +99,7 @@ Shizuku 是面向 Unity Gameplay 编程的可视化 Graph / Blueprint 框架：
 
 ### P0：发布后验收
 
-- [ ] 在独立消费项目中通过 Git Tag 全新安装 v0.9.5
+- [ ] 在独立消费项目中通过 Git Tag 全新安装 v0.10.0
 - [ ] 验证 Odin 已安装、Shizuku 后安装时的首次编译流程
 - [ ] 验证 `.NET 8 SDK` 首次构建 MCP Server 和重复配置流程
 - [ ] 在 Project-Shiori 验证自定义 `AssetReference` Timeline 节点及动态 Track 端口
